@@ -1,0 +1,205 @@
+// ADT bauelemente - Spezifikation und Implementation
+
+// Martin Seiß    21.3.2023
+
+
+// package beinhaltet zwei ADTs: Bauelement und Verbindung
+
+// Folgende Bauelemente sind enthalten:
+// Schalter, Gatter (AND, OR, NOT), Lampe
+// Bauelemente haben zwei Eingänge und einen Ausgang.
+// Bei Bauelementen mit normalerweise nur einem Eingang,
+// können beide Eingänge belegt werden.
+// Es reicht aus, wenn ein Eingang true ist.
+// z.B. NOT-Gatter:
+//		Eingang 1	|	Eingang 2	|	Ausgang
+//		----------------------------------------
+//		false		|	false		|   true
+//		false		|	true		|	false
+//		true		|	false		|	false
+//		true		|	true		|	false
+//
+// Bei Schaltern bedeuten die Eingänge Schalter an und Schalter aus.
+// Hier müssen beide Eingänge true oder false sein. Ein Eingang ist 
+// true/an, daraus folgt, beide Eingänge an/true, Schalter an.
+
+// Bauelelemente können mit Leitungen verbunden werden.
+
+
+package bauelemente
+
+
+type Leitung struct {
+	X				uint16		// x-Positon des Leitungsknicks
+	AusBauteilID 	uint16		// Nummer des Bauteils, wo Leitung startet
+	EinBauteilID	uint16		// Nummer des Bauteils, wo Leitung endet
+	EinNr			uint16		// Nummer des Eingangs (1 oder 2), wo Leitung endet
+}
+
+
+type Bautyp uint16
+
+const (
+	Schalter 	Bautyp = 0
+	AND			Bautyp = 1
+	OR			Bautyp = 2
+	NOT			Bautyp = 3
+	Lampe		Bautyp = 4
+//	Leitung		Bautyp = 5
+)
+
+
+
+
+type Bauelement interface {
+
+	// Vor: -
+	// Eff: Der aktuelle Ausgangswert des Bauelementes ist auf 
+	// 		Grundlage der Eingangswerte neu berechnet.
+	// Erg: Der aktuelle Ausgangswert des Bauelementes ist geliefert.
+	BerechneAusgang() bool
+	
+	// Vor: -
+	// Eff: Das Bauelement ist an angegebener Stelle gezeichnet.
+	// Erg: -
+	ZeichneBauelement()
+	
+	// Vor: n nur 1 oder 2 für Eingang
+	// Eff: Der Eingang 1 oder 2 des Bauelements wird auf den gegebenen
+	//		Wert true oder false gesetzt.
+	// Erg: -	
+	SetzeEingang(n uint8, wert bool)
+
+	// Vor: n nur 1 oder 2 für Eingang
+	// Eff: Der Eingang 1 oder 2 des Bauelements wird aus dem Ausgang
+	// 		der Verbindungermittelt.
+	// Erg: -	
+	//BestimmeEingang(n uint8)
+
+
+	// Vor: n nur 1 oder 2 für Eingang
+	// Eff: -
+	// Erg: Der Wert des Eingangs n des Bauelements ist geliefert.	
+	GibEingang(n uint8) bool
+	
+	
+	
+	GibBauelementtyp (id uint16) Bautyp 
+	
+	
+	// Vor: n nur 1 oder 2 für Eingang
+	// Eff: -
+	// Erg: Fügt die Verbindung in die Liste des Baulementes mit
+	// dem betreffenenden Eingang ein.
+	VerbindungZumEingang(v Leitung)
+	
+}
+
+
+
+type data struct {
+	id				uint16		// Nummer des Bauteils
+	x,y				uint16		// Position des Mittelpunktes des Bauelementes
+	eingang1		bool
+	eingang2		bool		// nur wenn zwei Anschlüsse nötig
+								// bei Schalter wert = true geschlossen
+								// wert = false offen
+	ausgang			bool
+	typ				Bautyp
+	berechnet		bool		// Wurde der Ausgang berechnet?
+	verbindungen	[]Leitung	// Liste aller Verbindungen, die an den
+								// Eingängen enden	
+}
+
+
+func New(id,x,y uint16, eingang1,eingang2,ausgang bool, typ Bautyp) *data {
+	var bt *data = new(data)
+	bt.id = id
+	bt.x = x
+	bt.y = y
+	bt.eingang1 = eingang1
+	bt.eingang2 = eingang2
+	if typ == Schalter {	// bei Schalter Eingänge gleicher Wert 
+		bt.eingang1 = bt.eingang1 || bt.eingang2
+		bt.eingang2 = bt.eingang1 || bt.eingang2
+	}
+	bt.ausgang = ausgang
+	bt.typ = typ
+	return bt
+}
+
+
+func (bt *data) BerechneAusgang() bool {
+	if bt.typ == Schalter {
+		bt.ausgang = bt.eingang2
+	} else if bt.typ == Lampe {
+		bt.ausgang = bt.eingang1 || bt.eingang2
+	} else if bt.typ == AND {
+		bt.ausgang = bt.eingang1 && bt.eingang1
+	} else if bt.typ == OR {
+		bt.ausgang = bt.eingang1 || bt.eingang1
+	} else if bt.typ == NOT { // egal an welchem Eingang Spannung anliegt
+		bt.ausgang = !(bt.eingang1 || bt.eingang2) 
+	} else {
+		panic("Bauteiltyp nicht bekannt!")		// noch zu spezifizieren!!??
+	}
+	return bt.ausgang
+}
+
+
+func (bt *data) ZeichneBauelement() {
+
+
+}
+	
+	
+func (bt *data) SetzeEingang(n uint8, wert bool) {
+	if bt.typ == Schalter {
+		if n == 1 || n==2 {
+			bt.eingang1 = wert
+			bt.eingang2 = wert
+		}
+	} else {
+		if n == 1 {
+			bt.eingang1 = wert
+		} else if n == 2 {
+			bt.eingang2 = wert		
+		} else {
+			panic("Fehler: Nummer vom Eingang falsch gesetzt. Nur 1 oder 2 erlaubt.")
+		}
+	}	
+}
+
+/*
+func (bt *data) BestimmeEingang(n uint8, bt2 Bauelement) {
+	if n == 1 {
+		bt.eingang1.Wert = bt2.ausgang.Wert
+	} else if n == 2 {
+		bt.eingang2.Wert = bt2.ausgang.Wert
+	} else {
+		panic("Fehler: Nummer vom Eingang falsch gesetzt. Nur 1 oder 2 erlaubt.")
+	}	
+
+}
+*/
+
+func (bt *data) GibEingang(n uint8) bool {
+	if n == 1 {
+		return bt.eingang1
+	} else if n == 2 {
+		return bt.eingang2	
+	} else {
+		panic("Fehler: Nummer vom Eingang falsch gesetzt. Nur 1 oder 2 erlaubt.")
+	}
+
+}
+
+
+func (bt *data) GibBauelementtyp(id uint16) Bautyp {
+	return bt.typ
+}
+
+
+func (bt *data) VerbindungZumEingang(v Leitung) {
+	bt.verbindungen = append(bt.verbindungen,v)
+}
