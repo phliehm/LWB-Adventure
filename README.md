@@ -21,5 +21,9 @@ https://map.kits.blog/map/82d2b0ba-aec9-4344-be2e-1be898fc7123
 - objekte
 - raeume
 
+### Ideen für gemeinsame Projektordner:
+- sounds
+- bilder
+
 
 Viel Spaß uns!:) 
