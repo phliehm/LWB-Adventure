@@ -10,7 +10,7 @@ const breite = 800 		// von Gott vorgegeben
 const hoehe  = 600  	// von Gott vorgegeben
 	
 func main () {
-	var punkte uint16 = 100					// Spiel-Punktzahl
+	var punkte uint16 = 10					// Spiel-Punktzahl
 	var pause bool = false
 	var akt	bool = true						// Prüft, ob Grafik aktualisiert werden muss
 	obj := make([]objekte.Objekt,0)			// Array für die Objekte der Welt
@@ -84,12 +84,12 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,akt *bool) {		// füllt Objekt
 	*akt = true
 	time.Sleep( time.Duration(2e9) )
 	
-	for *pause { time.Sleep( time.Duration(2e9) ) }
+	for *pause { time.Sleep( time.Duration(2e8) ) }
 	*obj = append(*obj, objekte.New(0,0,		200	,5) )
 	*akt = true
 	time.Sleep( time.Duration(2e9) )
 	
-	for *pause { time.Sleep( time.Duration(2e9) ) }
+	for *pause { time.Sleep( time.Duration(2e8) ) }
 	*obj = append(*obj, objekte.New(600,100,	150	,5) )
 	*akt = true
 	time.Sleep( time.Duration(2e9) )
@@ -104,12 +104,12 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,akt *bool) {		// füllt Objekt
 		time.Sleep( time.Duration(1e8) )
 	}
 	
-	for *pause { time.Sleep( time.Duration(2e9) ) }
+	for *pause { time.Sleep( time.Duration(2e8) ) }
 	*obj = append(*obj, objekte.New(600,300,	80	,1) )
 	*akt = true
 	time.Sleep( time.Duration(2e9) )
 	
-	for *pause { time.Sleep( time.Duration(2e9) ) }
+	for *pause { time.Sleep( time.Duration(2e8) ) }
 	*obj = append(*obj, objekte.New(500,500,	20	,1) )
 	*akt = true
 	
@@ -143,7 +143,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt objekte.Objekt, pa
 		
 		SetzeFont ("../../Schriftarten/Freshman.ttf", hoehe/20 )
 		Stiftfarbe(76,0,153)  
-		SchreibeFont (breite*3/4,0,"Punkte : "+fmt.Sprint (*punkte))	// Schreibe rechts oben Punkte
+		SchreibeFont (breite*14/20,0,"Punkte : "+fmt.Sprint (*punkte))	// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)
 		Schreibe (0,0,"FPS:"+fmt.Sprint (anzahl))					// Schreibe links oben FPS
 		if *pause { pauseObjekt.Zeichnen() }
