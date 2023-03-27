@@ -14,21 +14,24 @@ const höhe uint16 = 800
 var Taste uint16 = 's' // Variable für zu drückende Taste
 var TastenArray [5]uint16 = [5]uint16{'s', 'o', 'p', 'u', 'b'}
 
+
+// Überprüfe Taste
 func TesteTaste(taste uint16) {
 	//gfx.SetzeFont("CollegiateBlackFLF.ttf",20)
 	switch taste {
 	case Taste:
 		fmt.Println("Richtig! Das haben Sie aber toll geloest!!")
 		gfx.SchreibeFont(200, 500, "Richtig! Das haben Sie aber toll geloest!!")
-		gfx.LadeBildMitColorKey(650, 50, "LWB-A-BMP/WtheK_black.bmp", 255, 255, 255)
+		gfx.LadeBildMitColorKey(650, 50, "../../Bilder/WtheK_black.bmp", 255, 255, 255)
 	default:
 		fmt.Println("Ohjeee, das ist ja falsch, wie kommen Sie de6nn darauf???")
 		gfx.SchreibeFont(200, 500, "Ohjeee, das ist ja falsch, wie kommen Sie denn darauf???")
-		gfx.LadeBildMitColorKey(650, 50, "LWB-A-BMP/WtheK_black_sad.bmp", 255, 255, 255)
+		gfx.LadeBildMitColorKey(650, 50, "../../Bilder/WtheK_black_sad.bmp", 255, 255, 255)
 	}
 	//time.Sleep(1e9)
 }
 
+// Zufällige Taste würfeln
 func LoseTaste() uint16 {
 
 	return TastenArray[rand.Intn(5)]
@@ -38,7 +41,7 @@ func LoseTaste() uint16 {
 func main() {
 
 	gfx.Fenster(breite, höhe)
-	gfx.SetzeFont("Ubuntu-B.ttf", 20)
+	gfx.SetzeFont("../../Schriftarten/Ubuntu-B.ttf", 20)
 
 A:
 	for {
@@ -50,7 +53,8 @@ A:
 		gfx.Rechteck(100, 100, 400, 200)
 		Taste = LoseTaste()
 		gfx.SchreibeFont(150, 150, "Druecke "+string(Taste))
-		gfx.LadeBildMitColorKey(650, 50, "LWB-A-BMP/WtheK_black.bmp", 255, 255, 255)
+		gfx.SchreibeFont(20, 20, "Mit der Taste 'q' kannst du das Spiel beenden")
+		gfx.LadeBildMitColorKey(650, 50, "../../Bilder/WtheK_black.bmp", 255, 255, 255)
 		//gfx.LadeBildMitColorKey(50, 400, "LWB-A-BMP/3_Fachdidaktik_Planung.bmp", 255, 255, 255)
 		fmt.Println("Rechteck")
 		gfx.UpdateAn()
