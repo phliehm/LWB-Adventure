@@ -4,7 +4,7 @@ package main
 // Zweck: SWP - Minigame Moorhuhn
 //--------------------------------------------------------------------
 
-import ( . "gfxw" ;  "time" ; "fmt"; "../../Klassen/objekte"; "../../Klassen/raeume" )
+import ( . "gfx" ;  "time" ; "fmt"; "../../Klassen/objekte"; "../../Klassen/raeume" )
 
 const breite = 800 		// von Gott vorgegeben
 const hoehe  = 600  	// von Gott vorgegeben
@@ -203,8 +203,8 @@ func maussteuerung (obj *[]objekte.Objekt, maus objekte.Objekt, pause,akt *bool,
 			for _,ob := range *obj { 					// Zeichnet alleweiteren Objekte ein
 				if ob.Getroffen(mausX,mausY) {
 					ob.SetzeTyp(1)
-					SpieleSound("GameOver.wav")
-					*punkte++
+					SpieleSound("../../Sounds/GameOver.wav")
+					*punkte--
 					*akt = true
 				}
 			}

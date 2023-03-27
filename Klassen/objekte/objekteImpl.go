@@ -3,7 +3,7 @@ package objekte
 // Datum: 21.03.2023
 // Zweck: Objekte für das SWP
 
-import (. "gfxw" ; "sync")
+import (. "gfx" ; "sync")
 
 var m sync.Mutex
 	

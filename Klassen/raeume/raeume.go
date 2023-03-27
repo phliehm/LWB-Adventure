@@ -2,7 +2,7 @@ package raeume
 // Autor: B. Schneider
 // Datum: 21.03.2023
 
-import . "gfxw"
+import . "gfx"
 
 func Moorhuhn(breite uint16) {
 	if breite == 800 {
