@@ -4,7 +4,7 @@ package main
 // Zweck: SWP - Minigame Moorhuhn
 //--------------------------------------------------------------------
 
-import ( . "gfxw" ;  "time" ; "fmt"; "./objekte"; "./raeume" )
+import ( . "gfxw" ;  "time" ; "fmt"; "../../Klassen/objekte"; "../../Klassen/raeume" )
 
 const breite = 800 		// von Gott vorgegeben
 const hoehe  = 600  	// von Gott vorgegeben
