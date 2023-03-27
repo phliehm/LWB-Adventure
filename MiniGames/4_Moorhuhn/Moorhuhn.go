@@ -28,7 +28,7 @@ func main () {
 	Fenstertitel("StEPS-Wars")								// Gibt Fenster-Titel 
 	// SetzeFont ("collegeb.ttf", hoehe/4)					// Setzt Schriftart
 	// SetzeFont ("Prisma.ttf", hoehe/4)
-	SetzeFont ("Freshman.ttf", hoehe/20 ) 
+	SetzeFont ("../../Schriftarten/Freshman.ttf", hoehe/20 ) 
 	
 	// Objekte werden nach und nach in der Welt platziert
 	go erstelleObjekte(&obj, &pause, &akt)
@@ -141,7 +141,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt objekte.Objekt, pa
 		// maus.SetzeKoordinaten(*mausX,*mausY)
 		maus.Zeichnen()								// Zeichnet Maus
 		
-		SetzeFont ("Freshman.ttf", hoehe/20 )
+		SetzeFont ("../../Schriftarten/Freshman.ttf", hoehe/20 )
 		Stiftfarbe(76,0,153)  
 		SchreibeFont (breite*3/4,0,"Punkte : "+fmt.Sprint (*punkte))	// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)

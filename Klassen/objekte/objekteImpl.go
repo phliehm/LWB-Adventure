@@ -180,7 +180,7 @@ func (ob *data) Zeichnen() {
 		
 		case 4:															// PAUSE - Anzeige
 		m.Lock()
-		SetzeFont ("Freshman.ttf", int(ob.qua) )
+		SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua) )
 		Stiftfarbe(230,230,230)
 		Vollellipse(ob.x/2,ob.y/2,ob.x*5/12,ob.y/5)
 		Stiftfarbe(255,0,127)  
