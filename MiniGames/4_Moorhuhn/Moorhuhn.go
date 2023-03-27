@@ -16,8 +16,8 @@ func main () {
 	obj := make([]objekte.Objekt,0)			// Array für die Objekte der Welt
 	
     
-	pauseObjekt := objekte.New(breite,hoehe,hoehe/4	,4)			// Erstellt das Objekt PAUSE 
-	maus 		:= objekte.New(0,0,			30		,3)			// Erstellt das Objekt MAUSZEIGER mit Größe (40)
+	pauseObjekt := objekte.New(breite,hoehe,hoehe/4	,1)			// Erstellt das Objekt PAUSE 
+	maus 		:= objekte.New(0,0,			30		,0)			// Erstellt das Objekt MAUSZEIGER mit Größe (40)
 	
 	/*
 	mauX := make(chan uint16)									// Erstellt Channel zur Maussteuerung
@@ -52,7 +52,7 @@ A:	for {
 		taste,gedrueckt,_:= TastaturLesen1 ()
 		if gedrueckt == 1 {
 			switch taste {
-				case 'q': 												//mit 'q' wird das Programm beendet!
+				case 'q': 													// mit 'q' wird das Programm beendet!
 				break A
 				case 'p': 
 				pause = !pause												// Pause-Modus !!
@@ -80,21 +80,48 @@ A:	for {
 
 func erstelleObjekte(obj *[]objekte.Objekt, pause,akt *bool) {		// füllt Objekte ins Array
 	
-	*obj = append(*obj, objekte.New(200,50,		350	,5) )
+	time.Sleep( time.Duration(2e9) )
+	
+	*obj = append(*obj, objekte.New(0,150,		350	,3) )
 	*akt = true
 	time.Sleep( time.Duration(2e9) )
 	
 	for *pause { time.Sleep( time.Duration(2e8) ) }
-	*obj = append(*obj, objekte.New(0,0,		200	,5) )
+	*obj = append(*obj, objekte.New(200,0,		300	,5) )
 	*akt = true
 	time.Sleep( time.Duration(2e9) )
 	
 	for *pause { time.Sleep( time.Duration(2e8) ) }
-	*obj = append(*obj, objekte.New(600,100,	150	,5) )
+	*obj = append(*obj, objekte.New(400,300,	250	,3) )
 	*akt = true
 	time.Sleep( time.Duration(2e9) )
 	
-	test := objekte.New(0,350,		100	,1)
+	for *pause { time.Sleep( time.Duration(2e8) ) }
+	*obj = append(*obj, objekte.New(600,200,	200	,5) )
+	*akt = true
+	time.Sleep( time.Duration(2e9) )
+	
+	for *pause { time.Sleep( time.Duration(2e8) ) }
+	*obj = append(*obj, objekte.New(400,100,	150	,3) )
+	*akt = true
+	time.Sleep( time.Duration(2e9) )
+	
+	for *pause { time.Sleep( time.Duration(2e8) ) }
+	*obj = append(*obj, objekte.New(650,80,	100	,5) )
+	*akt = true
+	time.Sleep( time.Duration(2e9) )
+	
+	for *pause { time.Sleep( time.Duration(2e8) ) }
+	*obj = append(*obj, objekte.New(600,50,	50	,3) )
+	*akt = true
+	time.Sleep( time.Duration(2e9) )
+	
+	for *pause { time.Sleep( time.Duration(2e8) ) }
+	*obj = append(*obj, objekte.New(500,40,	50	,5) )
+	*akt = true
+	time.Sleep( time.Duration(2e9) )
+	
+	test := objekte.New(0,350,		100	,2)
 	*obj = append(*obj, test )
 	*akt = true
 	
@@ -104,14 +131,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,akt *bool) {		// füllt Objekt
 		time.Sleep( time.Duration(1e8) )
 	}
 	
-	for *pause { time.Sleep( time.Duration(2e8) ) }
-	*obj = append(*obj, objekte.New(600,300,	80	,1) )
-	*akt = true
-	time.Sleep( time.Duration(2e9) )
 	
-	for *pause { time.Sleep( time.Duration(2e8) ) }
-	*obj = append(*obj, objekte.New(500,500,	20	,1) )
-	*akt = true
 	
 }
 
@@ -127,7 +147,6 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt objekte.Objekt, pa
 		
 		Stiftfarbe(255,255,255)
 		Cls()									// Cleart vollständigen Screen
-		
 		
 		if *akt { 
 			ObjAktualisieren(obj)
@@ -167,6 +186,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt objekte.Objekt, pa
 
 func ObjAktualisieren(obj *[]objekte.Objekt) {
 	raeume.Moorhuhn(breite)						// Hintergrund des Moorhuhn-Raumes wird gezeichnet
+	// raeume.Hauptflur(breite)
 	
 	for _,ob := range *obj { 					// Zeichnet alleweiteren Objekte ein
 		ob.Zeichnen()
@@ -187,28 +207,47 @@ func maussteuerung (obj *[]objekte.Objekt, maus objekte.Objekt, pause,akt *bool,
 		mauY <- mausY
 		*/
 		
-		if *pause==false && taste==1 && status==1 { 			//linke Maustaste gerade gedrückt
+		if *pause==false && taste==1 && status==1 { 				//LINKE Maustaste gerade gedrückt
 			
-			for _,ob := range *obj { 					// Zeichnet alleweiteren Objekte ein
+			for _,ob := range *obj { 							// Zeichnet alleweiteren Objekte ein
 				if ob.Getroffen(mausX,mausY) {
-					ob.SetzeTyp(2)
-					SpieleNote("4A",0.1,0)
+					switch ob.GibTyp() {
+						case 2:
+						SpieleNote("4C",0.1,0)
+						case 3:
+						ob.SetzeTyp(4)
+						SpieleNote("4A",0.1,0)
+						case 4:
+						SpieleNote("4A",0.1,0)
+						case 5:
+						ob.SetzeTyp(6)
+						SpieleNote("4E",0.1,0)
+						case 6:
+						SpieleNote("4E",0.1,0)
+					}
 					*punkte++
 					*akt = true
 				}
 			}
-			fmt.Println ("links: ", taste, status,mausX,mausY) //------------------------
+			fmt.Println ("links: ", taste, status,mausX,mausY) 	// printet Koordinaten des Klicks
 		}
-		if *pause==false && taste == 3 && status == 1 { 			//rechte Maustaste gerade gedrückt
-			for _,ob := range *obj { 					// Zeichnet alleweiteren Objekte ein
+		
+		if *pause==false && taste == 3 && status == 1 { 			//RECHTE Maustaste gerade gedrückt
+			
+			for _,ob := range *obj { 							// Zeichnet alleweiteren Objekte ein
 				if ob.Getroffen(mausX,mausY) {
-					ob.SetzeTyp(1)
+					switch ob.GibTyp() {
+						case 4:
+						ob.SetzeTyp(3)
+						case 6:
+						ob.SetzeTyp(5)
+					}
 					SpieleSound("../../Sounds/GameOver.wav")
 					*punkte--
 					*akt = true
 				}
 			}
-			fmt.Println ("rechts: ", taste, status,mausX,mausY)
+			fmt.Println ("rechts: ", taste, status,mausX,mausY)	// printet Koordinaten des Klicks
 		}
 	}
 }
