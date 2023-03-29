@@ -14,6 +14,9 @@ import "gfx"
 
 func main() {
 
+	var xSize uint16 = 100  		// Größe des Bauelements in x-Richtung
+									// in Pixel zur Skalierung
+
 	// ---------------- Erzeuge Schaltkreis -------------- //
 
 	var sk sch.Schaltung = sch.New()
@@ -21,7 +24,7 @@ func main() {
 	sk.BauteilEinfuegen(1,100,100,b.Schalter)
 	sk.BauteilEinfuegen(2,100,400,b.Schalter)
 	
-	sk.BauteilEinfuegen(3,400,250,b.AND)	
+	sk.BauteilEinfuegen(3,400,250,b.NOT)	
 	
 	sk.BauteilEinfuegen(4,700,100,b.Lampe)
 	sk.BauteilEinfuegen(5,700,400,b.Lampe)
@@ -36,8 +39,8 @@ func main() {
 
 	// ---------------- Zeichne Schaltkreis -------------- //
 
-//	gfx.Fenster(1200,700)
-	gfx.Fenster(800,500)
+	gfx.Fenster(1260,720)
+//	gfx.Fenster(800,500)
 		
 	// ---------------- Teste Schaltkreis -------------- //
 
@@ -45,7 +48,7 @@ func main() {
 	fmt.Println("Zustand von Schalter 2", sk.GibSchalterwert(2))
 	fmt.Println("Ausgangswert aller Lampen", sk.GibLampenStatus())
 	fmt.Println()
-	sk.Zeichnen(100)
+	sk.Zeichnen(xSize)
 	fmt.Scanln()
 
 
@@ -57,7 +60,7 @@ func main() {
 	fmt.Println("Zustand von Schalter 2", sk.GibSchalterwert(2))
 	fmt.Println("Ausgangswert aller Lampen", sk.GibLampenStatus())
 	fmt.Println()
-	sk.Zeichnen(100)
+	sk.Zeichnen(xSize)
 	fmt.Scanln()
 
 
@@ -69,7 +72,7 @@ func main() {
 	fmt.Println("Zustand von Schalter 2", sk.GibSchalterwert(2))
 	fmt.Println("Ausgangswert aller Lampen", sk.GibLampenStatus())
 	fmt.Println()
-	sk.Zeichnen(100)
+	sk.Zeichnen(xSize)
 	fmt.Scanln()
 
 	// sberechneSchaltkreis(be,v)
