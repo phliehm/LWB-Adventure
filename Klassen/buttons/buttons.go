@@ -5,6 +5,7 @@
 package buttons
 
 import "gfx"
+// import "fmt"
 
 // Buttons haben recheckige From.
 // x,y - bezeichet die obere linke Ecke.
@@ -132,9 +133,9 @@ func (but *data) SetzeFont(font string) {
 	
 func (but *data) ZeichneButton() {
 	var diff uint16 = 2
-	var fsize int = 20
+	var fsize int = int(but.h/2)
 	
-	gfx.SetzeFont (but.font,fsize)
+	gfx.SetzeFont(but.font,fsize)
 
 	if but.aktiv {
 		gfx.Stiftfarbe(but.r,but.g,but.b)
