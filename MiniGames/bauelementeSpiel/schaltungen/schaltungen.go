@@ -24,7 +24,7 @@ type Schaltung interface {
 	
 	VerbindungEinfuegen(vonID,nachID,eingangNr,x uint16)
 	
-	PruefeSchaltung() bool
+//	PruefeSchaltung() bool
 	
 	SchaltungBerechnen()
 	
@@ -36,6 +36,16 @@ type Schaltung interface {
 	
 	GibLampenStatus() []bool
 	
+	GibBauelementtyp(id uint16) b.Bautyp
+	
+	GibSchalterIDs() []uint16 
+	
+	// Vor: Bauelement mit id existiert.
+	// Eff: -
+	// Erg: Die x und y Position (Mittelpunkt) des Bauelements mit
+	//		passender ID ist geliefert.		
+	GibPosXY(id uint16) (uint16,uint16)
+
 	Zeichnen(xSize uint16)
 	
 	//GibBauelement(id uint16) b.Bautyp
@@ -86,7 +96,6 @@ func (sch *data) PruefeSchaltung() bool  {
 	
 func (sch *data) SchaltungBerechnen() {
 
-//	var berechnet []bool = make([]bool,len(sch.bauelementeTab))
 	var verb []l.Leitung				// Liste der Verbindungen am Eingang			
 
 	// Schritt 1:
@@ -104,26 +113,21 @@ func (sch *data) SchaltungBerechnen() {
 		}
 	}
 
-	// fmt.Println("Berechnen vorbereitet!")
-
 	// Setze Eingänge, wenn alle Ausgänge der Verbindungen bereits berechnet.
 	// Suche vom Eingang aus die zuegehörigen Ausgänge.
-	// Berechne den Ausgang, wenn alle Eingänge gesetzt werden können.
+	// Berechne den Ausgang, wenn alle Eingänge gesetzt werden konnten.
+	// Wiederhole bis alle Bauteile berechnet
 	var e1,e2 bool			// neue Werte der Eingänge?
 	var	ok	bool			// alle Bauteile berechnet?
 	for {					// wiederhole bis alle berechnet: ok == true
 		ok = true
 A:		for _,be:= range sch.bauelementeTab {
-//		for _,be:= range sch.bauelementeTab {
 			e1 = false
 			e2 = false
 			if !be.GibBerechnet() {
 				ok = false
 				verb = be.GibVerbindungen()
-				//ok = true
 				for _,v:= range verb {		// alle verbundenen Ausgänge berechnet?
-//					fmt.Println(v.GibVonID())
-//					fmt.Println(v.GibEinNr())
 					if sch.bauelementeTab[v.GibVonID()].GibBerechnet() {
 						if v.GibEinNr() == 1 {
 							// Nur eine Eingangsleitung muss jeweils true sein (Spannung haben).
@@ -141,9 +145,6 @@ A:		for _,be:= range sch.bauelementeTab {
 				be.SetzeEingang(2, e2)
 				be.BerechneAusgang()
 				be.SetzeBerechnet(true)
-//				fmt.Println("Ausgang berechnet von Bauteil: ",be.GibBauelementtyp () )
-//				fmt.Println(e1,e2)
-//				fmt.Println(be.GibID(),be.BerechneAusgang())
 			}
 		}
 		if ok {break}			// ja alle Bauteile berechnet
@@ -199,11 +200,33 @@ func (sch *data) GibLampenStatus() []bool {
 }
 
 
+func (sch *data) GibBauelementtyp(id uint16) b.Bautyp {
+	return sch.bauelementeTab[id].GibBauelementtyp()
+}
+
+
+func (sch *data) GibSchalterIDs() []uint16 {
+	var erg []uint16 = make([]uint16,0)
+	for index,be:= range sch.bauelementeTab {
+		if be.GibBauelementtyp() == b.Schalter {
+			erg = append(erg,index)
+		}
+	}
+	return erg
+}
+
+
+func (sch *data) GibPosXY(id uint16) (uint16,uint16) {
+	return sch.bauelementeTab[id].GibPosXY()
+}
+
+
 
 func (sch *data) Zeichnen(xSize uint16) {
-	var verb []l.Leitung
-	gfx.Stiftfarbe(255,255,255)
-	gfx.Cls()
+	var verb []l.Leitung	
+//	gfx.UpdateAus()
+//	gfx.Stiftfarbe(255,255,255)
+//	gfx.Cls()
 	gfx.Stiftfarbe(0,0,0)	
 	for _,be:= range sch.bauelementeTab {
 		be.ZeichneBauelement(xSize)
@@ -213,20 +236,8 @@ func (sch *data) Zeichnen(xSize uint16) {
 				be.ZeichneLeitung(xSize,x+xSize/2,y,v)
 		}		
 	}
+//	gfx.UpdateAn()
 }
 
 
-/*
-func zeichneLeitung(xSize uint16) {
 
-	var x0,y0,x1,y1 uint16
-
-	gfx.Stiftfarbe(0,0,0)
-
-	// Line 1
-	l.ausBauteilID
-	x0 = 
-	y0 =
-
-}
-*/

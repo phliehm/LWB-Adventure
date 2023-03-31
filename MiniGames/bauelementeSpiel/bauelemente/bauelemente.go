@@ -281,6 +281,8 @@ func (bt *data) ZeichneBauelement(xSize uint16) {
 	var ySize uint16 = xSize
 	var fSize uint16 = xSize/2		// Größe des Fonts
 
+//	gfx.UpdateAus()
+
 	gfx.Stiftfarbe(0,0,0)
 	gfx.SetzeFont ("./terminus-font/TerminusTTF-4.49.2.ttf",int(fSize))
 	
@@ -309,7 +311,7 @@ func (bt *data) ZeichneBauelement(xSize uint16) {
 	} else if bt.typ == Lampe {
 		gfx.Vollkreis(bt.x,bt.y,xSize/3)
 		if bt.ausgang == true {
-			gfx.Stiftfarbe(255,0,0)
+			gfx.Stiftfarbe(255,255,0)
 		} else {
 			gfx.Stiftfarbe(255,255,255)
 		}
@@ -321,10 +323,14 @@ func (bt *data) ZeichneBauelement(xSize uint16) {
 			bt.x+xSize/3*71/100.,bt.y-xSize/3*71/100.,size)
 	}
 
+//	gfx.UpdateAn()
+
 }
+
 
 	
 func (bt *data) ZeichneLeitung(xSize,x,y uint16, v l.Leitung) {
+
 	if  bt.typ == NOT {
 		dickeLinie(bt.x-xSize/2,bt.y,v.GibXPos(),bt.y,size)		
 		dickeLinie(v.GibXPos(),bt.y,v.GibXPos(),y,size)
@@ -347,5 +353,6 @@ func (bt *data) ZeichneLeitung(xSize,x,y uint16, v l.Leitung) {
 		dickeLinie(v.GibXPos(),bt.y,v.GibXPos(),y,size)
 		dickeLinie(v.GibXPos(),y,x,y,size)
 	}
+
 }
 
