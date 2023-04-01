@@ -11,6 +11,7 @@ type data struct {                                      // Zugriff
 	x,y uint16          	// Koordinaten der linken oberen Ecke
 	typ uint8            	// Objekt-Typ
 	qua	uint16				// Quadratgröße = Breite des Objekts
+	r,g,b uint8				// Farbe des Objekts (optional)
 }
 
 /*
@@ -33,8 +34,10 @@ func New (x,y, qua uint16, typ uint8) *data {
 }
 
 func (ob *data) SetzeKoordinaten(x,y uint16) {
+	//m.Lock()
 	ob.x = x
 	ob.y = y
+	//m.Unlock()
 }
 
 func (ob *data) GibKoordinaten() (uint16,uint16) {
@@ -49,9 +52,19 @@ func (ob *data) GibTyp() (uint8) {
 	return ob.typ
 }
 
+func (ob *data) SetzeFarbe(r,g,b uint8) {
+	ob.r = r
+	ob.g = g
+	ob.b = b
+}
+
+func (ob *data) GibFarbe() (uint8, uint8, uint8) {
+	return ob.r,ob.g,ob.b
+}
+
 func (ob *data) Zeichnen() {
 	switch ob.typ {
-		case 0:																// Fadenkreuz-Maus-Zeiger be Koord x,y
+		case 0:																// Fadenkreuz-Maus-Zeiger bei Koord x,y
 		m.Lock()
 		Stiftfarbe(255,255,255)
 		for i:=uint16(0);i<ob.qua/10;i++ {
@@ -63,18 +76,19 @@ func (ob *data) Zeichnen() {
 		Vollrechteck(ob.x+ob.qua*2/10, 	ob.y-ob.qua/20,		ob.qua/2,ob.qua/10)
 		m.Unlock()
 		
-		case 1:															// PAUSE - Anzeige
+		case 1:																// PAUSE - Anzeige
 		m.Lock()
 		SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua) )
 		Stiftfarbe(230,230,230)
 		Vollellipse(ob.x/2,ob.y/2,ob.x*5/12,ob.y/5)
 		Stiftfarbe(255,0,127)  
-		SchreibeFont (ob.x/6,ob.y/2-ob.qua*5/12,"PAUSE")				// Schreibe mittig Pause
+		SchreibeFont (ob.x/6,ob.y/2-ob.qua*5/12,"PAUSE")					// Schreibe mittig Pause
 		m.Unlock()
 		
 		case 2:																// rotes Quadrat ab linker oberer Ecke
 		m.Lock()
-		Stiftfarbe(255,0,0)
+		Rechteck(ob.x,ob.y,ob.qua-1,ob.qua-1)
+		Stiftfarbe(ob.r,ob.g,ob.b)
 		Vollrechteck(ob.x,ob.y,ob.qua-1,ob.qua-1)
 		m.Unlock()
 		
@@ -263,10 +277,20 @@ func (ob *data) Zeichnen() {
 	}
 }
 
-func (ob *data) Getroffen(x,y uint16) bool {			// Checkt quasi, ob Hit-Box getroffen
-	if ob.x+ob.qua/10 < x && x < ob.x+ob.qua*9/10 	&& 	ob.y+ob.qua/10 < y && y < ob.y+ob.qua*9/10 {
-		return true
-	} else {
-		return false
-	}  
+func (ob *data) Getroffen(x,y uint16) bool {														// Checkt quasi, ob Hit-Box getroffen
+	switch ob.typ {
+		case 2:
+		if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
+			return true
+		} else {
+			return false
+		}  
+
+		default:
+		if ob.x+ob.qua/10 < x && x < ob.x+ob.qua*9/10 	&& 	ob.y+ob.qua/10 < y && y < ob.y+ob.qua*9/10 {
+			return true
+		} else {
+			return false
+		}
+	}
 }

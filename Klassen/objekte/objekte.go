@@ -26,6 +26,10 @@ type Objekt interface {
 	
 	GibTyp() (uint8)
 	
+	SetzeFarbe(r,g,b uint8)
+
+	GibFarbe() (uint8, uint8, uint8)
+	
 	Zeichnen()
 	
 	Getroffen(x,y uint16) bool

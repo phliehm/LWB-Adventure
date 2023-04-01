@@ -122,6 +122,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,akt *bool) {		// füllt Objekt
 	time.Sleep( time.Duration(2e9) )
 	
 	test := objekte.New(0,350,		100	,2)
+	test.SetzeFarbe(255,0,0)
 	*obj = append(*obj, test )
 	*akt = true
 	
