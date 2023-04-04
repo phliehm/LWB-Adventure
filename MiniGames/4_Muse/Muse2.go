@@ -8,7 +8,10 @@ import ( . "gfx"
 			"time"
 			"fmt"
 			"../../Klassen/objekte"
-			)
+			 "sync"
+			 )
+
+var m sync.Mutex
 
 const breite = 800 		// von Gott vorgegeben
 const hoehe  = 600  	// von Gott vorgegeben
@@ -20,8 +23,7 @@ func main () {
 	var verz bool								// für die Verzögerung in der Klangwiedergabe
 	var attack,decay,sustain,release uint8			// Werte für die Hüllkurve
 	
-	obj := make([]objekte.Objekt,0,200)			// Array für die Objekte der Welt
-	
+	obj := make([]objekte.Objekt,0,200)							// Array für die Objekte der Welt
     maus 		:= objekte.New(0,0,			30		,0)			// Erstellt das Objekt MAUSZEIGER mit Größe (40)
 	
 	
@@ -29,7 +31,7 @@ func main () {
 	Fenstertitel("Spiel(e) mit Klängen!")								// Gibt Fenster-Titel 
 	
 	// Objekte werden in der Welt platziert
-	erstelleObjekte(&obj, maus)
+	erstelleObjekte()
 	
 	
 	// Das Hauptprogramm startet die View-Komponente als nebenläufigen Prozess!
@@ -40,7 +42,7 @@ func main () {
 	go maussteuerung (&obj, maus, &taste, &status, &mausX, &mausY)
 	
 	// Nebenläufig wird Soundsteuerung gestartet:
-	go soundsteuerung(&obj, &taste, &status, &mausX, &mausY, &verz)
+	go soundsteuerung(&taste, &status, &mausX, &mausY, &verz)
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
 	// Wir fragen hier nur die Tastatur ab.
@@ -66,6 +68,7 @@ A:	for {
 				case 274:												// Unten-Taste
 				verz = true
 				case 'w':												// s-Taste für die WELLENFORM
+				m.Lock()
 				_,_,_,welle,_ := GibKlangparameter()
 				switch welle {
 					case 1:
@@ -97,6 +100,7 @@ A:	for {
 					Schreibe(10,10,"Welle: RECHTECK")
 					fmt.Println("WELLENform geändert auf RECHTECK")
 				}
+				m.Unlock()
 				case 'a':
 				_,dec,sus,rel := GibHuellkurve()
 				switch attack {						// GibHuellkurve() (float64,float64,float64,float64): Standard-> 0.002 0.75 0 0.006
@@ -278,33 +282,28 @@ A:	for {
 	}
 }
 
-func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt) {		// füllt Objekte ins Array
+func erstelleObjekte() {								// zeichnet Objekte 
+	var quadrat uint16 = 50
 	
-	for i:=uint16(0);i<=800;i+=50 {
-		for j:=uint16(25)-(i%100)/2;j<=600;j+=50 {
-			new := objekte.New(i,j,	90	,2)
-			new.SetzeFarbe(uint8(i/4),uint8(j/3),uint8( (i+j)/6 ))
-			*obj = append(*obj, new )
-		}
-	}
-	ObjAktualisieren(obj)
-}
-
-func ObjAktualisieren(obj *[]objekte.Objekt) {
 	Transparenz(150)
-	for _,ob := range *obj { 					// Zeichnet alleweiteren Objekte ein
-		ob.Zeichnen()
+	for i:=uint16(0);i<=800;i+=quadrat {
+		for j:=uint16(25)-(i%100)/2;j<=600;j+=quadrat {
+			//Stiftfarbe(0,0,0)
+			Stiftfarbe(uint8(i/4),uint8(j/3),uint8( (i+j)/6 ))
+			Rechteck(i,j,quadrat+20,quadrat+20)
+			Vollrechteck(i,j,quadrat,quadrat)
+		}
 	}
 	Transparenz(0)
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,800,24)
+	Archivieren()								// Speichert das Hintergrund-Bild
 	Stiftfarbe(0,0,0)
 	Schreibe(10,10,"Welle: RECHTECK")
 	Schreibe(200,10,"Attack: 0,002")
 	Schreibe(350,10,"Decay: 0,75")
 	Schreibe(500,10,"Sutain: 0")
 	Schreibe(650,10,"Release: 0,006")
-	Archivieren()								// Speichert das Hintergrund-Bild
 }
 
 
@@ -353,64 +352,68 @@ func maussteuerung (obj *[]objekte.Objekt, maus objekte.Objekt, taste *uint8, st
 	}
 }
 
-func soundsteuerung(obj *[]objekte.Objekt, taste *uint8, status *int8, mausX, mausY *uint16, verz *bool) {
+func soundsteuerung(taste *uint8, status *int8, mausX, mausY *uint16, verz *bool) {
+	var laenge,warten float64 = 0.5,0
 	for {
 		if *taste==1 && *status==1 { 							//LINKE Maustaste gerade gedrückt
 			for *status!=-1 {
-				for _,ob := range *obj { 							// Überpüft Objekte
-					if ob.Getroffen(*mausX,*mausY) {
-						b,h := ob.GibKoordinaten()
-						switch b {
-							case 0,50:
-							SpieleNote(fmt.Sprint((h+80)/80)+"C",0.1,0)
-							case 100,150:
-							SpieleNote(fmt.Sprint((h+80)/80)+"D",0.1,0)
-							case 200,250:
-							SpieleNote(fmt.Sprint((h+80)/80)+"E",0.1,0)
-							case 300,350:
-							SpieleNote(fmt.Sprint((h+80)/80)+"F",0.1,0)
-							case 400,450:
-							SpieleNote(fmt.Sprint((h+80)/80)+"G",0.1,0)
-							case 500,550:
-							SpieleNote(fmt.Sprint((h+80)/80)+"A",0.1,0)
-							case 600,650:
-							SpieleNote(fmt.Sprint((h+80)/80)+"H",0.1,0)
-							case 700,750:
-							SpieleNote(fmt.Sprint((h+160)/80)+"C",0.1,0)
-						 }
-					}
+				b,h := *mausX/50*50, *mausY/50*50
+				m.Lock()
+				switch b {
+					case 0,50:
+					SpieleNote(fmt.Sprint((h+80)/80)+"C",laenge,warten)
+					SpieleNote(fmt.Sprint((h+80)/80)+"D",laenge,warten)
+					SpieleNote(fmt.Sprint((h+80)/80)+"E",laenge,warten)
+					SpieleNote(fmt.Sprint((h+80)/80)+"F",laenge,warten)
+					SpieleNote(fmt.Sprint((h+80)/80)+"G",laenge,warten)
+					SpieleNote(fmt.Sprint((h+80)/80)+"A",laenge,warten)
+					SpieleNote(fmt.Sprint((h+80)/80)+"H",laenge,warten)
+					SpieleNote(fmt.Sprint((h)/80)+"C",laenge,warten)
+					SpieleNote(fmt.Sprint((h)/80)+"D",laenge,warten)
+					SpieleNote(fmt.Sprint((h)/80)+"E",laenge,warten)
+					case 100,150:
+					SpieleNote(fmt.Sprint((h+80)/80)+"D",laenge,warten)
+					SpieleNote(fmt.Sprint((h+80)/80)+"E",laenge,warten)
+					case 200,250:
+					SpieleNote(fmt.Sprint((h+80)/80)+"E",laenge,warten)
+					SpieleNote(fmt.Sprint((h+80)/80)+"F",laenge,warten)
+					case 300,350:
+					SpieleNote(fmt.Sprint((h+80)/80)+"F",laenge,warten)
+					case 400,450:
+					SpieleNote(fmt.Sprint((h+80)/80)+"G",laenge,warten)
+					case 500,550:
+					SpieleNote(fmt.Sprint((h+80)/80)+"A",laenge,warten)
+					case 600,650:
+					SpieleNote(fmt.Sprint((h+80)/80)+"H",laenge,warten)
+					case 700,750:
+					SpieleNote(fmt.Sprint((h+160)/80)+"C",laenge,warten)
 				}
-				if *verz {
-					time.Sleep(time.Duration(3e8) )
-				} else {
-					time.Sleep(time.Duration(6e7) )
-				}
+				m.Unlock()
+				
+				time.Sleep(time.Duration(5e8) )
+				
 				
 			}
 		} else if *taste==3 && *status==1 { 							//RECHTE Maustaste gerade gedrückt
 			for *status!=-1 {
-				for _,ob := range *obj { 							// Überpüft Objekte
-					if ob.Getroffen(*mausX,*mausY) {
-						b,h := ob.GibKoordinaten()
-						switch b {
-							case 0,50:
-							SpieleNote(fmt.Sprint((h+80)/80)+"C",0.1,0)
-							case 100,150:
-							SpieleNote(fmt.Sprint((h+80)/80)+"D",0.1,0)
-							case 200,250:
-							SpieleNote(fmt.Sprint((h+80)/80)+"E",0.1,0)
-							case 300,350:
-							SpieleNote(fmt.Sprint((h+80)/80)+"G",0.1,0)
-							case 400,450:
-							SpieleNote(fmt.Sprint((h+80)/80)+"A",0.1,0)
-							case 500,550:
-							SpieleNote(fmt.Sprint((h+80)/80)+"H",0.1,0)
-							case 600,650:
-							SpieleNote(fmt.Sprint((h+80)/80)+"D",0.1,0)
-							case 700,750:
-							SpieleNote(fmt.Sprint((h+160)/80)+"F",0.1,0)
-						 }
-					}
+				b,h := *mausX/50*50, *mausY/50*50
+				switch b {
+					case 0,50:
+					SpieleNote(fmt.Sprint((h+80)/80)+"C",0.1,0)
+					case 100,150:
+					SpieleNote(fmt.Sprint((h+80)/80)+"D",0.1,0)
+					case 200,250:
+					SpieleNote(fmt.Sprint((h+80)/80)+"E",0.1,0)
+					case 300,350:
+					SpieleNote(fmt.Sprint((h+80)/80)+"G",0.1,0)
+					case 400,450:
+					SpieleNote(fmt.Sprint((h+80)/80)+"A",0.1,0)
+					case 500,550:
+					SpieleNote(fmt.Sprint((h+80)/80)+"H",0.1,0)
+					case 600,650:
+					SpieleNote(fmt.Sprint((h+80)/80)+"D",0.1,0)
+					case 700,750:
+					SpieleNote(fmt.Sprint((h+160)/80)+"F",0.1,0)
 				}
 				if *verz {
 					time.Sleep(time.Duration(3e8) )

@@ -26,11 +26,17 @@ type Objekt interface {
 	
 	GibTyp() (uint8)
 	
+	SetzeAkt(akt bool)
+	
+	GibAkt() (bool)
+	
+	GibErstellung() (int64)
+	
 	SetzeFarbe(r,g,b uint8)
 
 	GibFarbe() (uint8, uint8, uint8)
 	
 	Zeichnen()
 	
-	Getroffen(x,y uint16) bool
+	Getroffen(x,y uint16, opt uint8) (bool, int64)
 }
