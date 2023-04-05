@@ -19,7 +19,7 @@ const hoehe  = 600  	// von Gott vorgegeben
 	
 func main () {
 	var mutex sync.Mutex					// erstellt Mutex
-	var punkte uint16 = 10					// Spiel-Punktzahl
+	var punkte uint16 = 0					// Spiel-Punktzahl
 	var stop bool = false					// für OK-Objekt
 	var pause bool = false
 	var akt	bool = true						// Prüft, ob Grafik aktualisiert werden muss
@@ -27,7 +27,7 @@ func main () {
 	
 	
 	fmt.Println(time.Now().UnixNano() )
-	random := rand.New( rand.NewSource( time.Now().UnixNano() ) )
+	random := rand.New( rand.NewSource( time.Now().UnixNano() ) )	// Initialisiere Random-Objekt mit der Systemzeit
 	
 	
     
@@ -48,8 +48,8 @@ func main () {
 	// Objekte werden nach und nach in der Welt platziert
 	go erstelleObjekte(&obj, &pause, &stop, &akt, random, &mutex)
 	
-	// Nebenläufig wird die Kontroll-Komponente 1 für die Maus gestartet.
-	go maussteuerung (&obj, maus, okayObjekt, &pause, &stop, &akt, &punkte)
+	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
+	go maussteuerung(&obj, maus, okayObjekt, &pause, &stop, &akt, &punkte)
 	
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
@@ -59,7 +59,7 @@ func main () {
 	// keine Control-Komponente 1.
 	
 A:	for {
-		taste,gedrueckt,_:= TastaturLesen1 ()
+		taste,gedrueckt,_:= TastaturLesen1()
 		if gedrueckt == 1 {
 			switch taste {
 				case 'q': 													// mit 'q' wird das Programm beendet!
@@ -73,8 +73,7 @@ A:	for {
 			}
 		}
 	}
-	
-
+	// return punkte
 }
 
 func erstelleObjekte(obj *[]objekte.Objekt, pause,stop,akt *bool, rand *rand.Rand, mutex *sync.Mutex) {		// füllt Objekte ins Array
@@ -88,6 +87,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,stop,akt *bool, rand *rand.Ran
 
 	time.Sleep( time.Duration(1e9) )
 	
+
 	/*										bewegtes Objekt
 	bewegung := objekte.New(0,0,		200	,5)
 	*obj = append(*obj, bewegung )
@@ -98,6 +98,41 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,stop,akt *bool, rand *rand.Ran
 	}
 	*/
 	
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	Zwischentext(&texte.MoorLvl4, mutex, stop)		// Level 4-Text
+	
+	Levelanzeige(level4, mutex)						// ----------------- LEVEL 4 --------------------
+	
+	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
+	
+	*obj = append(*obj, objekte.New(50,150,50,uint8(rand.Intn(2)*2+3)),objekte.New(50,200,50,uint8(rand.Intn(2)*2+3)),objekte.New(50,250,50,uint8(rand.Intn(2)*2+3)),		// L
+						objekte.New(50,300,50,uint8(rand.Intn(2)*2+3)),objekte.New(50,350,50,uint8(rand.Intn(2)*2+3)),objekte.New(50,400,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(50,450,50,uint8(rand.Intn(2)*2+3)),objekte.New(100,450,50,uint8(rand.Intn(2)*2+3)),objekte.New(150,450,50,uint8(rand.Intn(2)*2+3)),
+						  
+						objekte.New(215,150,50,uint8(rand.Intn(2)*2+3)),objekte.New(220,200,50,uint8(rand.Intn(2)*2+3)),objekte.New(230,250,50,uint8(rand.Intn(2)*2+3)),	// W
+						objekte.New(245,300,50,uint8(rand.Intn(2)*2+3)),objekte.New(260,350,50,uint8(rand.Intn(2)*2+3)),objekte.New(275,400,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(295,450,50,uint8(rand.Intn(2)*2+3)),objekte.New(325,400,50,uint8(rand.Intn(2)*2+3)),objekte.New(350,350,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(375,400,50,uint8(rand.Intn(2)*2+3)),objekte.New(405,450,50,uint8(rand.Intn(2)*2+3)),objekte.New(425,400,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(440,350,50,uint8(rand.Intn(2)*2+3)),objekte.New(455,300,50,uint8(rand.Intn(2)*2+3)),objekte.New(470,250,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(480,200,50,uint8(rand.Intn(2)*2+3)),objekte.New(485,150,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(600,150,50,uint8(rand.Intn(2)*2+3)),objekte.New(600,200,50,uint8(rand.Intn(2)*2+3)),objekte.New(600,250,50,uint8(rand.Intn(2)*2+3)),	// B
+						objekte.New(600,300,50,uint8(rand.Intn(2)*2+3)),objekte.New(600,350,50,uint8(rand.Intn(2)*2+3)),objekte.New(600,400,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(600,450,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(660,170,50,uint8(rand.Intn(2)*2+3)),objekte.New(700,215,50,uint8(rand.Intn(2)*2+3)),objekte.New(660,260,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(680,315,50,uint8(rand.Intn(2)*2+3)),objekte.New(725,360,50,uint8(rand.Intn(2)*2+3)),objekte.New(710,415,50,uint8(rand.Intn(2)*2+3)),
+						objekte.New(660,440,50,uint8(rand.Intn(2)*2+3)) )
+	*akt = true
+	time.Sleep( time.Duration(1e10) )
+	*obj = make([]objekte.Objekt,0)			// leere den Objekte-Slice (Performance!)
+	
+	
+	
+	
+	
+	
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 	Zwischentext(&texte.MoorEinl, mutex, stop)		// Einleitungs-Text
 	
 	Levelanzeige(level1, mutex)						// ----------------- LEVEL 1 --------------------
@@ -122,7 +157,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,stop,akt *bool, rand *rand.Ran
 	// ----------------------------------------------------------------------------------------------
 	
 	
-	Zwischentext(&texte.MoorLvl2, mutex, stop)		// Einleitungs-Text
+	Zwischentext(&texte.MoorLvl2, mutex, stop)		// Level 2-Text
 		
 	Levelanzeige(level2, mutex)						// ----------------- LEVEL 2 --------------------
 	
@@ -142,7 +177,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,stop,akt *bool, rand *rand.Ran
 	
 	// ----------------------------------------------------------------------------------------------
 	
-	Zwischentext(&texte.MoorLvl3, mutex, stop)		// Einleitungs-Text
+	Zwischentext(&texte.MoorLvl3, mutex, stop)		// Level 3-Text
 		
 	Levelanzeige(level3, mutex)						// ----------------- LEVEL 3 --------------------
 	
@@ -161,15 +196,12 @@ func erstelleObjekte(obj *[]objekte.Objekt, pause,stop,akt *bool, rand *rand.Ran
 	
 	// ----------------------------------------------------------------------------------------------
 	
-	Levelanzeige(level4, mutex)						// ----------------- LEVEL 4 --------------------
-	
-	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
 	
 	
-	*obj = append(*obj, objekte.New(0,150,		350	,3) )
-	*akt = true
-	time.Sleep( time.Duration(2e9) )
+	
+	
 
+	// ----------------------------------------------------------------------------------------------
 	
 	for *pause { time.Sleep( time.Duration(2e8) ) }
 	*obj = append(*obj, objekte.New(400,300,	250	,3) )
