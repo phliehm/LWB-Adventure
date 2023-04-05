@@ -280,40 +280,58 @@ func (ob *data) Zeichnen() {
 			
 // LEVEL 1 - Anzeige			
 			case 7:	
-			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/6 )
-			Stiftfarbe(230,230,230)
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/24 )
+			Stiftfarbe(144,99,31)
+			Vollellipse(ob.x/2,ob.y/2,ob.x*26/60,ob.y*13/60)
+			Stiftfarbe(68,225,255)
 			Vollellipse(ob.x/2,ob.y/2,ob.x*5/12,ob.y/5)
+			Stiftfarbe(127,25,64)  
+			SchreibeFont (ob.x/6,ob.y*20/48,"LEVEL 1")
 			Stiftfarbe(255,0,127)  
-			SchreibeFont (ob.x/6,ob.y/2-ob.qua*5/12,"LEVEL 1")					// Schreibe mittig Level 1
+			SchreibeFont (ob.x/6,ob.y*19/48,"LEVEL 1")					// Schreibe mittig Level 1
 
 // LEVEL 2 - Anzeige			
 			case 8:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/6 )
-			Stiftfarbe(230,230,230)
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/24 )
+			Stiftfarbe(144,99,31)
+			Vollellipse(ob.x/2,ob.y/2,ob.x*26/60,ob.y*13/60)
+			Stiftfarbe(68,225,255)
 			Vollellipse(ob.x/2,ob.y/2,ob.x*5/12,ob.y/5)
+			Stiftfarbe(127,25,64)  
+			SchreibeFont (ob.x/6,ob.y*20/48,"LEVEL 2")
 			Stiftfarbe(255,0,127)  
-			SchreibeFont (ob.x/6,ob.y/2-ob.qua*5/12,"LEVEL 2")					// Schreibe mittig Level 2
+			SchreibeFont (ob.x/6,ob.y*19/48,"LEVEL 2")					// Schreibe mittig Level 2
 			
 // LEVEL 3 - Anzeige			
 			case 9:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/6 )
-			Stiftfarbe(230,230,230)
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/24 )
+			Stiftfarbe(144,99,31)
+			Vollellipse(ob.x/2,ob.y/2,ob.x*26/60,ob.y*13/60)
+			Stiftfarbe(68,225,255)
 			Vollellipse(ob.x/2,ob.y/2,ob.x*5/12,ob.y/5)
+			Stiftfarbe(127,25,64)  
+			SchreibeFont (ob.x/6,ob.y*20/48,"LEVEL 3")
 			Stiftfarbe(255,0,127)  
-			SchreibeFont (ob.x/6,ob.y/2-ob.qua*5/12,"LEVEL 3")					// Schreibe mittig Level 3
+			SchreibeFont (ob.x/6,ob.y*19/48,"LEVEL 3")					// Schreibe mittig Level 3
 			
 // LEVEL 4 - Anzeige			
 			case 10:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/6 )
-			Stiftfarbe(230,230,230)
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/24 )
+			Stiftfarbe(144,99,31)
+			Vollellipse(ob.x/2,ob.y/2,ob.x*26/60,ob.y*13/60)
+			Stiftfarbe(68,225,255)
 			Vollellipse(ob.x/2,ob.y/2,ob.x*5/12,ob.y/5)
+			Stiftfarbe(127,25,64)  
+			SchreibeFont (ob.x/6,ob.y*20/48,"LEVEL 4")
 			Stiftfarbe(255,0,127)  
-			SchreibeFont (ob.x/6,ob.y/2-ob.qua*5/12,"LEVEL 4")					// Schreibe mittig Level 4
+			SchreibeFont (ob.x/6,ob.y*19/48,"LEVEL 4")					// Schreibe mittig Level 4
 
 // ZIELSCHEIBE			
-			case 11:																
+			case 11:																														
 			Stiftfarbe(230,0,0)
 			Vollkreis(ob.x,ob.y,ob.qua/2)
+			Stiftfarbe(0,0,0)
+			Kreis(ob.x,ob.y,ob.qua/2)	
 			Stiftfarbe(255,255,255)  
 			Vollkreis(ob.x,ob.y,ob.qua*4/10)
 			Stiftfarbe(230,0,0)
@@ -323,6 +341,44 @@ func (ob *data) Zeichnen() {
 			Stiftfarbe(230,0,0)
 			Vollkreis(ob.x,ob.y,ob.qua/10)
 
+// Countdown - 3			
+			case 12:																
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*13/30 )
+			/*Stiftfarbe(249,195,141)
+			Vollkreis(ob.x/2,ob.y/2,ob.qua/4)
+			Stiftfarbe(72,226,180)
+			Vollkreis(ob.x/2,ob.y/2,ob.qua*9/40)*/
+			Stiftfarbe(186,66,23)
+			SchreibeFont (ob.x*43/100,ob.y*35/100,"3")
+			Stiftfarbe(68,215,210)
+			SchreibeFont (ob.x*41/100,ob.y*34/100,"3")
+
+// Countdown - 2			
+			case 13:																
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*13/30 )
+			Stiftfarbe(186,66,23)
+			SchreibeFont (ob.x*43/100,ob.y*35/100,"2")
+			Stiftfarbe(68,215,210)
+			SchreibeFont (ob.x*41/100,ob.y*34/100,"2")
+
+// Countdown - 1			
+			case 14:																
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*13/30 )
+			Stiftfarbe(186,66,23)
+			SchreibeFont (ob.x*44/100,ob.y*35/100,"1")
+			Stiftfarbe(68,215,210)
+			SchreibeFont (ob.x*42/100,ob.y*34/100,"1")
+			
+// OK - Objekt			
+			case 20:															
+			Stiftfarbe(142,36,24)
+			Vollrechteck(ob.x*4/10,ob.y*8/10,ob.x/5,ob.y/10)
+			Stiftfarbe(255,124,128)
+			Vollrechteck(ob.x*41/100,ob.y*81/100,ob.x*9/50,ob.y*8/100)
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)/15 )
+			Stiftfarbe(124,212,255)
+			SchreibeFont (ob.x*46/100,ob.y*82/100,"O K")
+			
 		}
 	}
 }
@@ -369,6 +425,14 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 				ob.SetzeAkt(false)
 				SpieleSound("../../Sounds/Punkt.wav")
 				return true, time.Now().UnixNano() - ob.GibErstellung()
+			} else {
+				return false, 0
+			}
+			case 20:
+			if ob.x*4/10 < x && x < ob.x*6/10 	&& 	ob.y*8/10 < y && y < ob.y*9/10 {
+				//ob.SetzeAkt(false)
+				SpieleNote("5A",0.1,0)
+				return true, 0
 			} else {
 				return false, 0
 			}

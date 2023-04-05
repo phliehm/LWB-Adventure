@@ -6,7 +6,7 @@ import . "gfx"
 
 func Moorhuhn(breite uint16) {
 	if breite == 800 {
-		LadeBild (0,0, "../../Bilder/Pausenraum800600.bmp")
+		LadeBild (0,0, "../../Bilder/Seminarraum-2.bmp")
 	}
 }
 
