@@ -43,3 +43,35 @@ var MoorLvl4 []string = []string{" Das   L W B - P R I N Z I P",
 								"---  MASSE statt KLASSE  ---",
 								" Horte, was das Zeug haelt !"}
 								
+var MoorLvl51 []string = []string{"Haus- und Raumordnung des ",
+								"Studienzentrums fuer Erzie-",
+								"hung, Paedagogik und Schule",
+								"StEPS - 10.02.2023 - Rev 10 : ",
+								". . .",
+								"13. Das Verzehren von Spei-",
+								"sen und Getraenken ist in al-",
+								"len Seminar- und Vorlesungs-",
+								"raeumen nicht gestattet .",
+								". . . "}
+								
+var MoorLvl52 []string = []string{"   H  u  h  u ,  H  E  I  D  I ",
+								"",
+								"Nahrung und StEPS passt",
+								"nicht .        Deshalb :",
+								"Mach es wie Heidi und iss",
+								"draussen in der Natur !",
+								"",
+								"Erscheint Heidi, druecke H",
+								"und Nahrung verschwindet ."}
+								
+var MoorOut []string = []string{"  !  G U T   V E R D A U T  !",
+								"",
+								"",
+								" Als du kamst, warst du",
+								" Schueler/in, doch jetzt",
+								"   bist du Meister/in !",
+								"",
+								"   Moege die Macht . . .",
+								"      . . . immer mit dir sein !"}			
+								
+
