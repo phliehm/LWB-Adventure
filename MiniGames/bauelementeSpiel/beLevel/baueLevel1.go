@@ -34,7 +34,7 @@ func baueLevel1() EinzelLevel {
 
 	// --------------- Baue Schaltkreis ---------------------------//
 	elevel.text = make([]string,0)
-	elevel.text = append(elevel.text,"Schaffst du auch diese Aufgabe")
+	elevel.text = append(elevel.text,"Schaffen Sie auch diese Aufgabe")
 	elevel.text = append(elevel.text,"mit dem UND-Gatter?")
 
 	

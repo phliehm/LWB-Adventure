@@ -11,6 +11,8 @@ import level "./beLevel"
 import "fmt"
 import "gfx"
 import "../../Klassen/buttons"
+import "os"
+import "strconv"
 
 
 func erzeugeSchalterButton(x,y,xSize uint16) buttons.Button {
@@ -52,11 +54,12 @@ func alleLampenAn(sk sch.Schaltung) bool {
 
 func WillkommenText() []string {
 	var erg []string = make([]string,0)
-	erg = append(erg,"Willkommen beim Schaltungsspiel!")
+	erg = append(erg,"Willkommen zur Prüfung der")
+	erg = append(erg,"Technischen Informatik!")	
 	erg = append(erg,"")
-	erg = append(erg,"Deine Aufgabe ist es die Schalter")
+	erg = append(erg,"Ihre Aufgabe ist es die Schalter")
 	erg = append(erg,"so zu schalten, dass alle Lampen")
-	erg = append(erg,"leuchten. Versuche die Schalter")
+	erg = append(erg,"leuchten. Versuchen Sie die Schalter")
 	erg = append(erg,"so wenig wie möglich zu betätigen.")
 	erg = append(erg,"")
 	erg = append(erg,"Viel Spaß!")
@@ -66,20 +69,21 @@ func WillkommenText() []string {
 
 func schreibeGewonnen() []string {
 	var erg []string = make([]string,0)
-	erg = append(erg,"Glückwunsch geschafft!")
+	erg = append(erg,"Glückwunsch Sie haben alle")
+	erg = append(erg,"Aufgaben geschafft!")
 	erg = append(erg,"")
 	erg = append(erg,"Auf zur nächsten Aufgabe oder")
-	erg = append(erg,"versuche es noch einmal.")
+	erg = append(erg,"versuchen Sie es noch einmal.")
 	return erg
 }
 
 
 func schreibeGewonnenEnde() []string {
 	var erg []string = make([]string,0)
-	erg = append(erg,"Glückwunsch alle Aufgaben")
-	erg = append(erg,"geschafft!")
+	erg = append(erg,"Glückwunsch Sie haben alle")
+	erg = append(erg,"Aufgaben geschafft!")
 	erg = append(erg,"")
-	erg = append(erg,"Aber kannst du dich noch")
+	erg = append(erg,"Aber können Sie sich noch")
 	erg = append(erg,"verbessern?")
 	return erg
 }
@@ -87,22 +91,13 @@ func schreibeGewonnenEnde() []string {
 
 func schreibeVerloren() []string {
 	var erg []string = make([]string,0)
-	erg = append(erg,"Verloren! Versuche weniger")
-	erg = append(erg,"Schalter zu benutzen.")
+	erg = append(erg,"Verloren! Versuchen Sie")
+	erg = append(erg,"weniger Schalter zu benutzen.")
 	erg = append(erg,"")
 	return erg
 
 }
 
-/*
-func berechnePunktzahl(ilevel, iversuche uint16,lev level.Level) uint16 {
-	var punkte uint16 = lev.GibMaxPunktzahl(ilevel)
-	if punkte + lev.GibMinSchalter(ilevel) - iversuche >= 0 {
-		punkte = ev.GibMaxPunktzahl(ilevel) + lev.GibMinSchalter(ilevel) - iversuche
-	}
-	return punkte
-}
-*/
 
 func berechneNote(punkte, maxPunkte uint16) string {
 	var note string
@@ -191,7 +186,7 @@ func zeichneSpielfeld(happy bool, xSize, ilevel, punkte, maxPunkte uint16, sk sc
 
 func main() {
 
-	var ilevel uint16				// aktuelle Levelnummer
+	var ilevel uint16	  			// aktuelle Levelnummer
 	var ilevelGeschafft	uint16		// höchstes geschafftes Level
 	var nlevel uint16				// Anzahl der Level
 	var nPunkte uint16				// neue Punkte im Level
@@ -199,10 +194,21 @@ func main() {
 	var gPunkte	uint16				// Gesamtpunkte erreicht
 	var maxPunkte uint16			// maximale erreichbare Geamtpunktzahl
 	var happy bool = true			// Winnie sieht happy aus
+	var levelNeuLaden bool			// Level neu laden
 	var neuZeichnen bool 			// Schaltkreis neu zeichnen
 									
 	var text []string = WillkommenText()
 	var font string = "../../Schriftarten/Ubuntu-B.ttf"
+
+
+	// -------    Lade Level gegeben auf der Kommandozeile  ------- //
+	if len(os.Args) > 1 {
+		intVar, err := strconv.Atoi(os.Args[1])
+		if err != nil {
+			panic("Levelargument falsch!")
+		}		
+		ilevel = uint16(intVar) - 1
+	}
 
 
 	// ---------------- Erzeuge Schaltkreis ----------------------- //
@@ -220,7 +226,7 @@ func main() {
 	for i:=uint16(0); i<nlevel; i++ { 
 		maxPunkte = maxPunkte + lev.GibMaxPunktzahl(i)
 	}
-	fmt.Println("maxPunkte: ",maxPunkte)
+	// fmt.Println("maxPunkte: ",maxPunkte)
 
 
 	//  --------------------   Buttons ------------------------------//
@@ -252,7 +258,7 @@ func main() {
 
 	// Mausabfrage - Spielsteuerung
 	for {
-		neuZeichnen = false
+		// neuZeichnen = false
 		taste, status, mausX, mausY := gfx.MausLesen1()
 		if taste==1 && status==1 {
 			for id,but:= range sbutton {		// Überprüfe Schalter
@@ -278,17 +284,13 @@ func main() {
 				nochmal.AktiviereButton()
 				neuZeichnen = true
 				if ilevel == ilevelGeschafft {ilevelGeschafft++}
-				//fmt.Println("Level geschafft: ",ilevelGeschafft)
-				if nPunkte > ePunkte[ilevel] {
-					fmt.Println("neue Punktzahl: ",nPunkte)
-					ePunkte[ilevel] = nPunkte
-				}
-				gPunkte = 0					// berechne neue Punktzahl
+				// Merke die Punkte im Level und berechne die Gesamtpunktzahl
+				if nPunkte > ePunkte[ilevel] {ePunkte[ilevel] = nPunkte}
+				gPunkte = 0
 				for i:=uint16(0); i<nlevel; i++ {
 					gPunkte = gPunkte + ePunkte[i]
-					fmt.Println(ePunkte[i],gPunkte)
+					//fmt.Println(gPunkte)
 				}
-				fmt.Println("ilevel,gPunkte: ",ilevel+1,gPunkte)
 			} else if nPunkte == 0 {	   // wenn zu viele Versuche!!!
 				inaktiviereSchalter(sbutton)
 				text = schreibeVerloren()
@@ -299,36 +301,28 @@ func main() {
 			if weiter.TesteXYPosInButton(mausX,mausY) {
 				// Lade nächtes Level
 				ilevel++
-				nPunkte = lev.GibMaxPunktzahl(ilevel) + lev.GibMinSchalter(ilevel)
-				//nPunkte = 0
-				happy = true
-				lev  = level.New()	// Veränderungen rückgängig machen
-				sk = lev.GibSchaltkreis(ilevel)
-				sbutton = makeSchalterbuttonTab(sk,xSize)
-				xSize = lev.GibXSize(ilevel)
-				text = lev.GibText(ilevel)
 				zurueck.AktiviereButton()
-				nochmal.DeaktiviereButton()
-				//fmt.Println(ilevel,ilevelGeschafft,nlevel)
+				// weiter-Button nur wenn Level schon gewonnen
+				// und Spiel noch nicht fertig
 				if ilevel == ilevelGeschafft || ilevel+1 == nlevel {
 					weiter.DeaktiviereButton()
 				}
+				levelNeuLaden = true
 				neuZeichnen = true
 			}
 			if nochmal.TesteXYPosInButton(mausX,mausY) {
-				// Lade Level
-				lev  = level.New()	// Veränderungen rückgängig machen
-				sk = lev.GibSchaltkreis(ilevel)
-				sbutton = makeSchalterbuttonTab(sk,xSize)
-				nPunkte = lev.GibMaxPunktzahl(ilevel) + lev.GibMinSchalter(ilevel)
-				happy = true
-				text = lev.GibText(ilevel)
-				nochmal.DeaktiviereButton()
+				levelNeuLaden = true
 				neuZeichnen = true
 			}
 			if zurueck.TesteXYPosInButton(mausX,mausY) {
-				// Lade zuvoriges Level 
+				// Lade vorheriges Level 
 				ilevel--
+				if ilevel == 0 {zurueck.DeaktiviereButton()}
+				if ilevel < ilevelGeschafft {weiter.AktiviereButton()}
+				levelNeuLaden = true
+				neuZeichnen = true
+			}
+			if levelNeuLaden {
 				happy = true
 				lev  = level.New()	// Veränderungen rückgängig machen
 				sk = lev.GibSchaltkreis(ilevel)
@@ -337,9 +331,7 @@ func main() {
 				xSize = lev.GibXSize(ilevel)
 				text = lev.GibText(ilevel)
 				nochmal.DeaktiviereButton()
-				if ilevel == 0 {zurueck.DeaktiviereButton()}
-				if ilevel < ilevelGeschafft {weiter.AktiviereButton()}
-				neuZeichnen = true
+				levelNeuLaden = false
 			}
 			if neuZeichnen {
 //					fmt.Println("Schalter 1: ",sk.GibSchalterwert(1))
@@ -348,6 +340,7 @@ func main() {
 					zeichneSpielfeld(happy,xSize,ilevel,gPunkte,maxPunkte,sk,text)
 					zeichneButtons(weiter,zurueck,beenden,nochmal)
 					gfx.UpdateAn()
+					neuZeichnen = false
 			}
 			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende?
 				break

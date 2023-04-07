@@ -34,7 +34,7 @@ func baueLevel3() EinzelLevel {
 
 	// --------------- Baue Schaltkreis ---------------------------//
 	elevel.text = make([]string,0)
-	elevel.text = append(elevel.text,"Schaffst du auch diese")
+	elevel.text = append(elevel.text,"Schaffen Sie auch diese")
 	elevel.text = append(elevel.text,"Aufgabe mit dem NOT-Gatter?")
 		
 	// --------------   Schalter einfügen   -----------------------//
