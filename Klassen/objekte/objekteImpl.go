@@ -73,7 +73,7 @@ func (ob *data) Zeichnen() {
 		switch ob.typ {
 // Fadenkreuz-Maus-Zeiger bei Koord x,y
 			case 0:	
-			Stiftfarbe(255,255,255)
+			Stiftfarbe(240,240,240)
 			for i:=uint16(0);i<ob.qua/10;i++ {
 				Kreis(ob.x, ob.y, ob.qua/2-i)
 			}
@@ -368,7 +368,106 @@ func (ob *data) Zeichnen() {
 			SchreibeFont (ob.x*44/100,ob.y*35/100,"1")
 			Stiftfarbe(68,215,210)
 			SchreibeFont (ob.x*42/100,ob.y*34/100,"1")
+
+// LEVEL 5 - Anzeige			
+			case 15:																
+			SetzeFont ("../../Schriftarten/Freshman.ttf", int(ob.qua)*5/24 )
+			Stiftfarbe(144,99,31)
+			Vollellipse(ob.x/2,ob.y/2,ob.x*26/60,ob.y*13/60)
+			Stiftfarbe(68,225,255)
+			Vollellipse(ob.x/2,ob.y/2,ob.x*5/12,ob.y/5)
+			Stiftfarbe(127,25,64)  
+			SchreibeFont (ob.x/6,ob.y*20/48,"LEVEL 5")
+			Stiftfarbe(255,0,127)  
+			SchreibeFont (ob.x/6,ob.y*19/48,"LEVEL 5")					// Schreibe mittig Level 5
+
+// Heidi			
+			case 16:																														
+			LadeBild (ob.x,ob.y, "../../Bilder/Heidi-2.bmp")
+
+// Kaffee-Tasse 2 ab linker oberer Ecke			
+			case 18:			
+			Stiftfarbe(0,0,0)
+			Vollkreis(ob.x+ob.qua/2-1, ob.y+ob.qua/2-1, ob.qua/2-1)
+			Stiftfarbe(100,100,255)
+			Vollkreis(ob.x+ob.qua/2-1, ob.y+ob.qua/2-1, ob.qua/2-ob.qua/30-1)
 			
+			Stiftfarbe(0,0,0)												// schwarze Umrandung Außen-Unterteller
+			Vollellipse(ob.x+ob.qua*49/100, ob.y+ob.qua*70/100, ob.qua*4/10, ob.qua*16/100)
+			Stiftfarbe(224,224,224)											// weißer Außen-Unterteller
+			Vollellipse(ob.x+ob.qua*49/100, ob.y+ob.qua*70/100, ob.qua*4/10-ob.qua/40, ob.qua*15/100)
+			
+			Stiftfarbe(0,0,0)												// schwarze Umrandung Innen-Unterteller
+			Vollellipse(ob.x+ob.qua*49/100, ob.y+ob.qua*70/100, ob.qua*2/9, ob.qua*8/100)
+			Stiftfarbe(155,152,152)											// grauer Innen-Unterteller
+			Vollellipse(ob.x+ob.qua*49/100, ob.y+ob.qua*70/100, ob.qua*2/9-ob.qua/60, ob.qua*7/100)
+			
+			Stiftfarbe(0,0,0)			// schwarze Umrandung Henkel
+			Vollkreis(ob.x+ob.qua*83/100, ob.y+ob.qua*48/100,ob.qua*11/100)
+			Stiftfarbe(231,62,243)			// pinke Füllung Henkel
+			Vollkreis(ob.x+ob.qua*83/100, ob.y+ob.qua*48/100,ob.qua*9/100)
+			Stiftfarbe(0,0,0)			// schwaze Innen-Füllung Henkel
+			Vollkreis(ob.x+ob.qua*83/100, ob.y+ob.qua*48/100,ob.qua*7/100)
+			Stiftfarbe(0,0,255)			// blaues Inneres
+			Vollkreis(ob.x+ob.qua*83/100, ob.y+ob.qua*48/100,ob.qua*5/100)
+			
+			Stiftfarbe(0,0,0)			// schwarze Umrandung
+			Vollkreissektor(ob.x+ob.qua*47/100, ob.y+ob.qua*37/100, ob.qua*37/100,180,0)
+			Stiftfarbe(231,62,243)		// pinke Tasse
+			Vollkreissektor(ob.x+ob.qua*47/100, ob.y+ob.qua*38/100, ob.qua*35/100,180,0)
+
+			Stiftfarbe(0,0,0)			// schwarze Umrandung Kaffee
+			Vollellipse(ob.x+ob.qua*47/100, ob.y+ob.qua*37/100, ob.qua*37/100, ob.qua*10/100)
+			Stiftfarbe(153,76,13)		// brauner Kaffee
+			// Vollellipse(ob.x+ob.qua*47/100, ob.y+ob.qua*37/100, ob.qua*34/100, ob.qua*8/100)
+			Vollellipse(ob.x+ob.qua*47/100, ob.y+ob.qua*38/100, ob.qua*34/100, ob.qua*7/100)
+			
+			Stiftfarbe(222,214,214)
+			Vollellipse(ob.x+ob.qua*28/100, 	ob.y+ob.qua*20/100,	ob.qua/60,	ob.qua*8/100)
+			Vollellipse(ob.x+ob.qua*29/100+1, 	ob.y+ob.qua*24/100,	ob.qua/60,	ob.qua*8/100)
+			Vollellipse(ob.x+ob.qua*28/100, 	ob.y+ob.qua*28/100,	ob.qua/60,	ob.qua*8/100) 
+
+			Vollellipse(ob.x+ob.qua*47/100, 	ob.y+ob.qua*8/50,	ob.qua/60,	ob.qua*9/100)
+			Vollellipse(ob.x+ob.qua*46/100-1, 	ob.y+ob.qua*12/50,	ob.qua/60,	ob.qua*9/100)
+			Vollellipse(ob.x+ob.qua*47/100, 	ob.y+ob.qua*16/50,	ob.qua/60,	ob.qua*9/100) 
+
+			Vollellipse(ob.x+ob.qua*63/100, 	ob.y+ob.qua*19/100,	ob.qua/60,	ob.qua*9/100)
+			Vollellipse(ob.x+ob.qua*64/100+1, 	ob.y+ob.qua*23/100,	ob.qua/60,	ob.qua*9/100)
+			Vollellipse(ob.x+ob.qua*63/100, 	ob.y+ob.qua*27/100,	ob.qua/60,	ob.qua*9/100) 
+
+// PIZZA 2
+			case 19:																							
+			Stiftfarbe(0,0,0)
+			Vollkreis(ob.x+ob.qua/2-1, ob.y+ob.qua/2-1, ob.qua/2-1)
+			Stiftfarbe(229,212,186)
+			Vollkreis(ob.x+ob.qua/2-1, ob.y+ob.qua/2-1, ob.qua/2-ob.qua/30-1)								// Kreis-Hintergrund
+			Stiftfarbe(225,141,0)
+			Vollkreissektor(ob.x+ob.qua/2-ob.qua/40, ob.y+ob.qua/2+ob.qua/50, ob.qua*2/5, 60, 360)		// brauner Pizzaboden
+			Vollkreissektor(ob.x+ob.qua/2+ob.qua/20, ob.y+ob.qua/2-ob.qua/30, ob.qua*2/5, 0, 60)
+			Stiftfarbe(255,65,59)
+			Vollkreissektor(ob.x+ob.qua/2-ob.qua/40, ob.y+ob.qua/2+ob.qua/50, ob.qua*18/50, 60, 360)	// Tomatensauce
+			Vollkreissektor(ob.x+ob.qua/2+ob.qua/20, ob.y+ob.qua/2-ob.qua/30, ob.qua*18/50, 0, 60)
+			Stiftfarbe(255,215,33)
+			Vollkreissektor(ob.x+ob.qua/2-ob.qua/40, ob.y+ob.qua/2+ob.qua/50, ob.qua*16/50, 60, 360)	// Käse
+			Vollkreissektor(ob.x+ob.qua/2+ob.qua/20, ob.y+ob.qua/2-ob.qua/30, ob.qua*16/50, 0, 60)
+			Stiftfarbe(169,8,0)
+			Vollkreis(ob.x+ob.qua*10/20,	ob.y+ob.qua*6/20,	ob.qua/20)										// Salami
+			Vollkreis(ob.x+ob.qua*15/20,ob.y+ob.qua*6/20,	ob.qua/20)
+			Vollkreis(ob.x+ob.qua*5/20,	ob.y+ob.qua*8/20,	ob.qua/20)
+			Vollkreis(ob.x+ob.qua*7/20,	ob.y+ob.qua*11/20,	ob.qua/20)
+			Vollkreis(ob.x+ob.qua*11/20,ob.y+ob.qua*14/20,	ob.qua/20)
+			Vollkreis(ob.x+ob.qua*7/20,	ob.y+ob.qua*15/20,	ob.qua/20)
+			Vollkreissektor(ob.x+ob.qua/2+ob.qua/8,	ob.y+ob.qua/2+ob.qua/50,	ob.qua/20, 180, 360)
+			Vollkreissektor(ob.x+ob.qua/2+ob.qua/5,	ob.y+ob.qua/2-ob.qua/30,	ob.qua/20, 0, 180)
+			
+			Stiftfarbe(0,0,0)
+			Kreissektor(ob.x+ob.qua/2-ob.qua/40, ob.y+ob.qua/2+ob.qua/50, ob.qua*2/5, 60, 119)			// Pizzastücke-Umrandung
+			Kreissektor(ob.x+ob.qua/2-ob.qua/40, ob.y+ob.qua/2+ob.qua/50, ob.qua*2/5, 120, 179)
+			Kreissektor(ob.x+ob.qua/2-ob.qua/40, ob.y+ob.qua/2+ob.qua/50, ob.qua*2/5, 180, 239)
+			Kreissektor(ob.x+ob.qua/2-ob.qua/40, ob.y+ob.qua/2+ob.qua/50, ob.qua*2/5, 240, 299)
+			Kreissektor(ob.x+ob.qua/2-ob.qua/40, ob.y+ob.qua/2+ob.qua/50, ob.qua*2/5, 300, 360)
+			Kreissektor(ob.x+ob.qua/2+ob.qua/20, ob.y+ob.qua/2-ob.qua/30, ob.qua*2/5, 0, 60)
+
 // OK - Objekt			
 			case 20:															
 			Stiftfarbe(142,36,24)
@@ -394,7 +493,7 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			} else {
 				return false, 0
 			}
-			case 3:		//Kaffee
+			case 3:		// Kaffee
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 3 {
 					ob.SetzeAkt(false)
@@ -407,7 +506,7 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			} else {
 				return false, 0
 			}  
-			case 5:
+			case 5:		// Pizza
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 1 {
 					ob.SetzeAkt(false)
@@ -428,9 +527,43 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			} else {
 				return false, 0
 			}
+			/*
+			case 16: 		// HEIDI
+			if ob.x <= x && x < ob.x+85 	&& 	ob.y <= y && y < ob.y+88 {
+				SpieleSound("../../Sounds/Roar.wav")
+				return true, 0
+			} else {
+				return false, 0
+			} 
+			*/ 
+			case 18:		// Kaffee 2
+			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
+				if opt == 3 {
+					ob.SetzeAkt(false)
+					SpieleSound("../../Sounds/Trinken.wav")
+					return true, 6e8
+				}
+				ob.SetzeTyp(4)
+				SpieleSound("../../Sounds/GameOver.wav")
+				return true, 0
+			} else {
+				return false, 0
+			}  
+			case 19:		// Pizza 2
+			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
+				if opt == 1 {
+					ob.SetzeAkt(false)
+					SpieleSound("../../Sounds/Essen.wav")
+					return true, 6e8
+				}
+				ob.SetzeTyp(6)
+				SpieleSound("../../Sounds/GameOver.wav")
+				return true, 0
+			} else {
+				return false, 0
+			}  
 			case 20:
 			if ob.x*4/10 < x && x < ob.x*6/10 	&& 	ob.y*8/10 < y && y < ob.y*9/10 {
-				//ob.SetzeAkt(false)
 				SpieleNote("5A",0.1,0)
 				return true, 0
 			} else {
