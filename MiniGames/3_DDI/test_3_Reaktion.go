@@ -6,24 +6,25 @@ import (
 	"math/rand"
 	"strconv"
 	"time"
+	"os"
 )
 
 const breite uint16 = 1000
 const höhe uint16 = 800
 
-var Taste uint16 = 's' // Variable für zu drückende Taste
-var TastenArray [5]uint16 = [5]uint16{'1', '2', '3', '4', '5'}
+var Taste uint16  // Variable für zu drückende Taste
+var TastenArray [5]uint16 = [5]uint16{'4','5','6','7','8'}
+
+var BilderArray [5]string = [5]string{"4_RLP_start.bmp","5_Basiskonzepte.bmp","6_Planung.bmp",
+										"7_Stundenplanung.bmp","8_Unterricht_nf.bmp"}
 
 func TesteTaste(taste uint16) {
-	//gfx.SetzeFont("CollegiateBlackFLF.ttf",20)
 	switch taste {
 	case Taste:
-		fmt.Println("Richtig! Das haben Sie aber toll geloest!!")
-		gfx.SchreibeFont(200, 500, "Richtig! Das haben Sie aber toll geloest!!")
+		gfx.SchreibeFont(500, 500, "Richtig! Das haben Sie aber toll geloest!!")
 		gfx.LadeBildMitColorKey(550, 50, "../../Bilder/WtheK_black.bmp", 255, 255, 255)
 	default:
-		fmt.Println("Ohjeee, das ist ja falsch, wie kommen Sie de6nn darauf???")
-		gfx.SchreibeFont(200, 500, "Ohjeee, das ist ja falsch, wie kommen Sie denn darauf???")
+		gfx.SchreibeFont(500, 500, "Ohjeee, das ist ja falsch, wie kommen Sie denn darauf???")
 		gfx.LadeBildMitColorKey(550, 50, "../../Bilder/WtheK_black_sad.bmp", 255, 255, 255)
 	}
 	//time.Sleep(1e9)
@@ -35,6 +36,36 @@ func LoseTaste() uint16 {
 
 }
 
+// Startbildschirm 
+func startBildschirm() uint16{
+	gfx.Stiftfarbe(230, 255, 230)
+	gfx.Vollrechteck(0, 0, breite, höhe)
+	gfx.Stiftfarbe(0, 0, 0)
+	gfx.LadeBildMitColorKey(550, 50, "../../Bilder/WtheK_black.bmp", 255, 255, 255)
+	gfx.SchreibeFont(200, 500, "Hallo! Ich begrüsse Sie zur heutigen Fachdidaktik Veranstaltung!")
+	time.Sleep(1e9)
+	gfx.SchreibeFont(200, 540, "Kennen Sie diese 8 Schritte noch? Bestimmt!")
+	AchtSchritteText()
+	gfx.SchreibeFont(200, 560, "Ich zeige Ihnen jetzt Bilder und Sie drücken die zugehörigen Tasten 1-8.")
+	gfx.LadeBild(0, 0, "../../Bilder/3_Fachdidaktik_Planung.bmp")
+	gfx.SchreibeFont(200, 600, "Drücken Sie 'q' zum Beenden oder 's' um das Spiel zu starten")
+	for {
+		taste, gedrueckt, _ := gfx.TastaturLesen1()
+		if gedrueckt == 1 {
+			switch taste {
+			case 'q':
+				return 'q'
+			case 's':
+				return 's'
+			default:
+				continue
+			}
+		}
+	}
+	
+	return 's'
+} 
+
 // Schreibe 8 Schritte zur Kompetenzentwicklung
 func AchtSchritteText() {
 	var zeilenAbstand uint16 = 20 // Zeilenabstand
@@ -42,13 +73,16 @@ func AchtSchritteText() {
 		"4. Rahmen(lehr)plan","5. fundamentale Ideen, Basiskonzepte","6. Planung der Unterichtseinheit",
 		"7. Stundenplanung","8. Stundendurchführung"}
 	var i uint16
-	for i=0;i<uint16(len(text));i++ {gfx.SchreibeFont(110,110 + i*zeilenAbstand,text[i])} 
+	for i=0;i<uint16(len(text));i++ {gfx.SchreibeFont(50,20 + i*zeilenAbstand,text[i])} 
 }
 
 func main() {
 
 	gfx.Fenster(breite, höhe)
 	gfx.SetzeFont("../../Schriftarten/Ubuntu-B.ttf", 20)
+	
+	if startBildschirm()  == 'q' {os.Exit(0)}
+	time.Sleep(1e9)
 
 A:
 	for {
@@ -58,13 +92,14 @@ A:
 		gfx.Stiftfarbe(230, 255, 230)
 		gfx.Vollrechteck(0, 0, breite, höhe)
 		gfx.Stiftfarbe(0, 0, 0)
-		gfx.Rechteck(100, 100, 400, 200)
+		//gfx.Rechteck(100, 100, 400, 200)
 		Taste = LoseTaste()
-		gfx.SchreibeFont(150, 350, "Druecke "+string(Taste))
+		fmt.Println(Taste-'0'-4)
+		//gfx.SchreibeFont(150, 350, "Druecke "+string(Taste))
 		gfx.LadeBildMitColorKey(550, 50, "../../Bilder/WtheK_black.bmp", 255, 255, 255)
 		//gfx.LadeBildMitColorKey(50, 400, "LWB-A-BMP/3_Fachdidaktik_Planung.bmp", 255, 255, 255)
-		fmt.Println("Rechteck")
 		AchtSchritteText()
+		gfx.LadeBild(50,200,"../../Bilder/"+BilderArray[Taste-'0'-4])
 		gfx.UpdateAn()
 
 		taste, gedrueckt, _ := gfx.TastaturLesen1()
@@ -77,7 +112,7 @@ A:
 				TesteTaste(taste)
 			}
 		}
-		gfx.SchreibeFont(200, 550, "Das hat: "+strconv.Itoa(int(time.Now().UnixNano()-t_start)/1e6)+" ms gedauert!")
+		gfx.SchreibeFont(500, 550, "Das hat "+strconv.Itoa(int(time.Now().UnixNano()-t_start)/1e6)+" ms gedauert!")
 		time.Sleep(2e9)
 	}
 
