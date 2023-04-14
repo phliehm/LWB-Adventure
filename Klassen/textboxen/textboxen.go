@@ -6,12 +6,14 @@ package textboxen
  * Dieses Paket stellt einen ADT Textbox gemäß der unten angegebenen 
  * Spezifikation zur Verfügung. Eine Textbox hat:
  * Koordinate x,y, Breite, Höhe, Schriftfarbe, Font, Zeilenabstand, Schriftgröße, Inhalt
+ * Der Text kann linksbündig oder zentriert ausgegeben werden. Zentriert sieht nicht immer gut aus, das liegt an der
+ * unterschiedlichen Zeichenbreite, die wäre vermutlich nur unter erheblichen Performanceeinbußen richtig zu ermitteln.
  * Die Höhe hat derzeit keine Auswirkungen
  *  -------------------------------------------------------------
 
 	
 /* Vor.: --
- *  Eff.: 
+ *  
  *  Erg.:Eine neue Textbox mit den Koordinaten x,y und der Breite und Höhe 
  * 		ist geliefert. Default Werte sind: 
  * 		Schriftfarbe - schwarz
@@ -66,6 +68,13 @@ type Textbox interface {
 // Erg.: Die Farbe des Textes und des Rahmens (gleich) ist gesetzt
 	SetzeFarbe(r,g,b uint8) 
 
+// Vor.: --
+// Erg.: Text wird beim Aufruf von Zeichne() linksbündig ausgegeben (default)
+	SetzeLinksbündig()
+
+// Vor.: --
+// Erg.: Text wird beim Aufruf von Zeichne() zentriert ausgeben
+	SetzeZentriert()
 
 // Vor.: Ein gfx-Fenster ist offen
 // Eff.: Zeichnet die Textbox in das gfx-Fenster
