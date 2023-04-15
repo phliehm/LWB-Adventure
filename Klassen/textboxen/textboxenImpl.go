@@ -4,6 +4,7 @@ import (
 	"gfx"
 	"strings"
 	//"fmt"
+	"unicode/utf8"
 )
 
 type data struct {
@@ -13,6 +14,8 @@ type data struct {
 	text string
 	schriftgr int
 	r,g,b uint8
+	linksbündig bool
+	zentriert bool
 	
 }
 
@@ -25,6 +28,7 @@ func New(posx,posy,breite,höhe uint16) *data{
 	tb.breite = breite
 	tb.schriftgr = 20
 	tb.font =  "../Schriftarten/Ubuntu-B.ttf"
+	tb.linksbündig = true
 	return tb
 }
 // Vor.: --
@@ -94,6 +98,20 @@ func (tb *data) SetzeFarbe(r,g,b uint8) {
 	tb.r,tb.g,tb.b  = r,g,b
 }
 
+// Vor.: --
+// Erg.: Text wird beim Aufruf von Zeichne() linksbündig ausgegeben (default)
+func (tb *data) SetzeLinksbündig() {
+	tb.linksbündig = true
+	tb.zentriert = false
+}
+
+// Vor.: --
+// Erg.: Text wird beim Aufruf von Zeichne() zentriert ausgeben
+func (tb *data) SetzeZentriert() {
+	tb.linksbündig = false
+	tb.zentriert = true
+}
+
 // Vor.: Ein gfx-Fenster ist offen
 // Eff.: Zeichnet die Textbox in das gfx-Fenster
 func (tb *data)	Zeichne() {
@@ -103,33 +121,50 @@ func (tb *data)	Zeichne() {
 	
 	// Zeilenumbrüche generieren
 	//var textTemp string = tb.text
-	var z,l int		// z = Zeilenhöhe, l = Zeilenlänge
-	var n uint16	// Zeilenanzahl
+	var zeilenHöhe int		// y-Position der Zeile
+	var zeilenAnzahl uint16	
 	var zeile string	// Zeileninhalt
 	var zeichenbreite int
+	var zeilenLänge, zeilenLänge_temp uint16
+	//var linkerAbstand uint16 // Abstand zur linken Boxgrenze zur Darstellung von zentriertem Text
 	zeichenbreite = tb.schriftgr/2
 	if zeichenbreite == 0 {zeichenbreite = 1}	// Vermeide eine Zeichenbreite von 0
 	
 	// Wörter sollen ganz gelassen werden, Zeilenumbrüche also nur bei Leerzeichen
-	// Leerzeichen-Position merken
 	
 	worte := strings.Fields(tb.text)	// Slice mit durch Leerzeichen getrennte Worte
 	
 	for _,w:= range worte {
-		if uint16(len(zeile)*zeichenbreite + len(w)*zeichenbreite + 2*5) <= tb.breite {		// Prüfe ob Zeilenlänge überschritten wird
-			l += len(w)	*zeichenbreite						// Füge Länge des Wortes zur Zeilenlänge hinzu
+		// utf8.RuneCountInString(w) gibt die korrekte Anzahl an Zeichen in einem UTF8-Wort, also die Länge des Wortes
+		zeilenLänge = uint16(len(zeile)*zeichenbreite + utf8.RuneCountInString(w)*zeichenbreite)
+		if zeilenLänge <= tb.breite {		// Prüfe ob Zeilenlänge überschritten wird
+			//l += utf8.RuneCountInString(w)	*zeichenbreite						// Füge Länge des Wortes zur Zeilenlänge hinzu
 			zeile += w + " "					// Wort zur Zeile, inklusive Leerzeichen danach
+			//fmt.Println(w, len(w),utf8.RuneCountInString(w))
+			zeilenLänge_temp = zeilenLänge			// temp wird gebraucht um später den Text zentriert darstellen zu können
+			
 
 		} else {								// Zeile zu lang
-			gfx.SchreibeFont(tb.x,tb.y+uint16(z)+n*tb.zeilenAbstand,zeile)	// Schreibe Zeile an richtige Stelle
-			z+=tb.schriftgr					// erhöhe Zeilenanzahl
-			l=len(w)*zeichenbreite
-			zeile = w + " "
-			n+=1
+			// Schreibe den Text entweder linksbündig oder zentriert
+			if tb.linksbündig {
+				gfx.SchreibeFont(tb.x,tb.y+uint16(zeilenHöhe)+zeilenAnzahl*tb.zeilenAbstand,zeile)
+			} else {
+				gfx.SchreibeFont(tb.x+(tb.breite-zeilenLänge_temp)/2,tb.y+uint16(zeilenHöhe)+zeilenAnzahl*tb.zeilenAbstand,zeile)	// Schreibe Zeile an richtige Stelle
+			}
+			
+			zeilenHöhe+=tb.schriftgr					// erhöhe Zeilenanzahl
+			zeilenLänge=uint16(utf8.RuneCountInString(w)*zeichenbreite)		// setze Zeilenlänge neu (sonst wäre sie jetzt zu lang
+			zeilenLänge_temp = zeilenLänge									// Setze auch temp neu, sonst wird die falsche länge bei nur einem Wort pro Zeile genommen
+			zeile = w + " "					// Beginne eine neue Zeile
+			zeilenAnzahl+=1							// Erhöhe die Zeilenanzahl
+			//fmt.Println(w, len(w),utf8.RuneCountInString(w))
 		}
 	}
-	gfx.SchreibeFont(tb.x,tb.y+uint16(z)+n*tb.zeilenAbstand,zeile) 	// Schreibe letzte Zeile
-	
+	if tb.linksbündig {
+		gfx.SchreibeFont(tb.x,tb.y+uint16(zeilenHöhe)+zeilenAnzahl*tb.zeilenAbstand,zeile)
+	} else {
+		gfx.SchreibeFont(tb.x+(tb.breite-zeilenLänge_temp)/2,tb.y+uint16(zeilenHöhe)+zeilenAnzahl*tb.zeilenAbstand,zeile)	// Schreibe Zeile an richtige Stelle
+	}
 }
 
 
