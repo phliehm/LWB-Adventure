@@ -28,7 +28,8 @@ func makeSchalterbuttonTab(sk sch.Schaltung,xSize uint16) map[uint16]buttons.But
 //		if sk.GibBauelementtyp(id) == b.Schalter {
 			xb,yb = sk.GibPosXY(id)
 			// unsichbaren Button zuordnen
-			buts[id] = erzeugeSchalterButton(xb,yb,xSize)	
+			buts[id] = erzeugeSchalterButton(xb,yb,xSize)
+			buts[id].SetzeSound("../../Sounds/Punkt.wav")
 //		}
 	}
 	return buts
@@ -199,6 +200,8 @@ func main() {
 									
 	var text []string = WillkommenText()
 	var font string = "../../Schriftarten/Ubuntu-B.ttf"
+	var sound string = ""
+	var soundAn bool				// soll Sound gespielt werden?
 
 
 	// -------    Lade Level gegeben auf der Kommandozeile  ------- //
@@ -239,12 +242,15 @@ func main() {
 	var weiter,zurueck,beenden,nochmal buttons.Button
 	weiter = buttons.New(1090,650,100,40,255,255,100,false,"  weiter")
 	weiter.SetzeFont(font)
+//	weiter.SetzeSound("../../Sounds/Jump.wav")
 	zurueck = buttons.New(850,650,100,40,255,255,100,false,"  zurück")
 	zurueck.SetzeFont(font)
+//	zurueck.SetzeSound("../../Sounds/Jump.wav")
 	beenden = buttons.New(30,650,100,40,255,255,100,true,"   Ende")
 	beenden.SetzeFont(font)
 	nochmal = buttons.New(970,650,100,40,255,255,100,false,"nochmal")
 	nochmal.SetzeFont(font)
+//	nochmal.SetzeSound("../../Sounds/Jump.wav")
  
  
 	// ---------------- Zeichne Spielfeld -------------- //
@@ -291,14 +297,26 @@ func main() {
 					gPunkte = gPunkte + ePunkte[i]
 					//fmt.Println(gPunkte)
 				}
+				if sound == "../../Sounds/Sparkle.wav" { // Spiele Sound nur einmal!
+					soundAn = false
+				} else {
+					sound = "../../Sounds/Sparkle.wav"
+					soundAn = true
+				}				
 			} else if nPunkte == 0 {	   // wenn zu viele Versuche!!!
 				inaktiviereSchalter(sbutton)
 				text = schreibeVerloren()
 				happy = false
 				nochmal.AktiviereButton()
 				neuZeichnen = true
+				if sound == "../../Sounds/GameOver.wav" {
+					soundAn = false
+				} else {
+					sound = "../../Sounds/GameOver.wav"
+					soundAn = true
+				}				
 			}
-			if weiter.TesteXYPosInButton(mausX,mausY) {
+			if weiter.TesteXYPosInButton(mausX,mausY) { // nächstes Level
 				// Lade nächtes Level
 				ilevel++
 				zurueck.AktiviereButton()
@@ -308,19 +326,23 @@ func main() {
 					weiter.DeaktiviereButton()
 				}
 				levelNeuLaden = true
-				neuZeichnen = true
+				neuZeichnen = true		
 			}
-			if nochmal.TesteXYPosInButton(mausX,mausY) {
+			if nochmal.TesteXYPosInButton(mausX,mausY) { // Level nochmal
 				levelNeuLaden = true
 				neuZeichnen = true
 			}
-			if zurueck.TesteXYPosInButton(mausX,mausY) {
+			if zurueck.TesteXYPosInButton(mausX,mausY) { // Level zurück
 				// Lade vorheriges Level 
 				ilevel--
 				if ilevel == 0 {zurueck.DeaktiviereButton()}
 				if ilevel < ilevelGeschafft {weiter.AktiviereButton()}
 				levelNeuLaden = true
 				neuZeichnen = true
+				//sound = "../../Sounds/Jump.wav"			
+			}
+			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende des Spiels
+				break
 			}
 			if levelNeuLaden {
 				happy = true
@@ -332,18 +354,17 @@ func main() {
 				text = lev.GibText(ilevel)
 				nochmal.DeaktiviereButton()
 				levelNeuLaden = false
+				sound = ""						// Setze Sounds zurück
+				soundAn = false
 			}
 			if neuZeichnen {
-//					fmt.Println("Schalter 1: ",sk.GibSchalterwert(1))
-//					fmt.Println("Schalter 2: ",sk.GibSchalterwert(2))
+					if soundAn {gfx.SpieleSound(sound)}
 					gfx.UpdateAus()
 					zeichneSpielfeld(happy,xSize,ilevel,gPunkte,maxPunkte,sk,text)
 					zeichneButtons(weiter,zurueck,beenden,nochmal)
 					gfx.UpdateAn()
 					neuZeichnen = false
-			}
-			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende?
-				break
+//					soundAn = true
 			}
 		}
 	}

@@ -34,8 +34,8 @@ func baueLevel7() EinzelLevel {
 
 	// --------------- Baue Schaltkreis ---------------------------//
 	elevel.text = make([]string,0)
-	elevel.text = append(elevel.text,"So jetzt wird es ein wenig")
-	elevel.text = append(elevel.text,"schwerer!")
+	elevel.text = append(elevel.text,"Das ist die nächste")
+	elevel.text = append(elevel.text,"Herausforderung!")
 		
 	// --------------   Schalter einfügen   -----------------------//
 	sk.BauteilEinfuegen(1,100,100,b.Schalter)

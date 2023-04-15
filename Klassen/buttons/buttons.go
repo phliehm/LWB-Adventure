@@ -53,6 +53,12 @@ type Button interface {
 	// Erg: -
 	SetzeFont(font string)
 
+	// Vor: -
+	// Eff: Der angegebene Sound wird verwendet, wenn Button aktiv und
+	//		getroffen.
+	// Erg: -
+	SetzeSound(sound string)
+
 	// Vor: gfx Fenster ist geöffnet.
 	// Eff: Der Button ist gezeichnet.
 	// Erg: -
@@ -69,6 +75,7 @@ type data struct {
 	aktiv		bool		// true = Button aktiv
 	beschriftung 	string	// String mit Beschriftung des Buttons
 	font			string	// Name mit Pfad von Font
+	sound			string  // Name mit Pfad von Sound
 }
 
 
@@ -85,6 +92,7 @@ func New(x,y,br,h uint16, r,g,b uint8, aktiv bool, beschriftung string) *data {
 	but.aktiv = aktiv
 	but.beschriftung = beschriftung
 	but.font = "../Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf"		// Standartfont
+	but.sound = ""
 	return but
 }
 
@@ -94,6 +102,7 @@ func (but *data) TesteXYPosInButton(x,y uint16) bool {
 	if but.aktiv {
 		if but.x <= x &&  x <= but.x+but.br {
 			if but.y <= y &&  y <= but.y+but.h{
+				if but.sound != "" {gfx.SpieleSound(but.sound)}
 				return true
 			}
 		} 
@@ -129,6 +138,10 @@ func (but *data) SetzeFont(font string) {
 	but.font = font
 }
 
+
+func (but *data) SetzeSound(sound string) {
+	but.sound = sound
+}
 	
 	
 func (but *data) ZeichneButton() {
