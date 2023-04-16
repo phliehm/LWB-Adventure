@@ -25,12 +25,9 @@ func makeSchalterbuttonTab(sk sch.Schaltung,xSize uint16) map[uint16]buttons.But
 	var xb,yb uint16		// Mittelpunkt des Schalters
 	var schalterIDs []uint16 = sk.GibSchalterIDs()
 	for _,id := range schalterIDs {
-//		if sk.GibBauelementtyp(id) == b.Schalter {
-			xb,yb = sk.GibPosXY(id)
-			// unsichbaren Button zuordnen
-			buts[id] = erzeugeSchalterButton(xb,yb,xSize)
-			buts[id].SetzeSound("../Sounds/Punkt.wav")
-//		}
+		xb,yb = sk.GibPosXY(id)
+		buts[id] = erzeugeSchalterButton(xb,yb,xSize)
+		buts[id].SetzeSound("../Sounds/Punkt.wav")
 	}
 	return buts
 }
@@ -153,7 +150,6 @@ func schreibeSpielstand(level,punkte, maxPunkte uint16) {
 
 
 func zeichneButtons(weiter,zurueck,beenden,nochmal buttons.Button) {
-//	gfx.UpdateAus()
 	if weiter.GibAktivitaetButton() {
 			weiter.ZeichneButton()
 	}
@@ -166,7 +162,6 @@ func zeichneButtons(weiter,zurueck,beenden,nochmal buttons.Button) {
 	if nochmal.GibAktivitaetButton() {
 			nochmal.ZeichneButton()
 	}
-//	gfx.UpdateAn()
 }
 
 
@@ -197,15 +192,18 @@ func zeichneSpielfeld(happy bool, xSize, ilevel, punkte, maxPunkte uint16, sk sc
 
 }
 
+// Voraus: -
+// Eff: Bauelementespiel wird gestartet.
+// Erg: akteulles Level ilevel+1, Note und Punktestand je Level
+//		wird ausgegeben.
 
-
-func BauelementeSpiel(ilevel uint16) {
+func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 
 //	var ilevel uint16	  			// aktuelle Levelnummer
 	var ilevelGeschafft	uint16		// höchstes geschafftes Level
 	var nlevel uint16				// Anzahl der Level
 	var nPunkte uint16				// neue Punkte im Level
-	var ePunkte []uint16			// Punkte erreicht im Level
+//	var ePunkte []uint16			// Punkte erreicht im Level
 	var gPunkte	uint16				// Gesamtpunkte erreicht
 	var maxPunkte uint16			// maximale erreichbare Geamtpunktzahl
 	var happy bool = true			// Winnie sieht happy aus
@@ -218,16 +216,6 @@ func BauelementeSpiel(ilevel uint16) {
 //	var sound string = ""
 	var soundAn bool				// soll Sound gespielt werden?
 
-/*
-	// -------    Lade Level gegeben auf der Kommandozeile  ------- //
-	if len(os.Args) > 1 {
-		intVar, err := strconv.Atoi(os.Args[1])
-		if err != nil {
-			panic("Levelargument falsch!")
-		}		
-		ilevel = uint16(intVar) - 1
-	}
-*/
 
 	// ---------------- Erzeuge Schaltkreis ----------------------- //
 	// ---------------- und lade Level 1 ---------------------------//
@@ -237,7 +225,9 @@ func BauelementeSpiel(ilevel uint16) {
 							// Größe des Bauelements in x-Richtung
 							// in Pixel zur Skalierung
 	nlevel = lev.AnzahlLevel()
-	ePunkte = make([]uint16,nlevel)
+	if len(ePunkte) != int(nlevel) {
+		ePunkte = make([]uint16,nlevel)
+	}
 	sk.SchaltungBerechnen()
 	nPunkte = lev.GibMaxPunktzahl(ilevel) + lev.GibMinSchalter(ilevel)
 	// Zähle maximale erreichbare Punktzahl
@@ -256,15 +246,12 @@ func BauelementeSpiel(ilevel uint16) {
 	var weiter,zurueck,beenden,nochmal buttons.Button
 	weiter = buttons.New(1090,650,100,40,255,255,100,false,"  weiter")
 	weiter.SetzeFont(font)
-//	weiter.SetzeSound("../../Sounds/Jump.wav")
 	zurueck = buttons.New(850,650,100,40,255,255,100,false,"  zurück")
 	zurueck.SetzeFont(font)
-//	zurueck.SetzeSound("../../Sounds/Jump.wav")
 	beenden = buttons.New(30,650,100,40,255,255,100,true,"   Ende")
 	beenden.SetzeFont(font)
 	nochmal = buttons.New(970,650,100,40,255,255,100,false,"nochmal")
 	nochmal.SetzeFont(font)
-//	nochmal.SetzeSound("../../Sounds/Jump.wav")
  
  
 	// ---------------- Zeichne Spielfeld -------------------------- //
@@ -278,7 +265,6 @@ func BauelementeSpiel(ilevel uint16) {
 
 	// ----------- Mausabfrage - Spielsteuerung ---------------------//
 	for {
-		// neuZeichnen = false
 		taste, status, mausX, mausY := gfx.MausLesen1()
 		if taste==1 && status==1 {
 			for id,but:= range sbutton {		// Überprüfe Schalter
@@ -373,24 +359,18 @@ func BauelementeSpiel(ilevel uint16) {
 				text = lev.GibText(ilevel)
 				nochmal.DeaktiviereButton()
 				levelNeuLaden = false
-//				sound = ""						// Setze Sounds zurück
 				soundAn = false
 			}
 			if neuZeichnen {
-/*					if soundAn {
-						time.Sleep (time.Duration(4e8))
-						gfx.SpieleSound(sound)
-					}
-*/
 					gfx.UpdateAus()
 					zeichneSpielfeld(happy,xSize,ilevel,gPunkte,maxPunkte,sk,text)
 					zeichneButtons(weiter,zurueck,beenden,nochmal)
 					gfx.UpdateAn()
 					neuZeichnen = false
-//					soundAn = true
 			}
 		}
 	}
 
+return ilevel,berechneNote(gPunkte,maxPunkte),ePunkte
 	
 }
