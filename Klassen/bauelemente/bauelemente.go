@@ -281,10 +281,8 @@ func (bt *data) ZeichneBauelement(xSize uint16) {
 	var ySize uint16 = xSize
 	var fSize uint16 = xSize/2		// Größe des Fonts
 
-//	gfx.UpdateAus()
-
 	gfx.Stiftfarbe(0,0,0)
-	gfx.SetzeFont ("./terminus-font/TerminusTTF-4.49.2.ttf",int(fSize))
+	gfx.SetzeFont ("../Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf",int(fSize))
 	
 	if bt.typ == Schalter {
 		dickeLinie(bt.x-xSize/2,bt.y,bt.x-xSize/6,bt.y,size)
@@ -323,8 +321,6 @@ func (bt *data) ZeichneBauelement(xSize uint16) {
 			bt.x+xSize/3*71/100.,bt.y-xSize/3*71/100.,size)
 	}
 
-//	gfx.UpdateAn()
-
 }
 
 
@@ -337,13 +333,9 @@ func (bt *data) ZeichneLeitung(xSize,x,y uint16, v l.Leitung) {
 		dickeLinie(v.GibXPos(),y,x,y,size)
 	} else if bt.typ == AND || bt.typ == OR {
 		if v.GibEinNr() == 1 {
-//			gfx.Linie(bt.x-xSize/2,bt.y-xSize/4,v.GibXPos(),bt.y-xSize/4)
-//			gfx.Linie(v.GibXPos(),bt.y-xSize/4,v.GibXPos(),y)
 			dickeLinie(bt.x-xSize/2,bt.y-xSize/4,v.GibXPos(),bt.y-xSize/4,size)
 			dickeLinie(v.GibXPos(),bt.y-xSize/4,v.GibXPos(),y,size)
 		} else {
-//			gfx.Linie(bt.x-xSize/2,bt.y+xSize/4,v.GibXPos(),bt.y+xSize/4)		
-//			gfx.Linie(v.GibXPos(),bt.y+xSize/4,v.GibXPos(),y)
 			dickeLinie(bt.x-xSize/2,bt.y+xSize/4,v.GibXPos(),bt.y+xSize/4,size)		
 			dickeLinie(v.GibXPos(),bt.y+xSize/4,v.GibXPos(),y,size)
 		}
