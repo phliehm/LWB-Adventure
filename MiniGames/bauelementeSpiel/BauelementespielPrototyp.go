@@ -13,6 +13,7 @@ import "gfx"
 import "../../Klassen/buttons"
 import "os"
 import "strconv"
+import "time"
 
 
 func erzeugeSchalterButton(x,y,xSize uint16) buttons.Button {
@@ -63,6 +64,9 @@ func WillkommenText() []string {
 	erg = append(erg,"leuchten. Versuchen Sie die Schalter")
 	erg = append(erg,"so wenig wie möglich zu betätigen.")
 	erg = append(erg,"")
+	erg = append(erg,"Sie benötigen 45% der Punkte um die")
+	erg = append(erg,"Prüfunf zu bestehen.")
+	erg = append(erg,"")
 	erg = append(erg,"Viel Spaß!")
 	return erg
 }
@@ -70,11 +74,22 @@ func WillkommenText() []string {
 
 func schreibeGewonnen() []string {
 	var erg []string = make([]string,0)
-	erg = append(erg,"Glückwunsch Sie haben alle")
-	erg = append(erg,"Aufgaben geschafft!")
+	erg = append(erg,"Glückwunsch Sie haben die")
+	erg = append(erg,"Aufgabe geschafft!")
 	erg = append(erg,"")
 	erg = append(erg,"Auf zur nächsten Aufgabe oder")
 	erg = append(erg,"versuchen Sie es noch einmal.")
+	return erg
+}
+
+
+func schreibeBestanden() []string {
+	var erg []string = make([]string,0)
+	erg = append(erg,"Glückwunsch Sie die Prüfung")
+	erg = append(erg,"bestanden!")
+	erg = append(erg,"")
+	erg = append(erg,"Aber können Sie noch die Note")
+	erg = append(erg,"verbessern?")
 	return erg
 }
 
@@ -197,10 +212,11 @@ func main() {
 	var happy bool = true			// Winnie sieht happy aus
 	var levelNeuLaden bool			// Level neu laden
 	var neuZeichnen bool 			// Schaltkreis neu zeichnen
+	var bestanden bool				// Prüfung bestanden?
 									
 	var text []string = WillkommenText()
 	var font string = "../../Schriftarten/Ubuntu-B.ttf"
-	var sound string = ""
+//	var sound string = ""
 	var soundAn bool				// soll Sound gespielt werden?
 
 
@@ -229,7 +245,6 @@ func main() {
 	for i:=uint16(0); i<nlevel; i++ { 
 		maxPunkte = maxPunkte + lev.GibMaxPunktzahl(i)
 	}
-	// fmt.Println("maxPunkte: ",maxPunkte)
 
 
 	//  --------------------   Buttons ------------------------------//
@@ -253,7 +268,7 @@ func main() {
 //	nochmal.SetzeSound("../../Sounds/Jump.wav")
  
  
-	// ---------------- Zeichne Spielfeld -------------- //
+	// ---------------- Zeichne Spielfeld -------------------------- //
 
 	gfx.Fenster(1200,700)
 	gfx.SetzeFont ("../../Schriftarten/Ubuntu-B.ttf",20)
@@ -262,7 +277,7 @@ func main() {
 	zeichneButtons(weiter,zurueck,beenden,nochmal)
 
 
-	// Mausabfrage - Spielsteuerung
+	// ----------- Mausabfrage - Spielsteuerung ---------------------//
 	for {
 		// neuZeichnen = false
 		taste, status, mausX, mausY := gfx.MausLesen1()
@@ -279,42 +294,48 @@ func main() {
 					neuZeichnen = true
 				}
 			}
-			if alleLampenAn(sk) {
+			// check Level gewonnen oder verloren?
+			if alleLampenAn(sk) {			// check: Level geweonnen?
 				inaktiviereSchalter(sbutton)
-				if ilevel+1 == nlevel {		// Spiel zu Ende?
+				// Merke die Punkte im Level
+				if nPunkte > ePunkte[ilevel] {ePunkte[ilevel] = nPunkte} // Verbesserung?
+				gPunkte = 0					// Berechne Gesamtpunktzahl
+				for i:=uint16(0); i<nlevel; i++ {
+					gPunkte = gPunkte + ePunkte[i]
+				}
+				// Wie gewonnen?
+				if ilevel+1 == nlevel {		// Letztes Level? => Spiel zu Ende
 					text = schreibeGewonnenEnde()
-				} else {
+				// oder Prüfung bestanden?
+				} else if !bestanden && berechneNote(gPunkte,maxPunkte) != "n.B."{
+					bestanden = true
+					text = schreibeBestanden()
+					weiter.AktiviereButton()
+					time.Sleep (time.Duration(4e8))
+					gfx.SpieleSound("../../Sounds/Sparkle.wav")
+					time.Sleep (time.Duration(4e8))
+					gfx.SpieleSound("../../Sounds/Sparkle.wav")							
+					time.Sleep (time.Duration(4e8))
+					gfx.SpieleSound("../../Sounds/Sparkle.wav")							
+				} else { // oder nur Level gewonnen 
 					text = schreibeGewonnen()
 					weiter.AktiviereButton()
 				}
 				nochmal.AktiviereButton()
-				neuZeichnen = true
-				if ilevel == ilevelGeschafft {ilevelGeschafft++}
-				// Merke die Punkte im Level und berechne die Gesamtpunktzahl
-				if nPunkte > ePunkte[ilevel] {ePunkte[ilevel] = nPunkte}
-				gPunkte = 0
-				for i:=uint16(0); i<nlevel; i++ {
-					gPunkte = gPunkte + ePunkte[i]
-					//fmt.Println(gPunkte)
+				if ilevel == ilevelGeschafft {ilevelGeschafft++}			
+				if !soundAn {
+					gfx.SpieleSound("../../Sounds/Sparkle.wav")
+					soundAn = true	
 				}
-				if sound == "../../Sounds/Sparkle.wav" { // Spiele Sound nur einmal!
-					soundAn = false
-				} else {
-					sound = "../../Sounds/Sparkle.wav"
-					soundAn = true
-				}				
-			} else if nPunkte == 0 {	   // wenn zu viele Versuche!!!
+			} else if nPunkte == 0 {	   	// wenn zu viele Versuche!!!
 				inaktiviereSchalter(sbutton)
 				text = schreibeVerloren()
 				happy = false
 				nochmal.AktiviereButton()
-				neuZeichnen = true
-				if sound == "../../Sounds/GameOver.wav" {
-					soundAn = false
-				} else {
-					sound = "../../Sounds/GameOver.wav"
-					soundAn = true
-				}				
+				if !soundAn {			// Spiele Sound nur einmal
+					gfx.SpieleSound("../../Sounds/GameOver.wav")
+					soundAn = true	
+				}
 			}
 			if weiter.TesteXYPosInButton(mausX,mausY) { // nächstes Level
 				// Lade nächtes Level
@@ -339,14 +360,13 @@ func main() {
 				if ilevel < ilevelGeschafft {weiter.AktiviereButton()}
 				levelNeuLaden = true
 				neuZeichnen = true
-				//sound = "../../Sounds/Jump.wav"			
 			}
 			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende des Spiels
 				break
 			}
 			if levelNeuLaden {
 				happy = true
-				lev  = level.New()	// Veränderungen rückgängig machen
+				lev  = level.New()		// Veränderungen rückgängig machen
 				sk = lev.GibSchaltkreis(ilevel)
 				sbutton = makeSchalterbuttonTab(sk,xSize)
 				nPunkte = lev.GibMaxPunktzahl(ilevel) + lev.GibMinSchalter(ilevel)
@@ -354,11 +374,15 @@ func main() {
 				text = lev.GibText(ilevel)
 				nochmal.DeaktiviereButton()
 				levelNeuLaden = false
-				sound = ""						// Setze Sounds zurück
+//				sound = ""						// Setze Sounds zurück
 				soundAn = false
 			}
 			if neuZeichnen {
-					if soundAn {gfx.SpieleSound(sound)}
+/*					if soundAn {
+						time.Sleep (time.Duration(4e8))
+						gfx.SpieleSound(sound)
+					}
+*/
 					gfx.UpdateAus()
 					zeichneSpielfeld(happy,xSize,ilevel,gPunkte,maxPunkte,sk,text)
 					zeichneButtons(weiter,zurueck,beenden,nochmal)
