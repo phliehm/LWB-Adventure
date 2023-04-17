@@ -34,6 +34,10 @@ https://map.kits.blog/map/82d2b0ba-aec9-4344-be2e-1be898fc7123
 - Fenstergröße: 1200 x 700 
 - Trennung von Eingabe, Routine, Darstellung?
 
+? Highscore-Ausgabe am Ende jedes Minigames in Form eines Notenspiegels mit Notendurchschnitt
+    und Namensliste der besten 5/10 SpielerInnen ??? --> Klasse "Notenspiegel"?
+? Zwischenzeugnis (eigenes) anzeigen lassen ?
+
 ### Maingame
 - Point&Click im Comic Style
 - Startbildschirm ((Laden) oder Neu)
