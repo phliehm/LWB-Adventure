@@ -31,7 +31,7 @@ https://map.kits.blog/map/82d2b0ba-aec9-4344-be2e-1be898fc7123
 ### Vereinbarungen
 - Speichern zwischen den MiniGames
 - Note float32 (z.B. 1,3, Noten zwischen 1,0 und 5,0, gerundet ,3 / ,7 / ,0), Punktzahl uint32
-- Fenstergröße: 1200 x 900 
+- Fenstergröße: 1280 x 720 
 - Trennung von Eingabe, Routine, Darstellung?
 
 ### Maingame
