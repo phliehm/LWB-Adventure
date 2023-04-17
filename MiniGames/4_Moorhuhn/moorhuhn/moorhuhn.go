@@ -1,4 +1,4 @@
-package main
+package moorhuhn
 // Autor: B. Schneider
 // Datum: 20.03.2023
 // Zweck: SWP - Minigame Moorhuhn
@@ -8,21 +8,25 @@ import ( 	. "gfx"
 			"time"
 			"fmt"
 			"sync"
-			"../../Klassen/objekte"
-			"../../Klassen/raeume"
-			"../../Klassen/texte"
+			"../../../Klassen/objekte"
+			"../../../Klassen/raeume"
+			"../../../Klassen/texte"
 			"math/rand"
 			)
-
+/*
 const breite = 800 		// von Gott vorgegeben
 const hoehe  = 600  	// von Gott vorgegeben
+*/
+const breite = 1200 		// von Gott vorgegeben
+const hoehe  = 700  	// von Gott vorgegeben
 	
-func main () {
+func Moorhuhn () int16 {
 	var mutex sync.Mutex					// erstellt Mutex
 	var punkte int16 = 0					// Spiel-Punktzahl
 	var stop bool = false					// für OK-Objekt
 	var hubi bool = false					// für Hubi-Abwehr
-	var pause bool = false
+	var pause bool = false					// falls Pause
+	var ende bool = false					// falls Ende
 	var akt	bool = true						// Prüft, ob Grafik aktualisiert werden muss
 	obj := make([]objekte.Objekt,0)			// Array für die Objekte der Welt
 	
@@ -30,24 +34,22 @@ func main () {
 	random := rand.New( rand.NewSource( time.Now().UnixNano() ) )	// Initialisiere Random-Objekt mit der Systemzeit
 	
 	
-	pauseObjekt := objekte.New(breite,hoehe,hoehe/4	,1)			// Erstellt das Objekt PAUSE 
-	maus 		:= objekte.New(0,0,			30		,0)			// Erstellt das Objekt MAUSZEIGER mit Größe (30)
-	okayObjekt 	:= objekte.New(breite,hoehe,hoehe	,20)		// OK-Objekt
+	maus 		:= objekte.New(0, 0, 3, 0)			// Erstellt das Objekt MAUSZEIGER mit Größe (30)
+	pauseObjekt := objekte.New(0, 0, 0, 1)			// Erstellt das Objekt PAUSE 
+	okayObjekt 	:= objekte.New(0, 0, 0, 20)		// OK-Objekt
 	
-	Fenster (breite,hoehe)									// Öffnet GFX-Fenster
-	Fenstertitel("StEPS-Wars")								// Gibt Fenster-Titel 
 	
-	SetzeFont ("../../Schriftarten/Freshman.ttf", hoehe/20 ) 	// Setzt Schriftart
+	//SetzeFont ("../../Schriftarten/Freshman.ttf", 300 ) 	// Setzt Schriftart
 	
 	
 	// Das Hauptprogramm startet die View-Komponente als nebenläufigen Prozess!
-	go view_komponente(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &akt, &punkte, &mutex)
+	go view_komponente(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &akt, &ende, &punkte, &mutex)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, random, &mutex)
+	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, &ende, random, &mutex)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
-	go maussteuerung(&obj, maus, okayObjekt, &pause, &stop, &hubi, &akt, &punkte)
+	go maussteuerung(&obj, maus, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte)
 	
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
@@ -58,7 +60,7 @@ A:	for {
 		if gedrueckt == 1 {
 			switch taste {
 				case 'q': 													// mit 'q' wird das Programm beendet!
-				break A
+				if ende { break A }
 				case 'p': 
 				pause = !pause												// Pause-Modus !!
 
@@ -78,25 +80,27 @@ A:	for {
 			}
 		}
 	}
-	// return punkte
+	fmt.Println("Vielen Dank für's Spielen!")
+	time.Sleep( time.Duration(2e9) )
+	
+	return punkte
 }
 
-func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt *bool, rand *rand.Rand, mutex *sync.Mutex) {		// füllt Objekte ins Array
-	level1 := objekte.New(breite,hoehe,hoehe	,7)
-	level2 := objekte.New(breite,hoehe,hoehe	,8)
-	level3 := objekte.New(breite,hoehe,hoehe	,9)  
-	level4 := objekte.New(breite,hoehe,hoehe	,10)
-	level5 := objekte.New(breite,hoehe,hoehe	,15)
-	count3 := objekte.New(breite,hoehe,hoehe	,12)
-	count2 := objekte.New(breite,hoehe,hoehe	,13)
-	count1 := objekte.New(breite,hoehe,hoehe	,14)
+func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, mutex *sync.Mutex) {		// füllt Objekte ins Array
+	
+	
+	count3 := objekte.New(0,0,0,13)
+	count2 := objekte.New(0,0,0,14)
+	count1 := objekte.New(0,0,0,15)
 
 	time.Sleep( time.Duration(1e9) )
 	
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+	/*
 	Zwischentext(&texte.MoorEinl, mutex, stop)		// Einleitungs-Text
 	
+	level1 := objekte.New(breite,hoehe,hoehe	,7)
 	Levelanzeige(level1, mutex)						// ----------------- LEVEL 1 -------------------- Große Zielscheiben
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
@@ -104,7 +108,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	for i:=0;i<15;i++ {
 		time.Sleep( time.Duration(	rand.Uint32()/2 ) )
-		*obj = append(*obj, objekte.New( uint16(rand.Intn(600))+50, uint16(rand.Intn(400))+50, uint16(rand.Intn(150)+150), 11) )
+		*obj = append(*obj, objekte.New( uint16(rand.Intn(1000))+100, uint16(rand.Intn(500))+100, uint16(rand.Intn(225)+225), 12) )
 		*akt = true
 	}
 	
@@ -113,16 +117,17 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	*obj = make([]objekte.Objekt,0)					// leere den Objekte-Slice (Performance!)
 	
 	// ----------------------------------------------------------------------------------------------
-	
+	*/
 	Zwischentext(&texte.MoorLvl2, mutex, stop)		// Level 2-Text
 		
+	level2 := objekte.New(breite,hoehe,hoehe	,8)
 	Levelanzeige(level2, mutex)						// ----------------- LEVEL 2 -------------------- Kleine Zielscheiben
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
 	
 	for i:=0;i<15;i++ {
 		time.Sleep( time.Duration( rand.Uint32()/2 ) )
-		*obj = append(*obj, objekte.New( uint16(rand.Intn(650))+50, uint16(rand.Intn(450))+50, uint16(rand.Intn(100)+30), 11) )
+		*obj = append(*obj, objekte.New( uint16(rand.Intn(1000))+100, uint16(rand.Intn(500))+100, uint16(rand.Intn(150)+50), 12) )
 		*akt = true
 	}
 	time.Sleep( time.Duration(4e9) )
@@ -132,14 +137,15 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	// ----------------------------------------------------------------------------------------------
 	
 	Zwischentext(&texte.MoorLvl3, mutex, stop)		// Level 3-Text
-		
+	
+	level3 := objekte.New(breite,hoehe,hoehe	,9)  	
 	Levelanzeige(level3, mutex)						// ----------------- LEVEL 3 -------------------- Kaffee und Pizza
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
 	
 	
 	for i:=0;i<15;i++ {
-		*obj = append(*obj, objekte.New( uint16(rand.Intn(650))+50,uint16(rand.Intn(450))+50, uint16(rand.Intn(200)+50), uint8(rand.Intn(2)*2+3)) )
+		*obj = append(*obj, objekte.New( uint16(rand.Intn(800))+75,uint16(rand.Intn(400))+75, uint16(rand.Intn(300)+50), uint8(rand.Intn(2)*2+3)) )
 		*akt = true
 		time.Sleep( time.Duration(	rand.Uint32()/2 ) )
 	}
@@ -150,28 +156,30 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	// ----------------------------------------------------------------------------------------------
 	
+	
 	Zwischentext(&texte.MoorLvl4, mutex, stop)		// Level 4-Text
 	
+	level4 := objekte.New(breite,hoehe,hoehe	,10)
 	Levelanzeige(level4, mutex)						// ----------------- LEVEL 4 --------------------
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
 		
-	*obj = append(*obj, objekte.New(50,150,50,uint8(rand.Intn(2)+18)),objekte.New(50,200,50,uint8(rand.Intn(2)+18)),objekte.New(50,250,50,uint8(rand.Intn(2)+18)),		// L
-						objekte.New(50,300,50,uint8(rand.Intn(2)+18)),objekte.New(50,350,50,uint8(rand.Intn(2)+18)),objekte.New(50,400,50,uint8(rand.Intn(2)+18)),
-						objekte.New(50,450,50,uint8(rand.Intn(2)+18)),objekte.New(100,450,50,uint8(rand.Intn(2)+18)),objekte.New(150,450,50,uint8(rand.Intn(2)+18)),
+	*obj = append(*obj, objekte.New(75,125,75,uint8(rand.Intn(2)+18)),objekte.New(75,200,75,uint8(rand.Intn(2)+18)),objekte.New(75,275,75,uint8(rand.Intn(2)+18)),		// L
+						objekte.New(75,350,75,uint8(rand.Intn(2)+18)),objekte.New(75,425,75,uint8(rand.Intn(2)+18)),objekte.New(75,500,75,uint8(rand.Intn(2)+18)),
+						objekte.New(75,575,75,uint8(rand.Intn(2)+18)),objekte.New(150,575,75,uint8(rand.Intn(2)+18)),objekte.New(225,575,75,uint8(rand.Intn(2)+18)),
 						  
-						objekte.New(215,150,50,uint8(rand.Intn(2)+18)),objekte.New(220,200,50,uint8(rand.Intn(2)+18)),objekte.New(230,250,50,uint8(rand.Intn(2)+18)),	// W
-						objekte.New(245,300,50,uint8(rand.Intn(2)+18)),objekte.New(260,350,50,uint8(rand.Intn(2)+18)),objekte.New(275,400,50,uint8(rand.Intn(2)+18)),
-						objekte.New(295,450,50,uint8(rand.Intn(2)+18)),objekte.New(325,400,50,uint8(rand.Intn(2)+18)),objekte.New(350,350,50,uint8(rand.Intn(2)+18)),
-						objekte.New(375,400,50,uint8(rand.Intn(2)+18)),objekte.New(405,450,50,uint8(rand.Intn(2)+18)),objekte.New(425,400,50,uint8(rand.Intn(2)+18)),
-						objekte.New(440,350,50,uint8(rand.Intn(2)+18)),objekte.New(455,300,50,uint8(rand.Intn(2)+18)),objekte.New(470,250,50,uint8(rand.Intn(2)+18)),
-						objekte.New(480,200,50,uint8(rand.Intn(2)+18)),objekte.New(485,150,50,uint8(rand.Intn(2)+18)),
-						objekte.New(600,150,50,uint8(rand.Intn(2)+18)),objekte.New(600,200,50,uint8(rand.Intn(2)+18)),objekte.New(600,250,50,uint8(rand.Intn(2)+18)),	// B
-						objekte.New(600,300,50,uint8(rand.Intn(2)+18)),objekte.New(600,350,50,uint8(rand.Intn(2)+18)),objekte.New(600,400,50,uint8(rand.Intn(2)+18)),
-						objekte.New(600,450,50,uint8(rand.Intn(2)+18)),
-						objekte.New(660,170,50,uint8(rand.Intn(2)+18)),objekte.New(700,215,50,uint8(rand.Intn(2)+18)),objekte.New(660,260,50,uint8(rand.Intn(2)+18)),
-						objekte.New(680,315,50,uint8(rand.Intn(2)+18)),objekte.New(725,360,50,uint8(rand.Intn(2)+18)),objekte.New(710,415,50,uint8(rand.Intn(2)+18)),
-						objekte.New(660,440,50,uint8(rand.Intn(2)+18)) )
+						objekte.New(323,125,75,uint8(rand.Intn(2)+18)),objekte.New(330,200,75,uint8(rand.Intn(2)+18)),objekte.New(345,275,75,uint8(rand.Intn(2)+18)),	// W
+						objekte.New(368,350,75,uint8(rand.Intn(2)+18)),objekte.New(390,425,75,uint8(rand.Intn(2)+18)),objekte.New(413,500,75,uint8(rand.Intn(2)+18)),
+						objekte.New(443,575,75,uint8(rand.Intn(2)+18)),objekte.New(488,500,75,uint8(rand.Intn(2)+18)),objekte.New(525,425,75,uint8(rand.Intn(2)+18)),
+						objekte.New(563,500,75,uint8(rand.Intn(2)+18)),objekte.New(608,575,75,uint8(rand.Intn(2)+18)),objekte.New(638,500,75,uint8(rand.Intn(2)+18)),
+						objekte.New(660,425,75,uint8(rand.Intn(2)+18)),objekte.New(683,350,75,uint8(rand.Intn(2)+18)),objekte.New(705,275,75,uint8(rand.Intn(2)+18)),
+						objekte.New(720,200,75,uint8(rand.Intn(2)+18)),objekte.New(728,125,75,uint8(rand.Intn(2)+18)),
+						objekte.New(900,125,75,uint8(rand.Intn(2)+18)),objekte.New(900,200,75,uint8(rand.Intn(2)+18)),objekte.New(900,275,75,uint8(rand.Intn(2)+18)),	// B
+						objekte.New(900,350,75,uint8(rand.Intn(2)+18)),objekte.New(900,425,75,uint8(rand.Intn(2)+18)),objekte.New(900,500,75,uint8(rand.Intn(2)+18)),
+						objekte.New(900,575,75,uint8(rand.Intn(2)+18)),
+						objekte.New(990,155,75,uint8(rand.Intn(2)+18)),objekte.New(1050,223,75,uint8(rand.Intn(2)+18)),objekte.New(990,290,75,uint8(rand.Intn(2)+18)),
+						objekte.New(1020,373,75,uint8(rand.Intn(2)+18)),objekte.New(1088,440,75,uint8(rand.Intn(2)+18)),objekte.New(1065,523,75,uint8(rand.Intn(2)+18)),
+						objekte.New(990,560,75,uint8(rand.Intn(2)+18)) )
 	
 	*akt = true
 	time.Sleep( time.Duration(1.4e10) )
@@ -180,11 +188,12 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 
 	// ----------------------------------------------------------------------------------------------
 	
-	Zwischentext(&texte.MoorLvl51, mutex, stop)		// Level 5-Text - 1
 	
+	Zwischentext(&texte.MoorLvl51, mutex, stop)		// Level 5-Text - 1
 	maus.SetzeTyp(16)
 	Zwischentext(&texte.MoorLvl52, mutex, stop)		// Level 5-Text - 2
 	maus.SetzeTyp(0)
+	level5 := objekte.New(breite,hoehe,hoehe	,11)
 	Levelanzeige(level5, mutex)						// ----------------- LEVEL 5 -------------------- Kaffee und Pizza
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
@@ -195,10 +204,10 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	for zeit < 4e10 {	
 		
 		if i:= rand.Intn(20); i < 8 {
-			*obj = append(*obj, objekte.New( uint16(rand.Intn(600))+50,uint16(rand.Intn(400))+50, uint16(rand.Intn(150)+100), uint8(rand.Intn(2)+18)) )
+			*obj = append(*obj, objekte.New( uint16(rand.Intn(800))+100,uint16(rand.Intn(400))+100, uint16(rand.Intn(200)+100), uint8(rand.Intn(2)+18)) )
 			*akt = true
-		} else if i == 11 {
-			*obj = append(*obj, objekte.New( uint16(rand.Intn(710)),uint16(rand.Intn(510)), 0, 16) )
+		} else if i == 10 {
+			*obj = append(*obj, objekte.New( uint16(rand.Intn(800))+200,uint16(rand.Intn(300))+200, 0, 16) )
 			*hubi = true
 			*akt = true
 		}
@@ -215,18 +224,20 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	Zwischentext(&texte.MoorOut, mutex, stop)		// Ende-Text	
 	
 	// ----------------------------------------------------------------------------------------------
+	*ende = true
+	return
 }
 
 func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Lock()
-	raeume.Moorhuhn(breite)
+	raeume.Moorhuhn()
 	Transparenz(120)															
-	Vollrechteck(breite/10,hoehe/10,breite*4/5,hoehe*4/5)
+	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
-	SetzeFont ("../../Schriftarten/Freshman.ttf", hoehe/16 )
+	SetzeFont ("../../Schriftarten/Freshman.ttf", 50 )
 	Stiftfarbe(124,212,255)
 	for ind,str := range *textArr {
-		SchreibeFont (breite*4/25, uint16(hoehe*4/25+ind*hoehe/15) ,str )
+		SchreibeFont (210, uint16(70+ind*55) ,str )
 	}
 	Archivieren()
 	mutex.Unlock()
@@ -237,7 +248,7 @@ func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 
 func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 	mutex.Lock()
-	raeume.Moorhuhn(breite)
+	raeume.Moorhuhn()
 	level.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -247,7 +258,7 @@ func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 
 func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool) {
 	mutex.Lock()
-	raeume.Moorhuhn(breite)
+	raeume.Moorhuhn()
 	count3.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -255,7 +266,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	raeume.Moorhuhn(breite)
+	raeume.Moorhuhn()
 	count2.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -263,7 +274,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	raeume.Moorhuhn(breite)
+	raeume.Moorhuhn()
 	count1.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -273,7 +284,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 }
 
 // Es folgt die VIEW-Komponente
-func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.Objekt, pause, stop ,akt *bool, punkte *int16, mutex *sync.Mutex) {   	
+func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.Objekt, pause, stop ,akt, ende *bool, punkte *int16, mutex *sync.Mutex) {   	
 	var t1 int64 = time.Now().UnixNano() 		//Startzeit
 	var anz,anzahl int                  		// zur Bestimmung der Frames pro Sekunde
 	var verzögerung = 90
@@ -289,7 +300,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 			ObjAktualisieren(obj)
 			*akt = false
 		} else {
-			Restaurieren(0,0,breite,hoehe)					// Restauriert das alte Hintergrundbild
+			Restaurieren(0,0,1200,700)					// Restauriert das alte Hintergrundbild
 		}
 		
 		if *stop {
@@ -298,11 +309,11 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 		
 		maus.Zeichnen()										// Zeichnet Maus
 		
-		SetzeFont ("../../Schriftarten/Freshman.ttf", hoehe/20 )
+		SetzeFont ("../../Schriftarten/Freshman.ttf", 35 )
 		Stiftfarbe(76,0,153)  
-		SchreibeFont (breite*14/20,0,"Punkte : "+fmt.Sprint (*punkte))	// Schreibe rechts oben Punkte
+		SchreibeFont (900,5,"Punkte : "+fmt.Sprint (*punkte))	// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)
-		Schreibe (0,0,"FPS:"+fmt.Sprint (anzahl))					// Schreibe links oben FPS
+		Schreibe (1,1,"FPS:"+fmt.Sprint (anzahl))					// Schreibe links oben FPS
 		if *pause { pauseObjekt.Zeichnen() }
 			
 		
@@ -319,13 +330,14 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 		UpdateAn () 										// Nun wird der gezeichnete Frame sichtbar gemacht!
 		mutex.Unlock()
 		
+		if *ende { return }
 		time.Sleep(time.Duration(verzögerung * 1e5)) 		// Immer ca. 100 FPS !!
 		
 	}
 }
 
 func ObjAktualisieren(obj *[]objekte.Objekt) {
-	raeume.Moorhuhn(breite)									// Hintergrund des Moorhuhn-Raumes wird gezeichnet
+	raeume.Moorhuhn()									// Hintergrund des Moorhuhn-Raumes wird gezeichnet
 	
 	for _,ob := range *obj { 								// Zeichnet alleweiteren Objekte ein
 		ob.Zeichnen()
@@ -334,7 +346,7 @@ func ObjAktualisieren(obj *[]objekte.Objekt) {
 }
 
 // Es folgt die CONTROL-Komponente 1 --- Kein Bestandteil der Welt, also unabhängig -----
-func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause,stop,hubi,akt *bool, punkte *int16) {
+func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause,stop,hubi,akt,ende *bool, punkte *int16) {
 	/*var taste uint8
 	var status int8 */
 	for {
@@ -348,6 +360,8 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause
 					*stop = false
 				}
 			}
+		} else if *ende {
+			return
 		} else if *pause {	
 		} else if *hubi {									// falls ein Hubi (Lvl 5) aktiv ist
 			if status==1 {
