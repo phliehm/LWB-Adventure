@@ -68,11 +68,26 @@ func WillkommenText() []string {
 }
 
 
-func schreibeGewonnen() []string {
+func schreibeGewonnen(punkte, punktemax uint16) []string {
 	var erg []string = make([]string,0)
+	var punktestr string = fmt.Sprint(punkte)
 	erg = append(erg,"Glückwunsch Sie haben die")
 	erg = append(erg,"Aufgabe geschafft!")
 	erg = append(erg,"")
+	if punkte == punktemax {
+		erg = append(erg,"Sie haben die optimale")
+		erg = append(erg,"Lösung gefunden.")
+		erg = append(erg,"Es gibt volle "+punktestr+" Punkte.")
+	} else {
+		erg = append(erg,"Sie haben aber nicht die")
+		erg = append(erg,"optimale Lösung gefunden.")
+		if punkte > 1 {
+			erg = append(erg,"Es gibt nur "+punktestr+" Punkte.")				
+		} else {
+			erg = append(erg,"Es gibt nur einen Punkt.")
+		}
+	}
+	erg = append(erg,"")	
 	erg = append(erg,"Auf zur nächsten Aufgabe oder")
 	erg = append(erg,"versuchen Sie es noch einmal.")
 	return erg
@@ -256,7 +271,7 @@ func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
  
 	// ---------------- Zeichne Spielfeld -------------------------- //
 
-	gfx.Fenster(1200,700)
+//	gfx.Fenster(1200,700)
 	gfx.SetzeFont ("../Schriftarten/Ubuntu-B.ttf",20)
 
 	zeichneSpielfeld(happy,xSize,ilevel,gPunkte,maxPunkte,sk,text)
@@ -303,7 +318,7 @@ func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 					time.Sleep (time.Duration(4e8))
 					gfx.SpieleSound("../Sounds/Sparkle.wav")							
 				} else { // oder nur Level gewonnen 
-					text = schreibeGewonnen()
+					text = schreibeGewonnen(nPunkte,lev.GibMaxPunktzahl(ilevel))
 					weiter.AktiviereButton()
 				}
 				nochmal.AktiviereButton()
