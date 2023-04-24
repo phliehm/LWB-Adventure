@@ -10,6 +10,7 @@ import . "./bauelementeSpiel"
 //import "os"
 //import "strconv"
 import "fmt"
+import "gfx"
 
 
 
@@ -36,6 +37,7 @@ func main() {
 		ilevel = uint16(intVar) - 1
 	}
 */
+	gfx.Fenster(1200,700)
 	ilevel,note,ePunkte := BauelementeSpiel(ilevel,ePunkte)
 	fmt.Println("Note: ",note) 
 	fmt.Println("Starte alten Spielstand mit: ",ilevel,ePunkte )
