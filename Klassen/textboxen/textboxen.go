@@ -9,6 +9,8 @@ package textboxen
  * Der Text kann linksbündig oder zentriert ausgegeben werden. Zentriert sieht nicht immer gut aus, das liegt an der
  * unterschiedlichen Zeichenbreite, die wäre vermutlich nur unter erheblichen Performanceeinbußen richtig zu ermitteln.
  * Die Höhe hat derzeit keine Auswirkungen
+ * Es können Zeilenumbrüche im eingegeben Text mit "\n" erzwungen werden. 
+ * Beispiel: "1. Zeile\n2. Zeile\n3. Zeile\n\nHier war eine Leerzeile."
  *  -------------------------------------------------------------
 
 	
@@ -31,10 +33,16 @@ type Textbox interface {
 	SetzePosition(x,y uint16) () 
 // Vor.: --
 // Erg.: Position der Textbox ist geliefert
-	GibPosition()(uint16,uint16)
-// Vor.: 
-// Erg.: Die Größe (Breite und Höhe) der Textbox ist geliefert
-	GibGröße()(breite uint16,höhe uint16)
+	GibX()uint16
+// Vor.: --
+// Erg.: Position der Textbox ist geliefert
+	GibY()uint16
+// Vor.: --
+// Erg.: Breite der Textbox ist geliefert
+	GibBreite() uint16
+// Vor.: --
+// Erg.: Höhe der Textbox ist geliefert
+	GibtHöhe() uint16
 // Vor.: --
 // Eff.: Der Text wird der Textbox hinzugefügt 
 	SchreibeText(text string) ()
