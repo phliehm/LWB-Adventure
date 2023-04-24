@@ -73,14 +73,14 @@ func (ob *data) Zeichnen() {
 		switch ob.typ {
 // Fadenkreuz-Maus-Zeiger bei Koord x,y
 			case 0:	
-			Stiftfarbe(240,240,240)
-			for i:=uint16(0);i<ob.qua*2;i++ {
-				Kreis(ob.x, ob.y, ob.qua*10-i)
+			Stiftfarbe(0,255,0)
+			for i:=uint16(0);i<6;i++ {
+				Kreis(ob.x, ob.y, 30-i)
 			}
-			Vollrechteck(ob.x-ob.qua, 	ob.y-ob.qua*14,	ob.qua*2,	ob.qua*10)
-			Vollrechteck(ob.x-ob.qua, 	ob.y+ob.qua*4,	ob.qua*2,	ob.qua*10)
-			Vollrechteck(ob.x-ob.qua*14, 	ob.y-ob.qua,		ob.qua*10,		ob.qua*2)
-			Vollrechteck(ob.x+ob.qua*4, 	ob.y-ob.qua,		ob.qua*10,		ob.qua*2)
+			Vollrechteck(ob.x-3, ob.y-42, 6, 30)
+			Vollrechteck(ob.x-3, ob.y+12, 6, 30)
+			Vollrechteck(ob.x-42, ob.y-3, 30, 6)
+			Vollrechteck(ob.x+12, ob.y-3, 30, 6)
 
 // PAUSE - Anzeige			
 			case 1:		
@@ -94,7 +94,7 @@ func (ob *data) Zeichnen() {
 			Stiftfarbe(255,0,127)  
 			SchreibeFont (200,250,"PAUSE")							// Schreibe mittig Pause
 			
-// rotes Quadrat ab linker oberer Ecke			
+// rotes Quadrat ab linker oberer Ecke			// DUMMY
 			case 2:		
 			Rechteck(ob.x,ob.y,ob.qua-1,ob.qua-1)
 			Stiftfarbe(ob.r,ob.g,ob.b)
@@ -384,6 +384,10 @@ func (ob *data) Zeichnen() {
 			case 16:																														
 			LadeBild (ob.x,ob.y, "../../Bilder/Heidi-2.bmp")
 
+// StEPS-Logo			
+			case 17:																														
+			LadeBild (ob.x,ob.y, "../../Bilder/StEPS-Logo-2.bmp")
+
 // Kaffee-Tasse 2 ab linker oberer Ecke			
 			case 18:			
 			Stiftfarbe(0,0,0)
@@ -469,9 +473,9 @@ func (ob *data) Zeichnen() {
 
 // OK - Objekt			
 			case 20:															
-			Stiftfarbe(127,62,64)
+			Stiftfarbe(153,0,153)
 			Vollrechteck(480,570,240,80)
-			Stiftfarbe(255,124,128)
+			Stiftfarbe(255,0,255)
 			Vollrechteck(490,577,220,66)
 			SetzeFont ("../../Schriftarten/Freshman.ttf", 56 )
 			Stiftfarbe(124,212,255)

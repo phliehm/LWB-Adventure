@@ -10,7 +10,6 @@ import (. "gfx"
 	
 func main () {
 	Fenster (1200,700)										// Öffnet GFX-Fenster
-	Fenstertitel("StEPS-Wars")								// Gibt Fenster-Titel 
 	
 	fmt.Println("Du hast ",moorhuhn.Moorhuhn()," Punkte erreicht!")
 }
