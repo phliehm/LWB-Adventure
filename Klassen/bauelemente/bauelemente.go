@@ -44,8 +44,8 @@ const (
 	AND			Bautyp = 1
 	OR			Bautyp = 2
 	NOT			Bautyp = 3
-	Lampe		Bautyp = 4
-//	Leitung		Bautyp = 5
+	XOR			Bautyp = 4
+	Lampe		Bautyp = 5
 )
 
 
@@ -236,6 +236,8 @@ func (bt *data) BerechneAusgang() bool {
 		bt.ausgang = bt.eingang1 || bt.eingang2
 	} else if bt.typ == NOT { // egal an welchem Eingang Spannung anliegt
 		bt.ausgang = !(bt.eingang1 || bt.eingang2) 
+	} else if bt.typ == XOR {
+		bt.ausgang = (bt.eingang1 && !bt.eingang2) || (!bt.eingang1 && bt.eingang2)
 	} else {
 		panic("Bauteiltyp nicht bekannt!")		// noch zu spezifizieren!!??
 	}
@@ -306,6 +308,9 @@ func (bt *data) ZeichneBauelement(xSize uint16) {
 		gfx.Vollkreis(bt.x+xSize/2-xSize/20,bt.y,xSize/20)
 		gfx.Stiftfarbe(0,0,0)
 		gfx.SchreibeFont (bt.x-fSize/3,bt.y-fSize/2,"1")
+	} else if bt.typ == XOR {
+		dickesRechteck(bt.x-xSize/2,bt.y-ySize/2,xSize,ySize,size)
+		gfx.SchreibeFont (bt.x-fSize/2,bt.y-fSize/2,"=1")
 	} else if bt.typ == Lampe {
 		gfx.Vollkreis(bt.x,bt.y,xSize/3)
 		if bt.ausgang == true {
@@ -331,7 +336,7 @@ func (bt *data) ZeichneLeitung(xSize,x,y uint16, v l.Leitung) {
 		dickeLinie(bt.x-xSize/2,bt.y,v.GibXPos(),bt.y,size)		
 		dickeLinie(v.GibXPos(),bt.y,v.GibXPos(),y,size)
 		dickeLinie(v.GibXPos(),y,x,y,size)
-	} else if bt.typ == AND || bt.typ == OR {
+	} else if bt.typ == AND || bt.typ == OR || bt.typ == XOR {
 		if v.GibEinNr() == 1 {
 			dickeLinie(bt.x-xSize/2,bt.y-xSize/4,v.GibXPos(),bt.y-xSize/4,size)
 			dickeLinie(v.GibXPos(),bt.y-xSize/4,v.GibXPos(),y,size)
