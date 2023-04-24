@@ -1,7 +1,7 @@
 # LWB-Adventure
 
 Mindmap (**ACHTUNG: Löscht sich automatisch alle 30 Tage, immer mal wieder runterladen und neu hochladen!!!**):
-https://map.kits.blog/map/82d2b0ba-aec9-4344-be2e-1be898fc7123
+https://map.kits.blog/map/d25cd268-72d7-46ee-94c8-445c4e0ad085
 
 ## Regeln für das Repository: 
 
@@ -33,6 +33,10 @@ https://map.kits.blog/map/82d2b0ba-aec9-4344-be2e-1be898fc7123
 - Note float32 (z.B. 1,3, Noten zwischen 1,0 und 5,0, gerundet ,3 / ,7 / ,0), Punktzahl uint32
 - Fenstergröße: 1200 x 700 
 - Trennung von Eingabe, Routine, Darstellung?
+
+? Highscore-Ausgabe am Ende jedes Minigames in Form eines Notenspiegels mit Notendurchschnitt
+    und Namensliste der besten 5/10 SpielerInnen ??? --> Klasse "Notenspiegel"?
+? Zwischenzeugnis (eigenes) anzeigen lassen ?
 
 ### Maingame
 - Point&Click im Comic Style

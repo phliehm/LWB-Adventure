@@ -1,0 +1,69 @@
+Ideen-Sammlung für Minigame "SQL-Quest" (3. Semester)
+(Ideen nach Vorlage "SQL-Island")
+
+Spielfenster-Design:
+--------------------
+
+- (Terminal-?) Ausgabe-Fenster (in welcher Form?! Tabelle/...?!)
+- Eingabe-Fenster für SQL-Abfragen (Editor?!)
+- Herk mit Sprechblase für Infos und Anleitung
+- Zeile mit Angabe der vorhandenen (relevanten) Tabellen,
+  z.B. DOZENTEN (doznr, name, vlnr, sem, ...)
+- "Ausführen"-Button
+
+Sammlung SQL-Abfragen
+---------------------
+
+- "Welche Dozenten/Lehrveranstaltungen/... gibt es in der LWB?"
+  SELECT * FROM <tabelle>;
+  
+- "Welche Dozenten unterrichten/Lehrveranstaltungen gibt es im ?.Semester?"
+  SELECT * FROM <tabelle> WHERE < ... = ... >;
+  
+  "Welche Lehrveranstaltung haben etwas mit Programmierung zu tun?"
+                                < ... LIKE (%)... >;
+                                
+  "Welche Veranstaltungen hast Du im LWB-Adventure noch nicht besucht?"
+                                < ... IS NULL>;
+                                                     (AND ... (OR ...));
+                                                     
+- ("Welche Durchschnittsnote hast Du bisher erreicht?")
+  "Was ist das Lieblingsgetränk von Dozent XY?"
+  SELECT <attributname> FROM <tabelle> ... ;
+  
+- "Füge ... hinzu!"
+  INSERT INTO <tabelle(...)> VALUES (...);
+  
+- "Ändere .../ Füge ... ein!"
+  UPDATE <tabelle> SET <attributname> = <...> WHERE <...>;
+  
+- "Suche ... und lass die Ergebnisse nach ... (auf-/absteigend) sortiert anzeigen!"
+  SELECT * FROM <tabelle> WHERE <attributname> = ... ORDER BY <attributname> (DESC);
+  
+- tabellenübergreifende Suche (JOIN):
+  "Welche Vorlesungen oder Übungen hält Dozent XY?"
+  "Welche Veranstaltungen gab es in der Arnimalle?"
+  SELECT <tabelleA>.<attributA> FROM <tabelleA>, <tabelleB>
+     WHERE <tabelleA>.<attributB> = <tabelleB>.<attrubutB> AND <tabelleB>.<attributA> = ... ;
+     
+- "Wieviele Dozenten/Lehrveranstaltungen gibt es in der LWB/im ?.Semester?"
+  SELECT COUNT(*) FROM <tabelle> (, <tabelle2>) WHERE ... ;
+  
+- "Wieviel ... sind/haben alle Dozenten/Lehrveranstaltungen zusammen?"
+  "Wieviele Veranstaltungen gab es im ?. Semester?"
+  SELECT SUM(<tabelle>.<attributname>) FROM ... ;
+
+- "Lasse Dir die durchschnittlichen ...(Noten) der einzelnen ...(Lehrveranstaltungen) anzeigen!"
+  "Wieviele Veranstaltungen gab es pro Standort?"
+  SELECT <attributA>, SUM(<tabelle>.<attributB>), AVG(<tabelle>.<attributB>)
+     FROM <tabelle> GROUP BY <attributA> ORDER BY AVG(<tabelle>.<attributB>);
+     
+- "Wer hat den besten/schlechtesten Score im Minispiel XY, A/M/P/B?" (Übersicht Ergebnisse)
+  ("Wer ist der beste/schlechteste Student?" - Durchschnittsnote)
+  MIN MAX ?!
+
+- "Lösche ...!" (das, was vorher eingefügt wurde)
+  DELETE FROM <tabelle> WHERE ... ;
+
+
+ACHTUNG: Am Ende Datnenbank ggf. wieder saubermachen, bevor das Spiel beendet wird
