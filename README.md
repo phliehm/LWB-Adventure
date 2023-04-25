@@ -1,7 +1,7 @@
 # LWB-Adventure
 
 Mindmap (**ACHTUNG: Löscht sich automatisch alle 30 Tage, immer mal wieder runterladen und neu hochladen!!!**):
-https://map.kits.blog/map/82d2b0ba-aec9-4344-be2e-1be898fc7123
+https://map.kits.blog/map/d25cd268-72d7-46ee-94c8-445c4e0ad085
 
 ## Regeln für das Repository: 
 

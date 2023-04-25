@@ -62,6 +62,10 @@ func New() *data {
 	lev.elevel = append(lev.elevel,baueLevel5())	// Füge Level hinzu
 	lev.elevel = append(lev.elevel,baueLevel6())	// Füge Level hinzu
 	lev.elevel = append(lev.elevel,baueLevel7())	// Füge Level hinzu
+	lev.elevel = append(lev.elevel,baueLevel9())	// Füge Level hinzu
+	lev.elevel = append(lev.elevel,baueLevel9b())	// Füge Level hinzu
+	lev.elevel = append(lev.elevel,baueLevel8())	// Füge Level hinzu
+	lev.elevel = append(lev.elevel,baueLevel10())	// Füge Level hinzu
 	return lev
 }
 

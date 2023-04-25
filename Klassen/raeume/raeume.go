@@ -4,10 +4,8 @@ package raeume
 
 import . "gfx"
 
-func Moorhuhn(breite uint16) {
-	if breite == 800 {
-		LadeBild (0,0, "../../Bilder/Seminarraum-2.bmp")
-	}
+func Moorhuhn() {
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 }
 
 func Hauptflur(breite uint16) {
