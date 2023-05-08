@@ -1,4 +1,4 @@
-package objekte
+package memory
 // Autor: B. Schneider
 // Datum: 20.03.2023
 
@@ -30,11 +30,11 @@ type Objekt interface {
 	
 	GibAkt() (bool)
 	
-	SetzeInhalt(inhalt string)
-	
-	SetzeErstellung(erstellt int64)
-	
 	GibErstellung() (int64)
+	
+	SetzeFarbe(r,g,b uint8)
+
+	GibFarbe() (uint8, uint8, uint8)
 	
 	Zeichnen()
 	

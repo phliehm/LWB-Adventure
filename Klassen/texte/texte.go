@@ -92,4 +92,43 @@ var MoorOut2 []string = []string{"",
 								"",
 								"",
 								" Druecke nicht b, sondern Q ",
-								" zum Verlassen dieses Spiels !"}											
+								" zum Verlassen dieses Spiels !"}
+
+var MusterEinl []string = []string{"   H e r z l i c h    W i l l k o m m e n",
+								"                             zur",
+								"     Funktionalen Programmierung",
+								" ",
+								" Heute beschäftigen wir uns zuerst",
+								"          mit der MUSTER-ERKENNUNG",
+								"",
+								" und schließlich festigen wir das",
+								"          Wissen per MUSTER-MEMORY ."}
+			
+											
+var MusterV [6]string = [6]string{"  (f:w)",		// (f:w)
+								"  ('f':w)",		// ('f':w)
+								" (f:\"w\")",	// (f:"w")
+								"   [f,w]",		// [f,w]
+								"   (f,w)",		// (f,w)
+								"(f:w:fs)"}		// (f:w:fs)
+									
+	
+var MusterJ [6][]string = [6][]string {{"[1]","[[1]]","[\"w\"]","\"w\""},					// (f:w)
+									{"\"f\"","\"febweb\""},									// ('f':w)
+									{"\"fw\"","['v','w']"},									// (f:"w")
+									{"\"wf\"","[True,False]","[3,8]"},						// [f,w]
+									{"('f',False)","(1,'w')","(\"LWB\",True)"},				// (f,w)
+									{"[32,23]","\"LWB\"","[\"so\",\"ist\",\"das\"]"} }		// (f:w:fs)
+
+	
+var MusterN [6][]string = [6][]string {{"[1]","[[1]]","[\"w\"]","\"w\""},		// (f:w)
+									{"\"f\"","\"febweb\""},						// ('f':w)
+									{"\"fw\"",""},								// (f:"w")
+									{"\"ww\"",""},								// [f,w]
+									{"('f',False)","(1,'w')"},					// (f,w)
+									{"[32,23]",""} }							// (f:w:fs)	
+	
+	
+	
+	
+	

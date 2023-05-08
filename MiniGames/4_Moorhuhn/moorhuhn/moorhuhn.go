@@ -9,7 +9,6 @@ import ( 	. "gfx"
 			"fmt"
 			"sync"
 			"../../../Klassen/objekte"
-			"../../../Klassen/raeume"
 			"../../../Klassen/texte"
 			"math/rand"
 			)
@@ -225,7 +224,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	maus.SetzeTyp(17)
 	
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	Transparenz(120)															
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
@@ -250,7 +249,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	// ---
 	
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	Transparenz(120)															
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
@@ -268,7 +267,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 
 func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	Transparenz(120)
 	Stiftfarbe(76,0,153)														
 	Vollrechteck(100,50,1000,600)
@@ -287,7 +286,7 @@ func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 
 func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	level.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -297,7 +296,7 @@ func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 
 func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool) {
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	count3.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -306,7 +305,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	count2.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -315,7 +314,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	count1.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -355,7 +354,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 		
 		SetzeFont ("../../Schriftarten/Freshman.ttf", 35 )
 		Stiftfarbe(76,0,153)  
-		SchreibeFont (850,5,"Punkte : "+fmt.Sprint (*punkte,"  ' ",*diff," '"))	// Schreibe rechts oben Punkte
+		SchreibeFont (500,5,"Punkte : "+fmt.Sprint (*punkte,"        Letzter Treffer: ",*diff))	// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)
 		Schreibe (1,1,"FPS:"+fmt.Sprint (anzahl))					// Schreibe links oben FPS
 		if *pause { pauseObjekt.Zeichnen() }
@@ -381,7 +380,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 }
 
 func ObjAktualisieren(obj *[]objekte.Objekt) {
-	raeume.Moorhuhn()									// Hintergrund des Moorhuhn-Raumes wird gezeichnet
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")		// Hintergrund des Moorhuhn-Raumes wird gezeichnet
 	
 	for _,ob := range *obj { 								// Zeichnet alleweiteren Objekte ein
 		ob.Zeichnen()
