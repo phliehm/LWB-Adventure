@@ -42,7 +42,7 @@ type Textbox interface {
 	GibBreite() uint16
 // Vor.: --
 // Erg.: Höhe der Textbox ist geliefert
-	GibtHöhe() uint16
+	GibHöhe() uint16
 // Vor.: --
 // Eff.: Der Text wird der Textbox hinzugefügt 
 	SchreibeText(text string) ()
