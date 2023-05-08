@@ -1,4 +1,4 @@
-// ADT bauelemente - Spezifikation und Implementation
+// bauelementeSpiel - Hauptfunktion und Hilfsfunktionen
 
 // Martin Seiß    21.3.2023
 
