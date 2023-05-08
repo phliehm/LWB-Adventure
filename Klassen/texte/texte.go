@@ -35,8 +35,8 @@ var MoorLvl3 []string = []string{". . . uiii, wie SCHWIERIG !",
 								
 var MoorLvl4 []string = []string{" Das   L W B - P R I N Z I P",
 								"",
-								"Wie das mit der Nahrung",
-								"geht, wusstest du ja schon .",
+								"Wie das mit der Nahrung geht,",
+								"   wusstest du ja schon .",
 								" Aber wirst du auch satt ...",
 								"   ... in 30 Minuten Pause ?",
 								"         ",
@@ -54,7 +54,7 @@ var MoorLvl51 []string = []string{"Haus- und Raumordnung des ",
 								"raeumen nicht gestattet .",
 								". . . "}
 								
-var MoorLvl52 []string = []string{"   H  u  h  u ,  H  E  I  D  I ",
+var MoorLvl52 []string = []string{"   H  u  h  u ,    H  E  I  D  I ",
 								"",
 								"Nahrung und StEPS passt",
 								"nicht .        Deshalb :",
@@ -64,14 +64,71 @@ var MoorLvl52 []string = []string{"   H  u  h  u ,  H  E  I  D  I ",
 								"Erscheint Heidi, druecke H",
 								"und Nahrung verschwindet ."}
 								
-var MoorOut []string = []string{"  !  G U T   V E R D A U T  !",
+var MoorScore []string = []string{"  H o l a a d i o o o o o o o o o",
+								"",
+								"Gruene Wiesen im Sonnenschein.",
+								"Brauchst du zum Gluecklichsein.",
 								"",
 								"",
-								" Als du kamst, warst du",
-								" Schueler/in, doch jetzt",
-								"   bist du Meister/in !",
+								"  Du hast dich - gemessen an",
+								"   deinen derzeitigen Kompe-",
+								"    tenzen - ideal geschlagen !"}	
+								
+var MoorOut1 []string = []string{"Als du kamst, ",
+								"         warst du LWB,",
+								"                 jetzt bist du ",
 								"",
-								"   Moege die Macht . . .",
-								"      . . . immer mit dir sein !"}			
+								"                               StEPSi  !  !  !",
+								"",
+								"       erreichte PUNKTE : ",
+								"",
+								"veranstaltungs-NOTE : "}											
 								
 
+var MoorOut2 []string = []string{"",
+								"",
+								"   Moege die Macht . . .",
+								"           . . . immer mit dir sein !",
+								"",
+								"",
+								" Druecke nicht b, sondern Q ",
+								" zum Verlassen dieses Spiels !"}
+
+var MusterEinl []string = []string{"   H e r z l i c h    W i l l k o m m e n",
+								"                             zur",
+								"     Funktionalen Programmierung",
+								" ",
+								" Heute beschäftigen wir uns zuerst",
+								"          mit der MUSTER-ERKENNUNG",
+								"",
+								" und schließlich festigen wir das",
+								"          Wissen per MUSTER-MEMORY ."}
+			
+											
+var MusterV [6]string = [6]string{"  (f:w)",		// (f:w)
+								"  ('f':w)",		// ('f':w)
+								" (f:\"w\")",	// (f:"w")
+								"   [f,w]",		// [f,w]
+								"   (f,w)",		// (f,w)
+								"(f:w:fs)"}		// (f:w:fs)
+									
+	
+var MusterJ [6][]string = [6][]string {{"[1]","[[1]]","[\"w\"]","\"w\""},					// (f:w)
+									{"\"f\"","\"febweb\""},									// ('f':w)
+									{"\"fw\"","['v','w']"},									// (f:"w")
+									{"\"wf\"","[True,False]","[3,8]"},						// [f,w]
+									{"('f',False)","(1,'w')","(\"LWB\",True)"},				// (f,w)
+									{"[32,23]","\"LWB\"","[\"so\",\"ist\",\"das\"]"} }		// (f:w:fs)
+
+	
+var MusterN [6][]string = [6][]string {{"[1]","[[1]]","[\"w\"]","\"w\""},		// (f:w)
+									{"\"f\"","\"febweb\""},						// ('f':w)
+									{"\"fw\"",""},								// (f:"w")
+									{"\"ww\"",""},								// [f,w]
+									{"('f',False)","(1,'w')"},					// (f,w)
+									{"[32,23]",""} }							// (f:w:fs)	
+	
+	
+	
+	
+	

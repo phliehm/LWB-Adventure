@@ -11,8 +11,8 @@ type data struct {                                      // Zugriff
 	x,y uint16          	// Koordinaten der linken oberen Ecke
 	typ uint8            	// Objekt-Typ
 	qua	uint16				// Quadratgröße = Breite des Objekts
-	r,g,b uint8				// Farbe des Objekts (optional)
 	aktiv bool				// Gibt an, ob das Objekt aktiv ist
+	inhalt string			// enthält möglichen Text-Inhalt
 	erstellt int64			// Zeit der Erstellung
 }
 
@@ -54,18 +54,16 @@ func (ob *data) GibAkt() (bool) {
 	return ob.aktiv
 }
 
+func (ob *data) SetzeInhalt(inhalt string) {
+	ob.inhalt = inhalt
+}
+
+func (ob *data) SetzeErstellung(erstellt int64) {
+	ob.erstellt = erstellt
+}
+
 func (ob *data) GibErstellung() (int64) {
 	return ob.erstellt
-}
-
-func (ob *data) SetzeFarbe(r,g,b uint8) {
-	ob.r = r
-	ob.g = g
-	ob.b = b
-}
-
-func (ob *data) GibFarbe() (uint8, uint8, uint8) {
-	return ob.r,ob.g,ob.b
 }
 
 func (ob *data) Zeichnen() {
@@ -73,14 +71,14 @@ func (ob *data) Zeichnen() {
 		switch ob.typ {
 // Fadenkreuz-Maus-Zeiger bei Koord x,y
 			case 0:	
-			Stiftfarbe(240,240,240)
-			for i:=uint16(0);i<ob.qua*2;i++ {
-				Kreis(ob.x, ob.y, ob.qua*10-i)
+			Stiftfarbe(0,255,0)
+			for i:=uint16(0);i<6;i++ {
+				Kreis(ob.x, ob.y, 30-i)
 			}
-			Vollrechteck(ob.x-ob.qua, 	ob.y-ob.qua*14,	ob.qua*2,	ob.qua*10)
-			Vollrechteck(ob.x-ob.qua, 	ob.y+ob.qua*4,	ob.qua*2,	ob.qua*10)
-			Vollrechteck(ob.x-ob.qua*14, 	ob.y-ob.qua,		ob.qua*10,		ob.qua*2)
-			Vollrechteck(ob.x+ob.qua*4, 	ob.y-ob.qua,		ob.qua*10,		ob.qua*2)
+			Vollrechteck(ob.x-3, ob.y-42, 6, 30)
+			Vollrechteck(ob.x-3, ob.y+12, 6, 30)
+			Vollrechteck(ob.x-42, ob.y-3, 30, 6)
+			Vollrechteck(ob.x+12, ob.y-3, 30, 6)
 
 // PAUSE - Anzeige			
 			case 1:		
@@ -94,10 +92,10 @@ func (ob *data) Zeichnen() {
 			Stiftfarbe(255,0,127)  
 			SchreibeFont (200,250,"PAUSE")							// Schreibe mittig Pause
 			
-// rotes Quadrat ab linker oberer Ecke			
+// rotes Quadrat ab linker oberer Ecke			// DUMMY
 			case 2:		
 			Rechteck(ob.x,ob.y,ob.qua-1,ob.qua-1)
-			Stiftfarbe(ob.r,ob.g,ob.b)
+			Stiftfarbe(120,160,200)
 			Vollrechteck(ob.x,ob.y,ob.qua-1,ob.qua-1)
 
 // Kaffee-Tasse ab linker oberer Ecke			
@@ -384,6 +382,10 @@ func (ob *data) Zeichnen() {
 			case 16:																														
 			LadeBild (ob.x,ob.y, "../../Bilder/Heidi-2.bmp")
 
+// StEPS-Logo			
+			case 17:																														
+			LadeBild (ob.x,ob.y, "../../Bilder/StEPS-Logo-2.bmp")
+
 // Kaffee-Tasse 2 ab linker oberer Ecke			
 			case 18:			
 			Stiftfarbe(0,0,0)
@@ -469,14 +471,79 @@ func (ob *data) Zeichnen() {
 
 // OK - Objekt			
 			case 20:															
-			Stiftfarbe(127,62,64)
+			Stiftfarbe(153,0,153)
 			Vollrechteck(480,570,240,80)
-			Stiftfarbe(255,124,128)
+			Stiftfarbe(255,0,255)
 			Vollrechteck(490,577,220,66)
 			SetzeFont ("../../Schriftarten/Freshman.ttf", 56 )
 			Stiftfarbe(124,212,255)
 			SchreibeFont (554,584,"O K")
+
+// Titel-Objekt			
+			case 24:															
+			Transparenz(50)
+			Stiftfarbe(153,204,0)
+			Vollrechteck(150,50,900,80)
+			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 70 )
+			Stiftfarbe(65,96,140)
+			SchreibeFont (ob.x,ob.y,ob.inhalt)
+			Transparenz(0)
+		
+// FebWeb - Normal			
+			case 25:															
+			Transparenz(150)
+			LadeBild (ob.x-124,ob.y-137, "../../Bilder/FebWebK.bmp")
+			Transparenz(0)
+						
+// FebWeb - JA			
+			case 26:															
+			Transparenz(80)
+			LadeBild (ob.x-124,ob.y-137, "../../Bilder/FebWebJ.bmp")
+			Transparenz(0)
 			
+// FebWeb - NEIN
+			case 27:															
+			Transparenz(80)
+			LadeBild (ob.x-124,ob.y-137, "../../Bilder/FebWebN.bmp")
+			Transparenz(0)
+			
+// Spielkarte zugedeckt - ab linker oberer Ecke		
+			case 31:															
+			Stiftfarbe(153,0,153)
+			Vollrechteck(ob.x,ob.y,225,150)
+			Stiftfarbe(255,0,255)
+			Vollrechteck(ob.x+5,ob.y+5,215,140)
+			
+// Spielkarte aufgedeckt - ab linker oberer Ecke			
+			case 32:															
+			Stiftfarbe(153,0,153)
+			Vollrechteck(ob.x,ob.y,225,150)
+			Stiftfarbe(210,250,210)
+			Vollrechteck(ob.x+5,ob.y+5,215,140)
+			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 33 )
+			Stiftfarbe(160,100,220)
+			SchreibeFont (ob.x+9,ob.y+55,ob.inhalt)
+
+// Spielkarte fertig - ab linker oberer Ecke			
+			case 33:															
+			//Stiftfarbe(203,0,203)
+			
+			switch ob.erstellt {
+				case 1: Stiftfarbe(160,0,0)
+				case 2: Stiftfarbe(160,160,0)
+				case 3: Stiftfarbe(0,160,0)
+				case 4: Stiftfarbe(0,160,160)
+				case 5: Stiftfarbe(0,0,160)
+				case 6: Stiftfarbe(160,0,160)
+				default:
+			}
+			Vollrechteck(ob.x,ob.y,225,150)
+			//Vollrechteck(ob.x+5,ob.y+5,215,140)
+			Stiftfarbe(240,240,240)
+			Vollrechteck(ob.x+10,ob.y+10,205,130)
+			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 33 )
+			Stiftfarbe(220,152,255)
+			SchreibeFont (ob.x+9,ob.y+55,ob.inhalt)
 		}
 	}
 }
@@ -486,18 +553,18 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 		switch ob.typ {
 			case 2:
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
-				ob.SetzeAkt(false)
+				ob.aktiv = false
 				SpieleNote("4A",0.1,0)
-				return true, time.Now().UnixNano() - ob.GibErstellung()
+				return true, time.Now().UnixNano() - ob.erstellt
 			} else {
 				return false, 0
 			}
 			case 3:		// Kaffee
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 3 {
-					ob.SetzeAkt(false)
+					ob.aktiv = false
 					SpieleSound("../../Sounds/Trinken.wav")
-					return true, time.Now().UnixNano() - ob.GibErstellung()
+					return true, time.Now().UnixNano() - ob.erstellt
 				}
 				ob.SetzeTyp(4)
 				SpieleSound("../../Sounds/GameOver.wav")
@@ -508,9 +575,9 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			case 5:		// Pizza
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 1 {
-					ob.SetzeAkt(false)
+					ob.aktiv = false
 					SpieleSound("../../Sounds/Essen.wav")
-					return true, time.Now().UnixNano() - ob.GibErstellung()
+					return true, time.Now().UnixNano() - ob.erstellt
 				}
 				ob.SetzeTyp(6)
 				SpieleSound("../../Sounds/GameOver.wav")
@@ -520,16 +587,16 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			}  
 			case 12:
 			if math.Hypot( (float64(x)-float64(ob.x)),(float64(y)-float64(ob.y)) ) < float64(ob.qua/2) {
-				ob.SetzeAkt(false)
+				ob.aktiv = false
 				SpieleSound("../../Sounds/Punkt.wav")
-				return true, time.Now().UnixNano() - ob.GibErstellung()
+				return true, time.Now().UnixNano() - ob.erstellt
 			} else {
 				return false, 0
 			} 
 			case 18:		// Kaffee 2
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 3 {
-					ob.SetzeAkt(false)
+					ob.aktiv = false
 					SpieleSound("../../Sounds/Trinken.wav")
 					return true, 6e8
 				}
@@ -542,7 +609,7 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			case 19:		// Pizza 2
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 1 {
-					ob.SetzeAkt(false)
+					ob.aktiv = false
 					SpieleSound("../../Sounds/Essen.wav")
 					return true, 6e8
 				}
@@ -559,7 +626,16 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			} else {
 				return false, 0
 			}
-			
+			case 24:
+			case 31:
+			if ob.x < x && x < ob.x + ob.qua*3/2 && ob.y < y && y < ob.y+ob.qua {
+				return true, ob.erstellt
+			} else {
+				return false, 0
+			}
+			case 32:
+			case 33:
+			return false, 0
 			default:
 			if ob.x+ob.qua/10 < x && x < ob.x+ob.qua*9/10 	&& 	ob.y+ob.qua/10 < y && y < ob.y+ob.qua*9/10 {
 				ob.SetzeAkt(false)

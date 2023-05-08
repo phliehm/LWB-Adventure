@@ -30,11 +30,11 @@ type Objekt interface {
 	
 	GibAkt() (bool)
 	
-	GibErstellung() (int64)
+	SetzeInhalt(inhalt string)
 	
-	SetzeFarbe(r,g,b uint8)
-
-	GibFarbe() (uint8, uint8, uint8)
+	SetzeErstellung(erstellt int64)
+	
+	GibErstellung() (int64)
 	
 	Zeichnen()
 	

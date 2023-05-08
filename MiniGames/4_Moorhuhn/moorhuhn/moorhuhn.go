@@ -9,20 +9,15 @@ import ( 	. "gfx"
 			"fmt"
 			"sync"
 			"../../../Klassen/objekte"
-			"../../../Klassen/raeume"
 			"../../../Klassen/texte"
 			"math/rand"
 			)
-/*
-const breite = 800 		// von Gott vorgegeben
-const hoehe  = 600  	// von Gott vorgegeben
-*/
-const breite = 1200 		// von Gott vorgegeben
-const hoehe  = 700  	// von Gott vorgegeben
+
 	
 func Moorhuhn () int16 {
 	var mutex sync.Mutex					// erstellt Mutex
 	var punkte int16 = 0					// Spiel-Punktzahl
+	var diff int16 = 0						// Punkte-Veränderung
 	var stop bool = false					// für OK-Objekt
 	var hubi bool = false					// für Hubi-Abwehr
 	var pause bool = false					// falls Pause
@@ -34,22 +29,20 @@ func Moorhuhn () int16 {
 	random := rand.New( rand.NewSource( time.Now().UnixNano() ) )	// Initialisiere Random-Objekt mit der Systemzeit
 	
 	
-	maus 		:= objekte.New(0, 0, 3, 0)			// Erstellt das Objekt MAUSZEIGER mit Größe (30)
+	maus 		:= objekte.New(0, 0, 0, 0)			// Erstellt das Objekt MAUSZEIGER mit Größe (30)
 	pauseObjekt := objekte.New(0, 0, 0, 1)			// Erstellt das Objekt PAUSE 
-	okayObjekt 	:= objekte.New(0, 0, 0, 20)		// OK-Objekt
+	okayObjekt 	:= objekte.New(0, 0, 0, 20)			// OK-Objekt
 	
-	
-	//SetzeFont ("../../Schriftarten/Freshman.ttf", 300 ) 	// Setzt Schriftart
-	
+	Fenstertitel("StEPS-Wars")								// Gibt Fenster-Titel 
 	
 	// Das Hauptprogramm startet die View-Komponente als nebenläufigen Prozess!
-	go view_komponente(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &akt, &ende, &punkte, &mutex)
+	go view_komponente(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &akt, &ende, &punkte, &diff, &mutex)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, &ende, random, &mutex)
+	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, &ende, random, &punkte, &mutex)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
-	go maussteuerung(&obj, maus, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte)
+	go maussteuerung(&obj, maus, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte, &diff)
 	
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
@@ -81,12 +74,12 @@ A:	for {
 		}
 	}
 	fmt.Println("Vielen Dank für's Spielen!")
-	time.Sleep( time.Duration(2e9) )
+	time.Sleep( time.Duration(2e8) )
 	
 	return punkte
 }
 
-func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, mutex *sync.Mutex) {		// füllt Objekte ins Array
+func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, punkte *int16, mutex *sync.Mutex) {		// füllt Objekte ins Array
 	
 	
 	count3 := objekte.New(0,0,0,13)
@@ -97,10 +90,10 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------
-	/*
+	
 	Zwischentext(&texte.MoorEinl, mutex, stop)		// Einleitungs-Text
 	
-	level1 := objekte.New(breite,hoehe,hoehe	,7)
+	level1 := objekte.New(0,0,0	,7)
 	Levelanzeige(level1, mutex)						// ----------------- LEVEL 1 -------------------- Große Zielscheiben
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
@@ -117,10 +110,10 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	*obj = make([]objekte.Objekt,0)					// leere den Objekte-Slice (Performance!)
 	
 	// ----------------------------------------------------------------------------------------------
-	*/
+	
 	Zwischentext(&texte.MoorLvl2, mutex, stop)		// Level 2-Text
 		
-	level2 := objekte.New(breite,hoehe,hoehe	,8)
+	level2 := objekte.New(0,0,0	,8)
 	Levelanzeige(level2, mutex)						// ----------------- LEVEL 2 -------------------- Kleine Zielscheiben
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
@@ -138,7 +131,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	Zwischentext(&texte.MoorLvl3, mutex, stop)		// Level 3-Text
 	
-	level3 := objekte.New(breite,hoehe,hoehe	,9)  	
+	level3 := objekte.New(0,0,0	,9)  	
 	Levelanzeige(level3, mutex)						// ----------------- LEVEL 3 -------------------- Kaffee und Pizza
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
@@ -159,7 +152,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	Zwischentext(&texte.MoorLvl4, mutex, stop)		// Level 4-Text
 	
-	level4 := objekte.New(breite,hoehe,hoehe	,10)
+	level4 := objekte.New(0,0,0	,10)
 	Levelanzeige(level4, mutex)						// ----------------- LEVEL 4 --------------------
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
@@ -193,7 +186,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	maus.SetzeTyp(16)
 	Zwischentext(&texte.MoorLvl52, mutex, stop)		// Level 5-Text - 2
 	maus.SetzeTyp(0)
-	level5 := objekte.New(breite,hoehe,hoehe	,11)
+	level5 := objekte.New(0,0,0	,11)
 	Levelanzeige(level5, mutex)						// ----------------- LEVEL 5 -------------------- Kaffee und Pizza
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
@@ -220,18 +213,63 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	*obj = make([]objekte.Objekt,0)					// leere den Objekte-Slice (Performance!)
 	
 	// ----------------------------------------------------------------------------------------------
-
-	Zwischentext(&texte.MoorOut, mutex, stop)		// Ende-Text	
+	
+	maus.SetzeTyp(16)
+	time.Sleep( time.Duration(2e9) )
+	
+	Zwischentext(&texte.MoorScore, mutex, stop)		// Score-Text	
 	
 	// ----------------------------------------------------------------------------------------------
+	
+	maus.SetzeTyp(17)
+	
+	mutex.Lock()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	Transparenz(120)															
+	Vollrechteck(100,50,1000,600)
+	Transparenz(0)
+	SetzeFont ("../../Schriftarten/Freshman.ttf", 50 )
+	Stiftfarbe(124,212,255)
+	for ind,str := range texte.MoorOut1 {
+		SchreibeFont (210, uint16(70+ind*55) ,str )
+	}
+	SchreibeFont (855, 400 , fmt.Sprint(*punkte))
+	SchreibeFont (855, 510 , "1,3")
+	
+	Archivieren()
+	mutex.Unlock()
+					
+	*stop = true
+	
+	time.Sleep( time.Duration(1e9) )
+	SpieleSound("../../Sounds/Applaus.wav")
+	
+	for *stop { time.Sleep( time.Duration(1e8) ) }
+	
+	// ---
+	
+	mutex.Lock()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	Transparenz(120)															
+	Vollrechteck(100,50,1000,600)
+	Transparenz(0)
+	SetzeFont ("../../Schriftarten/Freshman.ttf", 50 )
+	Stiftfarbe(124,212,255)
+	for ind,str := range texte.MoorOut2 {
+		SchreibeFont (210, uint16(70+ind*55) ,str )
+	}
+	Archivieren()
+	mutex.Unlock()
+	
 	*ende = true
 	return
 }
 
 func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Lock()
-	raeume.Moorhuhn()
-	Transparenz(120)															
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	Transparenz(120)
+	Stiftfarbe(76,0,153)														
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
 	SetzeFont ("../../Schriftarten/Freshman.ttf", 50 )
@@ -243,12 +281,12 @@ func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Unlock()
 	
 	*stop = true
-	for *stop { time.Sleep( time.Duration(1e9) ) }
+	for *stop { time.Sleep( time.Duration(1e8) ) }
 }
 
 func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	level.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -258,33 +296,38 @@ func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 
 func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool) {
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	count3.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
+	SpieleNote("2A",0.05,0)
 	
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	count2.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
+	SpieleNote("2A",0.05,0)
 	
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	raeume.Moorhuhn()
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
 	count1.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
+	SpieleNote("2A",0.05,0)
 	
 	time.Sleep( time.Duration(1e9) )
+	SpieleNote("3A",0.5,0)
+	
 	*akt = true
 }
 
 // Es folgt die VIEW-Komponente
-func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.Objekt, pause, stop ,akt, ende *bool, punkte *int16, mutex *sync.Mutex) {   	
+func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.Objekt, pause, stop ,akt, ende *bool, punkte, diff *int16, mutex *sync.Mutex) {   	
 	var t1 int64 = time.Now().UnixNano() 		//Startzeit
 	var anz,anzahl int                  		// zur Bestimmung der Frames pro Sekunde
 	var verzögerung = 90
@@ -311,7 +354,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 		
 		SetzeFont ("../../Schriftarten/Freshman.ttf", 35 )
 		Stiftfarbe(76,0,153)  
-		SchreibeFont (900,5,"Punkte : "+fmt.Sprint (*punkte))	// Schreibe rechts oben Punkte
+		SchreibeFont (500,5,"Punkte : "+fmt.Sprint (*punkte,"        Letzter Treffer: ",*diff))	// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)
 		Schreibe (1,1,"FPS:"+fmt.Sprint (anzahl))					// Schreibe links oben FPS
 		if *pause { pauseObjekt.Zeichnen() }
@@ -337,7 +380,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 }
 
 func ObjAktualisieren(obj *[]objekte.Objekt) {
-	raeume.Moorhuhn()									// Hintergrund des Moorhuhn-Raumes wird gezeichnet
+	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")		// Hintergrund des Moorhuhn-Raumes wird gezeichnet
 	
 	for _,ob := range *obj { 								// Zeichnet alleweiteren Objekte ein
 		ob.Zeichnen()
@@ -346,7 +389,7 @@ func ObjAktualisieren(obj *[]objekte.Objekt) {
 }
 
 // Es folgt die CONTROL-Komponente 1 --- Kein Bestandteil der Welt, also unabhängig -----
-func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause,stop,hubi,akt,ende *bool, punkte *int16) {
+func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause,stop,hubi,akt,ende *bool, punkte, diff *int16) {
 	/*var taste uint8
 	var status int8 */
 	for {
@@ -374,24 +417,31 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause
 					if get,lang := ob.Getroffen(mausX,mausY,1); get {
 						if lang == 0 {
 							*punkte -= 5
+							*diff = -5
 							 fmt.Println("Knapp daneben - 5 MINUS-Punkte")
 						} else if lang < 3.5e8 {
 							 *punkte += 20
+							 *diff = 20
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 20 Punkte")
 						 } else if lang < 4.2e8 {
 							 *punkte += 15
+							 *diff = 15
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 15 Punkte")
 						 } else if lang < 5.2e8 {
 							 *punkte += 10
+							 *diff = 10
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 10 Punkte")
 						 } else if lang < 7e8 {
 							 *punkte += 5
+							 *diff = 5
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 5 Punkte")
 						 } else if lang < 1e9 {
 							 *punkte += 2
+							 *diff = 2
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 2 Punkte")
 						 } else {
 							 *punkte += 1
+							 *diff = 1
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 1 Punkt")
 						}	
 						*akt = true
@@ -403,24 +453,31 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause
 					if get,lang :=  ob.Getroffen(mausX,mausY,3); get {
 						if lang == 0 {
 							*punkte -= 5
+							*diff = -5
 							 fmt.Println("Knapp daneben - 5 MINUS-Punkte")
 						} else if lang < 3.5e8 {
 							 *punkte += 20
+							 *diff = 20
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 20 Punkte")
 						} else if lang < 4.2e8 {
 							 *punkte += 15
+							 *diff = 15
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 15 Punkte")
 						} else if lang < 5.2e8 {
 							 *punkte += 10
+							 *diff = 10
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 10 Punkte")
 						} else if lang < 7e8 {
 							 *punkte += 5
+							 *diff = 5
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 5 Punkte")
 						} else if lang < 1e9 {
 							 *punkte += 2
+							 *diff = 2
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 2 Punkte")
 						} else {
 							 *punkte += 1
+							 *diff = 1
 							 fmt.Println("Reaktionszeit: ",lang/1e6, " 1 Punkt")
 						}		
 						*akt = true
