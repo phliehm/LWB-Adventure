@@ -1,0 +1,80 @@
+TO DO:
+
+1. Array für alles?
+2. Setzen
+3. Punkte zählen
+
+1. Sprengen
+2. Reparieren
+3. wenn nicht repariert --> neue Bugs entstehen
+4. Bugs zerstören den Code
+- sprengen
+- schießen?
+
+
+
+
+- bugs finden
+--> fixen, essen?
+
+- Visualisierung der Bugs durch Käfer?
+- Hintergrund 1101011
+- Spieler:  Cursor
+- zufällig neue Bugs generieren (Warum? Wann?)
+- 0/1 als Objekte in einer Box zeichnen
+- Verschiedene Arten von Bugs
+	- einfache --> einfach essen
+	- mittel --> dauern länger?
+	- schwer --> pflanzen sich fort
+- Rätsel um Bugs zu beheben --> Zahlen angleichen? --> Wechsel zwischen eigentlicher Zahl und Bug
+- Klicken auf Objekt (Zahl) um Zahl zu ändern (farbig)
+- 
+
+
+  1       1
+   1     1
+	 000
+ 111 000 111
+	 000
+    1   1
+   1     1
+
+
+  2       2
+   2     2
+	 333
+ 222 333 222
+	 333
+    2   2
+   2     2
+Klassen:
+- Käfer (besteht aus Zahlen)
+- Zahlen (Position,Größe, Wert, Angeklickt,..)
+
+
+
+Arbeitsschritte:
+
+1. Hintergrund generieren (001101) (Bibliothek mit key Wörtern --> in Binär)
+2. Bugs einfügen
+
+
+
+Task:
+
+1. Zahl malen (0,1,2,3)
+2. Klasse Zahl schreiben, Bens Klasse verwenden? 
+3. Hintergrund generieren
+
+
+
+
+
+Synchronisation zeichnen:
+
+1. Hintergrund + Cursor werden unabhängig geupdatet
+2. Bug-Animation läuft unabhängig
+
+
+
+
