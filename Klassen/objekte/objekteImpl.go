@@ -479,6 +479,32 @@ func (ob *data) Zeichnen() {
 			Stiftfarbe(124,212,255)
 			SchreibeFont (554,584,"O K")
 
+// PASST - Objekt			
+			case 22:															
+			
+			Stiftfarbe(173,214,50)
+			Vollrechteck(220,460,250,80)
+			/*Stiftfarbe(255,0,255)
+			Vollrechteck(490,577,220,66)*/
+			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 50 )
+			Stiftfarbe(0,0,0)
+			SchreibeFont (252,472,"P a s s t")
+			Stiftfarbe(124,212,255)
+			SchreibeFont (250,470,"P a s s t")
+
+// PASST-NICHT - Objekt			
+			case 23:															
+			
+			Stiftfarbe(173,214,50)
+			Vollrechteck(540,460,450,80)
+			/*Stiftfarbe(255,0,255)
+			Vollrechteck(490,577,220,66)*/
+			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 50 )
+			Stiftfarbe(0,0,0)
+			SchreibeFont (572,472,"P a s s t   n i c h t")
+			Stiftfarbe(124,212,255)
+			SchreibeFont (570,470,"P a s s t   n i c h t")
+
 // Titel-Objekt			
 			case 24:															
 			Transparenz(50)
@@ -622,6 +648,18 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			case 20:
 			if 480 < x && x < 720 	&& 	570 < y && y < 650 {
 				SpieleNote("5A",0.1,0)
+				return true, 0
+			} else {
+				return false, 0
+			}
+			case 22:		// passt
+			if 220 < x && x < 470 && 460 < y && y < 540 {
+				return true, 1
+			} else {
+				return false, 0
+			}
+			case 23:		// passt nicht
+			if 540 < x && x < 990 && 460 < y && y < 540 {
 				return true, 0
 			} else {
 				return false, 0
