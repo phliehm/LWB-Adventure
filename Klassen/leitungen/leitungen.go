@@ -1,4 +1,4 @@
-// ADT bauelemente - Spezifikation und Implementation
+// ADT leitungen - Spezifikation und Implementation
 
 // Martin Seiß    21.3.2023
 
@@ -6,22 +6,26 @@ package leitungen
 
 
 type Leitung interface {
-
+	
+	// Erg: -
+	// Eff: -
+	// Erg: Gibt die ID vom Bauelement aus, woher die Verbindung kommt.
 	GibVonID() uint16
 
+	// Erg: -
+	// Eff: -
+	// Erg: Gibt die ID vom Bauelement aus, wohin die Verbindung geht.
 	GibNachID() uint16
-	
+
+	// Erg: -
+	// Eff: -
+	// Erg: Gibt die Eingangsnummer vom Bauelement aus, wohin die Verbindung geht.
 	GibEinNr() uint16
 	
-	GibXPos() uint16
-
-/*	
-	// Vor: Ein gfx-Grafikfenster ist geöffnet. xSize gibt die Größe
-	//		in Pixel des zu zeichnenden Bauelementes in x Richtung an.
-	// Eff: Die Leitung ist von Bauelement zu Bauelement gezeichnet.
 	// Erg: -
-	ZeichneLeitung(xSize uint16)
-*/
+	// Eff: -
+	// Erg: Gibt die x-Position vom Knick der Verbindung aus.
+	GibXPos() uint16
 	
 }
 

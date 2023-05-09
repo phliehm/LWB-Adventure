@@ -3,6 +3,10 @@
 // Martin Seiß    24.4.2023
 
 
+// Level:
+// ilevel, netz, punkte, txt, 
+
+
 package theNETgame
 
 
@@ -13,7 +17,8 @@ import "../../Klassen/buttons"
 //import "strconv"
 import "time"
 import . "../../Klassen/graphen"
-import "math/rand" 
+import "math/rand"
+import	"../../Klassen/textboxen"
 
 const nlevel uint16 = 9				// Anzahl der Level
 
@@ -21,14 +26,14 @@ var ilevel uint16	  				// aktuelle Levelnummer
 var nPunkte uint16 = 100			// max. Punkte im Level
 var aPunkte uint16					// Punkteanzug durch Kantenpassage			
 var punkte uint16 					// aktuelle Punktzahl
-var text []string = WillkommenText()
+var txt textboxen.Textbox
+//var text []string = WillkommenText()
 var paketid uint32					// id des Pakets
 var gewonnen bool					// Level geschafft
 var verloren uint16					// 1 = Kante gesperrt, 2 Knoten gesperrt,
 									// 3 = Bugget zu Ende
 var bestanden bool					// Püfung bestanden
 var time0 uint16				// Staŕtzeit in Sekunden
-
 
 //var gPunkte	uint16				// Gesamtpunkte erreicht
 //	var maxPunkte uint16			// maximale erreichbare Geamtpunktzahl
@@ -88,37 +93,27 @@ func aktiviereKnotenButton(buts map[uint16]buttons.Button, idlist []uint32) {
 }
 
 
-func WillkommenText() []string {
-	var erg []string = make([]string,0)
-	erg = append(erg,"Willkommen zum NET-Game!")
-	erg = append(erg,"")	
-	erg = append(erg,"")
-	erg = append(erg,"Bewegen Sie das Datenpaket")
-	erg = append(erg,"entlang der Verbindungen")
-	erg = append(erg,"zum Ziel, indem Sie auf die")
-	erg = append(erg,"grünen Nachbarrouter klicken.")
-	erg = append(erg,"Nutzen Sie die kostengünstigste")
-	erg = append(erg,"Verbindung.")
-	erg = append(erg,"Beachten Sie Kosten der")
-	erg = append(erg,"Verbindungen und die Zeit.")
-	erg = append(erg,"")
-	erg = append(erg,"Viel Spaß!")
-	return erg
+func WillkommenText() {
+	//var erg []string = make([]string,0)
+	txt.SchreibeText("Willkommen zum NET-Game!\n\n" +
+		"Bewegen Sie das Datenpaket entlang der Verbindungen " + 
+		"zum Ziel, indem Sie auf die grünen Nachbarrouter " +
+		"klicken.\n\n" +
+		"Nutzen Sie die kostengünstigste Verbindung.\n\n" +
+		"Viel Spaß!")
+		
+//	return txt
 }
 
 
-func schreibeGewonnen(diff uint16, weiter buttons.Button) []string {
-	var erg []string = make([]string,0)
+func schreibeGewonnen(diff uint16, weiter buttons.Button){
+	var erg string
+	erg = "Glückwunsch Sie haben die Aufgabe geschafft!\n \n"
 	
-	erg = append(erg,"Glückwunsch Sie haben die")
-	erg = append(erg,"Aufgabe geschafft!")
-	erg = append(erg,"")
 	// Wie gewonnen?
 	if ilevel+1 == nlevel {		// Letztes Level? => Spiel zu Ende
 		weiter.DeaktiviereButton()
-		erg = append(erg,"Sie haben alle Level")
-		erg = append(erg,"geschafft!")
-		erg = append(erg,"")
+		erg = erg + "Sie haben alle Level geschafft!\n \n"
 		gfx.SpieleSound("../Sounds/Sparkle.wav")
 		time.Sleep (time.Duration(4e8))
 		gfx.SpieleSound("../Sounds/Sparkle.wav")							
@@ -126,10 +121,8 @@ func schreibeGewonnen(diff uint16, weiter buttons.Button) []string {
 		gfx.SpieleSound("../Sounds/Sparkle.wav")
 	} else if ilevel == 2 && !bestanden {	// oder Prüfung bestanden?
 		weiter.AktiviereButton()
-		bestanden = true							
-		erg = append(erg,"Sie haben damit auch die")
-		erg = append(erg,"Prüfung bestanden!")
-		erg = append(erg,"")
+		bestanden = true
+		erg = erg + "Sie haben damit auch die Prüfung bestanden!\n\n"
 		time.Sleep (time.Duration(4e8))
 		gfx.SpieleSound("../Sounds/Sparkle.wav")
 		time.Sleep (time.Duration(4e8))
@@ -137,30 +130,47 @@ func schreibeGewonnen(diff uint16, weiter buttons.Button) []string {
 		time.Sleep (time.Duration(4e8))
 		gfx.SpieleSound("../Sounds/Sparkle.wav")
 	} else { // oder nur Level gewonnen
-		erg = append(erg,"Sie die ideale Route um")
-		erg = append(erg,fmt.Sprint(diff)+" Punkte verfehlt.")
-		erg = append(erg,"")
+		erg = erg + "Sie haben die ideale Route um "+
+			fmt.Sprint(diff) +
+			" Punkte verfehlt.\n\n"
 		weiter.AktiviereButton()
 		gfx.SpieleSound("../Sounds/Sparkle.wav")
 	}			
-	erg = append(erg,"")	
-	erg = append(erg,"Auf zur nächsten Aufgabe oder")
-	erg = append(erg,"versuchen Sie es noch einmal.")
-	return erg
+	erg = erg + "Auf zur nächsten Aufgabe oder versuchen Sie es noch einmal."
+	
+	txt.SchreibeText(erg)
 }
 
 
 
-func schreibeVerloren(verloren uint16) []string {
-	var erg []string = make([]string,0)
+func schreibeVerloren(verloren uint16) {	
+	var erg string 
+	var soundstr string = "../Sounds/GameOver.wav"
+	// 1 = Kante gesperrt, 2 Knoten gesperrt,
+	// 3 = Bugget zu Ende
 
-	erg = append(erg,"Es tut mit Leid, aber die")
-	erg = append(erg,"Kosten waren zu groß. Sie")	
-	erg = append(erg,"haben leider verloren!")
-	erg = append(erg,"")			
-	erg = append(erg,"Aber versuchen Sie es noch")
-	erg = append(erg,"einmal.")
-	return erg
+	if verloren == 1 {
+		//soundstr = "Sounds/sfx_sounds_negative1.wav"
+		erg = erg + "Es tut mit Leid, aber DarthSchmidtar hat das " +
+			"Paket abgefangen!\n\n"
+		erg = erg + "Aber versuchen Sie es noch einmal."
+	} else if verloren == 2 {
+		erg = erg + "Es tut mit Leid, aber das Datenpaket ging durch " +	
+			"einen Routerdefekt leider verloren!\n\n" +
+			"Aber versuchen Sie es noch einmal."
+	} else if verloren == 3 {
+		erg = erg + "Es tut mit Leid, aber die Kosten waren zu groß. " +
+			"Sie haben leider verloren!\n\n" +			
+			"Aber versuchen Sie es noch einmal."
+	}
+
+	soundstr = "../Sounds/sfx_sounds_negative1.wav"
+//	soundstr = "Sounds/sfx_sounds_negative1.wav"
+//	soundstr = "Sounds/sfx_sounds_negative1.wav"
+	gfx.SpieleSound(soundstr)
+
+	txt.SchreibeText(erg)
+
 }
 
 
@@ -295,10 +305,18 @@ func zeichneDarthSchmidtar(netz Graph) {
 				if r == 255 {
 					x,y = netz.KnotenKoordinaten(ids[j])
 					//fmt.Println("Knotenkoord: ",ids[i],x0,y0)
-					fmt.Println("Kantenkoord: ",ids[i],ids[j],x,y)
-					x = x0 + (x-x0)/2
-					y = y0 + (y-y0)/2
-					//fmt.Println("Darth Pos: ",x,y)
+//					fmt.Println("Kantenkoord: ",ids[i],ids[j],x,y)
+					if x > x0 {
+						x = x0 + (x-x0)/2
+					} else {
+						x = x + (x0-x)/2
+					}
+					if y < 0 {
+						y = y0 + (y-y0)/2
+					} else {
+						y = y + (y0-y)/2
+					}
+					fmt.Println("Darth Pos: ",x,y)
 					gfx.LadeBild(x-16,y-25,"../Bilder/DarthSchmidtarExtraTiny.bmp")
 				}
 			}
@@ -313,13 +331,16 @@ func zeichnePaket(id uint32,netz Graph) {
 	var x,y uint16 = netz.KnotenKoordinaten(id)
 //	gfx.LadeBildMitColorKey(x-25,y-25,"../Bilder/paket_klein.bmp",255,255,255)
 	gfx.LadeBild(x-25,y-25,"../Bilder/paket_klein.bmp")
+	if verloren > 0 {
+		gfx.LadeBild(x-20,y-40,"../Bilder/Feuer.bmp")
+	}
 }
 
 
 
-func zeichneSpielfeld(ilevel, punkte, maxPunkte uint16, text []string,netz Graph) {
+func zeichneSpielfeld(ilevel, punkte, maxPunkte uint16, netz Graph) {
 
-	var fontsize int = 20
+//	var fontsize int = 20
 
 	gfx.Stiftfarbe(255,255,255)
 	gfx.Cls()
@@ -333,17 +354,19 @@ func zeichneSpielfeld(ilevel, punkte, maxPunkte uint16, text []string,netz Graph
 	gfx.Linie(830,0,830,700-1)
 	gfx.Linie(830,380,1200-1,380)
 
-	gfx.SetzeFont ("../Schriftarten/Ubuntu-B.ttf",fontsize)
 	schreibeSpielstand(ilevel+1,punkte,maxPunkte)
+	txt.Zeichne()		// Schreibe in die Textbox
+/*
 	for i:=0; i<len(text); i++ {
 		gfx.SchreibeFont(850,400+20*uint16(i),text[i])
 	}
+*/
 	
 	netz.Darstellen()
 	zeichneStart(netz)
 	zeichneZiel(netz)
 	zeichneComputer(netz)
-//	zeichneDarthSchmidtar(netz)
+	zeichneDarthSchmidtar(netz)
 
 }
 
@@ -564,6 +587,9 @@ func findeNachbarn(id uint32, netz Graph) []uint32 {
 		if netz.Benachbart (id, index2) {
 			nachbarn = append(nachbarn,index2)
 			netz.KnotenFaerben(index2,r,255,b)
+		} else if netz.Benachbart (index2,id) {
+			nachbarn = append(nachbarn,index2)
+			netz.KnotenFaerben(index2,r,255,b)			
 		} else {
 			netz.KnotenFaerben(index2,r,0,b)
 		}
@@ -578,6 +604,7 @@ func hindernisse(netz Graph, pKnotensperre,pKantensperre float64) {
 	// Knoten sperren = rot
 	for {
 		if !gewonnen && verloren == 0 {
+			fmt.Println("verloren: ",verloren)
 			for _,index:= range ids {
 				_,g,b := netz.Knotenfarbe(index)
 				if index != 0 && index != max {
@@ -588,13 +615,15 @@ func hindernisse(netz Graph, pKnotensperre,pKantensperre float64) {
 					}
 				}
 				for _,index2:= range ids {
-					_,g,b := netz.Kantenfarbe(index,index2) 
-					if rand.Float64() > pKantensperre && index < index2 {
-						netz.KanteFaerben(index,index2,0,g,b)
-						netz.KanteFaerben(index2,index,0,g,b)
-					} else {
-						netz.KanteFaerben(index,index2,255,g,b)
-						netz.KanteFaerben(index2,index,255,g,b)
+					_,g,b := netz.Kantenfarbe(index,index2)
+					if netz.Benachbart(index,index2) && index < index2 {
+						if rand.Float64() > pKantensperre  {
+							netz.KanteFaerben(index,index2,0,g,b)
+							//netz.KanteFaerben(index2,index,0,g,b)
+						} else {
+							netz.KanteFaerben(index,index2,255,g,b)
+							//netz.KanteFaerben(index2,index,255,g,b)
+						}
 					}
 				}
 			}
@@ -602,6 +631,7 @@ func hindernisse(netz Graph, pKnotensperre,pKantensperre float64) {
 		time.Sleep (time.Duration(2e9))
 	}
 }
+
 
 
 func zeichnen(weiter,zurueck,beenden,nochmal buttons.Button, netz Graph) {
@@ -617,14 +647,25 @@ func zeichnen(weiter,zurueck,beenden,nochmal buttons.Button, netz Graph) {
 				verloren = 3
 				punkte = 0
 			}
-			fmt.Println("Punkte:", punkte)
+			//fmt.Println("Punkte:", punkte)
 			gfx.UpdateAus()
-			zeichneSpielfeld(ilevel,punkte,0,text,netz)
+			zeichneSpielfeld(ilevel,punkte,0,netz)
+			//if verloren == 0 {
 			zeichnePaket(paketid,netz)
+			//}
 			zeichneButtons(weiter,zurueck,beenden,nochmal)
 			gfx.UpdateAn()
-			time.Sleep (time.Duration(50e7))
+			time.Sleep (time.Duration(2e8))
 		}
+}
+
+
+func hintergrundmusik() {
+	var soundstr string = "../Sounds/Music/30s_Surf.wav"
+	for {
+		gfx.SpieleSound(soundstr)
+		time.Sleep (time.Duration(40e9))
+	}
 }
 
 
@@ -660,6 +701,11 @@ func TheNETgame(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 	ePunkte = make([]uint16,nlevel)
 	time0 = uint16(float64(time.Now().UnixNano())/1e9)
 
+	
+	gfx.SetzeFont ("../Schriftarten/Ubuntu-B.ttf",20)	
+	txt = textboxen.New(850,400,300,300)
+	WillkommenText()
+
 
 	//  --------------------   baue Netz ----------------------------//
 	
@@ -676,7 +722,7 @@ func TheNETgame(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 	// Liste der Nachbarn zum aktuellen Knoten
 	var nachbarn []uint32 = findeNachbarn(0,netz)	
 	zielID = maxID(netz)					// Zielknoten ID
-	var ids []uint32 = netz.KnotenID_Liste()
+	//var ids []uint32 = netz.KnotenID_Liste()
 
 
 	//  --------------------   Buttons ------------------------------//
@@ -687,7 +733,7 @@ func TheNETgame(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 
 	// Erzeuge Buttons zur Spielsteuerung
 	var weiter,zurueck,beenden,nochmal buttons.Button
-	weiter = buttons.New(1090,650,100,40,255,255,100,false,"  weiter")
+	weiter = buttons.New(1090,650,100,40,255,255,100,true,"  weiter")
 	weiter.SetzeFont(font)
 	zurueck = buttons.New(850,650,100,40,255,255,100,false,"  zurück")
 	zurueck.SetzeFont(font)
@@ -712,52 +758,52 @@ func TheNETgame(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 	gfx.UpdateAn()
 */
 
-	var pKnotensperre,pKantensperre float64 = 0.1,0.025
+	var pKnotensperre,pKantensperre float64 = 0.1,0.1 //;25
 	go hindernisse(netz, pKnotensperre,pKantensperre) 
 
 	go zeichnen(weiter,zurueck,beenden,nochmal,netz)
-
-
+	
+	go hintergrundmusik()
+	
+	
 	// ----------- Mausabfrage & Spielsteuerung ---------------------//
 	
 	//taste, status, mausX, mausY := gfx.MausLesen1()
-	
 	
 	for {
 		taste, status, mausX, mausY := gfx.MausLesen1()
 		if taste==1 && status==1 {
 			for id,but:= range sbutton {		// Überprüfe Schalter
-				if but.TesteXYPosInButton(mausX,mausY) {
+				if but.TesteXYPosInButton(mausX,mausY) && !gewonnen && verloren == 0 {
 					fmt.Println("Schalter getroffen: ",id)
+					fmt.Println("alte Nachbarn: ",nachbarn)
 					fmt.Println(netz.Kanteninfo(paketid,uint32(id)))
 					aPunkte = aPunkte + uint16(netz.Kanteninfo(paketid,uint32(id)))
 					inaktiviereKnotenButton(sbutton)
-					paketid = uint32(id)
-					fmt.Println("Nachbarn: ",nachbarn)
-					for _,index2:= range ids {
-						r,_,_ := netz.Kantenfarbe(paketid,index2)
-						if r == 255 {
-							verloren = 2
-							fmt.Println("verbotene Kante betreten: ",id,index2)
-							break
-						}
-					}
-					r,_,_ := netz.Knotenfarbe(paketid)
-					if r==255 {
+					// check Kante verboten?
+					r,_,_ := netz.Kantenfarbe(paketid,uint32(id))
+					if r == 255 {
 						verloren = 1
+						fmt.Println("verbotene Kante betreten: ",paketid,uint32(id))
+					}	
+					r,_,_ = netz.Knotenfarbe(uint32(id))
+					if r==255 {
+						verloren = 2
 					} else if id == uint16(zielID) && verloren==0 {
 						fmt.Println("Ziel erreicht!")
 						gewonnen = true 	
 					} else {
-						nachbarn = findeNachbarn(paketid,netz)		
+						nachbarn = findeNachbarn(uint32(id),netz)		
 						aktiviereKnotenButton(sbutton,nachbarn)
 					}
+					paketid = uint32(id)
+					fmt.Println("neue Nachbarn: ",nachbarn)
 					//neuZeichnen = true
 				}
 			}
 			// check Level gewonnen oder verloren?
 			if gewonnen {			// check: Level gewonnen?
-				text = schreibeGewonnen(aPunkte-uint16(mindist),weiter)
+				schreibeGewonnen(aPunkte-uint16(mindist),weiter)
 				// Merke die Punkte im Level
 				if punkte > ePunkte[ilevel] {ePunkte[ilevel] = punkte} // Verbesserung?
 				gPunkte = 0					// Berechne Gesamtpunktzahl
@@ -766,7 +812,8 @@ func TheNETgame(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 				}
 				nochmal.AktiviereButton()
 			} else if verloren > 0 {
-				text = schreibeVerloren(verloren)
+				//weiter.DeaktiviereButton()
+				schreibeVerloren(verloren)
 				nochmal.AktiviereButton()
 			}
 /*				// Merke die Punkte im Level
@@ -802,6 +849,7 @@ func TheNETgame(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 				aktiviereKnotenButton(sbutton,nachbarn)
 				gewonnen = false
 				verloren = 0
+				txt.SchreibeText("Viel Glück!")
 //				levelNeuLaden = true
 //				neuZeichnen = true
 				time0 = uint16(float64(time.Now().UnixNano())/1e9)
