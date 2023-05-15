@@ -44,7 +44,7 @@ func Muster() int16 {
 	go view_komponente(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &mutex, &eingabe)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go spielablauf(&obj, random, &mutex, &akt, &tastatur, &stop, &signal, &eingabe, &wert)
+	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &eingabe, &wert, &punkte)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
 	go maussteuerung(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &wert)
@@ -92,7 +92,7 @@ A:	for {
 					case taste == 50 && tiefe > 0:  		
 					eingabe += "\""
 					case taste == 51 && tiefe > 0:  		
-					eingabe += "\""
+					eingabe += "'"
 					case taste == 92 && tiefe > 0:  		
 					eingabe += "'"
 					case taste >= 97 && taste < 123 && tiefe == 0:  	// Kleinbuchstaben
@@ -120,11 +120,11 @@ A:	for {
 	return punkte
 }
 
-func spielablauf(obj *[]objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, eingabe *string, wert *uint8) {
+func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, eingabe *string, wert *uint8, punkte *int16) {
 	
 	zwischentext(&texte.MusterEinl, mutex, stop)		// Einleitungs-Text
 	
-	musterSpiel(obj, akt, signal, tastatur, random, mutex, eingabe, wert)
+	musterSpiel(obj, maus, akt, signal, tastatur, random, mutex, eingabe, wert, punkte)
 	
 	time.Sleep( time.Duration(5e9) )
 	
@@ -156,7 +156,8 @@ func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	for *stop { time.Sleep( time.Duration(1e8) ) }
 }
 
-func musterSpiel(obj *[]objekte.Objekt, akt, signal, tastatur *bool, rand *rand.Rand, mutex *sync.Mutex, eingabe *string, wert *uint8) { // gibt Muster zur Abfrage
+func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastatur *bool, rand *rand.Rand, 
+							mutex *sync.Mutex, eingabe *string, wert *uint8, punkte *int16) { // gibt Muster zur Abfrage
 	
 	var zufallSpalte int
 	
@@ -168,39 +169,30 @@ func musterSpiel(obj *[]objekte.Objekt, akt, signal, tastatur *bool, rand *rand.
 	
 	*obj = append(*obj, passt, passtNicht)
 	
-	for i:=1;i<7;i++ {
+	for i:=1;i<11;i++ {
 		
+		passt.SetzeAkt(true)
+		passtNicht.SetzeAkt(true)
+		auswahl := rand.Intn(6)			// zufällig ausgewählte Muster-Zeile
+		// -----
+				
 		mutex.Lock()
-		LadeBild (0,0, "../../Bilder/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
-		titel.Zeichnen()
-		Stiftfarbe(220,220,220)														
-		Vollrechteck(360,150,490,80)
-		Stiftfarbe(100,180,255)	
-		SchreibeFont (400, 150 , "Muster Nr. " + fmt.Sprint(i) )
+		musterabfrage(i)
 		
-		Transparenz(40)
-		Stiftfarbe(76,0,153)														
-		Vollrechteck(150,250,300,200)												
-		Vollrechteck(500,250,550,200)
-		Vollrechteck(150,550,900,100)
-		Transparenz(0)
-		
-		Stiftfarbe(30,30,30)
-		SchreibeFont (170, 250 , "Muster:      Argument:" )
-		SchreibeFont (200,560,"Bindung:  f =")
+		titel.Zeichnen()	
+		//SchreibeFont (240, 340 , texte.MusterV[rand.Intn(6)] )
 		
 		SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 70 )
 		Stiftfarbe(180,50,35)
-		//SchreibeFont (240, 340 , texte.MusterV[rand.Intn(6)] )
-		SchreibeFont (180, 340 , texte.MusterV[i-1] )							// Muster-Vorgabe
+		SchreibeFont (180, 340 , texte.MusterV[auswahl] )							// Muster-Vorgabe
 		
 		wahrOderFalsch := rand.Intn(2)					// durch Zufall wird wahre 1 oder falsche 0 Antwort gewählt
 		if wahrOderFalsch == 0 {
-			zufallSpalte = rand.Intn( len(texte.MusterN[i-1]) )
-			SchreibeFont (530, 340 , texte.MusterN[i-1][ zufallSpalte ] )			// falsches Muster
+			zufallSpalte = rand.Intn( len(texte.MusterN[auswahl]) )
+			SchreibeFont (530, 340 , texte.MusterN[ auswahl ][ zufallSpalte ] )			// falsches Muster
 		} else if wahrOderFalsch == 1 {
-			zufallSpalte = rand.Intn( len(texte.MusterJ[i-1]) )
-			SchreibeFont (530, 340 , texte.MusterJ[i-1][ zufallSpalte ] )			// richtiges Muster
+			zufallSpalte = rand.Intn( len(texte.MusterJ[ auswahl ]) )
+			SchreibeFont (530, 340 , texte.MusterJ[ auswahl ][ zufallSpalte ] )			// richtiges Muster
 		}
 		passt.Zeichnen()
 		passtNicht.Zeichnen()
@@ -208,18 +200,26 @@ func musterSpiel(obj *[]objekte.Objekt, akt, signal, tastatur *bool, rand *rand.
 		Archivieren()
 		mutex.Unlock()
 		
+		// -----
+		
 		for !*signal { time.Sleep( time.Duration(2e8) ) }
 		*signal = false
 		if *wert == uint8(wahrOderFalsch) {
 			SpieleSound("../../Sounds/Sparkle.wav")
+			*punkte += 50
+			maus.SetzeTyp(26)
+			go setzeMaus(maus)
 		} else {
 			SpieleSound("../../Sounds/Beep.wav")
+			*punkte -= 10
+			maus.SetzeTyp(27)
+			go setzeMaus(maus)
 		}
 		
 		passt.SetzeAkt(false)
 		passtNicht.SetzeAkt(false)
 		
-		
+		/*
 Neu:		
 		for !*signal { time.Sleep( time.Duration(2e8) ) }
 		*signal = false
@@ -244,6 +244,30 @@ Neu:
 	MusterJ
 	MusterN
 	*/
+}
+
+func musterabfrage(i int) {
+	LadeBild (0,0, "../../Bilder/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
+	
+	
+	SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 70 )
+	
+	Stiftfarbe(220,220,220)														
+	Vollrechteck(360,150,490,80)
+	Stiftfarbe(100,180,255)	
+	SchreibeFont (400, 150 , "Muster Nr. " + fmt.Sprint(i) )
+	
+	Transparenz(40)
+	Stiftfarbe(76,0,153)														
+	Vollrechteck(150,250,300,200)												
+	Vollrechteck(500,250,550,200)
+	Vollrechteck(150,550,900,100)
+	Transparenz(0)
+	
+	Stiftfarbe(30,30,30)
+	SchreibeFont (170, 250 , "Muster:      Argument:" )
+	SchreibeFont (200,560,"Bindung:  f =")
+	
 }
 
 func memorySpiel(obj *[]objekte.Objekt, akt *bool, level uint8, rand *rand.Rand) {		// füllt Karten ins Array

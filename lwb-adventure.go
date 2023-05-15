@@ -3,10 +3,12 @@ package main
 // Annalena Cyriacus
 // 24.04.2023
 
-import . "gfx"
-import "./Klassen/vierecke"
-import "./Klassen/objekte"
-
+import ( . "gfx"
+		"fmt"
+		"./Klassen/vierecke"
+		"./Klassen/objekte"
+		"./MiniGames/4_Moorhuhn/moorhuhn"
+		)
 
 func maussteuerung (tueren *[]vierecke.Viereck, maus objekte.Objekt) {
 	//var taste uint8
@@ -22,7 +24,8 @@ func maussteuerung (tueren *[]vierecke.Viereck, maus objekte.Objekt) {
 						//TO DO
 						switch i {
 							case 0:
-							LadeBild(0,50,"./Bilder/Seminarraum_1.bmp")
+							//LadeBild(0,50,"./Bilder/Seminarraum_1.bmp")
+							fmt.Println("Du hast ",moorhuhn.Moorhuhn()," Punkte erreicht!")
 							case 1:
 							LadeBild(0,50,"./Bilder/Seminarraum_2.bmp")
 							case 2:
@@ -57,6 +60,16 @@ func main () {
 	tuer3 = vierecke.New(425,330,430,470,465,460,460,350)
 	tuer4 = vierecke.New(720,355,710,455,740,460,750,340)
 	tuer5 = vierecke.New(570,350,570,435,625,435,625,350)
+	
+	//---
+	/*
+	sem4 := make([]vierecke.Viereck,0)			// Array für die Türen des Mainfloors
+	var sem4Schm, sem4Amoe vierecke.Viereck
+	sem4Schm = vierecke.New(45,45,600,45,600,600,45,600)			// KOORDINATEN ANPASSEN
+	sem4Amoe = vierecke.New(935,290,935,520,1010,545,1020,255)
+	*/
+	//---
+		
 	Stiftfarbe(0,0,0)
 	//tuer1.Zeichnen()
 	//tuer2.Zeichnen()

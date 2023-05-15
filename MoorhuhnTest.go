@@ -5,7 +5,7 @@ package main
 //--------------------------------------------------------------------
 
 import (. "gfx"
-		"./moorhuhn"
+		"./MiniGames/4_Moorhuhn/moorhuhn"
 		"fmt")
 	
 func main () {

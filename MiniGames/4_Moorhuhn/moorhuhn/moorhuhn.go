@@ -228,7 +228,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	Transparenz(120)															
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
-	SetzeFont ("../../Schriftarten/Freshman.ttf", 50 )
+	SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
 	Stiftfarbe(124,212,255)
 	for ind,str := range texte.MoorOut1 {
 		SchreibeFont (210, uint16(70+ind*55) ,str )
@@ -253,7 +253,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	Transparenz(120)															
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
-	SetzeFont ("../../Schriftarten/Freshman.ttf", 50 )
+	SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
 	Stiftfarbe(124,212,255)
 	for ind,str := range texte.MoorOut2 {
 		SchreibeFont (210, uint16(70+ind*55) ,str )
@@ -272,7 +272,7 @@ func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	Stiftfarbe(76,0,153)														
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
-	SetzeFont ("../../Schriftarten/Freshman.ttf", 50 )
+	SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
 	Stiftfarbe(124,212,255)
 	for ind,str := range *textArr {
 		SchreibeFont (210, uint16(70+ind*55) ,str )
