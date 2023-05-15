@@ -8,8 +8,8 @@ import ( 	. "gfx"
 			"time"
 			"fmt"
 			"sync"
-			"../../../Klassen/objekte"
-			"../../../Klassen/texte"
+			"../../Klassen/objekte"
+			"../../Klassen/texte"
 			"math/rand"
 			)
 
@@ -55,7 +55,7 @@ func Muster() int16 {
 	
 	
 	
-	SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 28 )
+	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 28 )
 	
 	
 A:	for {
@@ -139,12 +139,12 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 
 func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Lock()
-	LadeBild (0,0, "../../Bilder/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
 	Transparenz(120)
 	Stiftfarbe(76,0,153)														
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
-	SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 50 )
+	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 50 )
 	Stiftfarbe(124,212,255)
 	for ind,str := range *textArr {
 		SchreibeFont (210, uint16(70+ind*55) ,str )
@@ -182,7 +182,7 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 		titel.Zeichnen()	
 		//SchreibeFont (240, 340 , texte.MusterV[rand.Intn(6)] )
 		
-		SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 70 )
+		SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 		Stiftfarbe(180,50,35)
 		SchreibeFont (180, 340 , texte.MusterV[auswahl] )							// Muster-Vorgabe
 		
@@ -205,12 +205,12 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 		for !*signal { time.Sleep( time.Duration(2e8) ) }
 		*signal = false
 		if *wert == uint8(wahrOderFalsch) {
-			SpieleSound("../../Sounds/Sparkle.wav")
+			SpieleSound("./Sounds/Sparkle.wav")
 			*punkte += 50
 			maus.SetzeTyp(26)
 			go setzeMaus(maus)
 		} else {
-			SpieleSound("../../Sounds/Beep.wav")
+			SpieleSound("./Sounds/Beep.wav")
 			*punkte -= 10
 			maus.SetzeTyp(27)
 			go setzeMaus(maus)
@@ -226,10 +226,10 @@ Neu:
 		
 		*tastatur = true														// aktiviert die Tastatur-Eingabe
 		if *eingabe == texte.MusterL[i-1][ zufallSpalte ][0] {					// richtiges Muster: Lösung 1
-			SpieleSound("../../Sounds/Sparkle.wav")
+			SpieleSound("./Sounds/Sparkle.wav")
 			*eingabe = ""
 		} else {
-			SpieleSound("../../Sounds/Beep.wav")
+			SpieleSound("./Sounds/Beep.wav")
 			goto Neu
 		}
 		// SchreibeFont (530, 540 , texte.MusterN[i-1][ rand.Intn( len(texte.MusterN[i-1]) ) ] )		//falsches Muster
@@ -247,10 +247,10 @@ Neu:
 }
 
 func musterabfrage(i int) {
-	LadeBild (0,0, "../../Bilder/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
 	
 	
-	SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 70 )
+	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 	
 	Stiftfarbe(220,220,220)														
 	Vollrechteck(360,150,490,80)
@@ -334,11 +334,11 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 		if *stop {
 			okayObjekt.Zeichnen()
 		}
-		SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 60 )
+		SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 60 )
 		Stiftfarbe(120,180,120)
 		SchreibeFont (630,565,*eingabe)
 		
-		SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 35 )
+		SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 35 )
 		Stiftfarbe(76,0,153)  
 		SchreibeFont (500,12,"Punkte : "+fmt.Sprint (*punkte))				// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)
@@ -368,7 +368,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 }
 
 func ObjAktualisieren(obj *[]objekte.Objekt) {
-	LadeBild (0,0, "../../Bilder/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
 	
 	for _,ob := range *obj { 								// Zeichnet alleweiteren Objekte ein
 		ob.Zeichnen()
@@ -418,7 +418,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 								if lang == objektSpeicher.GibErstellung() {
 									ob.SetzeTyp(33)
 									objektSpeicher.SetzeTyp(33)
-									SpieleSound("../../Sounds/Sparkle.wav")
+									SpieleSound("./Sounds/Sparkle.wav")
 									*punkte += 50
 									maus.SetzeTyp(26)
 									zaehler++
@@ -428,7 +428,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 									}
 									go setzeMaus(maus)
 								} else {
-									SpieleSound("../../Sounds/Beep.wav")
+									SpieleSound("./Sounds/Beep.wav")
 									*punkte -= 10
 									objektSpeicher2 = ob
 									warten = true
@@ -440,7 +440,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 							} else {
 								*wert = uint8(lang)
 								*signal = true
-								SpieleSound("../../Sounds/Beep.wav")
+								SpieleSound("./Sounds/Beep.wav")
 							}
 							
 						}

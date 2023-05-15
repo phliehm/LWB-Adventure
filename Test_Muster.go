@@ -5,7 +5,7 @@ package main
 //--------------------------------------------------------------------
 
 import (. "gfx"
-		"./muster"
+		"./MiniGames/1_FP"
 		"fmt")
 	
 func main () {
