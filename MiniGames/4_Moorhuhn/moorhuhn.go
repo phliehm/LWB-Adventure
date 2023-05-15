@@ -8,8 +8,8 @@ import ( 	. "gfx"
 			"time"
 			"fmt"
 			"sync"
-			"../../../Klassen/objekte"
-			"../../../Klassen/texte"
+			"../../Klassen/objekte"
+			"../../Klassen/texte"
 			"math/rand"
 			)
 

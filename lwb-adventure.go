@@ -7,7 +7,7 @@ import ( . "gfx"
 		"fmt"
 		"./Klassen/vierecke"
 		"./Klassen/objekte"
-		"./MiniGames/4_Moorhuhn/moorhuhn"
+		"./MiniGames/4_Moorhuhn"
 		)
 
 func maussteuerung (tueren *[]vierecke.Viereck, maus objekte.Objekt) {
