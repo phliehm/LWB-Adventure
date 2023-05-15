@@ -35,7 +35,7 @@ func Muster() int16 {
 	
 	random := rand.New( rand.NewSource( time.Now().UnixNano() ) )	// Initialisiere Random-Objekt mit der Systemzeit
 	
-	maus 		:= objekte.New(0, 0, 0, 25)			// Erstellt das Objekt MAUSZEIGER mit Größe (30)
+	maus 		:= objekte.New(0, 0, 0, 25)			// Erstellt das Objekt MAUSZEIGER
 	okayObjekt 	:= objekte.New(0, 0, 0, 20)			// OK-Objekt
 	
 	Fenstertitel("Muster, Muster, nichts als Muster - und dazwischen Muster")								// Gibt Fenster-Titel 
@@ -171,11 +171,15 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 	
 	for i:=1;i<11;i++ {
 		
-		passt.SetzeAkt(true)
-		passtNicht.SetzeAkt(true)
+		if *tastatur {
+			passt.SetzeAkt(true)
+			passtNicht.SetzeAkt(true)
+			*tastatur = false
+		}
+			
 		auswahl := rand.Intn(6)			// zufällig ausgewählte Muster-Zeile
-		// -----
-				
+		
+		// -------------------------------------- Zeichnet den Hitnergrund zur Musterabfrage "Passt (nicht)"
 		mutex.Lock()
 		musterabfrage(i)
 		
@@ -199,7 +203,6 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 		
 		Archivieren()
 		mutex.Unlock()
-		
 		// -----
 		
 		for !*signal { time.Sleep( time.Duration(2e8) ) }
@@ -216,28 +219,71 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 			go setzeMaus(maus)
 		}
 		
-		passt.SetzeAkt(false)
-		passtNicht.SetzeAkt(false)
-		
-		/*
-Neu:		
-		for !*signal { time.Sleep( time.Duration(2e8) ) }
-		*signal = false
-		
-		*tastatur = true														// aktiviert die Tastatur-Eingabe
-		if *eingabe == texte.MusterL[i-1][ zufallSpalte ][0] {					// richtiges Muster: Lösung 1
-			SpieleSound("./Sounds/Sparkle.wav")
-			*eingabe = ""
-		} else {
-			SpieleSound("./Sounds/Beep.wav")
-			goto Neu
-		}
+		if wahrOderFalsch == 1 {
+			passt.SetzeAkt(false)
+			passtNicht.SetzeAkt(false)
+			*tastatur = true													// aktiviert die Tastatur-Eingabe
+			
+			// -------------------------------------- Zeichnet den Hintergrund zur Mustereingabe "f="
+			mutex.Lock()
+			mustereingabe(i,0)
+			
+			titel.Zeichnen()	
+			
+			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
+			Stiftfarbe(180,50,35)
+			SchreibeFont (180, 340 , texte.MusterV[auswahl] )							// Muster-Vorgabe
+			
+			SchreibeFont (530, 340 , texte.MusterJ[ auswahl ][ zufallSpalte ] )			// richtiges Muster
+			
+			Archivieren()
+			mutex.Unlock()
+			// -----
+Neu1:		
+			for !*signal { time.Sleep( time.Duration(2e8) ) }
+			*signal = false
+																							
+			if *eingabe == texte.MusterL[ auswahl ][ zufallSpalte ][0] {		// ABFRAGE: richtiges Muster: Lösung 1
+				SpieleSound("./Sounds/Sparkle.wav")
+				*eingabe = ""
+			} else {
+				SpieleSound("./Sounds/Beep.wav")
+				goto Neu1
+			}
+			
+			// -------------------------------------- Zeichnet den Hintergrund zur Mustereingabe "g="
+			mutex.Lock()
+			mustereingabe(i,1)
+			
+			titel.Zeichnen()	
+			
+			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
+			Stiftfarbe(180,50,35)
+			SchreibeFont (180, 340 , texte.MusterV[auswahl] )							// Muster-Vorgabe
+			
+			SchreibeFont (530, 340 , texte.MusterJ[ auswahl ][ zufallSpalte ] )			// richtiges Muster
+			
+			Archivieren()
+			mutex.Unlock()
+			// -----
+Neu2:			
+			for !*signal { time.Sleep( time.Duration(2e8) ) }
+			*signal = false
+																							
+			if *eingabe == texte.MusterL[ auswahl ][ zufallSpalte ][1] {		// ABFRAGE: richtiges Muster: Lösung 2
+				SpieleSound("./Sounds/Sparkle.wav")
+				*eingabe = ""
+			} else {
+				SpieleSound("./Sounds/Beep.wav")
+				goto Neu2
+			}
 		// SchreibeFont (530, 540 , texte.MusterN[i-1][ rand.Intn( len(texte.MusterN[i-1]) ) ] )		//falsches Muster
 		
 		/*
 		for !*signal { time.Sleep( time.Duration(2e8) ) }
 		*signal = false
 		*/
+		}
 	}
 		
 	/*
@@ -249,6 +295,25 @@ Neu:
 func musterabfrage(i int) {
 	LadeBild (0,0, "./Bilder/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
 	
+	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
+	
+	Stiftfarbe(220,220,220)														
+	Vollrechteck(360,150,490,80)
+	
+	Transparenz(40)
+	Stiftfarbe(76,0,153)														
+	Vollrechteck(150,250,300,200)												
+	Vollrechteck(500,250,550,200)
+	Transparenz(0)
+	
+	Stiftfarbe(100,180,255)	
+	SchreibeFont (400, 150 , "Muster Nr. " + fmt.Sprint(i) )
+	Stiftfarbe(30,30,30)
+	SchreibeFont (170, 250 , "Muster:      Argument:" )	
+}
+
+func mustereingabe(i,opt int) {
+	LadeBild (0,0, "./Bilder/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
 	
 	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 	
@@ -266,8 +331,11 @@ func musterabfrage(i int) {
 	
 	Stiftfarbe(30,30,30)
 	SchreibeFont (170, 250 , "Muster:      Argument:" )
-	SchreibeFont (200,560,"Bindung:  f =")
-	
+	if opt == 0 {
+		SchreibeFont (200,560,"Bindung:  f =")
+	} else {
+		SchreibeFont (200,560,"Bindung:  w =")
+	}
 }
 
 func memorySpiel(obj *[]objekte.Objekt, akt *bool, level uint8, rand *rand.Rand) {		// füllt Karten ins Array
