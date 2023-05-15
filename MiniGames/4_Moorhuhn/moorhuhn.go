@@ -14,7 +14,7 @@ import ( 	. "gfx"
 			)
 
 	
-func Moorhuhn () int16 {
+func Moorhuhn () (note float32, punktExp uint32) {
 	var mutex sync.Mutex					// erstellt Mutex
 	var punkte int16 = 0					// Spiel-Punktzahl
 	var diff int16 = 0						// Punkte-Veränderung
@@ -28,7 +28,6 @@ func Moorhuhn () int16 {
 	
 	random := rand.New( rand.NewSource( time.Now().UnixNano() ) )	// Initialisiere Random-Objekt mit der Systemzeit
 	
-	
 	maus 		:= objekte.New(0, 0, 0, 0)			// Erstellt das Objekt MAUSZEIGER mit Größe (30)
 	pauseObjekt := objekte.New(0, 0, 0, 1)			// Erstellt das Objekt PAUSE 
 	okayObjekt 	:= objekte.New(0, 0, 0, 20)			// OK-Objekt
@@ -39,7 +38,7 @@ func Moorhuhn () int16 {
 	go view_komponente(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &akt, &ende, &punkte, &diff, &mutex)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, &ende, random, &punkte, &mutex)
+	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, &ende, random, &punkte, &punktExp, &note, &mutex)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
 	go maussteuerung(&obj, maus, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte, &diff)
@@ -76,10 +75,11 @@ A:	for {
 	fmt.Println("Vielen Dank für's Spielen!")
 	time.Sleep( time.Duration(2e8) )
 	
-	return punkte
+	return
 }
 
-func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, punkte *int16, mutex *sync.Mutex) {		// füllt Objekte ins Array
+func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, 
+				punkte *int16, punktExp *uint32, note *float32, mutex *sync.Mutex) {		// füllt Objekte ins Array
 	
 	
 	count3 := objekte.New(0,0,0,13)
@@ -223,6 +223,29 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	maus.SetzeTyp(17)
 	
+	
+	if *punkte > 0 {
+		*punktExp = uint32(*punkte)
+	} else {
+		*punktExp = 0
+	}
+
+	switch {
+		case *punktExp == 0:	*note = 5.0
+		case *punktExp < 50:	*note = 4.7
+		case *punktExp < 100:	*note = 4.3
+		case *punktExp < 150:	*note = 4.0
+		case *punktExp < 200:	*note = 3.7
+		case *punktExp < 250:	*note = 3.3
+		case *punktExp < 300:	*note = 3.0
+		case *punktExp < 350:	*note = 2.7
+		case *punktExp < 400:	*note = 2.3
+		case *punktExp < 450:	*note = 2.0
+		case *punktExp < 500:	*note = 1.7
+		case *punktExp < 550:	*note = 1.3
+		case *punktExp > 550:	*note = 1.0
+	}
+	
 	mutex.Lock()
 	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
 	Transparenz(120)															
@@ -233,8 +256,8 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	for ind,str := range texte.MoorOut1 {
 		SchreibeFont (210, uint16(70+ind*55) ,str )
 	}
-	SchreibeFont (855, 400 , fmt.Sprint(*punkte))
-	SchreibeFont (855, 510 , "1,3")
+	SchreibeFont (855, 400 , fmt.Sprint(*punkte) )
+	SchreibeFont (855, 510 , fmt.Sprint(*note) )
 	
 	Archivieren()
 	mutex.Unlock()
