@@ -62,14 +62,14 @@ A:	for {
 					hubi = false
 					obj = make([]objekte.Objekt,0)
 					akt = true
-					SpieleSound("../../Sounds/Sparkle.wav")
+					SpieleSound("./Sounds/Sparkle.wav")
 					punkte += 10
 				} else {
-					SpieleSound("../../Sounds/Baeb.wav")
+					SpieleSound("./Sounds/Baeb.wav")
 					punkte -= 5
 				}
 				case 'b':
-				SpieleSound("../../Sounds/Roar.wav")
+				SpieleSound("./Sounds/Roar.wav")
 			}
 		}
 	}
@@ -224,7 +224,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	maus.SetzeTyp(17)
 	
 	mutex.Lock()
-	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
 	Transparenz(120)															
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
@@ -242,14 +242,14 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	*stop = true
 	
 	time.Sleep( time.Duration(1e9) )
-	SpieleSound("../../Sounds/Applaus.wav")
+	SpieleSound("./Sounds/Applaus.wav")
 	
 	for *stop { time.Sleep( time.Duration(1e8) ) }
 	
 	// ---
 	
 	mutex.Lock()
-	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
 	Transparenz(120)															
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
@@ -267,7 +267,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 
 func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Lock()
-	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
 	Transparenz(120)
 	Stiftfarbe(76,0,153)														
 	Vollrechteck(100,50,1000,600)
@@ -286,7 +286,7 @@ func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 
 func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 	mutex.Lock()
-	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
 	level.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -296,7 +296,7 @@ func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 
 func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool) {
 	mutex.Lock()
-	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
 	count3.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -305,7 +305,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
 	count2.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -314,7 +314,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
 	count1.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -352,7 +352,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 		
 		maus.Zeichnen()										// Zeichnet Maus
 		
-		SetzeFont ("../../Schriftarten/Freshman.ttf", 35 )
+		SetzeFont ("./Schriftarten/Freshman.ttf", 35 )
 		Stiftfarbe(76,0,153)  
 		SchreibeFont (500,5,"Punkte : "+fmt.Sprint (*punkte,"        Letzter Treffer: ",*diff))	// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)
@@ -380,7 +380,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 }
 
 func ObjAktualisieren(obj *[]objekte.Objekt) {
-	LadeBild (0,0, "../../Bilder/Seminarraum-3.bmp")		// Hintergrund des Moorhuhn-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")		// Hintergrund des Moorhuhn-Raumes wird gezeichnet
 	
 	for _,ob := range *obj { 								// Zeichnet alleweiteren Objekte ein
 		ob.Zeichnen()
@@ -408,7 +408,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause
 		} else if *pause {	
 		} else if *hubi {									// falls ein Hubi (Lvl 5) aktiv ist
 			if status==1 {
-				SpieleSound("../../Sounds/Baeb.wav")
+				SpieleSound("./Sounds/Baeb.wav")
 				*punkte -= 5
 			}
 		} else {

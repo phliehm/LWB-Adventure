@@ -82,7 +82,7 @@ func (ob *data) Zeichnen() {
 
 // PAUSE - Anzeige			
 			case 1:		
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 220 )
+			SetzeFont ("./Schriftarten/Freshman.ttf", 220 )
 			Stiftfarbe(125,0,64)
 			Vollellipse(600,350,560,205)
 			Stiftfarbe(230,230,230)
@@ -281,7 +281,7 @@ func (ob *data) Zeichnen() {
 			
 // LEVEL 1 - Anzeige			
 			case 7:	
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 200)
+			SetzeFont ("./Schriftarten/Freshman.ttf", 200)
 			Stiftfarbe(125,0,64)
 			Vollellipse(600,350,560,200)
 			Stiftfarbe(68,225,255)
@@ -293,7 +293,7 @@ func (ob *data) Zeichnen() {
 
 // LEVEL 2 - Anzeige			
 			case 8:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 200)
+			SetzeFont ("./Schriftarten/Freshman.ttf", 200)
 			Stiftfarbe(125,0,64)
 			Vollellipse(600,350,560,200)
 			Stiftfarbe(68,225,255)
@@ -305,7 +305,7 @@ func (ob *data) Zeichnen() {
 			
 // LEVEL 3 - Anzeige			
 			case 9:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 200)
+			SetzeFont ("./Schriftarten/Freshman.ttf", 200)
 			Stiftfarbe(125,0,64)
 			Vollellipse(600,350,560,200)
 			Stiftfarbe(68,225,255)
@@ -317,7 +317,7 @@ func (ob *data) Zeichnen() {
 			
 // LEVEL 4 - Anzeige			
 			case 10:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 200)
+			SetzeFont ("./Schriftarten/Freshman.ttf", 200)
 			Stiftfarbe(125,0,64)
 			Vollellipse(600,350,560,200)
 			Stiftfarbe(68,225,255)
@@ -329,7 +329,7 @@ func (ob *data) Zeichnen() {
 
 // LEVEL 5 - Anzeige			
 			case 11:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 200)
+			SetzeFont ("./Schriftarten/Freshman.ttf", 200)
 			Stiftfarbe(125,0,64)
 			Vollellipse(600,350,560,200)
 			Stiftfarbe(68,225,255)
@@ -356,7 +356,7 @@ func (ob *data) Zeichnen() {
 
 // Countdown - 3			
 			case 13:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 390 )
+			SetzeFont ("./Schriftarten/Freshman.ttf", 390 )
 			Stiftfarbe(186,66,23)
 			SchreibeFont (516,215,"3")
 			Stiftfarbe(68,215,210)
@@ -364,7 +364,7 @@ func (ob *data) Zeichnen() {
 
 // Countdown - 2			
 			case 14:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 390 )
+			SetzeFont ("./Schriftarten/Freshman.ttf", 390 )
 			Stiftfarbe(186,66,23)
 			SchreibeFont (516,215,"2")
 			Stiftfarbe(68,215,210)
@@ -372,7 +372,7 @@ func (ob *data) Zeichnen() {
 
 // Countdown - 1			
 			case 15:																
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 390 )
+			SetzeFont ("./Schriftarten/Freshman.ttf", 390 )
 			Stiftfarbe(186,66,23)
 			SchreibeFont (528,215,"1")
 			Stiftfarbe(68,215,210)
@@ -380,11 +380,11 @@ func (ob *data) Zeichnen() {
 
 // Heidi			
 			case 16:																														
-			LadeBild (ob.x,ob.y, "../../Bilder/Heidi-2.bmp")
+			LadeBild (ob.x,ob.y, "./Bilder/Heidi-2.bmp")
 
 // StEPS-Logo			
 			case 17:																														
-			LadeBild (ob.x,ob.y, "../../Bilder/StEPS-Logo-2.bmp")
+			LadeBild (ob.x,ob.y, "./Bilder/StEPS-Logo-2.bmp")
 
 // Kaffee-Tasse 2 ab linker oberer Ecke			
 			case 18:			
@@ -475,7 +475,7 @@ func (ob *data) Zeichnen() {
 			Vollrechteck(480,570,240,80)
 			Stiftfarbe(255,0,255)
 			Vollrechteck(490,577,220,66)
-			SetzeFont ("../../Schriftarten/Freshman.ttf", 56 )
+			SetzeFont ("./Schriftarten/Freshman.ttf", 56 )
 			Stiftfarbe(124,212,255)
 			SchreibeFont (554,584,"O K")
 
@@ -486,7 +486,7 @@ func (ob *data) Zeichnen() {
 			Vollrechteck(220,460,250,80)
 			/*Stiftfarbe(255,0,255)
 			Vollrechteck(490,577,220,66)*/
-			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 50 )
+			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 50 )
 			Stiftfarbe(0,0,0)
 			SchreibeFont (252,472,"P a s s t")
 			Stiftfarbe(124,212,255)
@@ -499,7 +499,7 @@ func (ob *data) Zeichnen() {
 			Vollrechteck(540,460,450,80)
 			/*Stiftfarbe(255,0,255)
 			Vollrechteck(490,577,220,66)*/
-			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 50 )
+			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 50 )
 			Stiftfarbe(0,0,0)
 			SchreibeFont (572,472,"P a s s t   n i c h t")
 			Stiftfarbe(124,212,255)
@@ -510,7 +510,7 @@ func (ob *data) Zeichnen() {
 			Transparenz(50)
 			Stiftfarbe(153,204,0)
 			Vollrechteck(150,50,900,80)
-			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 70 )
+			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 			Stiftfarbe(65,96,140)
 			SchreibeFont (ob.x,ob.y,ob.inhalt)
 			Transparenz(0)
@@ -518,19 +518,19 @@ func (ob *data) Zeichnen() {
 // FebWeb - Normal			
 			case 25:															
 			Transparenz(150)
-			LadeBild (ob.x-124,ob.y-137, "../../Bilder/FebWebK.bmp")
+			LadeBild (ob.x-124,ob.y-137, "./Bilder/FebWebK.bmp")
 			Transparenz(0)
 						
 // FebWeb - JA			
 			case 26:															
 			Transparenz(80)
-			LadeBild (ob.x-124,ob.y-137, "../../Bilder/FebWebJ.bmp")
+			LadeBild (ob.x-124,ob.y-137, "./Bilder/FebWebJ.bmp")
 			Transparenz(0)
 			
 // FebWeb - NEIN
 			case 27:															
 			Transparenz(80)
-			LadeBild (ob.x-124,ob.y-137, "../../Bilder/FebWebN.bmp")
+			LadeBild (ob.x-124,ob.y-137, "./Bilder/FebWebN.bmp")
 			Transparenz(0)
 			
 // Spielkarte zugedeckt - ab linker oberer Ecke		
@@ -546,7 +546,7 @@ func (ob *data) Zeichnen() {
 			Vollrechteck(ob.x,ob.y,225,150)
 			Stiftfarbe(210,250,210)
 			Vollrechteck(ob.x+5,ob.y+5,215,140)
-			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 33 )
+			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 33 )
 			Stiftfarbe(160,100,220)
 			SchreibeFont (ob.x+9,ob.y+55,ob.inhalt)
 
@@ -567,7 +567,7 @@ func (ob *data) Zeichnen() {
 			//Vollrechteck(ob.x+5,ob.y+5,215,140)
 			Stiftfarbe(240,240,240)
 			Vollrechteck(ob.x+10,ob.y+10,205,130)
-			SetzeFont ("../../Schriftarten/Ubuntu-B.ttf", 33 )
+			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 33 )
 			Stiftfarbe(220,152,255)
 			SchreibeFont (ob.x+9,ob.y+55,ob.inhalt)
 		}
@@ -589,11 +589,11 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 3 {
 					ob.aktiv = false
-					SpieleSound("../../Sounds/Trinken.wav")
+					SpieleSound("./Sounds/Trinken.wav")
 					return true, time.Now().UnixNano() - ob.erstellt
 				}
 				ob.SetzeTyp(4)
-				SpieleSound("../../Sounds/GameOver.wav")
+				SpieleSound("./Sounds/GameOver.wav")
 				return true, 0
 			} else {
 				return false, 0
@@ -602,11 +602,11 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 1 {
 					ob.aktiv = false
-					SpieleSound("../../Sounds/Essen.wav")
+					SpieleSound("./Sounds/Essen.wav")
 					return true, time.Now().UnixNano() - ob.erstellt
 				}
 				ob.SetzeTyp(6)
-				SpieleSound("../../Sounds/GameOver.wav")
+				SpieleSound("./Sounds/GameOver.wav")
 				return true, 0
 			} else {
 				return false, 0
@@ -614,7 +614,7 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			case 12:
 			if math.Hypot( (float64(x)-float64(ob.x)),(float64(y)-float64(ob.y)) ) < float64(ob.qua/2) {
 				ob.aktiv = false
-				SpieleSound("../../Sounds/Punkt.wav")
+				SpieleSound("./Sounds/Punkt.wav")
 				return true, time.Now().UnixNano() - ob.erstellt
 			} else {
 				return false, 0
@@ -623,11 +623,11 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 3 {
 					ob.aktiv = false
-					SpieleSound("../../Sounds/Trinken.wav")
+					SpieleSound("./Sounds/Trinken.wav")
 					return true, 6e8
 				}
 				ob.SetzeTyp(4)
-				SpieleSound("../../Sounds/GameOver.wav")
+				SpieleSound("./Sounds/GameOver.wav")
 				return true, 0
 			} else {
 				return false, 0
@@ -636,11 +636,11 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				if opt == 1 {
 					ob.aktiv = false
-					SpieleSound("../../Sounds/Essen.wav")
+					SpieleSound("./Sounds/Essen.wav")
 					return true, 6e8
 				}
 				ob.SetzeTyp(6)
-				SpieleSound("../../Sounds/GameOver.wav")
+				SpieleSound("./Sounds/GameOver.wav")
 				return true, 0
 			} else {
 				return false, 0
