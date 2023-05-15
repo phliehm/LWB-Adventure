@@ -14,7 +14,7 @@ import "gfx"
 // aktiv - Buttion ist aktiv und bereit zur Positionsbestimmung
 // beschriftung	- String mit Beschriftung des Buttons
 
-// New(x,y,h,br,r,g,b,form,aktiv,beschriftung) 
+// New(x,y,h,br,r,g,b,aktiv,beschriftung) 
 
 
 type Button interface {
@@ -59,7 +59,8 @@ type Button interface {
 	// Erg: -
 	SetzeSound(sound string)
 
-	// Vor: gfx Fenster ist geöffnet.
+	// Vor: gfx Fenster ist geöffnet und Button kann an gegebener Stelle
+	//		gezeichnet werden.
 	// Eff: Der Button ist gezeichnet.
 	// Erg: -
 	ZeichneButton()

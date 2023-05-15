@@ -12,7 +12,9 @@ import "gfx"
 import "../../Klassen/buttons"
 //import "os"
 //import "strconv"
-import "time"
+//import "time"
+
+var path string = "" //"../"
 
 
 func erzeugeSchalterButton(x,y,xSize uint16) buttons.Button {
@@ -27,7 +29,7 @@ func makeSchalterbuttonTab(sk sch.Schaltung,xSize uint16) map[uint16]buttons.But
 	for _,id := range schalterIDs {
 		xb,yb = sk.GibPosXY(id)
 		buts[id] = erzeugeSchalterButton(xb,yb,xSize)
-		buts[id].SetzeSound("../Sounds/Punkt.wav")
+		buts[id].SetzeSound(path + "Sounds/Punkt.wav")
 	}
 	return buts
 }
@@ -190,19 +192,18 @@ func zeichneSpielfeld(happy bool, xSize, ilevel, punkte, maxPunkte uint16, sk sc
 	gfx.Stiftfarbe(0,0,0)		
 
 	if happy {
-		gfx.LadeBild(840,10,"../Bilder/WtheK_black.bmp")
+		gfx.LadeBild(840,10,path + "Bilder/WtheK_black.bmp")
 	} else {
-		gfx.LadeBild(840,10,"../Bilder/WtheK_black_sad.bmp")
+		gfx.LadeBild(840,10,path + "Bilder/WtheK_black_sad.bmp")
 	}
 	gfx.Linie(830,0,830,700-1)
 	gfx.Linie(830,380,1200-1,380)
 
-	gfx.SetzeFont ("../Schriftarten/Ubuntu-B.ttf",fontsize)
+	gfx.SetzeFont (path + "Schriftarten/Ubuntu-B.ttf",fontsize)
 	schreibeSpielstand(ilevel+1,punkte,maxPunkte)
 	for i:=0; i<len(text); i++ {
 		gfx.SchreibeFont(850,400+20*uint16(i),text[i])
 	}
-	
 	
 	sk.Zeichnen(xSize)
 
@@ -228,7 +229,7 @@ func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 	var bestanden bool				// Prüfung bestanden?
 									
 	var text []string = WillkommenText()
-	var font string = "../Schriftarten/Ubuntu-B.ttf"
+	var font string = path + "Schriftarten/Ubuntu-B.ttf"
 //	var sound string = ""
 	var soundAn bool				// soll Sound gespielt werden?
 
@@ -273,7 +274,7 @@ func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 	// ---------------- Zeichne Spielfeld -------------------------- //
 
 //	gfx.Fenster(1200,700)
-	gfx.SetzeFont ("../Schriftarten/Ubuntu-B.ttf",20)
+	gfx.SetzeFont (path + "Schriftarten/Ubuntu-B.ttf",20)
 
 	zeichneSpielfeld(happy,xSize,ilevel,gPunkte,maxPunkte,sk,text)
 	zeichneButtons(weiter,zurueck,beenden,nochmal)
@@ -312,12 +313,7 @@ func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 					bestanden = true
 					text = schreibeBestanden()
 					weiter.AktiviereButton()
-					time.Sleep (time.Duration(4e8))
-					gfx.SpieleSound("../Sounds/Sparkle.wav")
-					time.Sleep (time.Duration(4e8))
-					gfx.SpieleSound("../Sounds/Sparkle.wav")							
-					time.Sleep (time.Duration(4e8))
-					gfx.SpieleSound("../Sounds/Sparkle.wav")							
+					gfx.SpieleSound(path + "Sounds/Applaus.wav")						
 				} else { // oder nur Level gewonnen 
 					text = schreibeGewonnen(nPunkte,lev.GibMaxPunktzahl(ilevel))
 					weiter.AktiviereButton()
@@ -325,7 +321,7 @@ func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 				nochmal.AktiviereButton()
 				if ilevel == ilevelGeschafft {ilevelGeschafft++}			
 				if !soundAn {
-					gfx.SpieleSound("../Sounds/Sparkle.wav")
+					gfx.SpieleSound(path + "Sounds/Sparkle.wav")
 					soundAn = true	
 				}
 			} else if nPunkte == 0 {	   	// wenn zu viele Versuche!!!
@@ -334,7 +330,7 @@ func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 				happy = false
 				nochmal.AktiviereButton()
 				if !soundAn {			// Spiele Sound nur einmal
-					gfx.SpieleSound("../Sounds/GameOver.wav")
+					gfx.SpieleSound(path + "Sounds/GameOver.wav")
 					soundAn = true	
 				}
 			}

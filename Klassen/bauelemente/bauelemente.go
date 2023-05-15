@@ -34,6 +34,7 @@ import "gfx"
 
 
 var size uint16 = 4				// Linienbreite in Pixel
+var path string = "" //"../"
 
 
 type Bautyp uint16
@@ -284,7 +285,7 @@ func (bt *data) ZeichneBauelement(xSize uint16) {
 	var fSize uint16 = xSize/2		// Größe des Fonts
 
 	gfx.Stiftfarbe(0,0,0)
-	gfx.SetzeFont ("../Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf",int(fSize))
+	gfx.SetzeFont (path + "Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf",int(fSize))
 	
 	if bt.typ == Schalter {
 		dickeLinie(bt.x-xSize/2,bt.y,bt.x-xSize/6,bt.y,size)
