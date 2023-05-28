@@ -551,9 +551,7 @@ func (ob *data) Zeichnen() {
 			SchreibeFont (ob.x+9,ob.y+55,ob.inhalt)
 
 // Spielkarte fertig - ab linker oberer Ecke			
-			case 33:															
-			//Stiftfarbe(203,0,203)
-			
+			case 33:
 			switch ob.erstellt {
 				case 1: Stiftfarbe(160,0,0)
 				case 2: Stiftfarbe(160,160,0)
@@ -569,6 +567,16 @@ func (ob *data) Zeichnen() {
 			Vollrechteck(ob.x+10,ob.y+10,205,130)
 			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 33 )
 			Stiftfarbe(220,152,255)
+			SchreibeFont (ob.x+9,ob.y+55,ob.inhalt)
+			
+			// Spielkarte AUFGEDECKT und ANGEKLICKT- ab linker oberer Ecke			
+			case 34:															
+			Stiftfarbe(153,0,153)
+			Vollrechteck(ob.x,ob.y,225,150)
+			Stiftfarbe(120,240,120)
+			Vollrechteck(ob.x+5,ob.y+5,215,140)
+			SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 33 )
+			Stiftfarbe(160,100,220)
 			SchreibeFont (ob.x+9,ob.y+55,ob.inhalt)
 		}
 	}
@@ -672,8 +680,19 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 				return false, 0
 			}
 			case 32:
+			if ob.x < x && x < ob.x + ob.qua*3/2 && ob.y < y && y < ob.y+ob.qua {
+				return true, ob.erstellt
+			} else {
+				return false, 0
+			}
 			case 33:
 			return false, 0
+			case 34:
+			if ob.x < x && x < ob.x + ob.qua*3/2 && ob.y < y && y < ob.y+ob.qua {
+				return true, ob.erstellt
+			} else {
+				return false, 0
+			}
 			default:
 			if ob.x+ob.qua/10 < x && x < ob.x+ob.qua*9/10 	&& 	ob.y+ob.qua/10 < y && y < ob.y+ob.qua*9/10 {
 				ob.SetzeAkt(false)

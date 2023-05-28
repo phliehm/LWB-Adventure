@@ -29,6 +29,8 @@ func Muster() int16 {
 	var ende bool = false					// falls Ende (Spiel soll beendet werden)
 	var tastatur = false					// falls Tastatur-Eingabe aktiv ist
 	
+	var kanal chan bool = make(chan bool)
+	
 	var akt	bool = true						// Prüft, ob Grafik aktualisiert werden muss
 	obj := make([]objekte.Objekt,0)			// Array für die Objekte der Welt
 	
@@ -44,10 +46,10 @@ func Muster() int16 {
 	go view_komponente(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &mutex, &eingabe)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &eingabe, &wert, &punkte)
+	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &eingabe, &wert, &punkte, kanal)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
-	go maussteuerung(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &wert)
+	go maussteuerung(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &wert, kanal)
 	
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
@@ -77,13 +79,17 @@ A:	for {
 					}
 					case taste >= 48 && taste < 58 && tiefe == 0:  		// Zahlen
 					eingabe += string(taste)
-					case taste == 55 && tiefe > 0:  		
+					case taste == 44:
+					eingabe += ","
+					case taste == 46:
+					eingabe += "."
+					case taste == 55 && tiefe > 0:  					// 7
 					eingabe += "["
-					case taste == 56 && tiefe > 0:  		
+					case taste == 56 && tiefe > 0:  					// 8
 					eingabe += "("
-					case taste == 57 && tiefe > 0:  		
+					case taste == 57 && tiefe > 0:    					// 9		
 					eingabe += ")"
-					case taste == 48 && tiefe > 0:  		
+					case taste == 48 && tiefe > 0:  		  			// 0
 					eingabe += "]"
 					case taste == 46 && tiefe > 0:  		
 					eingabe += ":"
@@ -120,20 +126,30 @@ A:	for {
 	return punkte
 }
 
-func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, eingabe *string, wert *uint8, punkte *int16) {
+func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, 
+			eingabe *string, wert *uint8, punkte *int16, kanal chan bool) {
+	var neuerZustand bool
+	
 	
 	zwischentext(&texte.MusterEinl, mutex, stop)		// Einleitungs-Text
 	
-	musterSpiel(obj, maus, akt, signal, tastatur, random, mutex, eingabe, wert, punkte)
+	//musterSpiel(obj, maus, akt, signal, tastatur, random, mutex, eingabe, wert, punkte)
 	
-	time.Sleep( time.Duration(5e9) )
+	//time.Sleep( time.Duration(3e9) )
 	
 	*obj = make([]objekte.Objekt,0)
 	*akt = true
 	
 	memorySpiel(obj, akt, 2, random)					// auf Level 1
 	
-	for !*signal { time.Sleep( time.Duration(2e9) ) }
+	neuerZustand = <- kanal
+	
+	memorySpiel(obj, akt, 1, random)					// auf Level 2
+	
+	neuerZustand = <- kanal
+	
+	fmt.Println(neuerZustand)
+	//for !*signal { time.Sleep( time.Duration(2e9) ) }
 	
 }
 
@@ -160,6 +176,9 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 							mutex *sync.Mutex, eingabe *string, wert *uint8, punkte *int16) { // gibt Muster zur Abfrage
 	
 	var zufallSpalte int
+	var versuch uint8									// zählt, ob es schon einen Lösungsversuch gab
+	var musterwahl int									
+	var musterspeicher []int						// speichert genutzte Muster ab
 	
 	titel := objekte.New(230,50,150,24)
 	titel.SetzeInhalt("MUSTER-ERKENNUNG")
@@ -169,33 +188,45 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 	
 	*obj = append(*obj, passt, passtNicht)
 	
-	for i:=1;i<11;i++ {
+	for i:=1;i<11;i++ {					// Schleife für die Abfrage von 10 Mustern
 		
 		if *tastatur {
 			passt.SetzeAkt(true)
 			passtNicht.SetzeAkt(true)
 			*tastatur = false
 		}
-			
-		auswahl := rand.Intn(6)			// zufällig ausgewählte Muster-Zeile
+		
+Neu0:			
+		auswahl := rand.Intn(6)								// wählt zufällig eine der Muster-Zeilen 0 bis 5 aus 
+		
+		wahrOderFalsch := rand.Intn(2)						// durch Zufall wird wahre 1 oder falsche 0 Antwort gewählt
+		if wahrOderFalsch == 0 {
+			zufallSpalte = rand.Intn( len(texte.MusterN[auswahl]) )
+		} else {
+			zufallSpalte = rand.Intn( len(texte.MusterJ[ auswahl ]) )
+		}
+		
+		musterwahl = 10*auswahl + zufallSpalte					// ausgewähltes Muster
+		for i:=0;i<len(musterspeicher);i++ {
+			if musterspeicher[i] == musterwahl {
+				goto Neu0
+			}
+		}
+		musterspeicher = append(musterspeicher, auswahl)		// fügt neue Musterkombination hinzu
 		
 		// -------------------------------------- Zeichnet den Hitnergrund zur Musterabfrage "Passt (nicht)"
 		mutex.Lock()
 		musterabfrage(i)
 		
-		titel.Zeichnen()	
-		//SchreibeFont (240, 340 , texte.MusterV[rand.Intn(6)] )
+		titel.Zeichnen()
 		
 		SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 		Stiftfarbe(180,50,35)
 		SchreibeFont (130, 340 , texte.MusterV[auswahl] )							// Muster-Vorgabe
 		
-		wahrOderFalsch := rand.Intn(2)					// durch Zufall wird wahre 1 oder falsche 0 Antwort gewählt
 		if wahrOderFalsch == 0 {
-			zufallSpalte = rand.Intn( len(texte.MusterN[auswahl]) )
 			SchreibeFont (480, 340 , texte.MusterN[ auswahl ][ zufallSpalte ] )			// falsches Muster
 		} else if wahrOderFalsch == 1 {
-			zufallSpalte = rand.Intn( len(texte.MusterJ[ auswahl ]) )
 			SchreibeFont (480, 340 , texte.MusterJ[ auswahl ][ zufallSpalte ] )			// richtiges Muster
 		}
 		passt.Zeichnen()
@@ -217,6 +248,7 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 			*punkte -= 10
 			maus.SetzeTyp(27)
 			go setzeMaus(maus)
+			time.Sleep( time.Duration(1e9) )
 		}
 		
 		if wahrOderFalsch == 1 {
@@ -249,12 +281,15 @@ Neu1:		// -----
 				*punkte += 50
 				maus.SetzeTyp(26)
 				go setzeMaus(maus)
-			} else {
+			} else if versuch==0 {
 				SpieleSound("./Sounds/Beep.wav")
 				*punkte -= 10
 				maus.SetzeTyp(27)
 				go setzeMaus(maus)
+				versuch++
 				goto Neu1
+			} else {
+				versuch = 0
 			}
 			
 			// -------------------------------------- Zeichnet den Hintergrund zur Mustereingabe "g="
@@ -282,26 +317,22 @@ Neu2:
 				*punkte += 50
 				maus.SetzeTyp(26)
 				go setzeMaus(maus)
-			} else {
+			} else if versuch==0 {
 				SpieleSound("./Sounds/Beep.wav")
 				*punkte -= 10
 				maus.SetzeTyp(27)
 				go setzeMaus(maus)
+				versuch++
 				goto Neu2
+			} else {
+				versuch = 0
 			}
-		// SchreibeFont (530, 540 , texte.MusterN[i-1][ rand.Intn( len(texte.MusterN[i-1]) ) ] )		//falsches Muster
-		
-		/*
-		for !*signal { time.Sleep( time.Duration(2e8) ) }
-		*signal = false
-		*/
 		}
+		time.Sleep( time.Duration(2e9) )				// vor neuem Muster warte 2 Sekunden
 	}
-		
-	/*
-	MusterJ
-	MusterN
-	*/
+	*tastatur = false
+	*eingabe = ""
+
 }
 
 func musterabfrage(i int) {
@@ -314,8 +345,8 @@ func musterabfrage(i int) {
 	
 	Transparenz(40)
 	Stiftfarbe(76,0,153)														
-	Vollrechteck(100,250,300,200)												
-	Vollrechteck(450,250,650,200)
+	Vollrechteck(100,250,300,180)												
+	Vollrechteck(450,250,650,180)
 	Transparenz(0)
 	
 	Stiftfarbe(100,180,255)	
@@ -336,17 +367,24 @@ func mustereingabe(i,opt int) {
 	
 	Transparenz(40)
 	Stiftfarbe(76,0,153)														
-	Vollrechteck(100,250,300,200)												
-	Vollrechteck(450,250,650,200)
-	Vollrechteck(100,550,900,100)
-	Transparenz(0)
+	Vollrechteck(100,250,300,180)												
+	Vollrechteck(450,250,650,180)
+	Vollrechteck(150,575,900,100)
 	
+	Stiftfarbe(153,204,0)
+	Vollrechteck(100,450,1000,90)
+	Transparenz(0)
+		
 	Stiftfarbe(30,30,30)
 	SchreibeFont (120, 250 , "Muster:      Argument:" )
 	if opt == 0 {
-		SchreibeFont (200,560,"Bindung:   f =")
+		SchreibeFont (195,580,"Bindung:   f =")
+		Stiftfarbe(65,96,140)
+		SchreibeFont (140,455,"Tippe die Bindung für f ein!")
 	} else {
-		SchreibeFont (200,560,"Bindung:  w =")
+		SchreibeFont (195,580,"Bindung:  w =")
+		Stiftfarbe(65,96,140)
+		SchreibeFont (135,455,"Tippe die Bindung für w ein!")
 	}
 }
 
@@ -359,6 +397,7 @@ func memorySpiel(obj *[]objekte.Objekt, akt *bool, level uint8, rand *rand.Rand)
 	
 	var musterListe [12]string		// wird mit Mustern gefüllt
 	var counter uint8				// zählt die neu erstellten Karten (bis 12)
+	var neu objekte.Objekt
 	
 	switch level {					// Karten-Beschriftung als Liste
 		case 1:
@@ -380,7 +419,11 @@ func memorySpiel(obj *[]objekte.Objekt, akt *bool, level uint8, rand *rand.Rand)
 	
 	for i:=uint16(75);i<1000;i+=275 {
 		for j:=uint16(150);j<600;j+=190 {										// erstellt Karten mit je einem Muster & Typ an verschiedenen Koordinaten (i,j) 
-			neu := objekte.New(i,j,150,31)
+			if level == 2 {
+				neu = objekte.New(i,j,150,32)
+			} else {
+				neu = objekte.New(i,j,150,31)
+			}
 			neu.SetzeInhalt( musterListe[counter] )
 			neu.SetzeErstellung( typListe[counter] )
 			*obj = append(*obj, neu)											// fügt die neu erstellte Karte dem Objekte-Array hinzu
@@ -416,7 +459,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 		}
 		SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 		Stiftfarbe(120,180,120)
-		SchreibeFont (645,560,*eingabe)
+		SchreibeFont (645,580,*eingabe)
 		
 		SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 35 )
 		Stiftfarbe(76,0,153)  
@@ -457,11 +500,11 @@ func ObjAktualisieren(obj *[]objekte.Objekt) {
 }
 
 // Es folgt die CONTROL-Komponente 1 --- Kein Bestandteil der Welt, also unabhängig -----
-func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signal, stop, akt, ende *bool, punkte, diff *int16, wert *uint8) {
+func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signal, stop, akt, ende *bool, punkte, diff *int16, wert *uint8, kanal chan bool) {
 	//var taste uint8
 	var aufgedeckt,warten bool = false,false			// gibt an, ob eine Karte aufgedeckt wurde, auf das Zudecken gewartet wird
-	var objektSpeicher,objektSpeicher2 objekte.Objekt
-	var zaehler uint8
+	var objektSpeicher,objektSpeicher2 objekte.Objekt	// Speichert aufgedeckte Karten
+	var zaehler uint8									// überprüft, wie viele Paare aufgedeckt wurden
 	
 	for {
 		taste, status, mausX, mausY := MausLesen1()
@@ -479,21 +522,25 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 		} else {
 			if taste==1 && status==1 { 						//LINKE Maustaste gerade gedrückt
 				if warten {
-					objektSpeicher2.SetzeTyp(31)
-					objektSpeicher.SetzeTyp(31)
+					if objektSpeicher.GibTyp() == 34 {
+						objektSpeicher2.SetzeTyp(32)
+						objektSpeicher.SetzeTyp(32)
+					} else {
+						objektSpeicher2.SetzeTyp(31)
+						objektSpeicher.SetzeTyp(31)
+					}
 					warten = false
 					*akt = true
 				} else {
-					for _,ob := range *obj { 							// Zeichnet alleweiteren Objekte ein
+					for _,ob := range *obj { 									// überprüft Objekte im Array
 						if get,lang := ob.Getroffen(mausX,mausY,1); get {
-							if !aufgedeckt && ob.GibTyp() == 31 {
+							if !aufgedeckt && ob.GibTyp() == 32 {					// Fälle für Level 1
 								SpieleNote("5A",0.1,0)
-								ob.SetzeTyp(32)
+								ob.SetzeTyp(34)
 								objektSpeicher = ob
 								aufgedeckt = true
 								*akt = true
-							} else if aufgedeckt && ob!=objektSpeicher && ob.GibTyp()==31 {
-								ob.SetzeTyp(32)
+							} else if aufgedeckt && ob!=objektSpeicher && ob.GibTyp()==32 {
 								*akt = true
 								if lang == objektSpeicher.GibErstellung() {
 									ob.SetzeTyp(33)
@@ -504,10 +551,12 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 									zaehler++
 									if zaehler == 6 {
 										zaehler = 0
+										kanal <- true
 										*signal = true
 									}
 									go setzeMaus(maus)
 								} else {
+									ob.SetzeTyp(34)
 									SpieleSound("./Sounds/Beep.wav")
 									*punkte -= 10
 									objektSpeicher2 = ob
@@ -517,10 +566,42 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 								}
 								aufgedeckt = false
 								*akt = true
+							} else if !aufgedeckt && ob.GibTyp() == 31 {			// Fälle für Level 2 und 3
+								SpieleNote("5A",0.1,0)
+								ob.SetzeTyp(32)
+								objektSpeicher = ob
+								aufgedeckt = true
+								*akt = true
+							} else if aufgedeckt && ob!=objektSpeicher && ob.GibTyp()==31 {
+								*akt = true
+								if lang == objektSpeicher.GibErstellung() {
+									ob.SetzeTyp(33)
+									objektSpeicher.SetzeTyp(33)
+									SpieleSound("./Sounds/Sparkle.wav")
+									*punkte += 50
+									maus.SetzeTyp(26)
+									zaehler++
+									if zaehler == 6 {
+										zaehler = 0
+										kanal <- true
+										*signal = true
+									}
+									go setzeMaus(maus)
+								} else {
+									ob.SetzeTyp(32)
+									SpieleSound("./Sounds/Beep.wav")
+									*punkte -= 10
+									objektSpeicher2 = ob
+									warten = true
+									maus.SetzeTyp(27)
+									go setzeMaus(maus)
+								}
+								aufgedeckt = false
+								*akt = true //
 							} else {
 								*wert = uint8(lang)
 								*signal = true
-								SpieleSound("./Sounds/Beep.wav")
+								//SpieleSound("./Sounds/Beep.wav")
 							}
 							
 						}
