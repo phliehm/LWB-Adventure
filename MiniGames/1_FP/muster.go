@@ -63,9 +63,9 @@ func Muster() int16 {
 A:	for {
 		taste, gedrueckt, tiefe = TastaturLesen1()
 		
-		fmt.Println (taste,gedrueckt,tiefe)
+		//fmt.Println (taste,gedrueckt,tiefe)
 		if tastatur {
-			if gedrueckt == 1  { // Beim Drücken der Taste, nicht beim Loslassen!
+			if gedrueckt == 1  { 						// Beim Drücken der Taste, nicht beim Loslassen!
 				switch {
 					case taste == 27:  									// ESC-Taste
 					break A
@@ -73,7 +73,11 @@ A:	for {
 					signal = true
 					case taste == 32:  									// Leer-Taste
 					eingabe += " "
-					case taste ==  8:  									//Backspace-Taste
+					case taste ==  8:  									// Backspace-Taste
+					if eingabe != "" {
+						eingabe = eingabe [:len(eingabe)-1]
+					}
+					case taste ==  276:  								// LINKS-Taste
 					if eingabe != "" {
 						eingabe = eingabe [:len(eingabe)-1]
 					}
@@ -109,7 +113,7 @@ A:	for {
 				}
 			}
 		} else {
-			if gedrueckt == 1  { // Beim Drücken der Taste, nicht beim Loslassen!
+			if gedrueckt == 1  { 					// Beim Drücken der Taste (1), nicht beim Loslassen!
 				switch {
 					case taste == 27:  									// ESC-Taste
 					break A
@@ -140,11 +144,20 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	*obj = make([]objekte.Objekt,0)
 	*akt = true
 	
+	memorySpiel(obj, akt, 5, random)					// auf Level 5
+	
+	neuerZustand = <- kanal
+	
+	
 	memorySpiel(obj, akt, 2, random)					// auf Level 1
 	
 	neuerZustand = <- kanal
 	
 	memorySpiel(obj, akt, 1, random)					// auf Level 2
+	
+	neuerZustand = <- kanal
+	
+	memorySpiel(obj, akt, 3, random)					// auf Level 3
 	
 	neuerZustand = <- kanal
 	
@@ -419,12 +432,19 @@ func memorySpiel(obj *[]objekte.Objekt, akt *bool, level uint8, rand *rand.Rand)
 	
 	for i:=uint16(75);i<1000;i+=275 {
 		for j:=uint16(150);j<600;j+=190 {										// erstellt Karten mit je einem Muster & Typ an verschiedenen Koordinaten (i,j) 
-			if level == 2 {
-				neu = objekte.New(i,j,150,32)
-			} else {
+			switch level {
+				case 1:
 				neu = objekte.New(i,j,150,31)
+				neu.SetzeInhalt( musterListe[counter] )
+				case 2:
+				neu = objekte.New(i,j,150,32)
+				neu.SetzeInhalt( musterListe[counter] )
+				case 3:
+				neu = objekte.New(i,j,150,31)
+				neu.SetzeInhalt( musterListe[counter] )
+				case 5:
+				neu = objekte.New(i,j,150,35)
 			}
-			neu.SetzeInhalt( musterListe[counter] )
 			neu.SetzeErstellung( typListe[counter] )
 			*obj = append(*obj, neu)											// fügt die neu erstellte Karte dem Objekte-Array hinzu
 			counter++
@@ -525,10 +545,14 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 					if objektSpeicher.GibTyp() == 34 {
 						objektSpeicher2.SetzeTyp(32)
 						objektSpeicher.SetzeTyp(32)
-					} else {
+					} else if objektSpeicher.GibTyp() == 32 {
 						objektSpeicher2.SetzeTyp(31)
 						objektSpeicher.SetzeTyp(31)
+					} else if objektSpeicher.GibTyp() == 36 {
+						objektSpeicher2.SetzeTyp(35)
+						objektSpeicher.SetzeTyp(35)
 					}
+					
 					warten = false
 					*akt = true
 				} else {
@@ -597,7 +621,40 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 									go setzeMaus(maus)
 								}
 								aufgedeckt = false
+								*akt = true
+
+							} else if !aufgedeckt && ob.GibTyp() == 35 {			// Fälle für Level 5 SOUND
+								ob.SetzeTyp(36)
+								go spieleKlang(lang)
+								objektSpeicher = ob
+								aufgedeckt = true
+								*akt = true
+							} else if aufgedeckt && ob!=objektSpeicher && ob.GibTyp()==35 {
+								ob.SetzeTyp(36)
+								go spieleKlang(lang)
+								*akt = true
+								if lang == objektSpeicher.GibErstellung() {
+									ob.SetzeTyp(33)
+									objektSpeicher.SetzeTyp(33)
+									*punkte += 50
+									maus.SetzeTyp(26)
+									zaehler++
+									if zaehler == 6 {
+										zaehler = 0
+										kanal <- true
+										*signal = true
+									}
+									go setzeMaus(maus)
+								} else {
+									*punkte -= 10
+									objektSpeicher2 = ob
+									warten = true
+									maus.SetzeTyp(27)
+									go setzeMaus(maus)
+								}
+								aufgedeckt = false
 								*akt = true //
+						
 							} else {
 								*wert = uint8(lang)
 								*signal = true
@@ -651,4 +708,24 @@ func setzeMaus (maus objekte.Objekt) {
 	time.Sleep(2e9)
 	maus.SetzeTyp(25)
 }
-	
+
+func spieleKlang(lang int64) {
+	switch lang {
+		case 1: SpieleSound("./Sounds/1Air.wav")
+		case 2: SpieleSound("./Sounds/2Bergkoenig.wav")
+		case 3: SpieleSound("./Sounds/3Koenigin.wav")
+		case 4: SpieleSound("./Sounds/4Pachelbel.wav")
+		case 5: SpieleSound("./Sounds/5Zuckerfee.wav")
+		case 6: SpieleSound("./Sounds/6Jahreszeiten.wav")
+	}
+	/*
+	switch lang {
+		case 1: SpieleNote("4D",0.7,0.1); SpieleNote("4F",0.7,0.1); SpieleNote("4G#",0.7,0.1); SpieleNote("4H",0.7,0.1)	// VERM aufsteigend
+		case 2: SpieleNote("4D",0.7,0.1); SpieleNote("4F#",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5D",0.7,0.1) // ÜB aufsteigend
+		case 3: SpieleNote("4D",0.7,0.1); SpieleNote("4F#",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5C",0.7,0.1) // DUR7 aufsteigend
+		case 4: SpieleNote("4D",0.7,0.1); SpieleNote("4F#",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5C#",0.7,0.1) // DUR7+ aufsteigend
+		case 5: SpieleNote("4D",0.7,0.1); SpieleNote("4F",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5C#",0.7,0.1) // MOLL7+ aufsteigend
+		case 6: SpieleNote("4D",0.7,0.1); SpieleNote("4F",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5C",0.7,0.1) // MOLL7 aufsteigend
+	}
+	*/
+}	
