@@ -11,7 +11,7 @@ import "gfx"
 // x,y - bezeichet die obere linke Ecke.
 // b,h - die Breite und Höhe
 // r,g,b - Hintergrundfarbwerte des Buttons
-// aktiv - Buttion ist aktiv und bereit zur Positionsbestimmung
+// aktiv - Button ist aktiv und bereit zur Positionsbestimmung
 // beschriftung	- String mit Beschriftung des Buttons
 
 // New(x,y,h,br,r,g,b,aktiv,beschriftung) 
