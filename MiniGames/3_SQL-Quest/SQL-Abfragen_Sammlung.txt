@@ -66,4 +66,4 @@ Sammlung SQL-Abfragen
   DELETE FROM <tabelle> WHERE ... ;
 
 
-ACHTUNG: Am Ende Datnenbank ggf. wieder saubermachen, bevor das Spiel beendet wird
+ACHTUNG: Am Ende Datenbank ggf. wieder saubermachen, bevor das Spiel beendet wird

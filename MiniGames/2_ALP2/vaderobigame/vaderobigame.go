@@ -54,7 +54,7 @@ func notenberechnung(punkte uint) float32 {
 
 //func Vaderobi() (float32,uint32) {
 func Vaderobi() {
-	
+		
 	var level [7]string
 	level = [7] string {"","Welt_FU","Welt_Steps","Welt_robi","Welt_SCM","Welt_CYR","Welt_ALP"}
 	var min [7]uint
@@ -75,10 +75,8 @@ func Vaderobi() {
 		Schrittmodus(false)
 		
 		//var min uint = 31
-		var laseranz uint
-		var markanz uint
-		var eingaben, fehler, korrekteBefehle uint
-		var punkte uint
+		var laseranz, markanz, eingaben, fehler, korrekteBefehle uint
+		var punkte, punktabzug uint
 		var note float32 = 0.0
 		
 		//Titel
@@ -112,30 +110,43 @@ func Vaderobi() {
 		
 		//Zähler
 		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-		gfx.SchreibeFont(1020,380,"Eingaben:  "+fmt.Sprint(eingaben))
-		gfx.Stiftfarbe(0,255,0)
-		gfx.SchreibeFont(1020,440,"Punkte:    "+fmt.Sprint(punkte))
+		gfx.SchreibeFont(1020,380,"Eingaben:   "+fmt.Sprint(eingaben))
+		//gfx.Stiftfarbe(0,255,0)
+		//gfx.SchreibeFont(1020,440,"Punkte:     "+fmt.Sprint(punkte))
 		gfx.Stiftfarbe(255,0,0)
-		gfx.SchreibeFont(1020,410,"Fehler:    "+fmt.Sprint(fehler))
+		gfx.SchreibeFont(1020,410,"Fehler:     "+fmt.Sprint(fehler))
+		
+		if i == 1 {
+			gfx.SpieleSound("./Sounds/lordvaderrise.wav")
+		} else {
+			gfx.SpieleSound("./Sounds/imperial_march.wav")
+		}
 		
 		var ted texteditoren.Texteditor
 		//ted = texteditoren.New(700,350,475,325,20,true)
 		ted = texteditoren.New(700,370,300,305,20,true)
+		
+		
+		
 		for {
 			switch ted.GibString() {
 				case "Laufen()":
 				switch Laufen1() {
 					case false:
 					fehler++
+					gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
 					Melden("FEHLER: **Laufen()** NICHT MÖGLICH!")
 					case true:
+					gfx.SpieleSound("./Sounds/sfx_sounds_impact11.wav")
 					korrekteBefehle++
 					}
 				case "LinksDrehen()":
 				korrekteBefehle++
+				gfx.SpieleSound("./Sounds/sfx_sounds_impact2.wav")
 				LinksDrehen()
 				case "RechtsDrehen()":
 				korrekteBefehle++
+				gfx.SpieleSound("./Sounds/sfx_sounds_impact2.wav")
 				RechtsDrehen()
 				case "AmRand()":
 				if AmRand() {
@@ -153,10 +164,12 @@ func Vaderobi() {
 				Fertig()
 				case "Markieren()":
 				korrekteBefehle++
+				gfx.SpieleSound("./Sounds/vader_breathing.wav")
 				markanz++
 				Markieren()
 				case "Demarkieren()":
 				korrekteBefehle++
+				gfx.SpieleSound("./Sounds/vader_breathing.wav")
 				markanz--
 				Demarkieren()
 				case "Markiert()":
@@ -181,9 +194,11 @@ func Vaderobi() {
 				switch Leeren1() {
 					case false:
 					fehler++
+					gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
 					Melden("FEHLER: **Entlasern()** NICHT MÖGLICH!")
 					case true:
 					korrekteBefehle++
+					gfx.SpieleSound("./Sounds/light-saber-off.wav")
 					laseranz--
 					}
 				case "HatLaserpower()":
@@ -196,8 +211,11 @@ func Vaderobi() {
 				switch Legen1() {
 					case false:
 					fehler++
+					gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
 					Melden("FEHLER: **Lasern()** NICHT MÖGLICH!")
 					case true:
+					//gfx.SpieleSound("./Sounds/sfx_wpn_laser5.wav")
+					gfx.SpieleSound("./Sounds/light-saber-on.wav")
 					korrekteBefehle++
 					laseranz++
 					}
@@ -207,26 +225,43 @@ func Vaderobi() {
 				switch Mauern1() {
 					case false:
 					fehler++
+					gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
 					Melden("FEHLER: **Mauern()** NICHT MÖGLICH!")
 					case true:
+					gfx.SpieleSound("./Sounds/sfx_movement_portal1.wav")
 					korrekteBefehle++
 					}
 				case "Entmauern()":
 				switch Entmauern1() {
 					case false:
 					fehler++
+					gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
 					Melden("FEHLER: **Entmauern()** NICHT MÖGLICH!")
 					case true:
+					gfx.SpieleSound("./Sounds/sfx_sounds_falling6.wav")
 					korrekteBefehle++
 					}
 				case "Baumodus()":
+				gfx.SpieleSound("./Sounds/ooh_sw_luke_dontdothat.wav")
 				Baumodus()
 				default:
 				fehler++
+				gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
 				Melden("Eingabefehler! -> Nochmal überlegen und ggf. Syntax prüfen!")
 			}
 			eingaben++
-			punkte = 100+min[i] - eingaben - fehler
+			punkte = 100+min[i]
+			if punkte >= eingaben {
+				punkte = punkte - eingaben
+			} else {
+				punkte = 0
+			}
+			if punkte >= fehler {
+				punkte = punkte - fehler
+			} else {
+				punkte = 0
+			}
+			
 			//Zähler
 			gfx.UpdateAus()
 			gfx.Stiftfarbe(255,255,255)
@@ -234,15 +269,15 @@ func Vaderobi() {
 			gfx.Stiftfarbe(0,0,0)
 			gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 			if eingaben > 9 {
-				gfx.SchreibeFont(1020,380,"Eingaben: "+fmt.Sprint(eingaben))
-			} else {
 				gfx.SchreibeFont(1020,380,"Eingaben:  "+fmt.Sprint(eingaben))
+			} else {
+				gfx.SchreibeFont(1020,380,"Eingaben:   "+fmt.Sprint(eingaben))
 			}
 			gfx.Stiftfarbe(255,0,0)
 			if fehler > 9 {
-				gfx.SchreibeFont(1020,410,"Fehler:   "+fmt.Sprint(fehler))
-			} else {
 				gfx.SchreibeFont(1020,410,"Fehler:    "+fmt.Sprint(fehler))
+			} else {
+				gfx.SchreibeFont(1020,410,"Fehler:     "+fmt.Sprint(fehler))
 			}
 			gfx.Stiftfarbe(0,0,0)
 					
@@ -251,28 +286,57 @@ func Vaderobi() {
 			//Level geschafft
 			if InLinkerObererEcke() {
 				Legen1()
+				gfx.SpieleSound("./Sounds/laser_all2easy.wav")
+				Melden("Ziel erreicht!")
 				if laseranz < minlaser[i] {
+					gfx.SpieleSound("./Sounds/ooh.wav")
 					Melden("Du hast vergessen zu lasern oder geschummelt - das gibt Abzug in der B-Note!")
-					punkte = punkte -10
+					if punkte >= 10 {
+						punkte = punkte -10
+						punktabzug = punktabzug + 10
+					} else {
+						punkte = 0
+						punktabzug = punktabzug + punkte
+					}
+					
 				}
 				if markanz < minmark[i] {
+					gfx.SpieleSound("./Sounds/ooh2.wav")
 					Melden("Du hast vergessen zu markieren oder geschummelt - das gibt Abzug in der B-Note!")
-					if markanz < minmark[i]/6 {
+					if markanz < minmark[i]/6 && punkte >= 35 {
 						punkte = punkte -35
-					} else if markanz < minmark[i]/2 {
+						punktabzug = punktabzug + 35
+					} else if markanz < minmark[i]/2 && punkte >= 20 {
 						punkte = punkte -20
-					} else {
+						punktabzug = punktabzug + 20
+					} else if punkte >= 15 {
 						punkte = punkte -15
+						punktabzug = punktabzug + 15
+					} else {
+						punktabzug = punktabzug + punkte
+						punkte = 0
 					}
 				}
+				
+				gfx.Stiftfarbe(255,0,0)
+				gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+				if punktabzug > 99 {
+					gfx.SchreibeFont(1020,440,"Abzüge:   "+fmt.Sprint(punktabzug))
+				} else if punktabzug > 9 {
+					gfx.SchreibeFont(1020,440,"Abzüge:    "+fmt.Sprint(punktabzug))
+				} else {
+					gfx.SchreibeFont(1020,440,"Abzüge:     "+fmt.Sprint(punktabzug))
+				}
+				
 				gfx.Stiftfarbe(0,255,0)
 				if punkte > 99 {
-					gfx.SchreibeFont(1020,440,"Punkte:  "+fmt.Sprint(punkte))
+					gfx.SchreibeFont(1020,470,"Punkte:   "+fmt.Sprint(punkte))
 				} else if punkte > 9 {
-					gfx.SchreibeFont(1020,440,"Punkte:   "+fmt.Sprint(punkte))
+					gfx.SchreibeFont(1020,470,"Punkte:    "+fmt.Sprint(punkte))
 				} else {
-					gfx.SchreibeFont(1020,440,"Punkte:    "+fmt.Sprint(punkte))
+					gfx.SchreibeFont(1020,470,"Punkte:     "+fmt.Sprint(punkte))
 				}
+				
 				gfx.Stiftfarbe(0,0,0)
 				gfx.Vollrechteck(150,225,375,225)
 				gfx.Stiftfarbe(0,255,0)
@@ -286,15 +350,19 @@ func Vaderobi() {
 					gfx.Vollrechteck(160,235,355,205)
 					gfx.Stiftfarbe(0,0,0)
 					gfx.SchreibeFont(170,255,"Level geschafft!")
-					gfx.SchreibeFont(200,300,"Aber leider")
-					gfx.SchreibeFont(170,360,"nicht bestanden!!!")
+					gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",30)
+					gfx.SchreibeFont(230,315,"Aber leider")
+					gfx.SchreibeFont(172,360,"nicht bestanden!!!")
+					gfx.SpieleSound("./Sounds/vader_breathing.wav")
 				} else {
+					gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",32)
 					gfx.Stiftfarbe(0,255,0)
 					gfx.Vollrechteck(160,235,355,205)
 					gfx.Stiftfarbe(0,0,0)
 					gfx.SchreibeFont(275,255,"Yeah!!!")
 					gfx.SchreibeFont(170,300,"Level geschafft!")
 					gfx.SchreibeFont(250,360,"Note: " + fmt.Sprintf("%2.1f",note))
+					gfx.SpieleSound("./Sounds/swsidious_youhavebeenwelltrained.wav")
 				}
 				Melden("Level geschafft! :) Weiter geht's!")
 				//Fertig()
