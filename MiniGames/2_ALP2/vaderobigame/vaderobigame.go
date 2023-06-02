@@ -7,6 +7,7 @@ package vaderobigame
 import (
 	"fmt"
 	"gfx"
+	"time"
 	. "../vaderobi"
 	"../../../Klassen/texteditoren"
 )
@@ -52,20 +53,28 @@ func notenberechnung(punkte uint) float32 {
 	} else { return 0.0 }
 }
 
-//func Vaderobi() (float32,uint32) {
-func Vaderobi() {
-		
-	var level [7]string
-	level = [7] string {"","Welt_FU","Welt_Steps","Welt_robi","Welt_SCM","Welt_CYR","Welt_ALP"}
-	var min [7]uint
-	min = [7]uint {0,37,31,31,30,40,35}
-	var minlaser [7]uint
-	minlaser = [7]uint {0,1,3,3,2,1,2}
-	var minmark [7]uint
-	minmark = [7]uint {0,15,12,13,11,16,14}
+func Vaderobi() (float32,uint32) {
+//func Vaderobi() {
+	
+	var level []string
+	level = [] string {"","Welt_FU","Welt_Steps","Welt_robi","Welt_SCM","Welt_CYR","Welt_ALP"}
+	var min []uint
+	min = []uint {0,37,31,31,30,40,35}
+	var minlaser []uint
+	minlaser = []uint {0,1,3,3,2,1,2}
+	var minmark []uint
+	minmark = []uint {0,15,12,13,11,16,14}
+	
+	var punktespeicher []uint
+	punktespeicher = make([]uint,len(level))
+	var notenspeicher []float32
+	notenspeicher = make([]float32,len(level))
+	var gesamtpunkte uint32
+	var gesamtnote float32
+	//var maxpunktzahl uint
 	
 	//---------------------------------------------------------------------
-	for i:=1; i<7; i++ {
+	for i:=1; i<len(level); i++ {
 		
 		gfx.Stiftfarbe(255,255,255)	
 		gfx.Cls()
@@ -344,8 +353,14 @@ func Vaderobi() {
 				gfx.Stiftfarbe(0,0,0)
 				gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",32)
 				
+				punktespeicher[i] = punkte
 				note = notenberechnung(punkte)
-				if note == 0.0 {
+				notenspeicher[i] = note
+				gesamtpunkte = gesamtpunkte + uint32(punkte)
+				gesamtnote = notenberechnung(uint(gesamtpunkte)/uint(i))
+				fmt.Println(gesamtnote)
+				
+				if note == 0.0												//TODO: Level wiederholen!!!
 					gfx.Stiftfarbe(255,0,0)
 					gfx.Vollrechteck(160,235,355,205)
 					gfx.Stiftfarbe(0,0,0)
@@ -381,10 +396,44 @@ func Vaderobi() {
 		}
 	//----------------------------------------------------------------------------
 	}
-	Fertig()
-	//gfx.TastaturLesen1()
-	//fmt.Println(ted.GibString())
 	
-	//fmt.Println(ted.GibPosition())
-	//return note, uint32(punkte)
+	//----------------- Endbildschirm --------------------------------------
+	gfx.Stiftfarbe(255,255,255)
+	gfx.Cls()
+	
+	gfx.SpieleSound(path + "Sounds/the_force.wav")
+	
+	gfx.LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
+	gfx.LadeBildMitColorKey(100,350,path + "Bilder/Darth_200.bmp",255,255,255)
+	gfx.LadeBild(620,80,path + "Bilder/paper_500.bmp")
+	gfx.LadeBild(960,520,path + "Bilder/certified_100.bmp")
+	gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
+		
+	gfx.Stiftfarbe(0,255,0)
+	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	gfx.SchreibeFont(330,10,"Super - ALP - Escape")
+	gfx.Stiftfarbe(0,0,0)
+	gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	gfx.SchreibeFont(295,140,"Du hast die")
+	gfx.SchreibeFont(310,260,"erreicht!")
+	gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	gfx.SchreibeFont(285,170,"Gesamtnote")
+	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",gesamtnote))
+	
+	gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	for i:=1; i<len(level); i++ {
+		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(punktespeicher[i]) + " Punkte")
+		gfx.SchreibeFont(710,175+uint16((i-1)*68),"           Note " + fmt.Sprintf("%2.1f",notenspeicher[i]))
+	}
+	gfx.SchreibeFont(700,130+uint16(6*70),"----------------------")
+	gfx.SchreibeFont(710,160+uint16(6*70),"Gesamt:    " + fmt.Sprint(gesamtpunkte) + " Punkte")
+	
+	_,klick,_,_ := gfx.MausLesen1()
+	for klick != 1 {
+		time.Sleep(1)
+	}
+	
+	Fertig()
+	return gesamtnote, gesamtpunkte
 }
