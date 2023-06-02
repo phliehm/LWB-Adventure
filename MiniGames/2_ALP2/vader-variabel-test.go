@@ -1,8 +1,11 @@
 package main
 
-import ( "gfx" ; "robi" )
+import (
+	"gfx"
+	"robi"
+)
 
-const b uint16 = 100			//Feldbreite
+const b uint16 = 75			//Feldbreite
 var sp uint16 = 2
 var ze uint16 = 2
 var xm uint16 = sp*b+b/2
@@ -28,11 +31,11 @@ func vader (r uint8) {
 		gfx.Volldreieck(xm,ym-b/10,xm-b*22/50,ym+b*11/50,xm+b*22/50,ym+b*11/50)
 		gfx.Volldreieck(xm,ym+b*21/50,xm-b*22/50,ym+b*11/50,xm+b*22/50,ym+b*11/50)
 		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
-		gfx.Vollrechteck(xm-b/50,ym+b*1/10,b/50,b*8/50)
+		gfx.Vollrechteck(xm-(b/50+1),ym+b*1/10,b/50+1,b*8/50)							//+1 wegen Division ohne Rest!
 		gfx.Vollrechteck(xm-b*4/50,ym+b*7/50,b*2/50,b*6/50)
 		gfx.Vollrechteck(xm-b*7/50,ym+b*9/50,b*2/50,b*4/50)
 		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
-		gfx.Vollrechteck(xm,ym+b*1/10,b/50,b*8/50)
+		gfx.Vollrechteck(xm,ym+b*1/10,b/50+1,b*8/50)									//+1 wegen Division ohne Rest
 		gfx.Vollrechteck(xm+b*2/50,ym+b*7/50,b*2/50,b*6/50)
 		gfx.Vollrechteck(xm+b*5/50,ym+b*9/50,b*2/50,b*4/50)
 		gfx.Stiftfarbe(255,0,0)					//rot
@@ -49,32 +52,32 @@ func vader (r uint8) {
 		gfx.Volldreieck(xm-b/10,ym,xm+b*11/50,ym-b*22/50,xm+b*11/50,ym+b*22/50)
 		gfx.Volldreieck(xm+b*21/50,ym,xm+b*11/50,ym-b*22/50,xm+b*11/50,ym+b*22/50)
 		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
-		gfx.Vollrechteck(xm+b*1/10,ym-b/50,b*8/50,b/50)
+		gfx.Vollrechteck(xm+b*1/10,ym-(b/50+1),b*8/50,b/50+1)							//+1 wegen Division ohne Rest!
 		gfx.Vollrechteck(xm+b*7/50,ym-b*4/50,b*6/50,b*2/50)
 		gfx.Vollrechteck(xm+b*9/50,ym-b*7/50,b*4/50,b*2/50)
 		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
-		gfx.Vollrechteck(xm+b*1/10,ym,b*8/50,b/50)
+		gfx.Vollrechteck(xm+b*1/10,ym,b*8/50,b/50+1)									//+1 wegen Division ohne Rest!
 		gfx.Vollrechteck(xm+b*7/50,ym+b*2/50,b*6/50,b*2/50)
 		gfx.Vollrechteck(xm+b*9/50,ym+b*5/50,b*4/50,b*2/50)
 		gfx.Stiftfarbe(255,0,0)					//rot
 		gfx.Volldreieck(xm+b*23/50,ym-b*7/50,xm+b*23/50,ym-b*11/50,xm-b*23/50,ym-b*22/50)	
 		gfx.Volldreieck(xm+b*23/50,ym-b*7/50,xm-b*23/50,ym-b*20/50,xm-b*23/50,ym-b*22/50)
 		case 0:
-		gfx.Stiftfarbe(50,50,50)				//dunkeldunkelgrau
+		gfx.Stiftfarbe(100,100,100)				//dunkelhellgrau
 		gfx.Vollkreis(xm,ym+b*7/50,b*15/50)
 		gfx.Volldreieck(xm-b*22/50,ym-b*11/50,xm-b*1/5,ym+b*3/10,xm-b*1/5,ym-b*11/50)
-		gfx.Stiftfarbe(100,100,100)				//dunkelhellgrau
+		gfx.Stiftfarbe(50,50,50)				//dunkeldunkelgrau
 		gfx.Vollkreissektor(xm+b/50,ym+b*7/50,b*15/50,270,90)
 		gfx.Volldreieck(xm+b*22/50,ym-b*11/50,xm+b*1/5,ym+b*3/10,xm+b*1/5,ym-b*11/50)
 		gfx.Stiftfarbe(0,0,0)					//schwarz
 		gfx.Volldreieck(xm,ym+b/10,xm-b*22/50,ym-b*11/50,xm+b*22/50,ym-b*11/50)
 		gfx.Volldreieck(xm,ym-b*21/50,xm-b*22/50,ym-b*11/50,xm+b*22/50,ym-b*11/50)
-		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
-		gfx.Vollrechteck(xm-b/50,ym-b*13/50,b/50,b*8/50)
+		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
+		gfx.Vollrechteck(xm-(b/50+1),ym-b*13/50,b/50+1,b*8/50)							//+1 wegen Division ohne Rest!
 		gfx.Vollrechteck(xm-b*4/50,ym-b*13/50,b*2/50,b*6/50)
 		gfx.Vollrechteck(xm-b*7/50,ym-b*13/50,b*2/50,b*4/50)
-		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
-		gfx.Vollrechteck(xm,ym-b*13/50,b/50,b*8/50)
+		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
+		gfx.Vollrechteck(xm,ym-b*13/50,b/50+1,b*8/50)									//+1 wegen Division ohne Rest!
 		gfx.Vollrechteck(xm+b*2/50,ym-b*13/50,b*2/50,b*6/50)
 		gfx.Vollrechteck(xm+b*5/50,ym-b*13/50,b*2/50,b*4/50)
 		gfx.Stiftfarbe(255,0,0)					//rot
@@ -91,11 +94,11 @@ func vader (r uint8) {
 		gfx.Volldreieck(xm+b/10,ym,xm-b*11/50,ym-b*22/50,xm-b*11/50,ym+b*22/50)
 		gfx.Volldreieck(xm-b*21/50,ym,xm-b*11/50,ym-b*22/50,xm-b*11/50,ym+b*22/50)
 		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
-		gfx.Vollrechteck(xm-b*13/50,ym-b/50,b*8/50,b/50)
+		gfx.Vollrechteck(xm-b*13/50,ym-(b/50+1),b*8/50,b/50+1)							//+1 wegen Division ohne Rest!
 		gfx.Vollrechteck(xm-b*13/50,ym-b*4/50,b*6/50,b*2/50)
 		gfx.Vollrechteck(xm-b*13/50,ym-b*7/50,b*4/50,b*2/50)
 		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
-		gfx.Vollrechteck(xm-b*13/50,ym,b*8/50,b/50)
+		gfx.Vollrechteck(xm-b*13/50,ym,b*8/50,b/50+1)									//+1 wegen Division ohne Rest!
 		gfx.Vollrechteck(xm-b*13/50,ym+b*2/50,b*6/50,b*2/50)
 		gfx.Vollrechteck(xm-b*13/50,ym+b*5/50,b*4/50,b*2/50)
 		gfx.Stiftfarbe(255,0,0)					//rot
@@ -164,7 +167,7 @@ func main () {
 	//Stiftfarbe(0,255,0)
 	//Vollkreis(xm,ym,feldbreite/2-5)
 	
-	vader(2)
+	vader(3)
 	//vader(1)
 	//vader(2)
 	//vader(3)

@@ -104,15 +104,11 @@ func (k *kachel) zeichnen () {
 	gfx.Vollrechteck(uint16(k.sp)*feldbreite,uint16(k.ze)*feldbreite,feldbreite,feldbreite)
 	if k.klotzanzahl > 0 {
 		gfx.Stiftfarbe(240,0,0)
-		//gfx.Vollrechteck(uint16(k.sp)*feldbreite,uint16(k.ze)*feldbreite + (4*feldbreite+2)/5,feldbreite/5,feldbreite/5)
-		gfx.Kreis(uint16(k.sp)*feldbreite+feldbreite/2,uint16(k.ze)*feldbreite+feldbreite/2,feldbreite/2-1)
-		gfx.Kreis(uint16(k.sp)*feldbreite+feldbreite/2,uint16(k.ze)*feldbreite+feldbreite/2,feldbreite/2-2)
-		gfx.Kreis(uint16(k.sp)*feldbreite+feldbreite/2,uint16(k.ze)*feldbreite+feldbreite/2,feldbreite/2-3)
-		//
+		gfx.Vollrechteck(uint16(k.sp)*feldbreite,uint16(k.ze)*feldbreite + (4*feldbreite+2)/5,feldbreite/5,feldbreite/5)
 		gfx.Schreibe(uint16(k.sp)*feldbreite+2,uint16(k.ze)*feldbreite+2,fmt.Sprint(k.klotzanzahl))
 	}
 	if k.zugemauert {
-		gfx.Stiftfarbe (0,0,0)
+		gfx.Stiftfarbe (100,40,40)
 		gfx.Vollrechteck (uint16(k.sp)*feldbreite+2,uint16(k.ze)*feldbreite+2,feldbreite/2-2,feldbreite/4-2)
 		gfx.Vollrechteck (uint16(k.sp)*feldbreite+feldbreite/2+1,uint16(k.ze)*feldbreite+2,feldbreite/2-2,feldbreite/4-2)
 		
@@ -183,11 +179,11 @@ func (r *robi) zeichnen () {
 		gfx.Volldreieck(xm,ym-b/10,xm-b*22/50,ym+b*11/50,xm+b*22/50,ym+b*11/50)
 		gfx.Volldreieck(xm,ym+b*21/50,xm-b*22/50,ym+b*11/50,xm+b*22/50,ym+b*11/50)
 		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
-		gfx.Vollrechteck(xm-(b/50+1),ym+b*1/10,b/50+1,b*8/50)							//+1 wegen Division ohne Rest!
+		gfx.Vollrechteck(xm-b/50,ym+b*1/10,b/50,b*8/50)
 		gfx.Vollrechteck(xm-b*4/50,ym+b*7/50,b*2/50,b*6/50)
 		gfx.Vollrechteck(xm-b*7/50,ym+b*9/50,b*2/50,b*4/50)
 		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
-		gfx.Vollrechteck(xm,ym+b*1/10,b/50+1,b*8/50)									//+1 wegen Division ohne Rest
+		gfx.Vollrechteck(xm,ym+b*1/10,b/50,b*8/50)
 		gfx.Vollrechteck(xm+b*2/50,ym+b*7/50,b*2/50,b*6/50)
 		gfx.Vollrechteck(xm+b*5/50,ym+b*9/50,b*2/50,b*4/50)
 		gfx.Stiftfarbe(255,0,0)					//rot
@@ -204,32 +200,32 @@ func (r *robi) zeichnen () {
 		gfx.Volldreieck(xm-b/10,ym,xm+b*11/50,ym-b*22/50,xm+b*11/50,ym+b*22/50)
 		gfx.Volldreieck(xm+b*21/50,ym,xm+b*11/50,ym-b*22/50,xm+b*11/50,ym+b*22/50)
 		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
-		gfx.Vollrechteck(xm+b*1/10,ym-(b/50+1),b*8/50,b/50+1)							//+1 wegen Division ohne Rest!
+		gfx.Vollrechteck(xm+b*1/10,ym-b/50,b*8/50,b/50)
 		gfx.Vollrechteck(xm+b*7/50,ym-b*4/50,b*6/50,b*2/50)
 		gfx.Vollrechteck(xm+b*9/50,ym-b*7/50,b*4/50,b*2/50)
 		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
-		gfx.Vollrechteck(xm+b*1/10,ym,b*8/50,b/50+1)									//+1 wegen Division ohne Rest!
+		gfx.Vollrechteck(xm+b*1/10,ym,b*8/50,b/50)
 		gfx.Vollrechteck(xm+b*7/50,ym+b*2/50,b*6/50,b*2/50)
 		gfx.Vollrechteck(xm+b*9/50,ym+b*5/50,b*4/50,b*2/50)
 		gfx.Stiftfarbe(255,0,0)					//rot
 		gfx.Volldreieck(xm+b*23/50,ym-b*7/50,xm+b*23/50,ym-b*11/50,xm-b*23/50,ym-b*22/50)	
 		gfx.Volldreieck(xm+b*23/50,ym-b*7/50,xm-b*23/50,ym-b*20/50,xm-b*23/50,ym-b*22/50)
 		case 0:
-		gfx.Stiftfarbe(100,100,100)				//dunkelhellgrau
+		gfx.Stiftfarbe(50,50,50)				//dunkeldunkelgrau
 		gfx.Vollkreis(xm,ym+b*7/50,b*15/50)
 		gfx.Volldreieck(xm-b*22/50,ym-b*11/50,xm-b*1/5,ym+b*3/10,xm-b*1/5,ym-b*11/50)
-		gfx.Stiftfarbe(50,50,50)				//dunkeldunkelgrau
+		gfx.Stiftfarbe(100,100,100)				//dunkelhellgrau
 		gfx.Vollkreissektor(xm+b/50,ym+b*7/50,b*15/50,270,90)
 		gfx.Volldreieck(xm+b*22/50,ym-b*11/50,xm+b*1/5,ym+b*3/10,xm+b*1/5,ym-b*11/50)
 		gfx.Stiftfarbe(0,0,0)					//schwarz
 		gfx.Volldreieck(xm,ym+b/10,xm-b*22/50,ym-b*11/50,xm+b*22/50,ym-b*11/50)
 		gfx.Volldreieck(xm,ym-b*21/50,xm-b*22/50,ym-b*11/50,xm+b*22/50,ym-b*11/50)
-		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
-		gfx.Vollrechteck(xm-(b/50+1),ym-b*13/50,b/50+1,b*8/50)							//+1 wegen Division ohne Rest!
+		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
+		gfx.Vollrechteck(xm-b/50,ym-b*13/50,b/50,b*8/50)
 		gfx.Vollrechteck(xm-b*4/50,ym-b*13/50,b*2/50,b*6/50)
 		gfx.Vollrechteck(xm-b*7/50,ym-b*13/50,b*2/50,b*4/50)
-		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
-		gfx.Vollrechteck(xm,ym-b*13/50,b/50+1,b*8/50)									//+1 wegen Division ohne Rest!
+		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
+		gfx.Vollrechteck(xm,ym-b*13/50,b/50,b*8/50)
 		gfx.Vollrechteck(xm+b*2/50,ym-b*13/50,b*2/50,b*6/50)
 		gfx.Vollrechteck(xm+b*5/50,ym-b*13/50,b*2/50,b*4/50)
 		gfx.Stiftfarbe(255,0,0)					//rot
@@ -246,11 +242,11 @@ func (r *robi) zeichnen () {
 		gfx.Volldreieck(xm+b/10,ym,xm-b*11/50,ym-b*22/50,xm-b*11/50,ym+b*22/50)
 		gfx.Volldreieck(xm-b*21/50,ym,xm-b*11/50,ym-b*22/50,xm-b*11/50,ym+b*22/50)
 		gfx.Stiftfarbe(80,80,80)				//helldunkelgrau
-		gfx.Vollrechteck(xm-b*13/50,ym-(b/50+1),b*8/50,b/50+1)							//+1 wegen Division ohne Rest!
+		gfx.Vollrechteck(xm-b*13/50,ym-b/50,b*8/50,b/50)
 		gfx.Vollrechteck(xm-b*13/50,ym-b*4/50,b*6/50,b*2/50)
 		gfx.Vollrechteck(xm-b*13/50,ym-b*7/50,b*4/50,b*2/50)
 		gfx.Stiftfarbe(130,130,130)				//hellhellgrau
-		gfx.Vollrechteck(xm-b*13/50,ym,b*8/50,b/50+1)									//+1 wegen Division ohne Rest!
+		gfx.Vollrechteck(xm-b*13/50,ym,b*8/50,b/50)
 		gfx.Vollrechteck(xm-b*13/50,ym+b*2/50,b*6/50,b*2/50)
 		gfx.Vollrechteck(xm-b*13/50,ym+b*5/50,b*4/50,b*2/50)
 		gfx.Stiftfarbe(255,0,0)					//rot
@@ -259,11 +255,7 @@ func (r *robi) zeichnen () {
 	}
 	if r.welt.feld[r.ze][r.sp].klotzanzahl > 0 {
 		gfx.Stiftfarbe(255,0,0)
-		//gfx.Vollrechteck(uint16(r.sp)*r.welt.feldbreite,uint16(r.ze)*r.welt.feldbreite + (4*r.welt.feldbreite+2)/5,r.welt.feldbreite/5,r.welt.feldbreite/5)
-		gfx.Kreis(uint16(r.sp)*r.welt.feldbreite+r.welt.feldbreite/2,uint16(r.ze)*r.welt.feldbreite+r.welt.feldbreite/2,r.welt.feldbreite/2-1)
-		gfx.Kreis(uint16(r.sp)*r.welt.feldbreite+r.welt.feldbreite/2,uint16(r.ze)*r.welt.feldbreite+r.welt.feldbreite/2,r.welt.feldbreite/2-2)
-		gfx.Kreis(uint16(r.sp)*r.welt.feldbreite+r.welt.feldbreite/2,uint16(r.ze)*r.welt.feldbreite+r.welt.feldbreite/2,r.welt.feldbreite/2-3)
-		//
+		gfx.Vollrechteck(uint16(r.sp)*r.welt.feldbreite,uint16(r.ze)*r.welt.feldbreite + (4*r.welt.feldbreite+2)/5,r.welt.feldbreite/5,r.welt.feldbreite/5)
 		gfx.Schreibe(uint16(r.sp)*r.welt.feldbreite+2,uint16(r.ze)*r.welt.feldbreite+2,fmt.Sprint(r.welt.feld[r.ze][r.sp].klotzanzahl))
 	}
 }
@@ -321,7 +313,6 @@ type welt struct {
 	rob *robi
 }
 
-/*
 func newWelt (weltbreite, welthoehe, feldbreite uint16) *welt {
 	var w *welt
 	w = new(welt)
@@ -345,77 +336,6 @@ func newWelt (weltbreite, welthoehe, feldbreite uint16) *welt {
 		z:=make([]*kachel,0)
 		for spalte:=uint8(0);spalte< uint8(weltbreite/feldbreite);spalte++ {
 			f:=newKachel(zeile,spalte,220,220,220,180,250,180,w)
-			f.zeichnen()
-			z = append(z,f)
-		}
-		w.feld = append (w.feld,z)
-	}
-	if welthoehe/feldbreite < 1 || weltbreite/feldbreite < 1 {
-		panic ("Die Welt ist zu klein für einen Robi!!")
-	}
-	w.rob = newRobi(0,0,2,w)												//hier andere Richtung?!
-	w.rob.zeichnen()
-	return w
-}
-
-func (w *welt) kodieren () []byte {
-	var b []byte = make ([]byte,8)
-	b[0] = uint8(w.weltbreite/256)
-	b[1] = uint8(w.weltbreite%256)
-	b[2] = uint8(w.welthoehe/256)
-	b[3] = uint8(w.welthoehe%256)
-	b[4] = uint8(w.feldbreite/256)
-	b[5] = uint8(w.feldbreite%256)
-	if w.schrittmodus {
-		b[6] = 1
-	} else {
-		b[6] = 0
-	} 
-	feldstromlaenge:= len(w.feld[0][0].kodieren())
-	if feldstromlaenge > 255 {
-		panic ("Ein kodiertes Feld darf nicht mehr als 255 Bytes lang sein!")
-	} 
-	b[7] = uint8(feldstromlaenge)
-	ze:=len (w.feld)
-	sp:=len (w.feld[0])
-	for i:=0; i < ze; i++ {
-		for j:=0; j < sp; j++ {
-			b = append(b,w.feld[i][j].kodieren()...)
-		}
-	}
-	robistrom:= w.rob.kodieren()
-	if len(robistrom) > 255 {
-		panic("Ein kodierter Robi darf nicht mehr als 255 Bytes lang sein!")
-	}
-	b = append (b,uint8(len(robistrom)))
-	b = append (b,robistrom...) 
-	return b
-}
-*/
-
-func newWelt (weltbreite, welthoehe, feldbreite uint16) *welt {
-	var w *welt
-	w = new(welt)
-	w.weltbreite = weltbreite
-	w.welthoehe = welthoehe
-	w.feldbreite = feldbreite
-	w.schrittmodus = true //Standart: aktiviert
-	w.feld = make ([][]*kachel,0)
-	if gfx.FensterOffen () {
-		if (gfx.Grafikspalten() < weltbreite || gfx.Grafikzeilen() < welthoehe) {
-			panic ("Das offene gfx-Fenster ist zu klein für die neue Welt!")
-		} else {
-			gfx.Stiftfarbe(255,255,255)
-			gfx.Vollrechteck (0,0,weltbreite,welthoehe)
-		}
-	} else {
-		panic ("Kein gfx-Fenster offen!")
-	}
-	for zeile:=uint8(0);zeile < uint8(welthoehe/feldbreite);zeile++ {
-		z:=make([]*kachel,0)
-		for spalte:=uint8(0);spalte < uint8(weltbreite/feldbreite);spalte++ {
-			//f:=newKachel(zeile,spalte,220,220,220,180,250,180,w)
-			f:=newKachel(zeile,spalte,220,220,220,0,255,0,w)
 			f.zeichnen()
 			z = append(z,f)
 		}
@@ -500,43 +420,37 @@ func (w *welt) enter () {
 }
 
 func fehlerUndEnde (text string) {
-	//var taste uint16
-	//var gedrueckt uint8
-	/*
-	schrifthoehe := w.feldbreite/3
-	ok:= gfx.SetzeFont(fontpath + "LiberationMono-Bold.ttf", int(schrifthoehe-4))
+	var taste uint16
+	var gedrueckt uint8
+	schrifthoehe := w.feldbreite/2
+	ok:= gfx.SetzeFont(fontpath + "LiberationSerif-Regular.ttf", int(schrifthoehe))
 	if ok { // Font gefunden !
 		gfx.Stiftfarbe (255,0,0)
 		gfx.Vollrechteck (0,gfx.Grafikzeilen()-schrifthoehe,gfx.Grafikspalten(),schrifthoehe)
-		gfx.Stiftfarbe (0,255,0)
-		gfx.SchreibeFont (10,gfx.Grafikzeilen() - schrifthoehe*19/20,"VOR. VON **"+text+ "** NICHT EINGEHALTEN! --> <ESC>")
+		gfx.Stiftfarbe (255,255,0)
+		gfx.SchreibeFont (10,gfx.Grafikzeilen() - schrifthoehe*11/10,"VOR. VON **"+text+ "** NICHT EINGEHALTEN! --> <ESC>")
 	} else { //Font nicht gefunden - Nothilfe: Verwendung des internen Fonts
 		gfx.Stiftfarbe (255,0,0)
 		gfx.Vollrechteck (0,gfx.Grafikzeilen()-12,gfx.Grafikspalten(),12)
-		gfx.Stiftfarbe (0,255,0)
-		gfx.Schreibe (10,gfx.Grafikzeilen() - 10," VOR. VON **"+text+ "** NICHT EINGEHALTEN! --> <ESC>")
+		gfx.Stiftfarbe (255,255,0)
+		gfx.Schreibe (10,gfx.Grafikzeilen() - 10," VOR. VON **"+text+ "** NICHT EINGEHALTEN! ENDE!!- Druecken Sie <ESC> !")
 	}
-	*/
-	/*
 	for {
 		taste,gedrueckt,_ = gfx.TastaturLesen1()
 		if taste == 27 && gedrueckt == 1 {break}
 	}
 	os.Exit(1)
-	*/
 }
 
 // Vor.: Robi hat in seiner Richtung einen betretbaren Nachbarplatz. //
 // Eff.: Robi steht in der gleichen Richtung wie vorher auf diesem
 // Nachbarplatz.
-func Laufen1 () bool {
+func Laufen1 () {
 	w.enter ()
 	if AmRand () || VorMauer () {
 		fehlerUndEnde ("Laufen1")
-		return false
 	}
 	w.rob.laufen1()
-	return true
 }
 
 // Vor.: keine //
@@ -581,22 +495,22 @@ func Schrittmodus (mode bool) {
 // ausgegeben. Der aufrufende Prozess wurde solange angehalten, bis der 
 // Benutzer in der Ausgabe mit einem Druck auf <ESC> quittiert hatte.
 // Nun ist die Meldung wieder aus dem Grafikfenster entfernt.
-func Melden (text string) {
+func Melden (text string, n uint) {
 	var taste uint16
 	var gedrueckt uint8
 	gfx.Archivieren ()
-	schrifthoehe := w.feldbreite/3
-	ok:= gfx.SetzeFont(fontpath + "LiberationMono-Bold.ttf", int(schrifthoehe-4))
+	schrifthoehe := w.feldbreite/2
+	ok:= gfx.SetzeFont(fontpath + "LiberationSerif-Regular.ttf", int(schrifthoehe))
 	if ok { // Font gefunden !
 		gfx.Stiftfarbe (255,0,0)
 		gfx.Vollrechteck (0,gfx.Grafikzeilen()-schrifthoehe ,gfx.Grafikspalten(),schrifthoehe)
-		gfx.Stiftfarbe (0,255,0)
-		gfx.SchreibeFont (10,gfx.Grafikzeilen() - schrifthoehe*39/40,text + "  --> <ESC>")
+		gfx.Stiftfarbe (255,255,0)
+		gfx.SchreibeFont (10,gfx.Grafikzeilen() - schrifthoehe*11/10,text + " " + fmt.Sprint(n)+"  --> <ESC>")
 	} else { //Font nicht gefunden - Nothilfe: Verwendung des internen Fonts
 		gfx.Stiftfarbe (255,0,0)
 		gfx.Vollrechteck (0,gfx.Grafikzeilen()-12,gfx.Grafikspalten(),12)
-		gfx.Stiftfarbe (0,255,0)
-		gfx.Schreibe (10,gfx.Grafikzeilen() - 10,text + "  --> <ESC>")
+		gfx.Stiftfarbe (255,255,0)
+		gfx.Schreibe (10,gfx.Grafikzeilen() - 10,text + " " + fmt.Sprint(n)+"  --> <ESC>")
 	}
 	for {
 		taste,gedrueckt,_ = gfx.TastaturLesen1()
@@ -610,7 +524,7 @@ func Melden (text string) {
 // ausgegeben. Der aufrufende Prozess wurde solange angehalten, bis der 
 // Benutzer in der Ausgabe mit einem Druck auf <ESC> quittiert hatte.
 // Nun ist die Meldung wieder aus dem Grafikfenster entfernt. 
-func FehlerMelden (text string) { Melden (text) }
+func FehlerMelden (text string, n uint) { Melden (text,n) }
 
 // Vor.: keine //
 // Eff.: Das Programm ist mit der Fehlermeldung "Programm beendet! 
@@ -620,18 +534,18 @@ func FehlerMelden (text string) { Melden (text) }
 func Fertig () {
 	var taste uint16
 	var gedrueckt uint8
-	schrifthoehe:= w.feldbreite/3
-	ok:= gfx.SetzeFont(fontpath + "LiberationMono-Bold.ttf", int(schrifthoehe-4))
+	schrifthoehe:= w.feldbreite / 2
+	ok:= gfx.SetzeFont(fontpath + "LiberationSerif-Regular.ttf", int(schrifthoehe))
 	if ok { // Font gefunden !
 		gfx.Stiftfarbe (255,0,0)
 		gfx.Vollrechteck (0,gfx.Grafikzeilen()-schrifthoehe,gfx.Grafikspalten(),schrifthoehe)
-		gfx.Stiftfarbe (0,255,0)
-		gfx.SchreibeFont (10,gfx.Grafikzeilen() - schrifthoehe*39/40,"Spiel gemeistert - ALP2 absolviert! :) -->  <ESC> !")
+		gfx.Stiftfarbe (255,255,0)
+		gfx.SchreibeFont (10,gfx.Grafikzeilen() - schrifthoehe*11/10,"Programm beendet! Drücken Sie <ESC> !")
 	} else { //Font nicht gefunden - Nothilfe: Verwendung des internen Fonts
 		gfx.Stiftfarbe (255,0,0)
 		gfx.Vollrechteck (0,gfx.Grafikzeilen()-12,gfx.Grafikspalten(),12)
-		gfx.Stiftfarbe (0,255,0)
-		gfx.Schreibe (10,gfx.Grafikzeilen() - 10,"Spiel gemeistert - ALP2 absolviert! :) -->  <ESC> !")
+		gfx.Stiftfarbe (255,255,0)
+		gfx.Schreibe (10,gfx.Grafikzeilen() - 10,"Programm beendet! Druecken Sie <ESC> !")
 	}
 	for {
 		taste,gedrueckt,_ = gfx.TastaturLesen1()
@@ -693,17 +607,15 @@ func Leer () bool {
 // ist ein Klotz mehr. In der linken oberen Ecke des Platzes ist die
 // aktuelle Anzahl der Klötze auf dem Platz angezeigt. Ist kein Klotz auf 
 // dem Platz, so ist keine Anzahl der Klötze angezeigt.
-func Leeren1 () bool {
+func Leeren1 () {
 	w.enter ()
 	if w.feld[w.rob.ze][w.rob.sp].klotzanzahl > 0 {
 		w.feld[w.rob.ze][w.rob.sp].klotzanzahl--
 		w.rob.klotzanzahl++
 		w.feld[w.rob.ze][w.rob.sp].zeichnen ()
 		w.rob.zeichnen()
-		return true
 	} else {
 		fehlerUndEnde("Leeren1")
-		return false
 	}
 }
 
@@ -718,17 +630,15 @@ func HatKloetze () bool {
 // Eff.: In Robis Tasche ist nun ein Klotz weniger und auf seinem Platz 
 // ist nun einer mehr. In der linken oberen Ecke des Platzes ist die
 // aktuelle Anzahl der Klötze auf dem Platz angezeigt. 
-func Legen1 () bool {
+func Legen1 () {
 	w.enter ()
 	if w.rob.klotzanzahl > 0 {
 		w.rob.klotzanzahl--
 		w.feld[w.rob.ze][w.rob.sp].klotzanzahl++
 		w.feld[w.rob.ze][w.rob.sp].zeichnen ()
 		w.rob.zeichnen()
-		return true
 	} else {
 		fehlerUndEnde("Legen1")
-		return false
 	}
 } 
 
@@ -754,28 +664,23 @@ func VorMauer () bool {
 // Standort ist nun zugemauert. Klötze, die sich auf dem zugemauerten
 // Feld befunden haben, sind nun in Robis Tasche. Eine auf dem 
 // zugemauerten Feld ggf. vorhandene Markierung ist jetzt entfernt.
-func Mauern1 () bool {
+func Mauern1 () {
 	w.enter ()
 	if !AmRand () && !VorMauer () {
-		//plus Markieren()
-		w.feld[w.rob.ze][w.rob.sp].markiert = true
-		w.feld[w.rob.ze][w.rob.sp].zeichnen ()
-		//w.feld[w.rob.ze][w.rob.sp].markiert = false
+		w.feld[w.rob.ze][w.rob.sp].markiert = false
 		w.rob.klotzanzahl = w.rob.klotzanzahl + w.feld[w.rob.ze][w.rob.sp].klotzanzahl
 		w.feld[w.rob.ze][w.rob.sp].klotzanzahl=0
 		w.feld[w.rob.ze][w.rob.sp].zugemauert = true
 		w.rob.laufen1 ()
-		return true
 	} else {
 		fehlerUndEnde("Mauern1")
-		return false
 	}
 }
 
 // Vor.: In Robis Richtung gibt es ein Nachbarfeld, das zugemauert ist. 
 // Eff.: Dieses Nachbarfeld ist nun nicht mehr zugemauert und Robi steht
 // mit gleicher Richtung auf diesem  entmauerten Platz. 
-func Entmauern1 () bool {
+func Entmauern1 () {
 	w.enter ()
 	if !AmRand() && VorMauer() {
 		switch w.rob.richtung {
@@ -785,15 +690,8 @@ func Entmauern1 () bool {
 			case 3: w.feld[w.rob.ze][w.rob.sp-1].zugemauert= false
 		}
 		w.rob.laufen1 ()
-		//einfügen Demarkieren()
-		w.feld[w.rob.ze][w.rob.sp].markiert = false
-		w.feld[w.rob.ze][w.rob.sp].zeichnen ()
-		w.rob.zeichnen ()
-		//
-		return true
 	} else {
 		fehlerUndEnde("Entmauern1")
-		return false
 	}
 }
 
@@ -928,6 +826,5 @@ func init () {
 		default:
 		fmt.Println ("Betriebssystem nicht erkannt!")
 	}
-	gfx.Fenster(1200,700)
-	w = newWelt(675,675,75)
+	w = newWelt(800,600,50)
 }
