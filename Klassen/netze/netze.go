@@ -8,7 +8,7 @@ package netze
 import "../graphen"
 import "math/rand"
 import "time"
-//import "fmt"
+import "fmt"
 
 
 type Netz interface{
@@ -38,7 +38,6 @@ type Netz interface{
 	// Erg: - 	
 	//GibNetz() uint32
 	SetzeWkeitHindernisse(pKnotensperre,pKantensperre float64)
-	 
 	
 	// Vor: -
 	// Eff: Setzt gemäß den Vorgaben die Hindernisse im Spiel in einer
@@ -47,17 +46,24 @@ type Netz interface{
 	// Erg: -
 	Hindernisse()
 	
-	
-	// Vor: Leerer Graph ist vorhanden!
-	// Eff: Ein für das Spiel geeigneter Graph mit Verbindung von Start
-	//		und Ziel ist hinzugefügt.
-	//BaueNetzgraph()
-	
-	
 	// Vor: verloren:   1 = Kante gesperrt, 2 Knoten gesperrt,
 	// 					3 = Bugget zu Ende
-	// Eff: Setzt, ob gewonnen oder verloren wurde.
-	SetzeGewonnenVerloren(gewonnen bool, verloren uint16)
+	// Eff: Setzt, ob verloren wurde.
+	SetzeVerloren(verloren uint16)
+	
+	// Vor: -
+	// Eff: Setzt, ob gewonnen wurde.
+	SetzeGewonnen(gewonnen bool)
+		
+	// Vor: -
+	// Erg: True, wenn Spiel gewonnen.
+	GibGewonnen() bool
+
+	// Vor: -
+	// Erg: 0, wenn Spiel nicht verloren. 1 = Kante war gesperrt,
+	//		2 Knoten war gesperrt, 3 = Bugget war zu Ende
+	GibVerloren() uint16
+	
 }
 
 
@@ -82,8 +88,10 @@ func New(pKnotensperre,pKantensperre float64) *data {
 	n.pKnotensperre = pKnotensperre
 	n.pKantensperre = pKantensperre
 	n.Graph = graphen.New(false)
-//	n.zielID = n.berechneZielID()
 	n.baueNetzgraph()
+	n.gewonnen = false
+	n.verloren = 0
+	fmt.Println("W'keiten:",n.pKnotensperre,n.pKantensperre)
 	return n
 }
 
@@ -110,16 +118,7 @@ func (netz *data) GibNachbarIDs(id uint32) []uint32 {
 
 
 func (netz *data) GibZielID() uint32 {
-	/*
-	var ids []uint32 = netz.KnotenID_Liste()
-	var max uint32
-	for i:=0; i<len(ids); i++ {
-		if max <= ids[i] {
-			max = ids[i]
-		}
-	}
-	*/
-	return netz.zielID		//max
+	return netz.zielID
 }
 
 
@@ -142,6 +141,9 @@ func (netz *data) Hindernisse() {
 	var ids []uint32 = netz.KnotenID_Liste()
 	var max uint32 = netz.zielID
 	// Knoten sperren = rot
+	
+	fmt.Println("Starte Hindernisse!")
+	
 	for {
 		if !netz.gewonnen && netz.verloren == 0 {
 			//fmt.Println("verloren: ",verloren)
@@ -152,6 +154,7 @@ func (netz *data) Hindernisse() {
 						netz.KnotenFaerben(index,0,g,b)
 					} else {
 						netz.KnotenFaerben(index,255,g,b)
+						//fmt.Println("Knoten gesperrt: ",index)
 					}
 				}
 				for _,index2:= range ids {
@@ -163,6 +166,8 @@ func (netz *data) Hindernisse() {
 						} else {
 							netz.KanteFaerben(index,index2,255,g,b)
 							//netz.KanteFaerben(index2,index,255,g,b)
+							//fmt.Println("Kante gesperrt: ",index,index2)
+
 						}
 					}
 				}
@@ -170,17 +175,29 @@ func (netz *data) Hindernisse() {
 		}
 		time.Sleep (time.Duration(2e9))
 	}
+	fmt.Println("Beende Hindernisse")
 }
 
 
 
-func (netz *data) SetzeGewonnenVerloren(gewonnen bool, verloren uint16) {
-	netz.gewonnen = gewonnen
+func (netz *data) SetzeVerloren(verloren uint16) {
 	netz.verloren = verloren
 }
 
 
+func (netz *data) SetzeGewonnen(gewonnen bool) {
+	netz.gewonnen = gewonnen
+}
 
+
+func (netz *data) GibVerloren() uint16 {
+	return netz.verloren
+}
+
+
+func (netz *data) GibGewonnen() bool {
+	return netz.gewonnen
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -198,17 +215,31 @@ func (netz *data) baueNetzgraph() {
 	var ok bool
 	
 	rand.Seed(time.Now().UnixNano())		// setzt Saat der Zufallszahlen
-	netz.baueGraph()						// Netz mit Knoten und Kanten
+	netz.baueGraph()						// erzeuge Netz mit Knoten und Kanten
+	netz.zielID = netz.berechneZielID()		// bestimme Ziel ID
 	for i:=0; i<1000; i++ {					// Check ob Graph zum Ende führt
 		ok,mindist = netz.dijkstraAlgorithmus()
+		fmt.Println("Graph OK? ",ok)
 		if ok {break}
 		if i % 100 == 99 {panic("Probleme zusammenhängenden Graphen zu finden!")}
+		netz.Graph = graphen.New(false)
 		netz.baueGraph()					// erzeuge neues Netz!
 	}
-	//fmt.Println(mindist)
-
+	
+	fmt.Println("Dist + ID: ",mindist,netz.zielID)
+	fmt.Println("Knotenzahl: ",netz.Knotenanzahl())
+	
+	var gzahl uint
+	for _,id:= range netz.KnotenID_Liste() {
+		_,g,_ :=  netz.Knotenfarbe(id) 
+		if g == 255 {gzahl++}
+	}
+	fmt.Println("Grüne Kanten: ",gzahl)
+	
+	
 	netz.mindist = mindist
-	netz.zielID = netz.berechneZielID()
+
+
 	//return netz,mindist
 }
 
@@ -223,6 +254,8 @@ func (netz *data) baueGraph() {
 	var dm,dn uint16 = 100,50		// Abstand zwischen Knoten 
 	var k, kmax uint32 = 1,10		// Kosten und maximale Kosten					
 	var id, id2 uint32				// ID des Knoten, und des 2. Kantenknoten
+
+	//fmt.Println("Knotenzahl:",netz.Knotenanzahl())
 
 	// Zeichne Knoten
 	for i:=uint32(0);i<m;i++ {
@@ -386,7 +419,7 @@ func (g *data) dijkstraAlgorithmus() (bool,uint32) {
 			g.KanteFaerben(ID1,ID2,0,0,0)			// Kantefarbe schwarz
 		}	
 	}		
-	
+		
 	r,gr,_ := g.Knotenfarbe(g.zielID)
 	// Endknoten erreichbar?
 	if r==0 && gr==255 {
@@ -407,6 +440,7 @@ func (netz *data) berechneZielID() uint32 {
 			max = ids[i]
 		}
 	}
+	//fmt.Println(max)
 	return max
 }
 
