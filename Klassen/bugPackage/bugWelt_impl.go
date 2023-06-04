@@ -30,7 +30,7 @@ func NewBugWelt(x,y,b,h uint) *bugWelt{
 
 
 
- func ZeichneWelt(punkteTB textboxen.Textbox) {
+ func ZeichneWelt() {
 	for howManyBugs()>0 {
 		gfx.UpdateAus()
 		gfx.Cls()
@@ -112,22 +112,28 @@ func zeichneArrayIntro() {
 
 func beschreibeArray(){
 	var s,z uint16
-	for a:=0;a<3;a++ {
-		for z=0;z<weltH;z++ {
-			for s=0;s<weltB;s++ {
-				welt[z][s] = uint8(rand.Intn(2))
-			}
+	for z=0;z<weltH;z++ {
+		for s=0;s<weltB;s++ {
+			welt[z][s] = uint8(rand.Intn(2))
 		}
 	}
 }
 
 func beschreibeArrayIntro(){
 	var s,z uint16
-	for a:=0;a<3;a++ {
-		for z=0;z<weltHIntro;z++ {
-			for s=0;s<weltB;s++ {
-				weltIntro[z][s] = uint8(rand.Intn(2))
-			}
+	for z=0;z<weltHIntro;z++ {
+		for s=0;s<weltB;s++ {
+			weltIntro[z][s] = uint8(rand.Intn(2))
+		}
+	}
+	
+}
+
+func beschreibeArraySchwarz(){
+	var s,z uint16
+	for z=0;z<weltH;z++ {
+		for s=0;s<weltB;s++ {
+			welt[z][s] = 2
 		}
 	}
 }

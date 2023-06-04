@@ -1,0 +1,78 @@
+TO DO:
+
+- Level verloren? --> Punkte = 0 --> restart
+
+- Mehr Bugs: kleinere? Wie Bewegung/Animation handeln?
+
+- Mehr Level:
+--> einfach schnellere Bugs? 
+--> Mehr Bugs
+--> selbstständig vermehren
+--> Punktabzug?
+--> Punkte bei Abschuss?
+
+- Anders schießen?
+
+- Upgrades? Zeit langsamer, Code Protect, breiter schießen
+--> Code-Repair Bug: Man kann mit dem Cursor Code reparieren, bugs bewegen sich in der Zeit nicht
+
+- Code reparieren? 
+
+Entwickeln? --> Größerer Cursor? 
+
+
+- zufällig neue Bugs generieren (Warum? Wann?)
+
+- Verschiedene Arten von Bugs
+	- einfache --> einfach essen
+	- mittel --> dauern länger?
+	- schwer --> pflanzen sich fort
+- Rätsel um Bugs zu beheben --> Zahlen angleichen? --> Wechsel zwischen eigentlicher Zahl und Bug
+- Klicken auf Objekt (Zahl) um Zahl zu ändern (farbig)
+- 
+
+
+  1       1
+   1     1
+	 000
+ 111 000 111
+	 000
+    1   1
+   1     1
+
+
+  2       2
+   2     2
+	 333
+ 222 333 222
+	 333
+    2   2
+   2     2
+   
+   
+Bugs/Fehler:
+
+- Bewegen sich direkt nach LvL Start
+
+
+
+
+
+Arbeitsschritte:
+
+
+
+
+
+Task:
+
+
+
+
+
+Synchronisation zeichnen:
+
+
+
+
+

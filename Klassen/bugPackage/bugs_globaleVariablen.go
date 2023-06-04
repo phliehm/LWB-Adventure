@@ -25,7 +25,7 @@ var a uint8 =1 // Bug Animation
 
 var bugArray [10]*bug
 
-var punkteArray [2]uint32 // Punktestand für jedes Level 
+var punkteArray [5]uint32 // Punktestand für jedes Level 
 var note float32	// Wird an die Main-Funktion des Spiels zurückgegeben
 
 var manual string = "Bewegen :  Pfeiltasten  |  Größere Schritte:  SHIFT + Pfeiltasten  |  Aufgeben:  'q'\n\n" 
@@ -33,5 +33,7 @@ var manual string = "Bewegen :  Pfeiltasten  |  Größere Schritte:  SHIFT + Pfe
 var sr,sg,sb uint8 = 0,0,0
 
 var punkteTB textboxen.Textbox 
+
+var quit chan bool = make(chan bool)
 
 

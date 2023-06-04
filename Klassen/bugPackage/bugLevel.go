@@ -8,11 +8,6 @@ import (
 	"math/rand"
 	)
 
-
-
-
-
-
 	
 func Startbildschirm() {
 	punkteTB = textboxen.New(200,10,1000,20)
@@ -33,7 +28,7 @@ func Startbildschirm() {
 						"Jedenfalls wimmelt es hier nur so von BUGs in deinem Code, deine TeamollegInnen werden nicht erfreut sein."+
 						"\nWer will den schon so eine verBUGgte Klasse benutzen?"+
 						"\n\nDie StudentInnen werden ja hier alle nicht besser, wir vom Dozententeam haben euch extra ein "+
-						"halbautomatisches BUGFIXING-TOOL programmiert. Damit solltes selbst du in der Lage sein die Bugs zu beseitigen. "+
+						"halbautomatisches BUGFIXING-TOOL (hBT) programmiert. Damit solltes selbst du in der Lage sein die Bugs zu beseitigen. "+
 						"Sogar auf einem Apfel.\n\n"+
 						"Gehe einfach mit deinem Cursor an genau die Stelle des Bugs, drücke LEERTASTE....und BAAAAMM!" )
 	HelloTB.SetzeFont("../../Schriftarten/ltypeb.ttf")
@@ -66,22 +61,16 @@ func LevelIntro() {
 	time.Sleep(1e9) // Wichtig damit die ZeichneWeltIntro() die Chance hat zu beenden
 }
 
+// Tutorial
 func Level0(){
 	gfx.SpieleSound("../../Sounds/Music/bugWars.wav")
 	beschreibeArray()
-	b1 := NewBug(50,30)
-	
-	bugArray[0] = b1
-	
-	b1.speed = 0
-	
-	go b1.bugAnimation()
-	go b1.startMoving()
+	createNBugs(1,0,1)
 	
 	//go cleanBugArray()
 	//go ShowBugs()
 	
-	go ZeichneWelt(punkteTB)
+	go ZeichneWelt()
 	
 	for howManyBugs() >0 {
 		time.Sleep(1e9)
@@ -93,24 +82,8 @@ func Level0(){
 func Level1(){
 	beschreibeArray()
 	//gfx.SpieleSound("../../Sounds/Music/bugWars.wav")
-	b1 := NewBug(50,30)
-	b2 := NewBug(20,10)
-	b3 := NewBug(40,15)
-	bugArray[0] = b1
-	bugArray[1] = b2
-	bugArray[2] = b3
-	b2.g = 50
-	b2.speed=2
-	b1.speed = 2
-	b3.speed = 2
-	go b1.bugAnimation()
-	go b1.startMoving()
-	go b2.bugAnimation()
-	go b2.startMoving()
-	go b3.bugAnimation()
-	go b3.startMoving()
-	
-	go ZeichneWelt(punkteTB)
+	createNBugs(3,2,1)	
+	go ZeichneWelt()
 	
 	//go cleanBugArray()
 	//go ShowBugs()
@@ -124,20 +97,51 @@ func Level1(){
 	
 }
 
-func Level1Start() {
+func Level2() {
+	fmt.Println("Lvl 2 startet")
+	beschreibeArray()
+	createNBugs(5,2,5)
+	go ZeichneWelt()
+	fmt.Println("lvl2 goint")
+	for howManyBugs()>0 {
+		time.Sleep(1e9)
+	}
+	
+	punkteArray[2] = zählePunkte()
+}
+
+
+func LevelTutorial() {
 	
 	gfx.UpdateAus()
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Cls()
-	Level1StartTB:= textboxen.New(300,100,500,200)
-	Level1StartTB.SchreibeText("Level 1 \n\n\nDie einfachen Bugs zuerst.\n\n\nPass auf, dass du nicht verschlimmbesserst!")
+	
+	//gfx.LadeBild(10,20,"../../Bilder/Amoebius_klein.bmp")
+	Level1TB:= textboxen.New(300,150,500,200)
+	Level1TB.SchreibeText("Level 1")
+	Level1TB.SetzeFont("../../Schriftarten/ltypeb.ttf")
+	Level1TB.SetzeSchriftgröße(40)
+	Level1TB.SetzeFarbe(255,0,0)
+	Level1TB.Zeichne()
+	
+	Level1StartTB:= textboxen.New(300,250,500,200)
+	Level1StartTB.SchreibeText("Die einfachen Bugs zuerst.\n\n\nPass auf, dass du nicht verschlimmbesserst!\n\n" + 
+	"Bewege dich mit den Pfeiltasten und nutze das hBT mit LEERTASTE. Das hBT muss aber zentriert werden!! Also nicht einfach "+
+	"irgendwo Bugfixen. Sonst machst du alles nur noch schlimmer!\n\n"+
+	"Wenn dir das ganze über den Kopf wächst, drücke einfach 'q'." )
 	Level1StartTB.SetzeFont("../../Schriftarten/ltypeb.ttf")
-	Level1StartTB.SetzeSchriftgröße(30)
+	Level1StartTB.SetzeSchriftgröße(26)
 	Level1StartTB.SetzeFarbe(0,255,0)
 	Level1StartTB.Zeichne()
 	gfx.UpdateAn()
+	gfx.Archivieren()
+	go amoebiusAndBugAnimation()
+	//go bugLevelAnimation()
 	gfx.TastaturLesen1()
+	quit <- true
 }
+
 
 
 func Endbildschirm() {
@@ -190,3 +194,22 @@ func EndbildschirmReal() {
 	gfx.TastaturLesen1()
 	//return gesamtnote, gesamtpunkte
 }
+
+
+/*
+func BugFoto() {
+	gfx.Stiftfarbe(0,0,0)
+	beschreibeArraySchwarz()
+	//beschreibeArray()
+	b1 := NewBug(50,30)
+	b1.speed=0
+	go b1.bugAnimation()
+	go b1.startMoving()
+	//beschreibeArray()
+	bugArray[0]=b1
+	go ZeichneWelt(punkteTB)
+	for howManyBugs()>0 {
+		time.Sleep(1e9)
+	}
+	gfx.TastaturLesen1()
+}*/
