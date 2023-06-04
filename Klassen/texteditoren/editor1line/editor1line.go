@@ -85,12 +85,14 @@ func updateFenster (xpos,ypos,breite,höhe uint16, schriftgr int) {
 	gfx.Stiftfarbe(0,0,0)
 	//transparentes weißes Rechteck für "alte Eingaben"
 	gfx.Transparenz(150)
-	gfx.Vollrechteck(702,398,296,276)
+	//gfx.Vollrechteck(702,398,296,276)
+	gfx.Vollrechteck(xpos+2,ypos+uint16(schriftgr)+8,breite-4,höhe-uint16(schriftgr)-9)
 	//schwarzes und weißes Rechteck am Ende bzw. unter Editor
 	gfx.Transparenz(0)
-	gfx.Vollrechteck(702,662,296,12)
+	//gfx.Vollrechteck(702,662,296,12)
+	gfx.Vollrechteck(xpos+2,ypos+höhe-30,breite-4,12)
 	gfx.Stiftfarbe(255,255,255)
-	gfx.Vollrechteck(700,675,300,25)
+	gfx.Vollrechteck(xpos,ypos+höhe,breite,700-ypos+höhe)
 	
 	zeilen.Positionieren (index) //aktiviere wieder aktuelle Zeile		
 	//gfx.SchreibeFont (0,572,"Sp:       ") 
