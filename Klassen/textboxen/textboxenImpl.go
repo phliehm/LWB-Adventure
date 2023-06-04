@@ -13,9 +13,13 @@ type data struct {
 	zeilenAbstand uint16
 	text string
 	schriftgr int
-	r,g,b uint8
+	r,g,b uint8		// Textfarbe
 	linksbündig bool
 	zentriert bool
+	hintergrund bool
+	rahmen bool
+	rr,rg,rb uint8 // Rahmenfarbe
+	hr,hg,hb uint8 // Hintergrundfarbe
 	
 }
 
@@ -178,15 +182,46 @@ func (tb *data) SetzeZentriert() {
 	tb.zentriert = true
 }
 
+// Vor.: --
+// Erg.: Ist die Eingabe true, wird ein Rahmen in der Rahmenfarbe gezeichnet, sonst nicht
+func (tb *data)	RahmenAn(r bool) {
+	tb.rahmen = r
+}
+
+// Vor.: --
+// Erg.: Rahmenfarbe ist gesetzt
+func (tb* data)	SetzeRahmenFarbe(r,g,b uint8) {
+	tb.rr,tb.rg,tb.rb = r,g,b
+}
+	
+// Vor.:
+// Erg.: Ist die Eingabe true, wird der Hintergrund mit der Hintergrundfarbe gezeichnet, sonst ist der Hintergrund transparent
+func (tb *data) HintergrundAn(h bool) {
+	tb.hintergrund = h
+}
+
+// Vor.: 
+// Erg.: Hintergrundfarbe ist gesetzt
+func (tb *data)	SetzeHintergrundFarbe(r,g,b uint8) {
+	tb.hr,tb.hg,tb.hb = r,g,b
+}
+
 // Vor.: Ein gfx-Fenster ist offen
 // Eff.: Zeichnet die Textbox in das gfx-Fenster
 func (tb *data)	Zeichne() {
 	var tempFont string
 	tempFont = gfx.GibFont()	// Speichere aktuellen Font um diesen später wieder darzustellen
 	gfx.SetzeFont(tb.font,tb.schriftgr)
+	// Zeichne Hintergrund
+	if tb.hintergrund {
+		gfx.Stiftfarbe(tb.hr,tb.hg,tb.hb)
+		gfx.Vollrechteck(tb.x-5,tb.y-5,tb.breite+10,tb.höhe+10)
+	}
+	if tb.rahmen {
+		gfx.Stiftfarbe(tb.rr,tb.rg,tb.rb)
+		gfx.Rechteck(tb.x-5,tb.y-5,tb.breite+10,tb.höhe+10)
+	}
 	gfx.Stiftfarbe(tb.r, tb.g, tb.b)
-	//gfx.Rechteck(tb.x,tb.y,tb.breite,tb.höhe)
-	
 	// Zeilenumbrüche generieren
 	//var textTemp string = tb.text
 	var zeilenAnzahl uint16	

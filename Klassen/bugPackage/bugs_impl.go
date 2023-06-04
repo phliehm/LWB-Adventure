@@ -274,3 +274,17 @@ func ShowBugs(){
 		fmt.Println(howManyBugs())
 	}
 }
+
+func createNBugs(n uint16,speed,nervosität int) {
+	for i:=uint16(0);i<n;i++ {
+		fmt.Println(i)
+		b := NewBug(uint16(rand.Intn(130)),uint16(rand.Intn(41)))
+		b.speed = speed
+		b.nervosität = nervosität
+		b.b = uint8(25*nervosität)
+		go b.bugAnimation()
+		go b.startMoving()
+		bugArray[i] = b
+		
+	}
+}

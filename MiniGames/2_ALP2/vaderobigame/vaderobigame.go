@@ -360,7 +360,7 @@ func Vaderobi() (float32,uint32) {
 				gesamtnote = notenberechnung(uint(gesamtpunkte)/uint(i))
 				fmt.Println(gesamtnote)
 				
-				if note == 0.0												//TODO: Level wiederholen!!!
+				if note == 0.0 {												//TODO: Level wiederholen!!!
 					gfx.Stiftfarbe(255,0,0)
 					gfx.Vollrechteck(160,235,355,205)
 					gfx.Stiftfarbe(0,0,0)
@@ -419,8 +419,10 @@ func Vaderobi() (float32,uint32) {
 	gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
 	gfx.SchreibeFont(285,170,"Gesamtnote")
 	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	gfx.Stiftfarbe(0,255,0)
 	gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",gesamtnote))
 	
+	gfx.Stiftfarbe(0,0,0)
 	gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	for i:=1; i<len(level); i++ {
 		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(punktespeicher[i]) + " Punkte")
