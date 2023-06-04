@@ -215,11 +215,11 @@ func (tb *data)	Zeichne() {
 	// Zeichne Hintergrund
 	if tb.hintergrund {
 		gfx.Stiftfarbe(tb.hr,tb.hg,tb.hb)
-		gfx.Vollrechteck(tb.x,tb.y,tb.breite,tb.höhe)
+		gfx.Vollrechteck(tb.x-5,tb.y-5,tb.breite+10,tb.höhe+10)
 	}
 	if tb.rahmen {
 		gfx.Stiftfarbe(tb.rr,tb.rg,tb.rb)
-		gfx.Rechteck(tb.x,tb.y,tb.breite,tb.höhe)
+		gfx.Rechteck(tb.x-5,tb.y-5,tb.breite+10,tb.höhe+10)
 	}
 	gfx.Stiftfarbe(tb.r, tb.g, tb.b)
 	// Zeilenumbrüche generieren
