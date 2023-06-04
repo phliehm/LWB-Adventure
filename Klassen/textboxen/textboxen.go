@@ -84,6 +84,21 @@ type Textbox interface {
 // Erg.: Text wird beim Aufruf von Zeichne() zentriert ausgeben
 	SetzeZentriert()
 
+// Vor.: --
+// Erg.: Ist die Eingabe true, wird ein Rahmen in der Rahmenfarbe gezeichnet, sonst nicht
+	RahmenAn(r bool)
+
+// Vor.: --
+// Erg.: Rahmenfarbe ist gesetzt
+	SetzeRahmenFarbe(r,g,b uint8)
+	
+// Vor.:
+// Erg.: Ist die Eingabe true, wird der Hintergrund mit der Hintergrundfarbe gezeichnet, sonst ist der Hintergrund transparent
+	HintergrundAn(h bool)
+// Vor.: 
+// Erg.: Hintergrundfarbe ist gesetzt
+	SetzeHintergrundFarbe(r,g,b uint8)
+
 // Vor.: Ein gfx-Fenster ist offen
 // Eff.: Zeichnet die Textbox in das gfx-Fenster
 	Zeichne()
