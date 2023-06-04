@@ -54,6 +54,19 @@ func (tb *data) GibY() uint16 {
 	return tb.y
 }
 
+// Vor.: --
+// Eff.: Die Breite der Textbox ist gesetzt
+func (tb *data)	SetzeBreite(b uint16) {
+	tb.breite = b
+}
+	
+	
+// Vor.: --
+// Eff.: Die Höhe der Textbox ist gesetzt
+func (tb *data)	SetzeHöhe(h uint16) {
+	tb.höhe = h
+}
+
 // Vor.: 
 // Erg.: Die Höhe der Textbox ist geliefert
 func (tb *data)	GibHöhe() uint16 {
@@ -215,11 +228,11 @@ func (tb *data)	Zeichne() {
 	// Zeichne Hintergrund
 	if tb.hintergrund {
 		gfx.Stiftfarbe(tb.hr,tb.hg,tb.hb)
-		gfx.Vollrechteck(tb.x-5,tb.y-5,tb.breite+10,tb.höhe+10)
+		gfx.Vollrechteck(tb.x-10,tb.y-10,tb.breite+20,tb.höhe+20)
 	}
 	if tb.rahmen {
 		gfx.Stiftfarbe(tb.rr,tb.rg,tb.rb)
-		gfx.Rechteck(tb.x-5,tb.y-5,tb.breite+10,tb.höhe+10)
+		gfx.Rechteck(tb.x-10,tb.y-10,tb.breite+20,tb.höhe+20)
 	}
 	gfx.Stiftfarbe(tb.r, tb.g, tb.b)
 	// Zeilenumbrüche generieren

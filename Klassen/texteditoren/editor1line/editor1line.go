@@ -90,7 +90,8 @@ func updateFenster (xpos,ypos,breite,höhe uint16, schriftgr int) {
 	//schwarzes und weißes Rechteck am Ende bzw. unter Editor
 	gfx.Transparenz(0)
 	//gfx.Vollrechteck(702,662,296,12)
-	gfx.Vollrechteck(xpos+2,ypos+höhe-30,breite-4,12)
+	//gfx.Vollrechteck(xpos+2,ypos+höhe/25*uint16(schriftgr)+10,breite-4,höhe-höhe/25*uint16(schriftgr)-10)
+	gfx.Vollrechteck(xpos+2,ypos+höhe/uint16(schriftgr+5)*uint16(schriftgr)+10,breite-4,höhe-höhe/uint16(schriftgr+5)*uint16(schriftgr)-10)
 	gfx.Stiftfarbe(255,255,255)
 	gfx.Vollrechteck(xpos,ypos+höhe,breite,700-ypos+höhe)
 	

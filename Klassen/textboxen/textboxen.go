@@ -38,6 +38,12 @@ type Textbox interface {
 // Erg.: Position der Textbox ist geliefert
 	GibY()uint16
 // Vor.: --
+// Eff.: Die Breite der Textbox ist gesetzt
+	SetzeBreite(b uint16)
+// Vor.: --
+// Eff.: Die Höhe der Textbox ist gesetzt
+	SetzeHöhe(h uint16)
+// Vor.: --
 // Erg.: Breite der Textbox ist geliefert
 	GibBreite() uint16
 // Vor.: --
