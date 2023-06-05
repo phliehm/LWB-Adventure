@@ -2,12 +2,12 @@
 //Juni 2023
 //Minigame "Vaderobi" (ALP2-Game)
 
-package vaderobigame
+package vadeROBIgame
 
 import (
 	"fmt"
 	"gfx"
-	"time"
+	//"time"
 	. "../vaderobi"
 	"../../../Klassen/texteditoren"
 )
@@ -431,10 +431,10 @@ func Vaderobi() (float32,uint32) {
 	gfx.SchreibeFont(700,130+uint16(6*70),"----------------------")
 	gfx.SchreibeFont(710,160+uint16(6*70),"Gesamt:    " + fmt.Sprint(gesamtpunkte) + " Punkte")
 	
-	_,klick,_,_ := gfx.MausLesen1()
-	for klick != 1 {
-		time.Sleep(1)
-	}
+	//_,klick,_,_ := gfx.MausLesen1()
+	//for klick != 1 {
+	//	time.Sleep(1)
+	//}
 	
 	Fertig()
 	return gesamtnote, gesamtpunkte

@@ -149,7 +149,12 @@ A:	for {
 					zeilen.Vor ()
 				}
 				case taste >= 32 && taste <= 270:  
-				z:= gfx.Tastaturzeichen(taste, tiefe)
+				z:= gfx.Tastaturzeichen(taste, tiefe)  
+				if taste == 93 {
+					z = gfx.Tastaturzeichen(43,1)
+				} else {
+					z = gfx.Tastaturzeichen(taste, tiefe)
+				}
 				if z != 0 { f.EinfuegenVor (z) }
 			}
 			updateFenster(xpos,ypos,breite,höhe,schriftgr)

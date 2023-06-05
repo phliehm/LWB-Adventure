@@ -92,7 +92,7 @@ func New(x,y,br,h uint16, r,g,b uint8, aktiv bool, beschriftung string) *data {
 	but.b = b
 	but.aktiv = aktiv
 	but.beschriftung = beschriftung
-	but.font = "../Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf"		// Standartfont
+	but.font = gfx.GibFont() 							//--> ACHTUNG: muss vorher einmal gesetzt worden sein!!! (Spez.)
 	but.sound = ""
 	return but
 }

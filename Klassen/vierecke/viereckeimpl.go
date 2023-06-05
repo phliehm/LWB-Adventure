@@ -39,13 +39,13 @@ func New (xA,yA,xB,yB,xC,yC,xD,yD uint16) *data { // *data erfüllt das Interfac
 
 // Vor.: -
 // Erg.: Alle Koordinaten der vier Ecken des Vierecks sind geliefert.
-func (v *data) Get () (xA,yA,xB,yB,xC,yC,xD,yD uint16) {
+func (v *data) GetKoordinaten () (xA,yA,xB,yB,xC,yC,xD,yD uint16) {
 	return v.xA,v.yA,v.xB,v.yB,v.xC,v.yC,v.xD,v.yD
 }
 
 // Vor.: -
 // Erg.: Das Viereck hat die eingegebenen Koordinaten.
-func (v *data) Set (xA,yA,xB,yB,xC,yC,xD,yD uint16) () {
+func (v *data) SetKoordinaten (xA,yA,xB,yB,xC,yC,xD,yD uint16) () {
 	v.xA = xA
 	v.yA = yA
 	v.xB = xB
@@ -158,7 +158,7 @@ func (v *data) Zeichnen() {
 	gfx.Linie(v.xD, v.yD, v.xA, v.yA)
 }
 
-func (v *data) Angeklickt(x,y uint16) (bool) {						// Checkt, ob angeklickt
+func (v *data) Angeklickt(x,y uint16) bool {						// Checkt, ob angeklickt
 	
 	var min, max func(a,b uint16) uint16
 	min = func (a,b uint16) uint16 {

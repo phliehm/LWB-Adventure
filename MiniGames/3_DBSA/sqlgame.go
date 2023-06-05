@@ -2,7 +2,7 @@
 //Juni 2023
 //LWB-Adventure: Minigame "SQL-Quest"
 
-package sqlgame
+package sqlGame
 
 import (
 	. "gfx"
@@ -33,7 +33,7 @@ func bubbleTexte() {
 }
 
 func eingabeTexte() {
-	eingTexte[1] = "SELECT  FROM raeume"
+	eingTexte[1] = "SELECT * FROM raeume;"
 }
 
 func ausgabeTexte() {
@@ -165,48 +165,47 @@ func SQLgame() {
 	
 //----------------Spiel-Steuerung-----------------------------------
 
-	for {
+	for i:=1; i<len(eingTexte); i++ {
+		fmt.Println("aktuelles i:",i)
+	
+		for {
 
-		taste, status, mausX, mausY := MausLesen1()
-		if taste==1 && status==1 {
-			if next.TesteXYPosInButton(mausX,mausY) {
-				fmt.Println("Weiter angeklickt!")
-				bubbletext.SchreibeText(texte[aktuellerText])
-				bubbletext.Zeichne()
-				next.ZeichneButton()
-				if aktuellerText < len(texte)-1 {
-					aktuellerText++
-				}
-				
-				for i:=1; i<len(eingTexte); i++ {
-					
-					fmt.Println("aktuelles i:",i)
-					//----------------Eingabe-Verarbeitung--------------
-					ted = texteditoren.New(315,595,830,63,20,true)
-								
-						for {
-							switch ted.GibString() {
-								case eingTexte[i]:
-								ausgabe.RahmenAn(true)
-								ausgabe.SetzeRahmenFarbe(0,0,0)
-								ausgabe.HintergrundAn(true)
-								ausgabe.SetzeHintergrundFarbe(255,255,255)
-								ausgabe.SchreibeText("")
-								ausgabe.Zeichne()
-								Stiftfarbe(255,255,255)
-								Vollrechteck(311,375,838,200)
-								erzeugeAusgabe(i)	
-								break					
-								default:
-								Stiftfarbe(255,255,255)
-								Vollrechteck(320,375,820,200)
-								erzeugeFehlerausgabe(ausgabe)
-								break
-							}
-							ted = texteditoren.New(315,595,830,63,20,true)					
-						}
+			taste, status, mausX, mausY := MausLesen1()
+			if taste==1 && status==1 {
+				if next.TesteXYPosInButton(mausX,mausY) {
+					fmt.Println("Weiter angeklickt!")
+					bubbletext.SchreibeText(texte[aktuellerText])
+					bubbletext.Zeichne()
+					next.ZeichneButton()
+					if aktuellerText < len(texte)-1 {
+						aktuellerText++
+					}
+					break
 				}
 			}
+		}
+						
+		//----------------Eingabe-Verarbeitung--------------
+		ted = texteditoren.New(315,595,830,63,20,true)
+					
+		for {
+			if ted.GibString() == eingTexte[i] {
+				ausgabe.RahmenAn(true)
+				ausgabe.SetzeRahmenFarbe(0,0,0)
+				ausgabe.HintergrundAn(true)
+				ausgabe.SetzeHintergrundFarbe(255,255,255)
+				ausgabe.SchreibeText("")
+				ausgabe.Zeichne()
+				Stiftfarbe(255,255,255)
+				Vollrechteck(311,375,838,200)
+				erzeugeAusgabe(i)
+				break
+			} else {
+				Stiftfarbe(255,255,255)
+				Vollrechteck(320,375,820,200)
+				erzeugeFehlerausgabe(ausgabe)							// TODO: Probleme abfangen (Hinweis zur Schreibweise/Simikolon)
+				ted = texteditoren.New(315,595,830,63,20,true)
+			}					
 		}
 	}
 		

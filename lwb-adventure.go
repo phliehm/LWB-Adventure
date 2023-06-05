@@ -6,18 +6,16 @@ package main
 import ( . "gfx"
 		//"fmt"
 		"./Klassen/vierecke"
-		"./Klassen/objekte"
+		//"./Klassen/objekte"
 		//"./MiniGames/4_Moorhuhn"
 		)
 
-func maussteuerung (tueren *[]vierecke.Viereck, exit vierecke.Viereck, maus objekte.Objekt) {
+func maussteuerung (tueren *[]vierecke.Viereck, exit vierecke.Viereck) {
 	//var taste uint8
 	//var status int8
 	for {
 		taste, status, mausX, mausY := MausLesen1()
-		
-		maus.SetzeKoordinaten(mausX,mausY)				//Aktualisiert Maus-Koordinaten
-		
+				
 		if taste==1 && status==1 { 						//LINKE Maustaste gerade gedrückt
 			for i,tuer := range *tueren { 				//Zeichnet alleweiteren Objekte ein
 				if tuer.Angeklickt(mausX,mausY) {
@@ -84,9 +82,6 @@ func theEnd() {
 func main () {
 	Fenster(1200,700)
 	
-	var maus objekte.Objekt
-	maus = objekte.New(0,0,0,0)						// Erstellt das Objekt MAUSZEIGER
-	tueren := make([]vierecke.Viereck,0)			// Array für die Türen des Mainfloors
 	var tuer1, tuer2, tuer3, tuer4, tuer5, exit vierecke.Viereck
 	tuer1 = vierecke.New(45,235,40,595,220,595,220,235)
 	tuer2 = vierecke.New(935,290,935,520,1010,545,1020,255)
@@ -115,7 +110,7 @@ func main () {
 	tueren = append(tueren,tuer1,tuer2,tuer3,tuer4,tuer5)
 	
 	
-	maussteuerung(&tueren,exit,maus)
+	maussteuerung(&tueren,exit)
 	
 	
 	TastaturLesen1()

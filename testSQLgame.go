@@ -12,7 +12,7 @@ import (
 	
 
 func main() {
-	sqlgame.SQLgame()
+	sqlGame.SQLgame()
 
 	/*
 	i,j := sqlgame.SQLgame()

@@ -16,7 +16,7 @@ type Viereck interface {
 	// Vor.: -
 	// Erg.: Die Koordinaten der vier Eckpunkte des Vierecks sind
 	//       geliefert.
-    Get () (xA,yA,xB,yB,xC,yC,xD,yD uint16)
+    GetKoordinaten () (xA,yA,xB,yB,xC,yC,xD,yD uint16)
 	
 	// Vor.: -
 	// Erg.: Eine Repräsentation des Vierecks in Form eines Strings

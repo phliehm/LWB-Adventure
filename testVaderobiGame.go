@@ -6,13 +6,13 @@ package main
 
 import (
 	//"gfx"
-	"./MiniGames/2_ALP2/vaderobigame"
+	"./MiniGames/2_ALP2/vadeROBIgame"
 	//"fmt"
 )
 	
 
 func main() {
-	vaderobigame.Vaderobi()
+	vadeROBIgame.Vaderobi()
 
 	/*
 	i,j := vaderobi.Vaderobi()
