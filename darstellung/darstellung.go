@@ -20,8 +20,8 @@ import (
 // interne Hilfsfunktionen
 // ------------------------
 
-func ladeEndeBildschirm() {
-	Vollrechteck(0,0,1200,700)								//TODO
+func ladeEndeBildschirm() {										//TODO
+	Vollrechteck(0,0,1200,700)
 	TastaturLesen1()
 }
 

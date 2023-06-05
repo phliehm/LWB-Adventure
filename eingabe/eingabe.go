@@ -69,5 +69,7 @@ func maussteuerung (raumnr int) {
 
 
 func Eingabe() {
+	
+	klickbarElemente()
 	maussteuerung(0)
 }
