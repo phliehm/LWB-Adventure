@@ -1,7 +1,9 @@
 package bugPackage
 
 
-import ("../../Klassen/textboxen")
+import (
+		"../../Klassen/textboxen"
+		"sync")
 
 // Tastatur
 var taste uint16
@@ -13,7 +15,7 @@ const breite uint16 = 1200
 const höhe uint16 = 700
 
 const weltHIntro uint16 = 50
-const weltB,weltH uint16 = 133,44
+const weltH,weltB uint16 = 44,133
 var welt [weltH][weltB] uint8 // Welt: Animation 1-3, Zeile, Spalte, Zahl
 var weltIntro [weltHIntro][weltB] uint8
 const y_offset uint16 = 6 // 5* zH offset damit oben ein schwarzer Balken ist
@@ -23,7 +25,9 @@ var cursor_x, cursor_y uint16  = 0,y_offset*zH
 
 var a uint8 =1 // Bug Animation
 
-var bugArray [10]*bug
+var bugArray [20]*bug
+
+var bugArraySchloss sync.Mutex
 
 var punkteArray [5]uint32 // Punktestand für jedes Level 
 var note float32	// Wird an die Main-Funktion des Spiels zurückgegeben
@@ -34,6 +38,13 @@ var sr,sg,sb uint8 = 0,0,0
 
 var punkteTB textboxen.Textbox 
 
+var autoAim bool =true// Drücke "x" um automatisch zum nächsten Bug zu springen
 var quit chan bool = make(chan bool)
 
+var wg sync.WaitGroup
+
+
+// Testing
+
+var xposWrite []int 
 

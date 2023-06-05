@@ -19,7 +19,7 @@ var bug1Shape [21][2] uint16 = [21][2]uint16{{0,0},{6*zB,0},
 
 
 type bug struct {
-	x,y uint16
+	x,y uint16		// x,y geben die linke obere Ecke des Bugs an
 	alive bool 
 	dying uint16
 	a uint16 // AnimatiosSchritt
@@ -151,11 +151,16 @@ func (b *bug) eatCode() {
 
 // Bewegung des Bugs
 func (b *bug) startMoving() {
+	
 	for b.ende == false {		
+		time.Sleep(time.Duration(1e9+rand.Intn(5000/b.nervosität)*1e6)) // Warte zufällige Zeit bevor sich Position ändert
+		bugArraySchloss.Lock()
 		var new_x, new_y uint16
-		new_x = uint16(int(b.x)+(b.speed%(b.speed+1))*(-b.speed/2 +-1+rand.Intn(1+b.speed))*int(zB))
-		new_y = uint16(int(b.y)+(b.speed%(b.speed+1))*(-b.speed/2 +-1+rand.Intn(1+b.speed))*int(zH))
+		new_x = uint16(int(b.x)+((-b.speed/2 +rand.Intn(1+b.speed)))*int(zB))
+		new_y = uint16(int(b.y)+((-b.speed/2 +rand.Intn(1+b.speed)))*int(zH))
 		
+		//fmt.Println("x: ",((-b.speed/2 +-1+rand.Intn(1+b.speed)))*int(zB)," y: ",((-b.speed/2 +-1+rand.Intn(1+b.speed)))*int(zH))
+		xposWrite = append(xposWrite,(((-b.speed-1)/2 +rand.Intn(1+b.speed)))*int(zB))
 		// Kollision mit anderen Bugs
 		for _,bu:= range bugArray {
 			if bu==nil {continue}
@@ -167,20 +172,21 @@ func (b *bug) startMoving() {
 		
 		
 		// Randbedingungen
-		if 	new_x < zB*7{
-			b.x =weltB*zB-7*zB
+		if 	new_x < 0{
+			b.x =weltB*zB-7*zB		// 7 ist die Breite eines Bugs
 		}else if  new_x > weltB*zB-zB*7{
 			b.x=0
 		}else {b.x = new_x}
 		
-		if  new_y < 7*zH+y_offset*zH {
+		if  new_y < y_offset*zH {
 			b.y=weltH*zH+y_offset*zH-7*zH
 		}else if new_y > weltH*zH+y_offset*zH- 7*zH{
 			b.y=y_offset*zH
 		}else {b.y = new_y} 
- 		
-	time.Sleep(time.Duration(1e9+rand.Intn(5000/b.nervosität)*1e6)) // Warte zufällige Zeit bevor sich Position ändert
+		
+ 		bugArraySchloss.Unlock()
 	}
+	
 }
 
 // Belebt und zeichnet Bug
@@ -189,19 +195,27 @@ func (b *bug) bugAnimation() {
 	//if b.typ == 5 {bug.startMoving()}
 	for b.alive{				// Zeichne Bug nur wenn am leben
 
-		if b.ende {				
-			//fmt.Println("No Animation")
+		if b.ende {
 			b.a = 4
 			break
-			}
+		}
 		// Animation startet
 
 		b.a=1
 		time.Sleep(4e8)
+		if b.ende {
+			b.a = 4
+			break
+		}
 		b.a=2
 		time.Sleep(4e8)
+		if b.ende {
+			b.a = 4
+			break
+		}
 		b.a=3
 		time.Sleep(4e8)
+		
 
 	}
 	// Bug wird zersetzt
@@ -221,41 +235,55 @@ func (b *bug) bugAnimation() {
 	
 }
 
+func rundeAufGeradeZahlen(z int) int{
+	if z%2 == 0 {return z}
+	return z+1
+}
+
 // Erzeugt einen neuen Bug an der Stelle eines anderen Bug
 func babyBugs(b *bug) {
+	
 	if howManyBugs() < len(bugArray) {
+		bugArraySchloss.Lock()
 		// Prüfe ob es weniger als maxAnzahlBugs gibt
 		for index,bu:= range bugArray {
 			// Wenn noch Platz ist erzeuge neuen Bug
 			if bu==nil {
 				if b.x%zB!=0 || b.y%zH!=0 {fmt.Println("WRONG!!!!!",b.x,b.y)}
 				bugArray[index]=NewBug(b.x/zB,b.y/zH) 
-				bugArray[index].nervosität=5+int(rand.Intn(5))
-				bugArray[index].speed = 1
+				bugArray[index].nervosität=5+rand.Intn(5)	
+				bugArray[index].speed = rundeAufGeradeZahlen(rand.Intn(5)) // Bei ungeraden Zahlen bewegen sich die Bugs ungleichmäßig
 				bugArray[index].b = uint8(25*bugArray[index].nervosität)
 				go bugArray[index].bugAnimation()
 				go bugArray[index].startMoving()
 				break
 			}
 		}
+		bugArraySchloss.Unlock()
 	}
+	
+	
 }
 
 // Gibt Anzahl der Bugs zurück
 func howManyBugs() int {
 	var anzahl int
+	bugArraySchloss.Lock()
 	for _,b:= range bugArray {
 		if b!=nil {
 			anzahl++
 			b.eatCode()
 			}
-	}	
+	}
+	bugArraySchloss.Unlock()	
+	//time.Sleep(1e6)
 	return anzahl
 }
 
 // Löscht tote Bugs
 func cleanBugArray() {
 	for {
+		bugArraySchloss.Lock()
 		for index,b:= range bugArray {
 			// entferne Bug wenn er tot ist
 			if b!=nil && b.alive == false { 
@@ -263,10 +291,21 @@ func cleanBugArray() {
 				
 			}
 		}
+		bugArraySchloss.Unlock()
 		time.Sleep(1e9)
 	}
 }
 
+func killAllBugs() {
+	gfx.SpieleSound("../../Sounds/Retro Sounds/Explosions/Long/sfx_exp_long3.wav")
+	bugArraySchloss.Lock()
+	for _,b:= range bugArray {
+		if b!=nil {
+			b.ende = true
+		}
+	}
+	bugArraySchloss.Unlock()
+}
 // Zum debugging, anzeigen wie viele Bugs es gibt
 func ShowBugs(){
 	for{
@@ -276,15 +315,18 @@ func ShowBugs(){
 }
 
 func createNBugs(n uint16,speed,nervosität int) {
+	bugArraySchloss.Lock()
 	for i:=uint16(0);i<n;i++ {
 		fmt.Println(i)
 		b := NewBug(uint16(rand.Intn(130)),uint16(rand.Intn(41)))
-		b.speed = speed
-		b.nervosität = nervosität
-		b.b = uint8(25*nervosität)
+		b.speed = rand.Intn(speed + 1)
+		b.g = uint8(25*b.speed)
+		b.nervosität = rand.Intn(nervosität)+1
+		b.b = uint8(25*b.nervosität)
 		go b.bugAnimation()
 		go b.startMoving()
 		bugArray[i] = b
 		
 	}
+	bugArraySchloss.Unlock()
 }

@@ -31,6 +31,7 @@ func NewBugWelt(x,y,b,h uint) *bugWelt{
 
 
  func ZeichneWelt() {
+	defer wg.Done()
 	for howManyBugs()>0 {
 		gfx.UpdateAus()
 		gfx.Cls()
@@ -40,10 +41,12 @@ func NewBugWelt(x,y,b,h uint) *bugWelt{
 		gfx.LadeBild(0,0,"../../Bilder/Amoebius_klein.bmp")
 		punkteTB.SchreibeText(manual+"Punkte: "+fmt.Sprint((zählePunkte())))
 		punkteTB.Zeichne()
+		bugArraySchloss.Lock()
 		for index,_ := range bugArray {
 			if bugArray[index]==nil {continue}
 			bugArray[index].zeichneBug()
 		}
+		bugArraySchloss.Unlock()
 		cursorZeichnen()
 		gfx.UpdateAn()
 		time.Sleep(1e7)
@@ -52,6 +55,7 @@ func NewBugWelt(x,y,b,h uint) *bugWelt{
 }
 
 func ZeichneWeltIntro() {
+	defer wg.Done()
 	BugAttackTB := textboxen.New(200,150,700,500)
 	BugAttackTB.SetzeZentriert()
 	BugAttackTB.SchreibeText(
@@ -66,11 +70,14 @@ func ZeichneWeltIntro() {
 		gfx.Cls()
 
 		zeichneArrayIntro()
-
+		
+		bugArraySchloss.Lock()
 		for index,_ := range bugArray {
+			//fmt.Println("zeichne bugArray")
 			if bugArray[index]==nil {continue}
 			bugArray[index].zeichneBug()
 		}
+		bugArraySchloss.Unlock()
 		
 		BugAttackTB.Zeichne()
 		
@@ -155,26 +162,29 @@ func CursorPos() {
 			step=10
 		}else {step=1}
 		if gedrueckt == 1 {
-			
+			fmt.Println(taste)
 			switch taste {
-				case 273:	
+				case 273:		// hoch
 							cursor_y -= step*zH
-							if cursor_y<y_offset*zH {cursor_y = y_offset*zH+weltH*zH-zH}	
+							// Wenn der Cursor über dem Weltrand oder über dem FensterRand ist, setze auf andere Seite
+							if cursor_y<y_offset*zH || cursor_y> 1000*zH{cursor_y = y_offset*zH+weltH*zH-zH}	
 							
-				case 274:  
+				case 274:  // runter
 							cursor_y += step*zH
 							if cursor_y>y_offset*zH+weltH*zH-zH {cursor_y = y_offset*zH}
-				case 275:	
+				case 275:	// rechts
 							cursor_x += step*zB
 							if cursor_x>weltB*zB-zB {cursor_x = 0}
-				case 276:	
+				case 276:	// links
 							cursor_x -= step*zB
 							if cursor_x>weltB*zB-zB {cursor_x = weltB*zB-zB}
-				case 32 : 	
+				case 32 : 	// Schießen
 							welt[(cursor_y-y_offset*zH)/zH][cursor_x/zB] = 0
 							
 							bugGetroffen()
-				case 'q':
+				case 120: 	cursor_x, cursor_y = getNextAliveBug() // autoAim
+				case 107: 	killAllBugs()
+				case 'q':	// beende Game
 					gfx.FensterAus()
 					return
 			
@@ -185,6 +195,20 @@ func CursorPos() {
 		}
 		time.Sleep(1e6)
 	}
+}
+
+func getNextAliveBug() (uint16, uint16) {
+	// Wenn autoAim noch nicht an ist, mache nichts
+	if !autoAim {return 0,0+y_offset*zH}
+	bugArraySchloss.Lock()
+	for _,b := range bugArray {
+		if b!=nil {
+			bugArraySchloss.Unlock()
+			return b.x+3*zB,b.y+3*zH
+		}
+	}
+	bugArraySchloss.Unlock()
+	return 0,0
 }
 
 // Zählt die Punkte im Array
@@ -201,6 +225,7 @@ func zählePunkte() uint32 {
 
 // Prüft ob ein Bug getroffen wurde und zerstört diesen Bug oder lässt neuen wachsen, oder macht nichts
 func bugGetroffen() {
+	bugArraySchloss.Lock()
 	for _,b:= range bugArray {
 		if b==nil{continue}
 		//fmt.Println("x: ",cursor_x, b.x, b.x+7*zB,"y: ",cursor_y, b.y,b.y + 7*14)
@@ -209,16 +234,20 @@ func bugGetroffen() {
 			//fmt.Println("Getroffen!!!")
 			gfx.SpieleSound("../../Sounds/Retro Sounds/Explosions/Long/sfx_exp_long1.wav")
 			b.ende=true
+			bugArraySchloss.Unlock()
 			return
 		}else if (cursor_x > b.x+zB && cursor_x<b.x+6*zB) && (cursor_y> b.y+zH && cursor_y<b.y+6*zH) {
 			fmt.Println("Oh nein!! Der Bug ist provoziert")
 			gfx.SpieleSound("../../Sounds/Retro Sounds/General Sounds/Negative Sounds/sfx_sounds_damage1.wav")
 			// Neuen Bug generieren
+			bugArraySchloss.Unlock()
 			babyBugs(b)
 			return
 		}
 				
 	}
+	bugArraySchloss.Unlock()
+	
 	// keinen Bug getroffen, mache Feld schwarz
 	welt[cursor_y/zH-y_offset][cursor_x/zB] = 2
 }

@@ -10,6 +10,7 @@ import (
 	
 )
 
+
 func main() {
 	rand.Seed(time.Now().UnixNano())		// Seed für Zufallszahlen
 	gfx.Fenster(1200,700)
@@ -21,7 +22,7 @@ func main() {
 	bugPackage.Startbildschirm() 	
 	bugPackage.LevelTutorial()
 	bugPackage.Level0()
-	bugPackage.Level1()
+	//bugPackage.Level1()
 	bugPackage.Level2()
 	bugPackage.EndbildschirmReal()
 

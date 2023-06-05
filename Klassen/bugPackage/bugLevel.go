@@ -5,7 +5,8 @@ import (
 	"time"
 	"../../Klassen/textboxen"
 	"fmt"
-	"math/rand"
+	//"math/rand"
+	"os"
 	)
 
 	
@@ -17,7 +18,7 @@ func Startbildschirm() {
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Cls()
 	gfx.UpdateAus()
-	gfx.LadeBild(5,5,"../../Bilder/Amoebius_klein.bmp")
+	gfx.LadeBild5,5,"../../Bilder/Amoebius_klein.bmp")
 	gfx.LadeBildMitColorKey(1050,530,"../../Bilder/FebWebK_red_gespiegelt.bmp",255,0,0)
 	HelloTB := textboxen.New(130,50,800,500)
 	HelloTB.SchreibeText("Willkomen beim Softwarepraktikum!\n\n" +
@@ -42,27 +43,29 @@ func Startbildschirm() {
 
 
 func LevelIntro() {
-	
+	wg.Add(1)
 	beschreibeArrayIntro()
-	for i:=0;i<len(bugArray);i++ {
-		bugArray[i] = NewBug(uint16(rand.Intn(100)),uint16(rand.Intn(40)))
-		bugArray[i].nervosität = rand.Intn(10)+1
-		bugArray[i].b = uint8(25*bugArray[i].nervosität)
-		go bugArray[i].bugAnimation()
-		go bugArray[i].startMoving()
-	}		
+	createNBugs(20,5,5)
 	go cleanBugArray()		// Läuft dann für alle weiteren Level
 	//go ShowBugs()
 	go ZeichneWeltIntro()
 	gfx.TastaturLesen1()
-	for i:=0;i<10;i++ {
+	
+	fmt.Println("Ich warte")
+	bugArraySchloss.Lock()
+	fmt.Println("Ich bin drin")
+	for i:=0;i<len(bugArray);i++ {
+	//	fmt.Println("Lösche BugArray")
 		bugArray[i] = nil
 	}
-	time.Sleep(1e9) // Wichtig damit die ZeichneWeltIntro() die Chance hat zu beenden
+	bugArraySchloss.Unlock()
+	wg.Wait()
+	//time.Sleep(1e9) // Wichtig damit die ZeichneWeltIntro() die Chance hat zu beenden
 }
 
 // Tutorial
 func Level0(){
+	wg.Add(1)
 	gfx.SpieleSound("../../Sounds/Music/bugWars.wav")
 	beschreibeArray()
 	createNBugs(1,0,1)
@@ -77,9 +80,12 @@ func Level0(){
 	}
 	
 	punkteArray[0] = zählePunkte()
+	wg.Wait()
 }
 
 func Level1(){
+	wg.Add(1)
+	autoAim =true
 	beschreibeArray()
 	//gfx.SpieleSound("../../Sounds/Music/bugWars.wav")
 	createNBugs(3,2,1)	
@@ -94,10 +100,12 @@ func Level1(){
 	
 	punkteArray[1] = zählePunkte()
 	
+	wg.Wait()
 	
 }
 
 func Level2() {
+	wg.Add(1)
 	fmt.Println("Lvl 2 startet")
 	beschreibeArray()
 	createNBugs(5,2,5)
@@ -108,6 +116,11 @@ func Level2() {
 	}
 	
 	punkteArray[2] = zählePunkte()
+	wg.Wait()
+	f,_ := os.Create("xpositionen.txt")
+	f.WriteString(fmt.Sprintln(xposWrite))
+	f.Close()
+
 }
 
 

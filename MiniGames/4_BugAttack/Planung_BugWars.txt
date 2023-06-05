@@ -53,6 +53,7 @@ Entwickeln? --> Größerer Cursor?
 Bugs/Fehler:
 
 - Bewegen sich direkt nach LvL Start
+- Cursor geht mit SHIFT+oben verloren (obere Grenze anschauen, unten geht) Wegen offset?
 
 
 
