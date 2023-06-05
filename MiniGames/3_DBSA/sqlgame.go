@@ -19,6 +19,7 @@ var texte []string = make([]string,14)
 var aktuellerText int = 1
 var ausgTexte [][]string = make([][]string,14)
 var ausg1 []string = make ([]string,7)
+var ausg2 []string = make ([]string,7)
 //var ausg2,ausg3,ausg4,ausg5,ausg6,ausg7 string
 var eingTexte []string = make([]string,14)
 
@@ -27,25 +28,42 @@ var eingTexte []string = make([]string,14)
 func bubbleTexte() {
 	texte[0] = "\n\nUm die DBSA-Prüfung zu bestehen,\nmusst Du Dein SQL-Wissen nutzen,\num alle Geheimnisse der LWB-Welt\nzu enthüllen!"
 	texte[1] = "Die LWB-Adventure-World ist zwar nicht ganz so verwirrend wie die STEPS-World, aber was für Räume gibt es denn hier eigentlich?"
-	texte[2] = "Aufgabe 2"
-	texte[3] = "Aufgabe 3"
-	texte[4] = "Aufgabe 4"
+	texte[2] = "Welche Lehrveranstaltungen finden im 4. Semester statt?"
+	texte[3] = "Wie heißen die Dozenten im LWB-Adventure?"
+	texte[4] = "Welche Lehrveranstaltungen haben etwas mit 'Programmieren' zu tun?"
+	texte[5] = "Was ist mein Lieblingsgetränk?"
+	texte[6] = "Suche alle Veranstaltungen von Winnie the K und lass die Ergebnisse nach SWS-Anzahl absteigend sortiert anzeigen!"
 }
 
 func eingabeTexte() {
 	eingTexte[1] = "SELECT * FROM raeume;"
+	eingTexte[2] = "SELECT * FROM veranstaltungen WHERE semester = 4;"
+	eingTexte[3] = "SELECT dozname FROM dozenten;"
+	eingTexte[4] = ""
+	eingTexte[5]
+	eingTexte[6] = "SELECT * FROM  WHERE <attributname> = ... ORDER BY <attributname> (DESC)"
 }
 
 func ausgabeTexte() {
 	
-	ausg1[0] = "RAUM-NR.     RAUM-NAME                      ORT"
-	ausg1[1] = "----------------------------------------------------------------"
-	ausg1[2] = "1            1. Semester                    FU/KL24-26"
-	ausg1[3] = "2            2. Semester                    online/homeoffice"
-	ausg1[4] = "3            3. Semester                    FU/Arnimallee"
-	ausg1[5] = "4            4. Semester                    STEPS/Georgenstraße"
-	ausg1[6] = "5            Nichtzeugnis-Verleihung        N.N."
+	ausg1[0] = " RAUM-NR.     RAUM-NAME                      ORT"
+	ausg1[1] = "------------------------------------------------------------------"
+	ausg1[2] = " 1            1. Semester                    FU/KL24-26"
+	ausg1[3] = " 2            2. Semester                    online/homeoffice"
+	ausg1[4] = " 3            3. Semester                    FU/Arnimallee"
+	ausg1[5] = " 4            4. Semester                    STEPS/Georgenstraße"
+	ausg1[6] = " 5            Nichtzeugnis-Verleihung        N.N."
 	ausgTexte[1] = ausg1
+	
+	ausg2[0] = " V-NR.     VERANSTALTUNGS-NAME                               DOZ-NR.     SEM.     SWS"
+	ausg2[1] = "--------------------------------------------------------------------------------"
+	ausg2[2] = " 4.1       Nichtsequentielle & verteilte Programmierung      4        9"
+	ausg2[3] = " 4.2       Rechnernetze                                      4        3"
+	ausg2[4] = " 4.3       Unterrichtsbezogenes Softwarepraktikum            4        5"
+	ausg2[5] = " 4.4       Unterrichtsbezogenes Datenbankpraktikum           4        5"
+	ausg2[6] = " 4.5       Analyse fachlichen Lernens                        4        5"
+	ausgTexte[2] = ausg2
+	
 		
 }
 
@@ -117,7 +135,7 @@ func SQLgame() {
 	datainfo.SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf")
 	datainfo.SetzeSchriftgröße(18)
 	datainfo.SetzeZeilenAbstand(3)
-	datainfo.SchreibeText("> raeume (raumnr, raumname, ort)\n> dozenten (doznr, dozname, lieblingsgetränk)\n> veranstaltungen (vnr, vname, thema, semester, sws)\n> mini-games (gamenr, gamename, maxpunktzahl)")
+	datainfo.SchreibeText("> raeume (raumnr, raumname, ort)\n> dozenten (doznr, dozname, lieblingsgetränk)\n> veranstaltungen (vnr, vname, doznr, semester, sws)\n> mini-games (gamenr, gamename, vnr, maxpunktzahl)")
 	datainfo.Zeichne()
 	
 	ausgabe.RahmenAn(true)

@@ -51,6 +51,7 @@ func maussteuerung (raumnr int) {
 							darstellung.SemesterraumDarstellen(index)
 							default:
 							if index == 0 {
+								raumnr = index
 								darstellung.MainfloorDarstellen()
 							} else {
 								//darstellung.MinigameLaden(index)

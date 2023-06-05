@@ -31,7 +31,6 @@ func ladeEndeBildschirm() {										//TODO
 	
 func MainfloorDarstellen() {
 	
-	Fenster(1200,700)
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,1200,700)
 	LadeBild(0,50,"./Bilder/mainfloor.bmp")

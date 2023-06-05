@@ -9,6 +9,7 @@ package lwbAdventure
  */
 
 import (
+	"gfx"
 	"../darstellung"
 	"../eingabe"
 )
@@ -40,6 +41,7 @@ var kante uint16
 
 func Start() {
 	
+	gfx.Fenster(1200,700)
 	darstellung.MainfloorDarstellen()
 	eingabe.Eingabe()
 	
