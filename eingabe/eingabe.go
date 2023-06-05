@@ -9,7 +9,8 @@ import (
 // Globale Variablen
 // ------------------
 
-var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,0)
+//var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,0)
+var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,6)
 //var klickElemente0 []vierecke.Viereck = make([]vierecke.Viereck,0)
 
 
