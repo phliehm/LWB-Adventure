@@ -18,7 +18,7 @@ func Startbildschirm() {
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Cls()
 	gfx.UpdateAus()
-	gfx.LadeBild(5,5,"../../Bilder/Amoebius_klein.bmp")
+	gfx.LadeBild(5,5,"../../Bilder/BugAttack/Amoebius_klein.bmp")
 	gfx.LadeBildMitColorKey(1050,530,"../../Bilder/FebWebK_red_gespiegelt.bmp",255,0,0)
 	HelloTB := textboxen.New(130,50,800,500)
 	HelloTB.SchreibeText("Willkomen beim Softwarepraktikum!\n\n" +
@@ -50,12 +50,9 @@ func LevelIntro() {
 	//go ShowBugs()
 	go ZeichneWeltIntro()
 	gfx.TastaturLesen1()
-	
-	fmt.Println("Ich warte")
 	bugArraySchloss.Lock()
-	fmt.Println("Ich bin drin")
+	// tötet alle Bugs
 	for i:=0;i<len(bugArray);i++ {
-	//	fmt.Println("Lösche BugArray")
 		bugArray[i] = nil
 	}
 	bugArraySchloss.Unlock()
@@ -179,7 +176,7 @@ func EndbildschirmReal() {
 	
 	
 	gfx.LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
-	gfx.LadeBildMitColorKey(100,350,path + "Bilder/Amoebius_klein.bmp",0,0,0)
+	gfx.LadeBildMitColorKey(100,350,path + "Bilder/BugAttack/Amoebius_klein.bmp",0,0,0)
 	gfx.LadeBild(620,80,path + "Bilder/paper_500.bmp")
 	gfx.LadeBild(960,520,path + "Bilder/certified_100.bmp")
 	gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")

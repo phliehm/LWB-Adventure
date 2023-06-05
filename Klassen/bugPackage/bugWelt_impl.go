@@ -6,39 +6,20 @@ import (
 		"time"
 		"math/rand"
 		"../../Klassen/textboxen"
-		
 		)
 
-
-
-/*
-type bugWelt struct {
-	x,y,breite, höhe uint
-	
-}
-*/
-/*
-func NewBugWelt(x,y,b,h uint) *bugWelt{
-	bw := new(bugWelt)
-	bw.x = x
-	bw.y = y
-	bw.breite = b
-	bw.höhe = h
-	return bw
-}
-*/
-
-
-
- func ZeichneWelt() {
+// zeichnet die Welt
+func ZeichneWelt() {
+	// Die Wait-Group stellt sicher, dass vor dem Beenden des Levels die Animation fertig ist 
 	defer wg.Done()
+	//  Nur solange es noch Bugs gibt
 	for howManyBugs()>0 {
 		gfx.UpdateAus()
 		gfx.Cls()
-		//gfx.Stiftfarbe(0,255,0)
-		sg = 255
+		// setze globale Stiftfarbe
+		sg = 255	
 		zeichneArray()
-		gfx.LadeBild(0,0,"../../Bilder/Amoebius_klein.bmp")
+		gfx.LadeBild(0,0,"../../Bilder/BugAttack/Amoebius_klein.bmp")
 		punkteTB.SchreibeText(manual+"Punkte: "+fmt.Sprint((zählePunkte())))
 		punkteTB.Zeichne()
 		bugArraySchloss.Lock()
@@ -54,6 +35,7 @@ func NewBugWelt(x,y,b,h uint) *bugWelt{
 	time.Sleep(1e9)
 }
 
+// Wie ZeichneWelt nur mit einigen Änderungen, nur als Animation für den Startbildschirm genutzt
 func ZeichneWeltIntro() {
 	defer wg.Done()
 	BugAttackTB := textboxen.New(200,150,700,500)
@@ -86,10 +68,9 @@ func ZeichneWeltIntro() {
 	}
 }
 
-
+// Hilfsfunktion um die Zahlen (Code) zu zeichnen
 func zeichneArray() {
 	var s,z uint16
-	//gfx.UpdateAus()
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Vollrechteck(0,0,1200,700)
 	//gfx.Stiftfarbe(0,255,0)
@@ -99,12 +80,11 @@ func zeichneArray() {
 			male_Zahl(s*zB,y_offset*zH+z*zH,welt[z][s])
 		}
 	}
-	//gfx.UpdateAn()
 }
 
+// zeichnet den Code, diesmal aber über das gesamte Fenster
 func zeichneArrayIntro() {
 	var s,z uint16
-	//gfx.UpdateAus()
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Vollrechteck(0,0,1200,700)
 	//gfx.Stiftfarbe(0,255,0)
@@ -114,9 +94,9 @@ func zeichneArrayIntro() {
 			male_Zahl(s*zB,z*zH,weltIntro[z][s])
 		}
 	}
-	//gfx.UpdateAn()
 }
 
+// Füllt den Array der Welt mit zufällig 1  oder 0
 func beschreibeArray(){
 	var s,z uint16
 	for z=0;z<weltH;z++ {
@@ -126,6 +106,7 @@ func beschreibeArray(){
 	}
 }
 
+// Füllt den Array der Welt mit zufällig 1  oder 0
 func beschreibeArrayIntro(){
 	var s,z uint16
 	for z=0;z<weltHIntro;z++ {
@@ -133,9 +114,9 @@ func beschreibeArrayIntro(){
 			weltIntro[z][s] = uint8(rand.Intn(2))
 		}
 	}
-	
 }
 
+// Füllt den Array mit Schwarz
 func beschreibeArraySchwarz(){
 	var s,z uint16
 	for z=0;z<weltH;z++ {
@@ -162,7 +143,7 @@ func CursorPos() {
 			step=10
 		}else {step=1}
 		if gedrueckt == 1 {
-			fmt.Println(taste)
+			//fmt.Println(taste)
 			switch taste {
 				case 273:		// hoch
 							cursor_y -= step*zH
@@ -197,6 +178,7 @@ func CursorPos() {
 	}
 }
 
+// Wenn man autoAim verwendet gibt diese Funktion den nächsten Bug im Array
 func getNextAliveBug() (uint16, uint16) {
 	// Wenn autoAim noch nicht an ist, mache nichts
 	if !autoAim {return 0,0+y_offset*zH}
@@ -227,17 +209,16 @@ func zählePunkte() uint32 {
 func bugGetroffen() {
 	bugArraySchloss.Lock()
 	for _,b:= range bugArray {
-		if b==nil{continue}
-		//fmt.Println("x: ",cursor_x, b.x, b.x+7*zB,"y: ",cursor_y, b.y,b.y + 7*14)
+		if b==nil{continue}	
+		// Wenn der Cursor in der Mitte des Bugs ist
 		if (cursor_x-3*zB == b.x && cursor_y-3*zH==b.y) {
-			//fmt.Println(cursor_x-3*zB,b.x,cursor_y-3*zH,b.y)
-			//fmt.Println("Getroffen!!!")
 			gfx.SpieleSound("../../Sounds/Retro Sounds/Explosions/Long/sfx_exp_long1.wav")
-			b.ende=true
+			b.stirbt=true
 			bugArraySchloss.Unlock()
 			return
+			// Wenn der Cursor auf dem Rest des Körpers des Bugs ist --> erzeuge neue Bugs
 		}else if (cursor_x > b.x+zB && cursor_x<b.x+6*zB) && (cursor_y> b.y+zH && cursor_y<b.y+6*zH) {
-			fmt.Println("Oh nein!! Der Bug ist provoziert")
+			//fmt.Println("Oh nein!! Der Bug ist provoziert")
 			gfx.SpieleSound("../../Sounds/Retro Sounds/General Sounds/Negative Sounds/sfx_sounds_damage1.wav")
 			// Neuen Bug generieren
 			bugArraySchloss.Unlock()
