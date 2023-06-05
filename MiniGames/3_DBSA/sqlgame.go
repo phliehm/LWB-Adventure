@@ -6,7 +6,7 @@ package sqlgame
 
 import (
 	. "gfx"
-	//"fmt"
+	"fmt"
 	"../../Klassen/buttons"
 	"../../Klassen/textboxen"
 	"../../Klassen/texteditoren"
@@ -20,6 +20,7 @@ var aktuellerText int = 1
 var ausgTexte [][]string = make([][]string,14)
 var ausg1 []string = make ([]string,7)
 //var ausg2,ausg3,ausg4,ausg5,ausg6,ausg7 string
+var eingTexte []string = make([]string,14)
 
 //----------------------Hilfsfunktionen----------------------------
 
@@ -29,6 +30,10 @@ func bubbleTexte() {
 	texte[2] = "Aufgabe 2"
 	texte[3] = "Aufgabe 3"
 	texte[4] = "Aufgabe 4"
+}
+
+func eingabeTexte() {
+	eingTexte[1] = "SELECT  FROM raeume"
 }
 
 func ausgabeTexte() {
@@ -71,6 +76,7 @@ func SQLgame() {
 	Fenster(1200,700)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	bubbleTexte()
+	eingabeTexte()
 	ausgabeTexte()
 	
 //------------------Variablen--------------------------------------
@@ -160,10 +166,11 @@ func SQLgame() {
 //----------------Spiel-Steuerung-----------------------------------
 
 	for {
+
 		taste, status, mausX, mausY := MausLesen1()
 		if taste==1 && status==1 {
 			if next.TesteXYPosInButton(mausX,mausY) {
-				//fmt.Println("Weiter angeklickt!")
+				fmt.Println("Weiter angeklickt!")
 				bubbletext.SchreibeText(texte[aktuellerText])
 				bubbletext.Zeichne()
 				next.ZeichneButton()
@@ -171,20 +178,33 @@ func SQLgame() {
 					aktuellerText++
 				}
 				
-				//----------------Eingabe-Verarbeitung--------------
-				ted = texteditoren.New(315,595,830,63,20,true)
-				for {
-					switch ted.GibString() {
-						case "SELECT  FROM raeume":
-						Stiftfarbe(255,255,255)
-						Vollrechteck(320,375,820,200)
-						erzeugeAusgabe(1)						
-						default:
-						Stiftfarbe(255,255,255)
-						Vollrechteck(320,375,820,200)
-						erzeugeFehlerausgabe(ausgabe)
-					}
+				for i:=1; i<len(eingTexte); i++ {
+					
+					fmt.Println("aktuelles i:",i)
+					//----------------Eingabe-Verarbeitung--------------
 					ted = texteditoren.New(315,595,830,63,20,true)
+								
+						for {
+							switch ted.GibString() {
+								case eingTexte[i]:
+								ausgabe.RahmenAn(true)
+								ausgabe.SetzeRahmenFarbe(0,0,0)
+								ausgabe.HintergrundAn(true)
+								ausgabe.SetzeHintergrundFarbe(255,255,255)
+								ausgabe.SchreibeText("")
+								ausgabe.Zeichne()
+								Stiftfarbe(255,255,255)
+								Vollrechteck(311,375,838,200)
+								erzeugeAusgabe(i)	
+								break					
+								default:
+								Stiftfarbe(255,255,255)
+								Vollrechteck(320,375,820,200)
+								erzeugeFehlerausgabe(ausgabe)
+								break
+							}
+							ted = texteditoren.New(315,595,830,63,20,true)					
+						}
 				}
 			}
 		}
