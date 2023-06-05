@@ -18,7 +18,7 @@ func Startbildschirm() {
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Cls()
 	gfx.UpdateAus()
-	gfx.LadeBild5,5,"../../Bilder/Amoebius_klein.bmp")
+	gfx.LadeBild(5,5,"../../Bilder/Amoebius_klein.bmp")
 	gfx.LadeBildMitColorKey(1050,530,"../../Bilder/FebWebK_red_gespiegelt.bmp",255,0,0)
 	HelloTB := textboxen.New(130,50,800,500)
 	HelloTB.SchreibeText("Willkomen beim Softwarepraktikum!\n\n" +

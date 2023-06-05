@@ -8,8 +8,7 @@ import (
 		//"../../Klassen/textboxen"
 		//"fmt"
 	
-)
-
+		)
 
 func main() {
 	rand.Seed(time.Now().UnixNano())		// Seed für Zufallszahlen
@@ -25,7 +24,4 @@ func main() {
 	//bugPackage.Level1()
 	bugPackage.Level2()
 	bugPackage.EndbildschirmReal()
-
-	
-
 }

@@ -137,6 +137,7 @@ func versetzeBug(x,y uint16, bu *bug) uint16{
 }
 
 func (b *bug) eatCode() {
+		fmt.Println("Bug: ",b.y,b.x)
 		welt[(b.y)/zH-3][(b.x)/zB+3] = 2
 		/*welt[(b.y)/zH-2][(b.x)/zB+3] = 2
 		welt[(b.y)/zH-4][(b.x)/zB+3] = 2
@@ -250,7 +251,7 @@ func babyBugs(b *bug) {
 			// Wenn noch Platz ist erzeuge neuen Bug
 			if bu==nil {
 				if b.x%zB!=0 || b.y%zH!=0 {fmt.Println("WRONG!!!!!",b.x,b.y)}
-				bugArray[index]=NewBug(b.x/zB,b.y/zH) 
+				bugArray[index]=NewBug(b.x/zB,b.y/zH-y_offset) 
 				bugArray[index].nervosität=5+rand.Intn(5)	
 				bugArray[index].speed = rundeAufGeradeZahlen(rand.Intn(5)) // Bei ungeraden Zahlen bewegen sich die Bugs ungleichmäßig
 				bugArray[index].b = uint8(25*bugArray[index].nervosität)
@@ -314,6 +315,8 @@ func ShowBugs(){
 	}
 }
 
+//  Es werden n Bugs erzeugt, speed und nervosität werden zufällig bis 
+//	zur maximalen speed, nervosität gewählt
 func createNBugs(n uint16,speed,nervosität int) {
 	bugArraySchloss.Lock()
 	for i:=uint16(0);i<n;i++ {

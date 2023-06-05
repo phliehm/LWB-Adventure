@@ -18,7 +18,7 @@ const weltHIntro uint16 = 50
 const weltH,weltB uint16 = 44,133
 var welt [weltH][weltB] uint8 // Welt: Animation 1-3, Zeile, Spalte, Zahl
 var weltIntro [weltHIntro][weltB] uint8
-const y_offset uint16 = 6 // 5* zH offset damit oben ein schwarzer Balken ist
+const y_offset uint16 = 6 // 6* zH offset damit oben ein schwarzer Balken ist
 const zB, zH uint16 = 9,14			// Maße für die Zahlen 0 und 1 (Zellengröße)
 
 var cursor_x, cursor_y uint16  = 0,y_offset*zH
