@@ -20,7 +20,9 @@ var aktuellerText int = 1
 var ausgTexte [][]string = make([][]string,14)
 var ausg1 []string = make ([]string,7)
 var ausg2 []string = make ([]string,7)
-//var ausg2,ausg3,ausg4,ausg5,ausg6,ausg7 string
+var ausg3 []string = make ([]string,8)
+var ausg4 []string = make ([]string,5)
+var ausg5 []string = make ([]string,3)
 var eingTexte []string = make([]string,14)
 
 //----------------------Hilfsfunktionen----------------------------
@@ -31,17 +33,22 @@ func bubbleTexte() {
 	texte[2] = "Welche Lehrveranstaltungen finden im 4. Semester statt?"
 	texte[3] = "Wie heißen die Dozenten im LWB-Adventure?"
 	texte[4] = "Welche Lehrveranstaltungen haben etwas mit 'Programmieren' zu tun?"
-	texte[5] = "Was ist mein Lieblingsgetränk?"
-	texte[6] = "Suche alle Veranstaltungen von Winnie the K und lass die Ergebnisse nach SWS-Anzahl absteigend sortiert anzeigen!"
+	texte[5] = "Ob Du es auch schaffst herauszubekommen, was mein ganz persönliches Lieblingsgetränk ist?"
+	texte[6] = "Aufgabe 6"
+	texte[7] = "Aufgabe 7"
+	texte[8] = "Aufgabe 8"
+	texte[9] = "Aufgabe 9"
+	texte[10] = "Mal schauen, ob Du die sechs Kommandos richtig eingibst, mit denen Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K nach SWS-Anzahl absteigend sortiert angezeigt werden!"
 }
 
 func eingabeTexte() {
 	eingTexte[1] = "SELECT * FROM raeume;"
 	eingTexte[2] = "SELECT * FROM veranstaltungen WHERE semester = 4;"
 	eingTexte[3] = "SELECT dozname FROM dozenten;"
-	eingTexte[4] = ""
-	eingTexte[5]
-	eingTexte[6] = "SELECT * FROM  WHERE <attributname> = ... ORDER BY <attributname> (DESC)"
+	eingTexte[4] = "SELECT * FROM veranstaltungen WHERE vname LIKE '%Programmierung';"
+	eingTexte[5] = "SELECT lieblingsgetraenk FROM dozenten WHERE dozname = 'Herk';"
+	
+	eingTexte[10] = "SELECT vname, semester, sws FROM veranstaltungen NATURAL JOIN dozenten WHERE dozname = 'Winnie the K' ORDER BY sws DESC;"
 }
 
 func ausgabeTexte() {
@@ -55,28 +62,46 @@ func ausgabeTexte() {
 	ausg1[6] = " 5            Nichtzeugnis-Verleihung        N.N."
 	ausgTexte[1] = ausg1
 	
-	ausg2[0] = " V-NR.     VERANSTALTUNGS-NAME                               DOZ-NR.     SEM.     SWS"
+	ausg2[0] = " V-NR.   VERANSTALTUNGS-NAME                             DOZ-NR.   SEM.    SWS"
 	ausg2[1] = "--------------------------------------------------------------------------------"
-	ausg2[2] = " 4.1       Nichtsequentielle & verteilte Programmierung      4        9"
-	ausg2[3] = " 4.2       Rechnernetze                                      4        3"
-	ausg2[4] = " 4.3       Unterrichtsbezogenes Softwarepraktikum            4        5"
-	ausg2[5] = " 4.4       Unterrichtsbezogenes Datenbankpraktikum           4        5"
-	ausg2[6] = " 4.5       Analyse fachlichen Lernens                        4        5"
+	ausg2[2] = " 4.1     Nichtsequentielle & verteilte Programmierung    2         4       9"
+	ausg2[3] = " 4.2     Rechnernetze                                    6         4       3"
+	ausg2[4] = " 4.3     Unterrichtsbezogenes Softwarepraktikum          1         4       5"
+	ausg2[5] = " 4.4     Unterrichtsbezogenes Datenbankpraktikum         4         4       5"
+	ausg2[6] = " 4.5     Analyse fachlichen Lernens                      3         4       5"
 	ausgTexte[2] = ausg2
 	
+	ausg3[0] = " DOZENTEN-NAME"
+	ausg3[1] = "---------------"
+	ausg3[2] = " Amoebi"
+	ausg3[3] = " Darth Schmidter"
+	ausg3[4] = " Fab Web"
+	ausg3[5] = " Herk"
+	ausg3[6] = " J.EthI"
+	ausg3[7] = " Winnie the K"
+	ausgTexte[3] = ausg3
 		
+	ausg4[0] = " V-NR.   VERANSTALTUNGS-NAME                             DOZ-NR.   SEM.    SWS"
+	ausg4[1] = "--------------------------------------------------------------------------------"
+	ausg4[2] = " 1.2     Funktionale Programmierung                      3         1       8"
+	ausg4[3] = " 2.1     Imperative & projektorientierte Programmierung  2         2       7"
+	ausg4[4] = " 4.1     Nichtsequentielle &  verteilte Programmierung   2         4       9"
+	ausgTexte[4] = ausg4
+	
+	ausg5[0] = " LIEBLINGSGETRÄNK"
+	ausg5[1] = "------------------"
+	ausg5[2] = " Beruhigungstee"											// WIRKLICH??? :D
 }
 
 func erzeugeFehlerausgabe(ausgabe textboxen.Textbox) {
 	ausgabe.RahmenAn(true)
 	ausgabe.SetzeRahmenFarbe(255,0,0)
-	ausgabe.SetzePosition(320,550)
-	ausgabe.SetzeHöhe(20)
-	ausgabe.SchreibeText("")
+	ausgabe.SetzePosition(320,527)
+	ausgabe.SetzeHöhe(43)
+	ausgabe.SetzeZeilenAbstand(3)
+	ausgabe.SetzeFarbe(255,0,0)
+	ausgabe.SchreibeText("FALSCHE EINGABE! --> Überprüfe die Anfrage / korrigiere die Schreibweise!!!\n(Kommandos GROSS, sonst klein, strings mit '...' und Simikolon nicht vergessen)!")
 	ausgabe.Zeichne()
-	Stiftfarbe(255,0,0)
-	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",20)
-	SchreibeFont(328,550,"FALSCHE EINGABE! --> Überprüfe die Anfrage / korrigiere die Schreibweise!")
 }
 
 func erzeugeAusgabe(n int) {
@@ -135,7 +160,7 @@ func SQLgame() {
 	datainfo.SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf")
 	datainfo.SetzeSchriftgröße(18)
 	datainfo.SetzeZeilenAbstand(3)
-	datainfo.SchreibeText("> raeume (raumnr, raumname, ort)\n> dozenten (doznr, dozname, lieblingsgetränk)\n> veranstaltungen (vnr, vname, doznr, semester, sws)\n> mini-games (gamenr, gamename, vnr, maxpunktzahl)")
+	datainfo.SchreibeText("> raeume (raumnr, raumname, ort)\n> dozenten (doznr, dozname, lieblingsgetraenk)\n> veranstaltungen (vnr, vname, doznr, semester, sws)\n> mini-games (gamenr, gamename, vnr, maxpunktzahl)")
 	datainfo.Zeichne()
 	
 	ausgabe.RahmenAn(true)
@@ -192,9 +217,12 @@ func SQLgame() {
 			if taste==1 && status==1 {
 				if next.TesteXYPosInButton(mausX,mausY) {
 					fmt.Println("Weiter angeklickt!")
+					Stiftfarbe(255,255,255)
+					Vollrechteck(235,235,200,40)
 					bubbletext.SchreibeText(texte[aktuellerText])
 					bubbletext.Zeichne()
 					next.ZeichneButton()
+					next.DeaktiviereButton()
 					if aktuellerText < len(texte)-1 {
 						aktuellerText++
 					}
@@ -208,6 +236,9 @@ func SQLgame() {
 					
 		for {
 			if ted.GibString() == eingTexte[i] {
+				SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",30)
+				Stiftfarbe(0,255,0)
+				SchreibeFont(240,240,"RICHTIG!!!  :-)")
 				ausgabe.RahmenAn(true)
 				ausgabe.SetzeRahmenFarbe(0,0,0)
 				ausgabe.HintergrundAn(true)
@@ -217,6 +248,7 @@ func SQLgame() {
 				Stiftfarbe(255,255,255)
 				Vollrechteck(311,375,838,200)
 				erzeugeAusgabe(i)
+				next.AktiviereButton()
 				break
 			} else {
 				Stiftfarbe(255,255,255)

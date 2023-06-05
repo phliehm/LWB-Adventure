@@ -152,6 +152,8 @@ A:	for {
 				z:= gfx.Tastaturzeichen(taste, tiefe)  
 				if taste == 93 {
 					z = gfx.Tastaturzeichen(43,1)
+				} else if taste == 92 {
+					z = gfx.Tastaturzeichen(42,1)
 				} else {
 					z = gfx.Tastaturzeichen(taste, tiefe)
 				}
