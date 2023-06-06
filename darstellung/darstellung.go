@@ -55,7 +55,7 @@ func SemesterraumDarstellen(n int) {
 		case 2:
 		LadeBild(0,0,"./Bilder/MainGame/Homeoffice_2_JEthl_Darth.bmp")
 		case 3:
-		LadeBild(0,0,"./Bilder/Seminarraum_3_Herk_WtheK.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/Seminarraum_3_Herk_WtheK.bmp")
 		case 4:
 		LadeBild(0,0,"./Bilder/MainGame/Seminarraum_4_Darth_Amoebi_WtheK.bmp")
 		case 5:
