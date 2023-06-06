@@ -182,7 +182,11 @@ func ohneLeerzeichen(s string) string {
 func SQLgame() {
 	
 //-----------------initialisiere gfx-Fenster-----------------------	
-	Fenster(1200,700)
+	if ! FensterOffen() {
+		Fenster(1200,700)
+	}
+	Stiftfarbe(255,255,255)
+	Vollrechteck(0,0,1200,700)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	bubbleTexte()
 	eingabeTexte()

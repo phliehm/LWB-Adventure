@@ -16,7 +16,7 @@ type data struct {
 	r, g, b uint8 //optional
 }
 
-// Methoden eines Dreiecks
+// Methoden eines Vierecks
 // -----------------------
 
 // Vor.: -
@@ -100,7 +100,7 @@ func (v *data) SetzeKoordD(x,y uint16) {
 	}
 }
 
-/*		
+		
 func (v *data) GibFarbe() (uint8,uint8,uint8) {
 	return v.r, v.g, v.b
 }
@@ -111,7 +111,6 @@ func (v *data) SetzeFarbe (r,g,b uint8) {
 	v.b = b
 }
 
-*/
 
 // Vor.: -
 // Erg.: Eine Repräsentation des Vierecks in Form eines Strings ist geliefert.

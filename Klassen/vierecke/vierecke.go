@@ -17,6 +17,10 @@ type Viereck interface {
 	// Erg.: Die Koordinaten der vier Eckpunkte des Vierecks sind
 	//       geliefert.
     GetKoordinaten () (xA,yA,xB,yB,xC,yC,xD,yD uint16)
+    
+    GibFarbe() (r,g,b uint8)
+    
+    SetzeFarbe(r,g,b uint8) 
 	
 	// Vor.: -
 	// Erg.: Eine Repräsentation des Vierecks in Form eines Strings

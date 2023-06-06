@@ -51,13 +51,13 @@ func SemesterraumDarstellen(n int) {
 		case 0:
 		ladeEndeBildschirm()
 		case 1:
-		LadeBild(0,0,"./Bilder/MainGame/Seminarraum_1_FabWeb_WtheK.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/raum1.bmp")
 		case 2:
-		LadeBild(0,0,"./Bilder/MainGame/Homeoffice_2_JEthl_Darth.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/raum2.bmp")
 		case 3:
-		LadeBild(0,0,"./Bilder/MainGame/Seminarraum_3_Herk_WtheK.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/raum3.bmp")
 		case 4:
-		LadeBild(0,0,"./Bilder/MainGame/Seminarraum_4_Darth_Amoebi_WtheK.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/raum4.bmp")
 		case 5:
 		Stiftfarbe(255,255,255)
 		Vollrechteck(0,0,1200,700)
