@@ -12,7 +12,7 @@ import (
 	. "gfx"
 	"../MiniGames/1_FP"
 	"../MiniGames/bauelementeSpiel"
-	//"../MiniGames/2_ALP2/vadeROBIgame"
+	"../MiniGames/2_ALP2/vadeROBIgame"
 	//"../MiniGames/3_DDI"
 	"../MiniGames/3_DBSA"
 	//"../MiniGames/4_BugAttack"
@@ -97,7 +97,7 @@ func MinigameLaden(raum,n int) {
 		case 2:
 		switch n {
 			case 1:
-			//vadeROBIgame.Vaderobi()
+			vadeROBIgame.Vaderobi()
 			case 2:
 			//TODO (noch kein importierbares package vorhanden)
 		}

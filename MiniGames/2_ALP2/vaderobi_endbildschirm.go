@@ -27,6 +27,7 @@ func main() {
 	LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
 	exit.SetzeFarbe(0,0,0)
 	exit.Zeichnen()
+	exit.AktiviereKlickbar()
 	
 	Stiftfarbe(0,255,0)
 	SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
@@ -47,6 +48,6 @@ func main() {
 	}
 	SchreibeFont(700,130+uint16(6*70),"----------------------")
 	SchreibeFont(710,160+uint16(6*70),"Gesamt:    xx Punkte")
-
+	
 	TastaturLesen1()
 }

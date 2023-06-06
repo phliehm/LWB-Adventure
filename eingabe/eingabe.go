@@ -92,6 +92,7 @@ func maussteuerung (raumnr int) {
 								
 							} else {									//wenn nicht "exit" (index 0) geklickt wurde,
 								darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
+								darstellung.SemesterraumDarstellen(raumnr)
 							}
 						}
 						
