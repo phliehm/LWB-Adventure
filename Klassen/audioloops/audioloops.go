@@ -8,6 +8,7 @@ package audioloops
  * 
  */
 
+var musikAn bool
 
 import (
 	"gfx"
@@ -22,8 +23,8 @@ func LoopDuration(audiodatei string, dateiLänge uint, loopLänge uint) () {
 	
 	// Erstelle einen neuen Timer
 	t := time.NewTimer(time.Duration(loopLänge)*time.Millisecond)
-		
-	for {
+	musikAn = true	
+	for musikAn {
 		select {
 		// Timer ist abgelaufen
 		case <-t.C:			
@@ -36,4 +37,11 @@ func LoopDuration(audiodatei string, dateiLänge uint, loopLänge uint) () {
 			time.Sleep(time.Duration(dateiLänge)*time.Millisecond)
 		}
 	}
+	musikAn = false
+	
+}
+
+func StoppeAudio () {
+	gfx.StoppeAlleSounds()
+	musikAn = false		// Damit Loop nicht wieder neu anfängt
 }
