@@ -50,6 +50,10 @@ type Viereck interface {
 	Zeichnen()
 
 	Angeklickt(x,y uint16) bool
+	
+	AktiviereKlickbar()
+	
+	DeaktiviereKlickbar()
 
 }
 

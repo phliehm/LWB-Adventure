@@ -63,11 +63,14 @@ func maussteuerung (raumnr int) {
 		if taste==1 && status==1 { 										//LINKE Maustaste gerade gedrückt
 						
 			for index,element := range klickbar[raumnr] { 				//enthält alle klickbaren Objekte im jeweiligen Raum
+				
+				element.AktiviereKlickbar()
 								
 				if element.Angeklickt(mausX,mausY) {					//wenn ein Element angeklickt wurde, prüfe wo und welches:
 						
 						switch raumnr {
 							case 0:										//wenn im mainfloor (raumnr 0):
+							element.DeaktiviereKlickbar()
 							raumnr = index								//neue raumnr ist index des geklickten Elements (hier der angeklickten Tür, entspricht dem Semester)
 							darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
 							
@@ -77,6 +80,7 @@ func maussteuerung (raumnr int) {
 							}*/
 							
 							default:									//wenn nicht im mainfloor (raumnr != 0):
+							element.DeaktiviereKlickbar()
 							if index == 0 {								//Element mit index 0 wurde geklickt, also "exit", d.h. ...
 								raumnr = index							//... zurück in den mainfloor (raumnr 0)
 								darstellung.MainfloorDarstellen()		//deshalb mainfloor darstellen

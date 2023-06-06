@@ -13,6 +13,7 @@ type data struct {
 	xB, yB uint16 
 	xC, yC uint16
 	xD, yD uint16
+	aktiv bool
 	r, g, b uint8 //optional
 }
 
@@ -157,15 +158,27 @@ func (v *data) Zeichnen() {
 	gfx.Linie(v.xD, v.yD, v.xA, v.yA)
 }
 
+func (v *data) AktiviereKlickbar() {
+	v.aktiv = true
+}
+
+func (v *data) DeaktiviereKlickbar() {
+	v.aktiv = false
+}
+
 func (v *data) Angeklickt(x,y uint16) bool {						// Checkt, ob angeklickt
 	
-	var min, max func(a,b uint16) uint16
-	min = func (a,b uint16) uint16 {
-		if a < b {return a} else {return b}
-	}
-	max = func (a,b uint16) uint16 {
-		if a > b {return a} else {return b}
+	if v.aktiv {
+		var min, max func(a,b uint16) uint16
+		min = func (a,b uint16) uint16 {
+			if a < b {return a} else {return b}
+		}
+		max = func (a,b uint16) uint16 {
+			if a > b {return a} else {return b}
+		}
+		
+		return min(v.xA,v.xB) <= x && x <= max(v.xC,v.xD) && min(v.yA,v.yD) <= y && y <= max(v.yB,v.yC)
 	}
 	
-	return min(v.xA,v.xB) <= x && x <= max(v.xC,v.xD) && min(v.yA,v.yD) <= y && y <= max(v.yB,v.yC)
+	return false
 }

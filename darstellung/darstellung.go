@@ -66,6 +66,7 @@ func SemesterraumDarstellen(n int) {
 	
 }
 
+/*
 //Hilfsfunktion BauelementeSpiel:
 func bauelemente() {
 	var ilevel uint16	  			// aktuelle Levelnummer
@@ -78,6 +79,7 @@ func bauelemente() {
 	ePunkte = []uint16{}
 	bauelementeSpiel.BauelementeSpiel(ilevel,ePunkte)
 }
+*/
 
 
 func MinigameLaden(raum,n int) {
@@ -89,7 +91,7 @@ func MinigameLaden(raum,n int) {
 			case 1:
 			muster.Muster()
 			case 2:
-			bauelemente()
+			bauelementeSpiel.BauelementeSpiel()
 		}
 		
 		case 2:
