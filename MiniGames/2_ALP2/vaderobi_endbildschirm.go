@@ -7,10 +7,13 @@ package main
 import (
 	. "gfx"
 	"fmt"
+	"../../Klassen/vierecke"
 )
 
 var path string = "../../"
 var path2 string = "./" //MiniGames/2_ALP2/"
+
+var exit vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
 
 func main() {
 	Fenster(1200,700)
@@ -22,6 +25,8 @@ func main() {
 	LadeBild(620,80,path + "Bilder/paper_500.bmp")
 	LadeBild(960,520,path + "Bilder/certified_100.bmp")
 	LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
+	exit.SetzeFarbe(0,0,0)
+	exit.Zeichnen()
 	
 	Stiftfarbe(0,255,0)
 	SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
