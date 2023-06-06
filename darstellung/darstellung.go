@@ -10,6 +10,14 @@ package darstellung
 
 import (
 	. "gfx"
+	"../MiniGames/1_FP"
+	"../MiniGames/bauelementeSpiel"
+	//"../MiniGames/2_ALP2/vadeROBIgame"
+	//"../MiniGames/3_DDI"
+	"../MiniGames/3_DBSA"
+	//"../MiniGames/4_BugAttack"
+	"../MiniGames/4_Moorhuhn"
+	"../MiniGames/theNETgame"
 )
 
 // Globale Variablen
@@ -43,13 +51,13 @@ func SemesterraumDarstellen(n int) {
 		case 0:
 		ladeEndeBildschirm()
 		case 1:
-		LadeBild(0,50,"./Bilder/Seminarraum_1_neu2.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/Seminarraum_1_FabWeb_WtheK.bmp")
 		case 2:
-		LadeBild(0,50,"./Bilder/Seminarraum_2_neu.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/Homeoffice_2_JEthl_Darth.bmp")
 		case 3:
-		LadeBild(0,50,"./Bilder/Seminarraum_3_neu.bmp")
+		LadeBild(0,0,"./Bilder/Seminarraum_3_Herk_WtheK.bmp")
 		case 4:
-		LadeBild(0,50,"./Bilder/Seminarraum_4.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/Seminarraum_4_Darth_Amoebi_WtheK.bmp")
 		case 5:
 		Stiftfarbe(255,255,255)
 		Vollrechteck(0,0,1200,700)
@@ -57,3 +65,59 @@ func SemesterraumDarstellen(n int) {
 	}
 	
 }
+
+//Hilfsfunktion BauelementeSpiel:
+func bauelemente() {
+	var ilevel uint16	  			// aktuelle Levelnummer
+	var ePunkte []uint16			// Punkte erreicht im Level
+
+	//ilevel = 3	  								// aktuelle Levelnummer
+	//ePunkte = []uint16{3,3,3,0,0,0,0} 			// Punkte erreicht im Level
+
+	ilevel = 0
+	ePunkte = []uint16{}
+	bauelementeSpiel.BauelementeSpiel(ilevel,ePunkte)
+}
+
+
+func MinigameLaden(raum,n int) {
+	
+	switch raum {
+		
+		case 1:
+		switch n {
+			case 1:
+			muster.Muster()
+			case 2:
+			bauelemente()
+		}
+		
+		case 2:
+		switch n {
+			case 1:
+			//vadeROBIgame.Vaderobi()
+			case 2:
+			//TODO (noch kein importierbares package vorhanden)
+		}
+		
+		case 3:
+		switch n {
+			case 1:
+			sqlGame.SQLgame()
+			case 2:
+			//TODO (noch kein importierbares package vorhanden)
+		}
+		
+		case 4:
+		switch n {
+			case 1:
+			moorhuhn.Moorhuhn()
+			case 2:
+			//TODO (noch kein importierbares package vorhanden)
+			case 3:
+			theNETgame.TheNETgame()
+		}
+					
+	}
+}
+

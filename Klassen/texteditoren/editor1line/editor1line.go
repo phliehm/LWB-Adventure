@@ -153,7 +153,13 @@ A:	for {
 				if taste == 93 {
 					z = gfx.Tastaturzeichen(43,1)
 				} else if taste == 92 {
-					z = gfx.Tastaturzeichen(42,1)
+					z = gfx.Tastaturzeichen(35,1)
+				} else if taste == 47 {
+					if tiefe == 1 {
+						z = gfx.Tastaturzeichen(45,1)
+					} else {
+						z = gfx.Tastaturzeichen(45,0)
+					}
 				} else {
 					z = gfx.Tastaturzeichen(taste, tiefe)
 				}

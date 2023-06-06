@@ -74,6 +74,9 @@ func Vaderobi() (float32,uint32) {
 	//var maxpunktzahl uint
 	
 	//---------------------------------------------------------------------
+	
+	WeltOeffnen()
+	
 	for i:=1; i<len(level); i++ {
 		
 		gfx.Stiftfarbe(255,255,255)	

@@ -3,7 +3,7 @@
 
 //	zum Speichern vom Spielstand 
 
-//  mit Punkte, Note und Datum (wann gespeichernt wurde)
+//  mit Punkte, Note und Datum (wann gespeichert wurde)
 
 //	Martin Seiß		5.6.2023
 
@@ -18,9 +18,9 @@ import . "dateien"
 
 type Spielstand interface {
 
-	// Vor: Der Pfad (path) ist existiert.
+	// Vor: Der Pfad (path) existiert.
 	// Eff: Lädt den Spielstand in den Speicher, wenn vorhanden,
-	//		sonst wird neue datei angelegt. 
+	//		sonst wird eine neue Datei angelegt. 
 	// Erg: Der Spielstand ist geliefert.
 	// New(spielername,pfad string) bool 
 
@@ -34,14 +34,14 @@ type Spielstand interface {
 	
 	// Vor: -
 	// Eff: -
-	// Erg: True ist geleifert, wenn Spielstandsdatei vorhanden war, und
+	// Erg: True ist geliefert, wenn Spielstandsdatei vorhanden war, und
 	// 		alter Spielstand geladen wurde.
 	GibVorhanden() bool
 
 	
 	// Vor: -
 	// Eff: -
-	// Erg: Ein Float-Slice ist geleifert, der die Noten in den Spielen
+	// Erg: Ein Float-Slice ist geliefert, der die Noten in den Spielen
 	//		wiedergibt.
 	GibNoten() []float32
 	

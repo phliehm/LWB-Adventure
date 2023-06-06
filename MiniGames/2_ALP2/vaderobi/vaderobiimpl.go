@@ -916,7 +916,7 @@ func Baumodus () {
 	}
 }
 
-func init () {
+func WeltOeffnen () {
 	switch runtime.GOOS {
 		case "linux": 
 		if fontpath == "" { //wsl erkennt GOPATH nicht
@@ -928,6 +928,8 @@ func init () {
 		default:
 		fmt.Println ("Betriebssystem nicht erkannt!")
 	}
-	gfx.Fenster(1200,700)
+	if !gfx.FensterOffen() {
+		gfx.Fenster(1200,700)
+	}
 	w = newWelt(675,675,75)
 }
