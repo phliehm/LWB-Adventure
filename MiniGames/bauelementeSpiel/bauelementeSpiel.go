@@ -159,6 +159,37 @@ func berechneNote(punkte, maxPunkte uint16) string {
 }
 
 
+func berechneNoteFloat32(punkte, maxPunkte uint16) float32 {
+	var note float32
+	var prozente float32 = float32(punkte)/float32(maxPunkte)*100.
+	if prozente > 90 {
+		note = 1.0
+	} else if prozente > 85 {
+		note = 1.3
+	} else if prozente > 80 {
+		note = 1.7
+	} else if prozente > 75 {
+		note = 2.0
+	} else if prozente > 70 {
+		note = 2.3
+	} else if prozente > 65 {
+		note = 2.7
+	} else if prozente > 60 {
+		note = 3.0
+	} else if prozente > 55 {
+		note = 3.3
+	} else if prozente > 50 {
+		note = 3.7
+	} else if prozente > 45 {
+		note = 4.0
+	} else {
+		note = 6.0
+	}
+	return note
+}
+
+
+
 func schreibeSpielstand(level,punkte, maxPunkte uint16) {
 	var note string =  berechneNote(punkte, maxPunkte)
 	gfx.SchreibeFont(20,15,"Level: " + fmt.Sprint(level))
@@ -214,13 +245,13 @@ func zeichneSpielfeld(happy bool, xSize, ilevel, punkte, maxPunkte uint16, sk sc
 // Erg: akteulles Level ilevel+1, Note und Punktestand je Level
 //		wird ausgegeben.
 
-func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
+func BauelementeSpiel() (float32,uint32) {
 
-//	var ilevel uint16	  			// aktuelle Levelnummer
+	var ilevel uint16	  			// aktuelle Levelnummer
 	var ilevelGeschafft	uint16		// höchstes geschafftes Level
 	var nlevel uint16				// Anzahl der Level
 	var nPunkte uint16				// neue Punkte im Level
-//	var ePunkte []uint16			// Punkte erreicht im Level
+	var ePunkte []uint16			// Punkte erreicht im Level
 	var gPunkte	uint16				// Gesamtpunkte erreicht
 	var maxPunkte uint16			// maximale erreichbare Geamtpunktzahl
 	var happy bool = true			// Winnie sieht happy aus
@@ -383,6 +414,6 @@ func BauelementeSpiel(ilevel uint16,ePunkte []uint16) (uint16,string,[]uint16) {
 		}
 	}
 
-return ilevel,berechneNote(gPunkte,maxPunkte),ePunkte
+return berechneNoteFloat32(gPunkte,maxPunkte),uint32(gPunkte)
 	
 }

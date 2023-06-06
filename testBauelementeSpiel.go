@@ -17,15 +17,15 @@ import "gfx"
 
 func main() {
 
-	var ilevel uint16	  			// aktuelle Levelnummer
-	var ePunkte []uint16			// Punkte erreicht im Level
-
+	var note float32	  			// aktuelle Levelnummer
+	var punkte uint32				// Punkte erreicht im Level
+/*
 	ilevel = 3	  								// aktuelle Levelnummer
 	ePunkte = []uint16{3,3,3,0,0,0,0} 			// Punkte erreicht im Level
 
 	ilevel = 0
 	ePunkte = []uint16{} 
-
+*/
 	// -------    Lade Level gegeben auf der Kommandozeile  ------- //
 /*
 	fmt.Println(len(os.Args))
@@ -38,8 +38,8 @@ func main() {
 	}
 */
 	gfx.Fenster(1200,700)
-	ilevel,note,ePunkte := BauelementeSpiel(ilevel,ePunkte)
+	note,punkte = BauelementeSpiel()
 	fmt.Println("Note: ",note) 
-	fmt.Println("Starte alten Spielstand mit: ",ilevel,ePunkte )
+	fmt.Println("Punkte: ",punkte) 
 	
 }
