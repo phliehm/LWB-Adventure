@@ -100,7 +100,7 @@ func aktiviereKnotenButton(buts map[uint16]buttons.Button, idlist []uint32) {
 // Eff: Spiel wird gestartet.
 // Erg: akteulles Level ilevel+1, Note und Punktestand je Level
 //		wird ausgegeben.
-func TheNETgame() (float32,uint16) {
+func TheNETgame() (float32,uint32) {
 
 	var font string = "Schriftarten/Ubuntu-B.ttf"
 	var nachbarn []uint32
@@ -137,6 +137,8 @@ func TheNETgame() (float32,uint16) {
 	
 	go sf.Hintergrundmusik()
 		
+	
+	fmt.Println("Note beim Start: ",sf.GibNote())
 	
 	// ----------- Mausabfrage & Spielsteuerung ---------------------//
 	
@@ -240,6 +242,6 @@ func TheNETgame() (float32,uint16) {
 	}
 
  
-return sf.GibNote(),sf.GibPunktzahl() 
+return sf.GibNote(),uint32(sf.GibPunktzahl()) 
 	
 }

@@ -1,10 +1,14 @@
 package eingabe
 
+
 import (
 	"gfx"
 	"../Klassen/vierecke"
 	"../darstellung"
+	"fmt"
+	"../Klassen/spielstaende"
 )
+
 
 // Globale Variablen
 // ------------------
@@ -12,6 +16,8 @@ import (
 //var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,0)
 var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,6)
 //var klickElemente0 []vierecke.Viereck = make([]vierecke.Viereck,0)
+var spielstand spielstaende.Spielstand
+
 
 
 func klickbarElemente() {
@@ -49,6 +55,10 @@ func klickbarElemente() {
 
 	
 func maussteuerung (raumnr int) {
+	
+	var note float32
+	var punkte uint32
+	
 	//var taste uint8
 	//var status int8
 	
@@ -72,8 +82,11 @@ func maussteuerung (raumnr int) {
 							case 0:										//wenn im mainfloor (raumnr 0):
 							element.DeaktiviereKlickbar()
 							raumnr = index								//neue raumnr ist index des geklickten Elements (hier der angeklickten Tür, entspricht dem Semester)
-							darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
-							
+							if raumnr == 5 {
+								darstellung.EndbildschirmDarstellen(spielstand)
+							} else {	
+								darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
+							}
 							/*for _,el := range klickbar[raumnr] {
 								el.SetzeFarbe(0,0,0)
 								el.Zeichnen()
@@ -89,9 +102,10 @@ func maussteuerung (raumnr int) {
 									el.SetzeFarbe(0,0,0)
 									el.Zeichnen()
 								}*/
-								
+
 							} else {									//wenn nicht "exit" (index 0) geklickt wurde,
-								darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
+								note,punkte = darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
+								speichereMax(note,punkte,raumnr,index)		// Das beste Ergebnis wird gespeichert.
 								darstellung.SemesterraumDarstellen(raumnr)
 							}
 						}
@@ -109,7 +123,47 @@ func maussteuerung (raumnr int) {
 
 
 func Eingabe() {
+
+	// gfx.Fenster(1200,700)
+
+	spielstand = darstellung.Startbildschirm()
+
+	gfx.Fenster(1200,700)
+
+	darstellung.MainfloorDarstellen()
 	
 	klickbarElemente()
 	maussteuerung(0)
+	
+}
+
+
+
+
+//  ----------------      Hilfsfunktionen     ---------------------  //
+
+
+// Eff: Die bessere Note ist gespeichert. Bei Notengleichstand ist die
+//		bessere Punktzahl gespeichert.
+func speichereMax(note1 float32,punkte1 uint32,raumnr,index int)	{
+
+	var noten []float32 = spielstand.GibNoten()
+	var punkte []uint32 = spielstand.GibPunkte()
+	var ispiel int = (raumnr-1)*3 + (index-1)	// raumnr>0,ispiel>0
+	
+	fmt.Println(raumnr,index)
+	fmt.Println("Erspieltes Ergebnis: ",note1,punkte1)
+	fmt.Println("Alter Spielstand: ",spielstand.GibNoten(),spielstand.GibPunkte())
+	fmt.Println("Spielnr:", ispiel)
+	
+	// erstes Spiel? oder bessere Note? oder bessere Punkte?
+	if noten[ispiel] == 0 || note1 < noten[ispiel] || 
+			(note1 == noten[ispiel] && punkte1 > punkte[ispiel]) {
+		noten[ispiel] = note1
+		punkte[ispiel] = punkte1
+		spielstand.Speichern(noten,punkte)
+	}
+
+	fmt.Println("Neuer Spielstand: ",spielstand.GibNoten(),spielstand.GibPunkte())
+
 }

@@ -156,6 +156,7 @@ func (sp *data)	ladeDaten() {
 	var d Datei				// Datei-Objekt zum Spielstand
 	var b1, b2, b3, b4	byte	// Hilfsbytes zum speichern
 
+	//fmt.Println("Dateiname ",sp.dateiname)
 	d = Oeffnen(sp.dateiname,'x')
 	if d.Ende() {				// Dateiinhalt existierte noch nicht
 		d.Schliessen()
