@@ -119,9 +119,7 @@ func MinigameLaden(raum,n int) {
 			case 2:
 			//TODO (noch kein importierbares package vorhanden)
 			case 3:
-			fmt.Println("Starte theNETgame")
 			theNETgame.TheNETgame()
-			fmt.Println("Stoppe theNETgame")
 		}
 					
 	}
