@@ -12,12 +12,14 @@ import (
 	. "gfx"
 	"../MiniGames/1_FP"
 	"../MiniGames/bauelementeSpiel"
-	"../MiniGames/2_ALP2/vadeROBIgame"
+	"../MiniGames/2_ALP2/vaderobigame"
+//	"../MiniGames/2_ALP2/vadeROBIgame"
 	//"../MiniGames/3_DDI"
 	"../MiniGames/3_DBSA"
 	//"../MiniGames/4_BugAttack"
 	"../MiniGames/4_Moorhuhn"
 	"../MiniGames/theNETgame"
+	"fmt"
 )
 
 // Globale Variablen
@@ -117,7 +119,9 @@ func MinigameLaden(raum,n int) {
 			case 2:
 			//TODO (noch kein importierbares package vorhanden)
 			case 3:
+			fmt.Println("Starte theNETgame")
 			theNETgame.TheNETgame()
+			fmt.Println("Stoppe theNETgame")
 		}
 					
 	}

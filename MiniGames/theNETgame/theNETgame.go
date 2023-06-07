@@ -15,7 +15,7 @@ import "gfx"
 import "../../Klassen/buttons"
 //import "os"
 //import "strconv"
-//import "time"
+import "time"
 import	"../../Klassen/textboxen"
 //import	. "../../Klassen/netze"
 import  spielfelder "../../Klassen/theNETgameSpielfeld"
@@ -118,6 +118,7 @@ func TheNETgame() (float32,uint16) {
 	beenden.SetzeFont(font)
 	nochmal = buttons.New(970,650,100,40,255,255,100,false,"nochmal")
 	nochmal.SetzeFont(font)
+
  
  	//  -------------------   baue Spielfeld ------------------------//
 	var sf spielfelder.Spielfeld = spielfelder.New(weiter,starter,beenden,nochmal)
@@ -154,11 +155,11 @@ func TheNETgame() (float32,uint16) {
 					// check Kante verboten?
 					r,_,_ := sf.Kantenfarbe(paketid,uint32(id))
 					if r == 255 {
+						fmt.Println("verbotene Kante betreten: ",paketid,uint32(id))
 						sf.SetzeVerloren(1)
 						paketid = uint32(id)
 						sf.SetzePaketID(paketid)
 						nochmal.AktiviereButton()
-						fmt.Println("verbotene Kante betreten: ",paketid,uint32(id))
 					}
 					// check Knoten verboten?
 					r,_,_ = sf.Knotenfarbe(uint32(id))
@@ -217,15 +218,11 @@ func TheNETgame() (float32,uint16) {
 				sf.StartGame()
 				aktiviereKnotenButton(sbutton,sf.GibNachbarIDs(0))
 				starter.DeaktiviereButton()
-//				aktiviereKnotenButton(sbutton)
-/*				if ilevel == 0 {starter.DeaktiviereButton()}
-				if ilevel < ilevelGeschafft {weiter.AktiviereButton()}
-				levelNeuLaden = true
-				neuZeichnen = true
-*/
+
 			}
 
 			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende des Spiels
+				beenden.DeaktiviereButton()
 				break
 			}
 
@@ -238,7 +235,7 @@ func TheNETgame() (float32,uint16) {
 		// Bei Gewonnen, neues Level!
 		//if sf.GibGewonnen() {weiter.AktiviereButton()}
 
-		// time.Sleep(1e7)
+		time.Sleep(1e7)
 
 	}
 

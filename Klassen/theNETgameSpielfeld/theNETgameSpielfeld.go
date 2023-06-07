@@ -141,7 +141,7 @@ func (sf *data) Zeichnen() {
 
 		var dtime uint16				// Zeit seit Start
 
-		for {
+		for sf.beenden.GibAktivitaetButton() {
 			
 			// Läuft das Level noch?
 			if sf.GibGewonnen() && sf.start {
@@ -191,7 +191,7 @@ func (sf *data) Zeichnen() {
 
 func (sf *data) Hintergrundmusik() {
 	var soundstr string = "Sounds/Music/30s_Surf.wav"
-	for {
+	for sf.beenden.GibAktivitaetButton() {
 		gfx.SpieleSound(soundstr)
 		time.Sleep (time.Duration(40e9))
 	}
@@ -298,7 +298,7 @@ func (sf *data) schreibeVerloren() {
 
 	if sf.GibVerloren() == 1 {
 		//soundstr = "Sounds/sfx_sounds_negative1.wav"
-		erg = erg + "Es tut mit Leid, aber DarthSchmidtar hat das " +
+		erg = erg + "Es tut mit Leid, aber Darth Schmidter hat das " +
 			"Paket abgefangen!\n\n"
 		erg = erg + "Aber versuchen Sie es noch einmal."
 	} else if sf.GibVerloren()  == 2 {
@@ -577,7 +577,7 @@ func (sf *data)	ladeLevel(ilevel uint16) {
 		//sf.Netz = netze.New(0.,0.0)
 		sf.Netz = netze.New(0.2,0.2)
 		sf.txt.SchreibeText("Oh je, noch mehr Routerausfälle und " +
-			"Dark Schmidther will es jetzt wissen! \n\n")	
+			"Darth Schmidter will es jetzt wissen! \n\n")	
 		sf.SetzeVerloren(0)
 		sf.maxPunkte = uint16(sf.GibMinDist()) + 20 
 		sf.punkte = sf.maxPunkte
