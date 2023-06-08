@@ -138,7 +138,7 @@ func TheNETgame() (float32,uint32) {
 	go sf.Hintergrundmusik()
 		
 	
-	fmt.Println("Note beim Start: ",sf.GibNote())
+	fmt.Println("Note beim Starten: ",sf.GibNote())
 	
 	// ----------- Mausabfrage & Spielsteuerung ---------------------//
 	
@@ -225,6 +225,8 @@ func TheNETgame() (float32,uint32) {
 
 			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende des Spiels
 				beenden.DeaktiviereButton()
+				gfx.StoppeAlleSounds()
+				//fmt.Println("Alle Sounds werden gelöscht!")
 				break
 			}
 
