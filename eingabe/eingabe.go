@@ -1,5 +1,8 @@
-package eingabe
+// Autor: A. Cyriacus und M. Seiß
+// Datum: 07.06.2023
+// Zweck: Implementierung des ADO eingabe
 
+package eingabe
 
 import (
 	"gfx"
@@ -22,7 +25,7 @@ var spielstand spielstaende.Spielstand
 
 func klickbarElemente() {
 	
-	var ende, exit, tuer1, tuer2, tuer3, tuer4, tuer5 vierecke.Viereck
+	var ende, exit, tuer1, tuer2, tuer3, tuer4, tuer5, info vierecke.Viereck
 	var fabweb1, wthek1, darth2, jethi2, herk3, wthek3, darth4, amoebi4, wthek4 vierecke.Viereck
 	
 	ende = vierecke.New(1080,495,1075,615,1130,620,1135,500)
@@ -43,9 +46,10 @@ func klickbarElemente() {
 	tuer3 = vierecke.New(425,330,430,470,465,460,460,350)
 	tuer4 = vierecke.New(720,355,710,455,740,460,750,340)
 	tuer5 = vierecke.New(570,350,570,435,625,435,625,350)
+	info = vierecke.New(1083,275,1083,325,1133,325,1133,275)
 	
 	
-	klickbar[0] = append(klickbar[0],ende,tuer1,tuer2,tuer3,tuer4,tuer5)
+	klickbar[0] = append(klickbar[0],ende,tuer1,tuer2,tuer3,tuer4,tuer5,info)
 	klickbar[1] = append(klickbar[1],exit,fabweb1,wthek1)
 	klickbar[2] = append(klickbar[2],exit,darth2,jethi2)
 	klickbar[3] = append(klickbar[3],exit,herk3,wthek3)
@@ -80,9 +84,12 @@ func maussteuerung (raumnr int) {
 						
 						switch raumnr {
 							case 0:										//wenn im mainfloor (raumnr 0):
-							element.DeaktiviereKlickbar()
+							element.DeaktiviereKlickbar()				//im vorherigen Raum anklickbare Elemente sind deaktiviert
 							raumnr = index								//neue raumnr ist index des geklickten Elements (hier der angeklickten Tür, entspricht dem Semester)
-							if raumnr == 5 {
+							if raumnr == 6 {
+								darstellung.InfoDarstellen()
+								darstellung.MainfloorDarstellen()
+							} else if raumnr == 5 {
 								darstellung.EndbildschirmDarstellen(spielstand)
 							} else {	
 								darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
@@ -130,6 +137,7 @@ func Eingabe() {
 
 	gfx.Fenster(1200,700)
 
+	darstellung.StartFenster()
 	darstellung.MainfloorDarstellen()
 	
 	klickbarElemente()

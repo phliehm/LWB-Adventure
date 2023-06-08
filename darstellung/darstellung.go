@@ -1,5 +1,5 @@
-// Autor: A. Cyriacus
-// Datum: 05.06.2023
+// Autor: A. Cyriacus und M. Seiß
+// Datum: 07.06.2023
 // Zweck: Implementierung des ADO darstellung
 
 package darstellung
@@ -20,6 +20,8 @@ import (
 	"../MiniGames/4_Moorhuhn"
 	"../MiniGames/theNETgame"
 	"../Klassen/spielstaende"
+	"../Klassen/textboxen"
+	"../Klassen/buttons"
 	"fmt"
 )
 
@@ -45,9 +47,78 @@ func MainfloorDarstellen() {
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,1200,700)
 	LadeBild(0,50,"./Bilder/mainfloor.bmp")
+	Stiftfarbe(0,0,0)
+	SetzeFont("./Schriftarten/Starjedi.ttf",80)
+	SchreibeFont(105,290,"1")
+	SchreibeFont(103,442,"1")
+	SetzeFont("./Schriftarten/Starjedi.ttf",50)
+	SchreibeFont(968,314,"2")
+	SchreibeFont(961,430,"2")
+	SetzeFont("./Schriftarten/Starjedi.ttf",25)
+	SchreibeFont(436,359,"3")
+	SchreibeFont(438,414,"3")
+	SetzeFont("./Schriftarten/Starjedi.ttf",20)
+	SchreibeFont(725,368,"4")
+	SchreibeFont(720,415,"4")
+	LadeBildMitColorKey(1083,275, "./Bilder/MainGame/info-1.bmp", 255,255,255)
+	//LadeBildMitColorKey (105,325, "./Bilder/MainGame/1.bmp", 255,255,255)
+	//LadeBildMitColorKey (965,330, "./Bilder/MainGame/2.bmp", 255,255,255)
+	//LadeBildMitColorKey (434,371, "./Bilder/MainGame/3-2.bmp", 255,255,255)
+	//LadeBildMitColorKey (725,376, "./Bilder/MainGame/4.bmp", 255,255,255)
 	
 }
 
+func StartFenster() {
+	
+	//var startText textboxen.Textbox = textboxen.New(60,110,630,480)
+	//var startknopf buttons.Button = buttons.New(600,540,90,50,0,255,0,true," LOS!")
+	var startText textboxen.Textbox = textboxen.New(410,110,630,480)
+	var startknopf buttons.Button = buttons.New(950,540,90,50,0,255,0,true," LOS!")
+	
+	LadeBild(0,50,"./Bilder/MainGame/startbildschirm.bmp")
+	Stiftfarbe(0,0,0)
+	SetzeFont("./Schriftarten/Starjedi.ttf",80)
+	SchreibeFont(105,290,"1")
+	SchreibeFont(103,442,"1")
+	SetzeFont("./Schriftarten/Starjedi.ttf",50)
+	SchreibeFont(968,314,"2")
+	SchreibeFont(961,430,"2")
+	SetzeFont("./Schriftarten/Starjedi.ttf",25)
+	SchreibeFont(436,359,"3")
+	SchreibeFont(438,414,"3")
+	SetzeFont("./Schriftarten/Starjedi.ttf",20)
+	SchreibeFont(725,368,"4")
+	SchreibeFont(720,415,"4")
+	
+	//LadeBildMitColorKey(740,250, "./Bilder/MainGame/Darth-1.bmp", 255,255,255)
+	LadeBildMitColorKey(140,250, "./Bilder/MainGame/Darth-1.bmp", 255,255,255)
+	LadeBildMitColorKey(1083,275, "./Bilder/MainGame/info-1.bmp", 255,255,255)
+	
+	Stiftfarbe(255,255,255)
+	Transparenz(100)
+	//Vollrechteck(50,100,650,500)
+	Vollrechteck(400,100,650,500)
+	Transparenz(0)
+	
+	startText.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	//startText.SetzeSchriftgröße()
+	//startText.SetzeFarbe(255,255,255)
+	startText.SchreibeText("Willkommen zum LWB-Adventure-Game!\n\nBlablablablabla...\nBlablablablabla...\nBlablablablabla...\nBlablablablabla...\n")
+	startText.Zeichne()
+	startknopf.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	startknopf.ZeichneButton()
+	
+	for {
+		taste, status, mausX, mausY := MausLesen1()
+				
+		if taste==1 && status==1 {
+			if startknopf.TesteXYPosInButton(mausX,mausY) {
+				return
+			}
+		}
+	}
+	
+}
 
 func SemesterraumDarstellen(n int) {
 	
@@ -69,7 +140,31 @@ func SemesterraumDarstellen(n int) {
 	
 }
 
-
+func InfoDarstellen() {
+	
+	var infotext textboxen.Textbox = textboxen.New(570,120,500,350)
+	var ok buttons.Button = buttons.New(917,295,50,40,0,255,0,true,"OK")
+	
+	LadeBildMitColorKey(530,90, "./Bilder/MainGame/bubble2_red.bmp", 255,0,0)
+	LadeBildMitColorKey(955,390, "./Bilder/MainGame/palimpalim.bmp", 255,255,255)
+	
+	infotext.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	infotext.SchreibeText("Info: Blablablablabla...")
+	infotext.Zeichne()
+	ok.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	ok.ZeichneButton()
+	
+	for {
+		taste, status, mausX, mausY := MausLesen1()
+				
+		if taste==1 && status==1 {
+			if ok.TesteXYPosInButton(mausX,mausY) {
+				return
+			}
+		}
+	}
+	
+}
 
 func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 
@@ -122,7 +217,7 @@ func Startbildschirm() spielstaende.Spielstand {
 	
 	
 	//  ----------  Beispiel 1: Lade Spielstand  -------------------//	
-	fmt.Println("Geben Sie Ihren Nuternamen ein:")
+	fmt.Println("Geben Sie Ihren Spielernamen ein:")
 	fmt.Scanln(&spielername)
 	
 	spielstand = spielstaende.New(spielername,path)
