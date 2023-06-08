@@ -1,3 +1,8 @@
+
+// Paket bereitgestellt aus in der Vorlesung Alp2
+// von St. Schmidt
+
+
 package graphen
 
 // Vor.: keine
