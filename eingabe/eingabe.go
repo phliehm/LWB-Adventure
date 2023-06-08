@@ -133,11 +133,11 @@ func Eingabe() {
 
 	// gfx.Fenster(1200,700)
 
-	spielstand = darstellung.Startbildschirm()
+	//darstellung.Startbildschirm()
 
 	gfx.Fenster(1200,700)
 
-	darstellung.StartFenster()
+	spielstand = darstellung.StartFenster()
 	darstellung.MainfloorDarstellen()
 	
 	klickbarElemente()
