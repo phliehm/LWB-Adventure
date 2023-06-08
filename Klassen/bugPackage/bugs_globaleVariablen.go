@@ -26,11 +26,7 @@ var cursor_x, cursor_y uint16  = 0,y_offset*zH
 var a uint8 =1 // Bug Animation
 
 var bugArray [20]*bug
-
 var bugArraySchloss sync.Mutex
-
-var punkteArray [5]uint32 // Punktestand für jedes Level 
-var note float32	// Wird an die Main-Funktion des Spiels zurückgegeben
 
 var manual string = "Bewegen :  Pfeiltasten  |  Größere Schritte:  SHIFT + Pfeiltasten  |  Aufgeben:  'q'\n\n" 
 
@@ -43,8 +39,15 @@ var quit chan bool = make(chan bool)
 
 var wg sync.WaitGroup
 
-
-// Testing
-
-var xposWrite []int 
+var level, anzahlBugsImLevel uint16
+var levelSchloss sync.Mutex
+var lvlSpeed, lvlNervosität int
+var lvlLäuft bool
+var lvlZeit uint16 
+var lvlMaxPunkte [3]uint16 = [3]uint16{4800,4500,4000}
+var lvlMinPunkte [3]uint16 = [3]uint16{4000,3000,2000}
+const maxPunkteProLevel uint16 = 5000
+var punkteArray [3]uint16 // Punktestand für jedes Level 
+var EndN float32
+var EndP uint32
 

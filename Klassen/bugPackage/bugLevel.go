@@ -6,20 +6,20 @@ import (
 	"../../Klassen/textboxen"
 	"fmt"
 	//"math/rand"
-	"os"
+	//"os"
 	)
 
 	
 func Startbildschirm() {
 	punkteTB = textboxen.New(200,10,1000,20)
 	punkteTB.SetzeFarbe(255,255,255)
-	punkteTB.SetzeFont("../../Schriftarten/ltypeb.ttf")
+	punkteTB.SetzeFont("Schriftarten/ltypeb.ttf")
 	
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Cls()
 	gfx.UpdateAus()
-	gfx.LadeBild(5,5,"../../Bilder/BugAttack/Amoebius_klein.bmp")
-	gfx.LadeBildMitColorKey(1050,530,"../../Bilder/FebWebK_red_gespiegelt.bmp",255,0,0)
+	gfx.LadeBild(5,5,"Bilder/BugAttack/Amoebius_klein.bmp")
+	gfx.LadeBildMitColorKey(1050,530,"Bilder/FebWebK_red_gespiegelt.bmp",255,0,0)
 	HelloTB := textboxen.New(130,50,800,500)
 	HelloTB.SchreibeText("Willkomen beim Softwarepraktikum!\n\n" +
 						"Du hast ja schon begonnen! Bevor wir euch eine Einweisung gegeben haben?\n\nVerständlich!\n\n"+
@@ -32,7 +32,7 @@ func Startbildschirm() {
 						"halbautomatisches BUGFIXING-TOOL (hBT) programmiert. Damit solltes selbst du in der Lage sein die Bugs zu beseitigen. "+
 						"Sogar auf einem Apfel.\n\n"+
 						"Gehe einfach mit deinem Cursor an genau die Stelle des Bugs, drücke LEERTASTE....und BAAAAMM!" )
-	HelloTB.SetzeFont("../../Schriftarten/ltypeb.ttf")
+	HelloTB.SetzeFont("Schriftarten/ltypeb.ttf")
 	HelloTB.SetzeFarbe(0,255,0)
 	HelloTB.SetzeSchriftgröße(25)
 	HelloTB.Zeichne()
@@ -43,12 +43,15 @@ func Startbildschirm() {
 
 
 func LevelIntro() {
+	gfx.SpieleSound("Sounds/Music/bugWars.wav")
 	wg.Add(1)
 	beschreibeArrayIntro()
 	createNBugs(20,5,5)
 	go cleanBugArray()		// Läuft dann für alle weiteren Level
 	//go ShowBugs()
 	go ZeichneWeltIntro()
+	//time.Sleep(2e9)
+	
 	gfx.TastaturLesen1()
 	bugArraySchloss.Lock()
 	// tötet alle Bugs
@@ -57,67 +60,74 @@ func LevelIntro() {
 	}
 	bugArraySchloss.Unlock()
 	wg.Wait()
+	gfx.StoppeAlleSounds()
 	//time.Sleep(1e9) // Wichtig damit die ZeichneWeltIntro() die Chance hat zu beenden
 }
 
+// Erhöht das Level, sicher
+func erhöheLevel() {
+	levelSchloss.Lock()
+	level++
+	fmt.Println("level: ", level)
+	levelSchloss.Unlock()
+}
+
+// Startet ein neues Level mit den gegebenen Parametern
+func levelStart(){
+	wg.Add(1)
+	beschreibeArray()
+	createNBugs(anzahlBugsImLevel,lvlSpeed,lvlNervosität)
+	go ZeichneWelt()
+	go zählePunkte()
+	lvlZeit = 0
+	lvlLäuft = true
+	go lvlTimer()
+	// Warte bis keine Bugs mehr da sind
+	for howManyBugs()>0 {
+		time.Sleep(1e9)
+	}
+	lvlLäuft = false
+	wg.Wait()
+	ergebnisLevel()
+	
+}
+
+// Zeigt Punkte und Note nach Level an
+func ergebnisLevel() {
+	fmt.Println("Level: ",level)
+	fmt.Println("Punkte: ", punkteArray[level-1])
+	fmt.Println("Note: ", berechneNote())
+}
+
 // Tutorial
-func Level0(){
-	wg.Add(1)
-	gfx.SpieleSound("../../Sounds/Music/bugWars.wav")
-	beschreibeArray()
-	createNBugs(1,0,1)
-	
-	//go cleanBugArray()
-	//go ShowBugs()
-	
-	go ZeichneWelt()
-	
-	for howManyBugs() >0 {
-		time.Sleep(1e9)
-	}
-	
-	punkteArray[0] = zählePunkte()
-	wg.Wait()
-}
-
 func Level1(){
-	wg.Add(1)
-	autoAim =true
-	beschreibeArray()
-	//gfx.SpieleSound("../../Sounds/Music/bugWars.wav")
-	createNBugs(3,2,1)	
-	go ZeichneWelt()
-	
-	//go cleanBugArray()
-	//go ShowBugs()
-	
-	for howManyBugs()>0 {
-		time.Sleep(1e9)
-	}
-	
-	punkteArray[1] = zählePunkte()
-	
-	wg.Wait()
+	erhöheLevel()
+	anzahlBugsImLevel = 1
+	lvlSpeed = 0
+	lvlNervosität = 1
+	gfx.SpieleSound("Sounds/Music/bugWars.wav")
+	levelStart()
 	
 }
 
-func Level2() {
-	wg.Add(1)
-	fmt.Println("Lvl 2 startet")
-	beschreibeArray()
-	createNBugs(5,2,5)
-	go ZeichneWelt()
-	fmt.Println("lvl2 goint")
-	for howManyBugs()>0 {
-		time.Sleep(1e9)
-	}
-	
-	punkteArray[2] = zählePunkte()
-	wg.Wait()
-	f,_ := os.Create("xpositionen.txt")
-	f.WriteString(fmt.Sprintln(xposWrite))
-	f.Close()
+func Level2(){
+	erhöheLevel()
+	anzahlBugsImLevel = 3
+	lvlSpeed = 2
+	lvlNervosität = 2
+	autoAim =true
+	//gfx.SpieleSound("Sounds/Music/bugWars.wav")
+	levelStart()
+}
 
+func Level3() {
+	erhöheLevel()
+	lvlNervosität = 5
+	anzahlBugsImLevel = 5
+	lvlSpeed = 2
+	levelStart()
+	// Letztes Level vorbei
+	erhöheLevel()
 }
 
 
@@ -127,10 +137,10 @@ func LevelTutorial() {
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Cls()
 	
-	//gfx.LadeBild(10,20,"../../Bilder/Amoebius_klein.bmp")
+	//gfx.LadeBild(10,20,"Bilder/Amoebius_klein.bmp")
 	Level1TB:= textboxen.New(300,150,500,200)
 	Level1TB.SchreibeText("Level 1")
-	Level1TB.SetzeFont("../../Schriftarten/ltypeb.ttf")
+	Level1TB.SetzeFont("Schriftarten/ltypeb.ttf")
 	Level1TB.SetzeSchriftgröße(40)
 	Level1TB.SetzeFarbe(255,0,0)
 	Level1TB.Zeichne()
@@ -140,7 +150,7 @@ func LevelTutorial() {
 	"Bewege dich mit den Pfeiltasten und nutze das hBT mit LEERTASTE. Das hBT muss aber zentriert werden!! Also nicht einfach "+
 	"irgendwo Bugfixen. Sonst machst du alles nur noch schlimmer!\n\n"+
 	"Wenn dir das ganze über den Kopf wächst, drücke einfach 'q'." )
-	Level1StartTB.SetzeFont("../../Schriftarten/ltypeb.ttf")
+	Level1StartTB.SetzeFont("Schriftarten/ltypeb.ttf")
 	Level1StartTB.SetzeSchriftgröße(26)
 	Level1StartTB.SetzeFarbe(0,255,0)
 	Level1StartTB.Zeichne()
@@ -153,24 +163,27 @@ func LevelTutorial() {
 }
 
 
-
+/*
+ * Nicht mehr benötigt?
 func Endbildschirm() {
 	gfx.Cls()
 	BugAttackTB := textboxen.New(200,100,700,500)
 	BugAttackTB.SetzeZentriert()
 	BugAttackTB.SchreibeText(
 		"BUG ATTACK\nNote: "+fmt.Sprint(BerechneNote()))
-	BugAttackTB.SetzeFont("../../Schriftarten/ltypeb.ttf")
+	BugAttackTB.SetzeFont("Schriftarten/ltypeb.ttf")
 	BugAttackTB.SetzeFarbe(0,255,0)
 	BugAttackTB.SetzeSchriftgröße(100)
 	BugAttackTB.Zeichne()
 	fmt.Println(BerechneNote())
 	gfx.TastaturLesen1()
 }
+*/
 
+// Ergebnisbildschirm / Level
 func EndbildschirmReal() {
 	var path string
-	path = "../../"
+	path = ""
 	gfx.Stiftfarbe(255,255,255)
 	gfx.Cls()
 	
@@ -191,15 +204,19 @@ func EndbildschirmReal() {
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
 	gfx.SchreibeFont(285,170,"Gesamtnote")
 	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
-	gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",BerechneNote()))
+	EndN, EndP = berechneEndNoteUndGesamtPunktzahl()
+	gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",EndN))
 	
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	for i:=1; i<7; i++ {
-		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(BerechneNote()) + " Punkte")
-		gfx.SchreibeFont(710,175+uint16((i-1)*68),"           Note " + fmt.Sprintf("%2.1f",BerechneNote()))
+	//fmt.Println("level: ",level)
+	for i:=uint16(1); i<4; i++ {
+		//fmt.Println(i)
+		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(punkteArray[i-1]) + " Punkte")
+		gfx.SchreibeFont(710,175+uint16((i-1)*68),"           Note " + fmt.Sprintf("%2.1f",berechneNote()))
 	}
 	gfx.SchreibeFont(700,130+uint16(6*70),"----------------------")
-	gfx.SchreibeFont(710,160+uint16(6*70),"Gesamt:    " + fmt.Sprint(berechneSummeVonSlice(punkteArray[:])) + " Punkte")
+	
+	gfx.SchreibeFont(710,160+uint16(6*70),"Gesamt:    " + fmt.Sprint(EndP) + " Punkte")
 
 	gfx.TastaturLesen1()
 	//return gesamtnote, gesamtpunkte
@@ -207,6 +224,7 @@ func EndbildschirmReal() {
 
 
 /*
+ * Funktion um einen stillsitzenden Bug zu generieren und anzeigen zu lassen, für Fotos;)
 func BugFoto() {
 	gfx.Stiftfarbe(0,0,0)
 	beschreibeArraySchwarz()

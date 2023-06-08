@@ -17,7 +17,6 @@ var bug1Shape [21][2] uint16 = [21][2]uint16{{0,0},{6*zB,0},
 												{1*zB,5*zH},{5*zB,5*zH},
 												{0,6*zH},{6*zB,6*zH}}
 
-
 type bug struct {
 	x,y uint16		// x,y geben die linke obere Ecke des Bugs an
 	alive bool 
@@ -161,15 +160,12 @@ func (b *bug) startMoving() {
 		new_x = uint16(int(b.x)+((-b.speed/2 +rand.Intn(1+b.speed)))*int(zB))
 		new_y = uint16(int(b.y)+((-b.speed/2 +rand.Intn(1+b.speed)))*int(zH))
 		
-		//fmt.Println("x: ",((-b.speed/2 +-1+rand.Intn(1+b.speed)))*int(zB)," y: ",((-b.speed/2 +-1+rand.Intn(1+b.speed)))*int(zH))
-		xposWrite = append(xposWrite,(((-b.speed-1)/2 +rand.Intn(1+b.speed)))*int(zB))
 		// Kollision mit anderen Bugs
 		for _,bu:= range bugArray {
 			if bu==nil {continue}
 			if b!=bu {
 				new_x = versetzeBug(new_x,new_y,bu)
-			}
-				
+			}	
 		}
 		
 		
@@ -300,7 +296,7 @@ func cleanBugArray() {
 
 // Alle Bugs mit einem Tastendruck töten
 func killAllBugs() {
-	gfx.SpieleSound("../../Sounds/Retro Sounds/Explosions/Long/sfx_exp_long3.wav")
+	gfx.SpieleSound("Sounds/Retro Sounds/Explosions/Long/sfx_exp_long3.wav")
 	bugArraySchloss.Lock()
 	for _,b:= range bugArray {
 		if b!=nil {

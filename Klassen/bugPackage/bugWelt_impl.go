@@ -19,8 +19,8 @@ func ZeichneWelt() {
 		// setze globale Stiftfarbe
 		sg = 255	
 		zeichneArray()
-		gfx.LadeBild(0,0,"../../Bilder/BugAttack/Amoebius_klein.bmp")
-		punkteTB.SchreibeText(manual+"Punkte: "+fmt.Sprint((zählePunkte())))
+		gfx.LadeBild(0,0,"Bilder/BugAttack/Amoebius_klein.bmp")
+		punkteTB.SchreibeText(manual+"Punkte: "+fmt.Sprint(punkteArray[level-1]))
 		punkteTB.Zeichne()
 		bugArraySchloss.Lock()
 		for index,_ := range bugArray {
@@ -42,7 +42,7 @@ func ZeichneWeltIntro() {
 	BugAttackTB.SetzeZentriert()
 	BugAttackTB.SchreibeText(
 		"BUG ATTACK")
-	BugAttackTB.SetzeFont("../../Schriftarten/ComputerTypewriter.ttf")
+	BugAttackTB.SetzeFont("Schriftarten/ComputerTypewriter.ttf")
 	BugAttackTB.SetzeFarbe(0,255,0)
 	BugAttackTB.SetzeSchriftgröße(200)
 	
@@ -184,42 +184,35 @@ func getNextAliveBug() (uint16, uint16) {
 	if !autoAim {return 0,0+y_offset*zH}
 	bugArraySchloss.Lock()
 	for _,b := range bugArray {
-		if b!=nil {
+		if b==nil {continue}
+		if !b.stirbt {
 			bugArraySchloss.Unlock()
 			return b.x+3*zB,b.y+3*zH
 		}
 	}
 	bugArraySchloss.Unlock()
-	return 0,0
+	return 0,0+y_offset*zH
 }
 
-// Zählt die Punkte im Array
-func zählePunkte() uint32 {
-	var abzug uint32
-	var z,s uint16 
-	for z=0;z<weltH;z++ {
-		for s=0;s<weltB;s++ {
-			if welt[z][s] ==2 {abzug+=100}
-		}
-	}
-	return maxPunkteProLevel-abzug
-}
 
 // Prüft ob ein Bug getroffen wurde und zerstört diesen Bug oder lässt neuen wachsen, oder macht nichts
 func bugGetroffen() {
 	bugArraySchloss.Lock()
 	for _,b:= range bugArray {
 		if b==nil{continue}	
+		if b.stirbt {
+			continue
+		}
 		// Wenn der Cursor in der Mitte des Bugs ist
-		if (cursor_x-3*zB == b.x && cursor_y-3*zH==b.y) {
-			gfx.SpieleSound("../../Sounds/Retro Sounds/Explosions/Long/sfx_exp_long1.wav")
+		if (cursor_x-3*zB == b.x && cursor_y-3*zH==b.y)  {
+			gfx.SpieleSound("Sounds/Retro Sounds/Explosions/Long/sfx_exp_long1.wav")
 			b.stirbt=true
 			bugArraySchloss.Unlock()
 			return
 			// Wenn der Cursor auf dem Rest des Körpers des Bugs ist --> erzeuge neue Bugs
-		}else if (cursor_x > b.x+zB && cursor_x<b.x+6*zB) && (cursor_y> b.y+zH && cursor_y<b.y+6*zH) {
+		}else if (cursor_x > b.x+zB && cursor_x<b.x+5*zB) && (cursor_y> b.y+zH && cursor_y<b.y+5*zH) {
 			//fmt.Println("Oh nein!! Der Bug ist provoziert")
-			gfx.SpieleSound("../../Sounds/Retro Sounds/General Sounds/Negative Sounds/sfx_sounds_damage1.wav")
+			gfx.SpieleSound("Sounds/Retro Sounds/General Sounds/Negative Sounds/sfx_sounds_damage1.wav")
 			// Neuen Bug generieren
 			bugArraySchloss.Unlock()
 			babyBugs(b)
@@ -231,4 +224,31 @@ func bugGetroffen() {
 	
 	// keinen Bug getroffen, mache Feld schwarz
 	welt[cursor_y/zH-y_offset][cursor_x/zB] = 2
+}
+
+// Zählt die Punkte im Array
+func zählePunkte() {
+	for level <4{
+		levelSchloss.Lock()
+		var abzug uint16
+		var z,s uint16 
+		for z=0;z<weltH;z++ {
+			for s=0;s<weltB;s++ {
+				if welt[z][s] ==2 {abzug+=10}
+			}
+		}
+		abzug+=lvlZeit*50
+		if abzug > maxPunkteProLevel{punkteArray[level-1] = 0		// negative Punkte vermeiden
+		}else {punkteArray[level-1] = maxPunkteProLevel-abzug}
+		levelSchloss.Unlock()
+		time.Sleep(1e8)
+	}
+}
+
+// Misst die Zeit in einem Level
+func lvlTimer() {
+	for lvlLäuft {
+		time.Sleep(1e9)
+		lvlZeit++
+	}
 }
