@@ -10,15 +10,19 @@ import (
 	"../../Klassen/buttons"
 	"../../Klassen/textboxen"
 	"../../Klassen/texteditoren"
+	"../../Klassen/vierecke"
 )
 
 var path string = ""
 var path2 string = "./" //MiniGames/2_ALP2/"
 
-var texte []string = make([]string,14)
+var punkte, fehler uint32
+//var note float32
+
+var texte []string = make([]string,11)
 var aktuellerText int = 1
 
-var ausgTexte [][]string = make([][]string,14)
+var ausgTexte [][]string = make([][]string,11)
 var ausg1 []string = make ([]string,7)
 var ausg2 []string = make ([]string,7)
 var ausg3 []string = make ([]string,8)
@@ -30,20 +34,20 @@ var ausg8 []string = make ([]string,3)
 var ausg9 []string = make ([]string,7)
 var ausg10 []string = make ([]string,5)
 
-var eingTexte []string = make([]string,14)
-var eingTexte2 []string = make([]string,14)
+var eingTexte []string = make([]string,11)
+var eingTexte2 []string = make([]string,11)
 
-var hilfeTexte [][]string = make([][]string,14)
-var hilfen1 []string = make ([]string,3)
-var hilfen2 []string = make ([]string,3)
-var hilfen3 []string = make ([]string,3)
-var hilfen4 []string = make ([]string,3)
-var hilfen5 []string = make ([]string,3)
-var hilfen6 []string = make ([]string,3)
-var hilfen7 []string = make ([]string,3)
-var hilfen8 []string = make ([]string,3)
-var hilfen9 []string = make ([]string,3)
-var hilfen10 []string = make ([]string,3)
+var hilfeTexte [][]string = make([][]string,11)
+var hilfen1 []string = make ([]string,4)
+var hilfen2 []string = make ([]string,4)
+var hilfen3 []string = make ([]string,4)
+var hilfen4 []string = make ([]string,4)
+var hilfen5 []string = make ([]string,4)
+var hilfen6 []string = make ([]string,4)
+var hilfen7 []string = make ([]string,4)
+var hilfen8 []string = make ([]string,4)
+var hilfen9 []string = make ([]string,4)
+var hilfen10 []string = make ([]string,4)
 
 //----------------------Hilfsfunktionen----------------------------
 
@@ -78,68 +82,78 @@ func eingabeTexte() {
 }
 
 func eingabeTexte2() {
-	//eingTexte2[1] = "SELECT*FROMraeume;"
-	//eingTexte2[2] = "SELECT * FROM veranstaltungen WHERE semester = 4;"
-	//eingTexte2[3] = "SELECT dozname FROM dozenten;"
-	//eingTexte2[4] = "SELECT * FROM veranstaltungen WHERE vname LIKE '%Programmierung';"
-	//eingTexte2[5] = "SELECT lieblingsgetraenk FROM dozenten WHERE dozname = 'Herk';"
-	//eingTexte2[6] = "SELECT COUNT(*) FROM mini-games AS Anzahl_MiniGames;"
-	//eingTexte2[7] = "SELECT vname, MAX(sws) FROM veranstaltungen;"
-	//eingTexte2[8] = "SELECT SUM(sws) FROM veranstaltungen AS Gesamtanzahl_SWS;"
-	//eingTexte2[9] = "SELECT ort, COUNT(*) FROM raeume, veranstaltungen AS Anzahl_Veranstaltungen WHERE raumnr = semester GROUP BY ort ORDER BY COUNT(*);"					//TODO
-	//eingTexte2[10] = "SELECT vname, semester, sws FROM veranstaltungen NATURAL JOIN dozenten WHERE dozname = 'Winnie the K' ORDER BY sws DESC;"
+	//eingTexte2[1] = ""
+	//eingTexte2[2] = ""
+	//eingTexte2[3] = ""
+	eingTexte2[4] = "SELECT*FROMveranstaltungenWHEREvnameLIKE'%Programmierung%';"
+	//eingTexte2[5] = ""
+	//eingTexte2[6] = ""
+	//eingTexte2[7] = ""
+	//eingTexte2[8] = ""
+	//eingTexte2[9] = ""
+	//eingTexte2[10] = ""
 }
 
 func hilfeText() {
 	
-	hilfen1[0] = "Hilfe 1.1"
-	hilfen1[1] = "Hilfe 1.2"
-	hilfen1[2] = "Das wäre die richtige Lösung gewesen!"
+	hilfen1[0] = ""
+	hilfen1[1] = "Hilfe 1: Nutze SELECT ... FROM ...!"
+	hilfen1[2] = "Hilfe 2: Wenn die Ausgabe alle Attribute eines Eintrags enthalten soll, nutze * !"
+	hilfen1[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT * FROM raeume;"
 	hilfeTexte[1] = hilfen1
 	
 	hilfen2[0] = ""
-	hilfen2[1] = ""
-	hilfen2[2] = ""
+	hilfen2[1] = "Hilfe 1: Nutze ... WHERE ... = ...!"
+	hilfen2[2] = "Hilfe 2: Wenn die Ausgabe alle Attribute eines Eintrags enthalten soll, nutze * !"
+	hilfen2[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT * FROM veranstaltungen WHERE semester = 4;"
 	hilfeTexte[2] = hilfen2
 	
 	hilfen3[0] = ""
-	hilfen3[1] = ""
-	hilfen3[2] = ""
+	hilfen3[1] = "Hilfe 1: Nutze nur SELECT ... FROM ...!"
+	hilfen3[2] = "Hilfe 2: Wenn die Ausgabe nur ein bestimmtes Attribut enthalten soll, nutze statt * den Attributnamen!"
+	hilfen3[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT dozname FROM dozenten;"
 	hilfeTexte[3] = hilfen3
 	
 	hilfen4[0] = ""
-	hilfen4[1] = ""
-	hilfen4[2] = ""
+	hilfen4[1] = "Hilfe 1: Nutze ... WHERE ... LIKE ...!"
+	hilfen4[2] = "Hilfe 2: Wie wäre es mit ... '%Programmierung' ?"
+	hilfen4[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT * FROM veranstaltungen WHERE vname LIKE '%Programmierung';"
 	hilfeTexte[4] = hilfen4
 	
 	hilfen5[0] = ""
-	hilfen5[1] = ""
-	hilfen5[2] = ""
+	hilfen5[1] = "Hilfe 1: Nutze ... WHERE ... = ...!"
+	hilfen5[2] = "Hilfe 2: Denke daran, dass das Attribut dozname ein String ist, also '...' genutzt werden muss!"
+	hilfen5[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT lieblingsgetraenk FROM dozenten WHERE dozname = 'Herk';"
 	hilfeTexte[5] = hilfen5
 	
 	hilfen6[0] = ""
-	hilfen6[1] = ""
-	hilfen6[2] = ""
+	hilfen6[1] = "Hilfe 1: Nutze SELECT COUNT(*) ... !"
+	hilfen6[2] = "Hilfe 2: Um die Ausgabe-Überschrift festzulegen, brauchst Du zwischen COUNT(*) und FROM das Kommando AS ... !"
+	hilfen6[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT COUNT(*) AS AnzahlMiniGames FROM mini-games;"
 	hilfeTexte[6] = hilfen6
 	
 	hilfen7[0] = ""
-	hilfen7[1] = ""
-	hilfen7[2] = ""
+	hilfen7[1] = "Hilfe 1: Nutze SELECT SUM(...) ... !"
+	hilfen7[2] = "Hilfe 2: Auch hier brauchst Du  das Kommando AS ... !"
+	hilfen7[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT SUM(sws) AS GesamtanzahlSWS FROM veranstaltungen;"
 	hilfeTexte[7] = hilfen7
 	
 	hilfen8[0] = ""
-	hilfen8[1] = ""
-	hilfen8[2] = ""
+	hilfen8[1] = "Hilfe 1: Nutze ... WHERE ... = (SELECT ...)!"
+	hilfen8[2] = "Hilfe 2: In der zweiten SELECT-Anweisung brauchst Du das Kommando MAX(...)"
+	hilfen8[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT vname FROM veranstaltungen WHERE sws = (SELECT MAX(sws) FROM veranstaltungen);"
 	hilfeTexte[8] = hilfen8
 	
 	hilfen9[0] = ""
-	hilfen9[1] = ""
-	hilfen9[2] = ""
+	hilfen9[1] = "Hilfe 1: Drei der sechs benötigten Kommandos sind NATURAL JOIN, WHERE und ORDER BY!"
+	hilfen9[2] = "Hilfe 2: Gib genau an, welche Atrribute in der Ausgabe enthalten sein sollen und denke am Ende an die absteigende Sortierung!"
+	hilfen9[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT vname, semester, sws FROM veranstaltungen NATURAL JOIN dozenten WHERE dozname = 'WinnietheK' ORDER BY sws DESC;"
 	hilfeTexte[9] = hilfen9
 	
 	hilfen10[0] = ""
-	hilfen10[1] = ""
-	hilfen10[2] = ""
+	hilfen10[1] = "Hilfe 1: Nutze u.a. COUNT(*), GROUP BY und ORDER BY!"
+	hilfen10[2] = "Hilfe 2: Nutze das Kartesische Produkt und die Tatsache, dass raumnr und semester gleich sind! Achte außerdem auf die Attribute, die in der Ausgabe enthalten sein sollen!"
+	hilfen10[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT ort, COUNT(*) AS AnzahlVeranstaltungen FROM raeume, veranstaltungen WHERE raumnr = semester GROUP BY ort ORDER BY COUNT(*);"
 	hilfeTexte[10] = hilfen10
 	
 }
@@ -218,15 +232,31 @@ func ausgabeTexte() {
 	ausgTexte[9] = ausg9
 }
 
-func erzeugeFehlerausgabe(ausgabe textboxen.Textbox) {
+func initialausgabe(ausgabe textboxen.Textbox) {
+	//Stiftfarbe(255,255,255)
+	//Vollrechteck(310,370,840,210)
+	ausgabe.SetzeHöhe(190)
 	ausgabe.RahmenAn(true)
-	ausgabe.SetzeRahmenFarbe(255,0,0)
-	ausgabe.SetzePosition(320,527)
-	ausgabe.SetzeHöhe(43)
-	ausgabe.SetzeZeilenAbstand(3)
-	ausgabe.SetzeFarbe(255,0,0)
-	ausgabe.SchreibeText("FALSCHE EINGABE! --> Überprüfe die Anfrage / korrigiere die Schreibweise!!!\n(Kommandos GROSS, sonst klein, strings mit '...' und Simikolon nicht vergessen!)")
+	ausgabe.SetzeRahmenFarbe(0,0,0)
+	ausgabe.HintergrundAn(true)
+	ausgabe.SetzeHintergrundFarbe(255,255,255)
+	ausgabe.SetzeFarbe(0,255,0)
+	ausgabe.SetzeZeilenAbstand(5)
+	ausgabe.SchreibeText("Hier erscheint das Ergebnis Deiner SQL-Anfrage, sobald Du sie eingegeben und mit ENTER ausgeführt hast! (Hinweis: Kommandos GROSS schreiben, alles andere klein!)")
 	ausgabe.Zeichne()
+	//ausgabe.RahmenAn(false)
+}
+
+func erzeugeFehlerausgabe() {
+	var falschausgabe textboxen.Textbox = textboxen.New(320,380,820,43)
+	falschausgabe.RahmenAn(true)
+	falschausgabe.SetzeRahmenFarbe(255,0,0)
+	falschausgabe.SetzePosition(320,527)
+	//falschausgabe.SetzeHöhe(43)
+	falschausgabe.SetzeZeilenAbstand(3)
+	falschausgabe.SetzeFarbe(255,0,0)
+	falschausgabe.SchreibeText("FALSCHE EINGABE! --> Überprüfe die Anfrage / korrigiere die Schreibweise!!!\n(Kommandos GROSS, sonst klein, strings mit '...' und Simikolon nicht vergessen!)")
+	falschausgabe.Zeichne()
 }
 
 func erzeugeAusgabe(n int) {
@@ -235,6 +265,23 @@ func erzeugeAusgabe(n int) {
 	for i:=0; i<len(ausgTexte[n]); i++ {
 		SchreibeFont(328,uint16(383+i*22),ausgTexte[n][i])
 	}
+}
+
+//Punkte und Note ausgeben
+func punktenoteSchreiben(punktenote textboxen.Textbox, levelpunkte, punkte uint32) {
+	punktenote.HintergrundAn(true)
+	punktenote.SetzeHintergrundFarbe(255,255,255)
+	if punkte < 10 {
+		punktenote.SchreibeText("Punkte: "+fmt.Sprint(levelpunkte)+"\n\nNote: ")
+	} else {
+		punktenote.SchreibeText("Punkte: "+fmt.Sprint(punkte)+"\n\nNote: ")
+	}
+	
+	if notenberechnung(punkte) > 0 {
+		punktenote.SetzeHöhe(250)
+		punktenote.SchreibeText("Punkte: "+fmt.Sprint(punkte)+"\n\nNote: "+fmt.Sprintf("%2.1f",notenberechnung(punkte)))
+	}
+	punktenote.Zeichne()
 }
 
 func ohneLeerzeichen(s string) string {
@@ -247,8 +294,32 @@ func ohneLeerzeichen(s string) string {
 	return erg
 }
 
+func notenberechnung(punkte uint32) float32 {
+	if punkte >= 100 { return 1.0
+	} else if punkte >= 90 { 
+		return 1.3
+	} else if punkte >= 80 { 
+		return 1.7
+	} else if punkte >= 75 {
+		return 2.0
+	} else if punkte >= 70 {
+		return 2.3
+	} else if punkte >= 65 {
+		return 2.7
+	} else if punkte >= 60 {
+		return 3.0
+	} else if punkte >= 55 {
+		return 3.3
+	} else if punkte >= 50 {
+		return 4.0
+	} else { return 0.0 }
+}
+
 //func SQLgame() (float32,uint32) {
-func SQLgame() {
+func SQLgame() (punkte uint32, note float32) {
+	
+	//punkte = 10
+	//fmt.Println("Punkte:",fmt.Sprint(punkte))
 	
 //-----------------initialisiere gfx-Fenster-----------------------	
 	if ! FensterOffen() {
@@ -268,9 +339,11 @@ func SQLgame() {
 	hilfeText()
 	
 //------------------Variablen--------------------------------------
+	
 	var next buttons.Button = buttons.New(445,240,80,35,0,255,0,true,"   next")
 	var firsted textboxen.Textbox = textboxen.New(320,600,820,48)
 	var ausgabe textboxen.Textbox = textboxen.New(320,380,820,190)
+	//var falschausgabe textboxen.Textbox = textboxen.New(320,380,820,43)
 	var datainfo textboxen.Textbox = textboxen.New(610,265,530,85)
 	//var fehlerausgabe textboxen.Textbox = textboxen.New(320,550,820,25)
 	SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",50)
@@ -278,18 +351,36 @@ func SQLgame() {
 	SetzeFont(path2 + "Schriftarten/Ubuntu-R.ttf",50)
 	var bubbletext textboxen.Textbox = textboxen.New(220,150,305,120)
 	var infotext textboxen.Textbox = textboxen.New(600,90,540,120)
+	var punktenote textboxen.Textbox = textboxen.New(30,110,110,150)
+	var durchgefallen textboxen.Textbox = textboxen.New(30,180,110,80)
 	var ted texteditoren.Texteditor
+	var exit vierecke.Viereck = vierecke.New(1080,90,1080,205,1170,205,1170,90)
+	var punktespeicher []uint32
+	punktespeicher = make([]uint32,len(texte))
 	
 //------------------Grafik-Elemente--------------------------------
 	
 	LadeBild(150,90,path2 + "Bilder/bubble2_flipped_400.bmp")
 	LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/Herk_200.bmp",255,255,255)
-		
+	
 	SetzeFont(path2 + "Schriftarten/brlnsdb.ttf",60)
 	Stiftfarbe(0,255,0)
 	SchreibeFont(70,10,"SQL-Quest:")
 	SetzeFont(path2 + "Schriftarten/brlnsr.ttf",50)
 	SchreibeFont(390,20,"Explore the LWB-Adventure-World!")
+	
+	//punktenote.SetzeZeilenAbstand(5)
+	punktenote.SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf")
+	punktenote.SetzeSchriftgröße(20)
+	punktenote.SchreibeText("Punkte: 0\n\nNote:")
+	punktenote.Zeichne()
+	
+	durchgefallen.SetzeZeilenAbstand(5)
+	durchgefallen.SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf")
+	durchgefallen.SetzeSchriftgröße(20)
+	durchgefallen.SetzeFarbe(255,0,0)
+	durchgefallen.SchreibeText("nicht bestanden")
+	durchgefallen.Zeichne()
 	
 	//infotext.SetzeFarbe(0,0,0)
 	infotext.SetzeZeilenAbstand(5)
@@ -308,15 +399,7 @@ func SQLgame() {
 	datainfo.SchreibeText("> raeume (raumnr, raumname, ort)\n> dozenten (doznr, dozname, lieblingsgetraenk)\n> veranstaltungen (vnr, vname, doznr, semester, sws)\n> mini-games (gamenr, gamename, vnr, maxpunktzahl)")
 	datainfo.Zeichne()
 	
-	ausgabe.RahmenAn(true)
-	ausgabe.SetzeRahmenFarbe(0,0,0)
-	ausgabe.HintergrundAn(true)
-	ausgabe.SetzeHintergrundFarbe(255,255,255)
-	ausgabe.SetzeFarbe(0,255,0)
-	ausgabe.SetzeZeilenAbstand(5)
-	ausgabe.SchreibeText("Hier erscheint das Ergebnis Deiner SQL-Anfrage, sobald Du sie eingegeben und mit ENTER ausgeführt hast! (Hinweis: Kommandos GROSS schreiben, alles andere klein!)")
-	ausgabe.Zeichne()
-	ausgabe.RahmenAn(false)
+	initialausgabe(ausgabe)
 	
 	/*
 	fehlerausgabe.RahmenAn(true)
@@ -354,8 +437,10 @@ func SQLgame() {
 	
 //----------------Spiel-Steuerung-----------------------------------
 
-	for i:=1; i<len(eingTexte); i++ {
+A:	for i:=1; i<len(texte); i++ {
 		fmt.Println("aktuelles i:",i)
+		
+		var levelpunkte uint32 = 10
 	
 		for {
 
@@ -363,12 +448,24 @@ func SQLgame() {
 			if taste==1 && status==1 {
 				if next.TesteXYPosInButton(mausX,mausY) {
 					fmt.Println("Weiter angeklickt!")
+					
+					if i == 1 {
+						//Beenden-Hinweis nach dem ersten Klick auf den next-Button
+						Stiftfarbe(0,0,0)
+						SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf",14)
+						SchreibeFont(30,280,"Beenden des")
+						SchreibeFont(30,300,"Spiels:")
+						SchreibeFont(30,320,"Tippe exit")
+						SchreibeFont(30,340,"und ENTER!")
+					}
+					
 					Stiftfarbe(255,255,255)
 					Vollrechteck(220,115,305,170)
 					bubbletext.SchreibeText(texte[aktuellerText])
 					bubbletext.Zeichne()
 					bubblehead.SchreibeText("Level "+fmt.Sprint(i))
 					bubblehead.Zeichne()
+					initialausgabe(ausgabe)
 					//next.ZeichneButton()
 					//Stiftfarbe(255,255,255)							//next-Button "ausgrauen"
 					//Transparenz(50)
@@ -388,34 +485,61 @@ func SQLgame() {
 		ted = texteditoren.New(315,595,830,63,20,true)
 					
 		for {
-			//var eing string = ohneLeerzeichen(ted.GibString())
-			//if  eing == eingTexte[i] || eing == eingTexte2[i] {
-			if ohneLeerzeichen(ted.GibString()) == eingTexte[i] {
-				//Stiftfarbe(255,255,255)
-				//Vollrechteck(443,238,84,39)
-				SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",30)
-				Stiftfarbe(255,255,255)
-				Vollrechteck(220,235,315,40)
-				Vollrechteck(100,500,100,100)
-				LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/herk_200.bmp",255,255,255)
-				Stiftfarbe(0,255,0)
-				SchreibeFont(230,240,"RICHTIG!!!  :-)")
-				next.ZeichneButton()
-				ausgabe.RahmenAn(true)
-				ausgabe.SetzeRahmenFarbe(0,0,0)
-				ausgabe.HintergrundAn(true)
-				ausgabe.SetzeHintergrundFarbe(255,255,255)
-				ausgabe.SetzeFarbe(0,255,0)
-				ausgabe.SchreibeText("")				
-				ausgabe.Zeichne()
-				Stiftfarbe(255,255,255)
-				Vollrechteck(311,375,838,200)
-				erzeugeAusgabe(i)
-				//next.AktiviereButton()
+			
+			if ted.GibString() == "exit" {
+				i = 11
 				break
-			} else {
-				
-				for j:=0; j<3; j++ {
+			}
+			
+			for j:=0; j<4; j++ {
+			
+				//var eing string = ohneLeerzeichen(ted.GibString())
+				//if  eing == eingTexte[i] || eing == eingTexte2[i] {
+								
+				if ohneLeerzeichen(ted.GibString()) == eingTexte[i] || ted.GibString() == "42" {
+					//Stiftfarbe(255,255,255)
+					//Vollrechteck(443,238,84,39)
+					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",30)
+					Stiftfarbe(255,255,255)
+					Vollrechteck(220,235,315,40)
+					Vollrechteck(100,500,100,100)
+					LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/herk_200.bmp",255,255,255)
+					Stiftfarbe(0,255,0)
+					SchreibeFont(230,240,"RICHTIG!!!  :-)")
+					punkte = punkte + levelpunkte
+					punktespeicher[i] = levelpunkte
+					punktenoteSchreiben(punktenote,levelpunkte,punkte)
+					//fmt.Println("Punkte:",fmt.Sprint(punkte))
+					next.ZeichneButton()
+					
+					ausgabe.RahmenAn(true)
+					ausgabe.SetzeRahmenFarbe(0,0,0)
+					ausgabe.SetzeHöhe(190)
+					ausgabe.HintergrundAn(true)
+					ausgabe.SetzeHintergrundFarbe(255,255,255)
+					ausgabe.SetzeFarbe(0,255,0)
+					ausgabe.SchreibeText("")				
+					ausgabe.Zeichne()
+					Stiftfarbe(255,255,255)
+					Vollrechteck(311,375,838,200)
+					erzeugeAusgabe(i)
+					//next.AktiviereButton()
+					continue A
+				} else {
+					
+					switch j {
+						case 0:
+						levelpunkte = levelpunkte - 1
+						case 1:
+						levelpunkte = levelpunkte - 2
+						case 2:
+						levelpunkte = levelpunkte - 3
+						case 3:
+						levelpunkte = levelpunkte - 4
+					}
+					//punktenoteSchreiben(punktenote,levelpunkte,punkte)
+					
+					//fmt.Println("Punkte:",fmt.Sprint(punkte))
 					
 					if j == 0 {											//Next-Button "ausgrauen"
 						Stiftfarbe(255,255,255)
@@ -424,6 +548,7 @@ func SQLgame() {
 					}
 					
 					//ausgabe.Zeichnen()
+					Stiftfarbe(255,255,255)
 					Transparenz(0)
 					Vollrechteck(311,371,838,218)						//alte Ausgabe überdecken
 					//Vollrechteck(320,375,820,200)
@@ -434,16 +559,19 @@ func SQLgame() {
 					//ausgabe.SetzeRahmenFarbe(0,0,0)
 					ausgabe.HintergrundAn(false)
 					//ausgabe.SetzeHintergrundFarbe(255,255,255)
+					ausgabe.SetzeHöhe(190)
+					ausgabe.RahmenAn(true)
+					ausgabe.SetzeRahmenFarbe(0,0,0)
 					ausgabe.SetzeFarbe(255,0,0)
 					ausgabe.SchreibeText(hilfeTexte[i][j])				
 					ausgabe.Zeichne()
 					
-					erzeugeFehlerausgabe(ausgabe)
+					if j<3 { erzeugeFehlerausgabe() }
 					
 					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",30)
 					Stiftfarbe(255,0,0)
 					
-					if j<2 {
+					if j<3 {
 						SchreibeFont(225,240,"NOCHMAL!  :-(")
 						ted = texteditoren.New(315,595,830,63,20,true)
 					} else {
@@ -454,12 +582,73 @@ func SQLgame() {
 						next.ZeichneButton()
 					}
 				}
+	
 			}
+			fmt.Println("Punkte:",fmt.Sprint(punkte))
 			break					
+		}		
+	}
+	
+	punkte = punkte - 10
+	fmt.Println("Punkte:",fmt.Sprint(punkte))
+	
+	//----------------- Endbildschirm --------------------------------------
+	
+	Stiftfarbe(255,255,255)
+	Cls()
+	
+	//SpieleSound(path + "Sounds/the_force.wav")
+	
+	LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
+	LadeBildMitColorKey(80,370,path + "Bilder/SQLGame/Herk_200.bmp",255,255,255)
+	LadeBild(620,80,path2 + "Bilder/paper_500.bmp")
+	LadeBild(960,520,path2 + "Bilder/certified_100.bmp")
+	LadeBild(1080,90,path2 + "Bilder/Zurück-Symbol.bmp")
+	//exit.SetKoordinaten(1080,80,1080,195,1170,195,1170,80)
+	exit.SetzeFarbe(0,0,0)
+	exit.AktiviereKlickbar()
+	
+	SetzeFont(path2 + "Schriftarten/brlnsdb.ttf",60)
+	Stiftfarbe(0,255,0)
+	SchreibeFont(70,10,"SQL-Quest:")
+	SetzeFont(path2 + "Schriftarten/brlnsr.ttf",50)
+	SchreibeFont(390,20,"Explore the LWB-Adventure-World!")
+	
+	Stiftfarbe(0,0,0)
+	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	SchreibeFont(295,140,"Du hast die")
+	SchreibeFont(310,260,"erreicht!")
+	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	SchreibeFont(285,170,"Gesamtnote")
+	SetzeFont(path2 + "Schriftarten/Starjedi.ttf",42)
+	SchreibeFont(325,195,"1.0")												//TODO
+	
+	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	for i:=1; i<len(texte); i++ {
+		if i == 10 {
+			if punktespeicher[i] < 10 {
+				SchreibeFont(710,150+uint16((i-1)*40),"Level "+ fmt.Sprint(i) + ":    "+fmt.Sprint(punktespeicher[i])+" Punkte")
+			} else {
+				SchreibeFont(710,150+uint16((i-1)*40),"Level "+ fmt.Sprint(i) + ":   "+fmt.Sprint(punktespeicher[i])+" Punkte")
+			}
+		} else {
+			if punktespeicher[i] < 10 {
+				SchreibeFont(710,150+uint16((i-1)*40),"Level "+ fmt.Sprint(i) + ":     "+fmt.Sprint(punktespeicher[i])+" Punkte")
+			} else {
+				SchreibeFont(710,150+uint16((i-1)*40),"Level "+ fmt.Sprint(i) + ":    "+fmt.Sprint(punktespeicher[i])+" Punkte")
+			}
 		}
 	}
-		
-
+	
+	SchreibeFont(700,550,"----------------------")
+	if punkte == 100 {
+		SchreibeFont(710,580,"Gesamt:   "+fmt.Sprint(punkte)+" Punkte")
+	} else {
+		SchreibeFont(710,580,"Gesamt:    "+fmt.Sprint(punkte)+" Punkte")
+	}
+	
 	TastaturLesen1()
+	
+	return punkte, notenberechnung(punkte)	
 	
 }
