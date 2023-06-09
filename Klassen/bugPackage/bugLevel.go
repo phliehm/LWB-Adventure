@@ -131,9 +131,10 @@ func Level2(){
 	lvlNervosität = 2
 	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
 	alleLadebalken = append(alleLadebalken,lautoaim)
+	/*
 	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
 	alleLadebalken = append(alleLadebalken,l)
-
+	*/
 	//gfx.SpieleSound("Sounds/Music/bugWars.wav")
 	levelStart()
 }
@@ -176,6 +177,21 @@ func Level5() {
 	anzahlBugsImLevel = 10
 	lvlSpeed = 2
 	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
+	alleLadebalken = append(alleLadebalken,l)
+	levelStart()
+	// Letztes Level vorbei
+	//erhöheLevel()
+}
+
+func Level6() {
+	LevelTutorial()
+	erhöheLevel()
+	lvlNervosität = 6
+	anzahlBugsImLevel = 20
+	lvlSpeed = 4
+	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",1)
 	alleLadebalken = append(alleLadebalken,lautoaim)
 	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
 	alleLadebalken = append(alleLadebalken,l)

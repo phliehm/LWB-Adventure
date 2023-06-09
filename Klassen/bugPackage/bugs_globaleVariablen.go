@@ -49,10 +49,10 @@ var levelSchloss sync.Mutex
 var lvlSpeed, lvlNervosität int
 var lvlLäuft bool
 var lvlZeit uint16 
-const maxLevel = 5 
-var lvlMaxPunkte [maxLevel]uint16 = [maxLevel]uint16{4800,4500,4000,4000,4000}
-var lvlMinPunkte [maxLevel]uint16 = [maxLevel]uint16{4000,3000,2000,2000,2000}
-var LevelArray [maxLevel]func() = [maxLevel]func(){Level1,Level2,Level3,Level4,Level5}
+const maxLevel = 6 
+var lvlMaxPunkte [maxLevel]uint16 = [maxLevel]uint16{4800,4500,4000,4000,4000,4000}
+var lvlMinPunkte [maxLevel]uint16 = [maxLevel]uint16{4000,3000,2000,2000,2000,2000}
+var LevelArray [maxLevel]func() = [maxLevel]func(){Level1,Level2,Level3,Level4,Level5,Level6}
 
 const maxPunkteProLevel uint16 = 5000
 var punkteArray [maxLevel]uint16 // Punktestand für jedes Level 

@@ -301,14 +301,20 @@ func (l *ladebalken) zeichne() {
 func (l *ladebalken) cooldown() {
 	*l.wertAdresse = 0		// Setze Cooldown auf 0
 	for lvlLäuft {
-		if *l.wertAdresse == 0 {					
-			for i:=uint16(0);i<=10;i++ {
-				*l.wertAdresse = i		// Überschreibe den Wert an der Adresse
-				time.Sleep(time.Duration(l.cdlänge)*1e6)
-			}
+		if *l.wertAdresse != 0 {
+			time.Sleep(1e8)
+			continue		
+		}			
+		for i:=uint16(0);i<=10;i++ {
+			if lvlLäuft == false {	// Falls das Level beendet ist, beende diese Methode
+				return
+				}			
+			*l.wertAdresse = i		// Überschreibe den Wert an der Adresse
+			time.Sleep(time.Duration(l.cdlänge)*1e8)
 		}
-	}	
-}
+	}
+		time.Sleep(1e8)
+}	
 
 // Zeichnet alle Ladebalken im alleLadebalken-Slice
 func zeichneAlleLadebalken() {
