@@ -434,7 +434,7 @@ func SpieleSound (s string) {
 // Vor.: Das Grafikfenster ist offen.
 // Eff.: Das Abspielen aller Sounds ist sofort gestoppt bzw. abgebrochen.
 func StoppeAlleSounds() {
-	gfxServerAnfrage ("STAS:"+s)
+	gfxServerAnfrage ("STAS")
 	//C.StoppeAlleSounds()
 }
 
