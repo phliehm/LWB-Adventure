@@ -83,8 +83,6 @@ func Getraenkeautomat() (float32, uint32) {
 	var status uint					// 0 = weitere Münzen einwerfen
 									// 1 = richtiges Getränk bestellt
 									// 2 = falsches Getränk bestellt
-	//var getraenkeName string		// Name des Getränks
-//	var	txt textboxen.Textbox		// Text für die seitlichen Textbox
 	var font string = path + "Schriftarten/Ubuntu-B.ttf"
 	var neueEingabe bool
 	var ilevel uint16				// aktuelle Levenummer, beginned bei 0
@@ -156,6 +154,15 @@ func Getraenkeautomat() (float32, uint32) {
 				gfx.StoppeAlleSounds()
 				break
 			}
+
+			if reset.TesteXYPosInButton(mausX,mausY) { // Spiel zurücksetzen
+				// weiter.DeaktiviereButton()
+				// aktiviereSpielbutton(zehner,zwanziger,fuenfziger,reset)
+				gfx.SpieleSound(path + "Sounds/Beep.wav")
+				ladeLevel(ilevel)
+				zeichneSpielfeld(ilevel+1,punkte,note,muenzenAnzahl,weiter,starter,beenden)
+			}
+
 			
 			if zehner.TesteXYPosInButton(mausX,mausY) {
 				// Münzenanzahl kontrollieren!
@@ -253,7 +260,7 @@ func Getraenkeautomat() (float32, uint32) {
 // ---------------   Hilfsfunktionen   -------------------------//
 
 
-// Eff: Weisst den Levelparametern die richtigen Werte zu.
+// Eff: Weist den Levelparametern die richtigen Werte zu.
 func ladeLevel(ilevel uint16) {
 	
 	if ilevel == 0 {
@@ -535,13 +542,17 @@ func deaktiviereSpielbutton(zehner,zwanziger,fuenfziger,reset buttons.Button) {
 }
 
 
+// Vor: Ein passendes gfx-Fenster ist geöffnet.
+// Eff: Schriebt Note und Level ins Spielfeld.
 func schreibeSpielstand(level uint16,punkte uint32, note float32) {
-	gfx.SchreibeFont(20,15,"Level: " + fmt.Sprint(level))
-	gfx.SchreibeFont(150,15,"Punkte: " + fmt.Sprint(punkte))
-	gfx.SchreibeFont(320,15,"Note: " + fmt.Sprint(note))
+	gfx.SchreibeFont(850,10,"Level: " + fmt.Sprint(level))
+	//gfx.SchreibeFont(150,15,"Punkte: " + fmt.Sprint(punkte))
+	gfx.SchreibeFont(1100,10,"Note: " + fmt.Sprint(note))
 }
 
 
+// Vor: Ein passendes gfx-Fenster ist geöffnet.
+// Eff: Die Münzen sind gezeichnet und die Anzahlen sind geschreiben.
 func zeichneMuenzen(muenzenzahl [3]uint) {
 
 	var x,y,r uint16		// Parameter für Kreis
@@ -591,16 +602,21 @@ func zeichneMuenzen(muenzenzahl [3]uint) {
 }
 
 
+// Vor: Ein passendes gfx-Fenster ist geöffnet.
+// Eff: Der Automat ist gezeichnet.
 func zeichneAutomat() {
 
+	// Automatenfarbe
 	gfx.Stiftfarbe(139,69,19)		
 	gfx.Vollrechteck(10,10,650,680)
 	gfx.Stiftfarbe(0,0,0)		
 	gfx.Rechteck(10,10,650,680)
+	
+	// Display
 	gfx.LadeBild(550,30,"Bilder/Display.bmp")
 	gfx.Rechteck(550,30,91,400)
 
-	// Reset
+	// Reset-Button
 	gfx.Stiftfarbe(255,255,0)		
 	gfx.Vollrechteck(570,48,50,73)
 	gfx.Stiftfarbe(0,0,0)		
@@ -616,6 +632,7 @@ func zeichneAutomat() {
 	} else {
 		gfx.LadeBildMitColorKey (30,100,path+"Bilder/Automat2.bmp",0,0,0)
 	}
+	
 	// Ausgabe
 	gfx.LadeBild(70,530,"Bilder/Ausschank.bmp")
 
@@ -645,7 +662,8 @@ func zeichneAutomat() {
 	
 }
 
-
+// Vor: Ein passendes gfx-Fenster ist geöffnet.
+// Eff: Die Buttons sind gezeichnet.
 func zeichneButtons(weiter,starter,beenden buttons.Button) {
 	if weiter.GibAktivitaetButton() {
 			weiter.ZeichneButton()
@@ -658,13 +676,14 @@ func zeichneButtons(weiter,starter,beenden buttons.Button) {
 	}
 }
 
-
+// Vor: Ein passendes gfx-Fenster ist geöffnet.
+// Eff: Das Spielfeld mit Automat, Münzen, Text, J.EthI, Buttons und
+//	 	Spielstand ist gezeichnet.
 func zeichneSpielfeld(ilevel uint16, punkte uint32, note float32,
 		muenzenzahl [3]uint, weiter,starter,beenden buttons.Button) {
 
 	var fontsize int = 20
 
-	
 	gfx.UpdateAus()
 
 	// Säubere Hintergrund
@@ -677,17 +696,15 @@ func zeichneSpielfeld(ilevel uint16, punkte uint32, note float32,
 	gfx.Linie(830,0,830,700-1)
 	gfx.Linie(830,380,1200-1,380)
 
-	// Spielstand
-	gfx.SetzeFont (path + "Schriftarten/Ubuntu-B.ttf",fontsize)
-	schreibeSpielstand(ilevel+1,punkte,note)
-	
 	zeichneAutomat()
 	zeichneMuenzen(muenzenzahl)
 	zeichneButtons(weiter,starter,beenden)
-	
-	// schreibe Text
-	//txt.SchreibeText("Schade, das falsche Getränk ist geliefert. " +
-	//						"Versuchen Sie es noch einmal.")
+
+	// Spielstand
+	gfx.SetzeFont (path + "Schriftarten/Ubuntu-B.ttf",fontsize)
+	schreibeSpielstand(ilevel,punkte,note)
+
+	// schreibe den Text in die Box
 	txt.Zeichne()		
 	
 	gfx.UpdateAn()
