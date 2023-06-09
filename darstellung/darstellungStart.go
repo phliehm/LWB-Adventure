@@ -18,7 +18,7 @@ import (
 	"../Klassen/textboxen"
 	"../Klassen/buttons"
 	"fmt"
-	"../Klassen/felder"
+	felder "../Klassen/felder2"
 )
 
 
