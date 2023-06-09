@@ -10,9 +10,7 @@ import level "../../Klassen/beLevel"
 import "fmt"
 import "gfx"
 import "../../Klassen/buttons"
-//import "os"
-//import "strconv"
-//import "time"
+import "time"
 
 var path string = "" //"../"
 
@@ -240,6 +238,19 @@ func zeichneSpielfeld(happy bool, xSize, ilevel, punkte, maxPunkte uint16, sk sc
 
 }
 
+// Vor: Ein gfx-Grafikfenster ist geöffnet.
+// Eff: Hintergrundmusik ist gestartet. (Als go-Routine ausführen
+//		damit das Spiel weitergeht.)
+func hintergrundmusik(beenden buttons.Button) {
+	var soundstr string = "Sounds/Music/bauelemente.wav"
+	for beenden.GibAktivitaetButton() {
+		gfx.SpieleSound(soundstr)
+		time.Sleep (time.Duration(19206e6))
+	}
+}
+
+
+
 // Voraus: -
 // Eff: Bauelementespiel wird gestartet.
 // Erg: akteulles Level ilevel+1, Note und Punktestand je Level
@@ -303,13 +314,12 @@ func BauelementeSpiel() (float32,uint32) {
  
  
 	// ---------------- Zeichne Spielfeld -------------------------- //
-
-//	gfx.Fenster(1200,700)
 	gfx.SetzeFont (path + "Schriftarten/Ubuntu-B.ttf",20)
-
 	zeichneSpielfeld(happy,xSize,ilevel,gPunkte,maxPunkte,sk,text)
 	zeichneButtons(weiter,zurueck,beenden,nochmal)
 
+	// ---------------- starte Musik ------------------------------- //
+	go hintergrundmusik(beenden)
 
 	// ----------- Mausabfrage - Spielsteuerung ---------------------//
 	for {
@@ -390,6 +400,7 @@ func BauelementeSpiel() (float32,uint32) {
 				neuZeichnen = true
 			}
 			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende des Spiels
+				gfx.StoppeAlleSounds()
 				break
 			}
 			if levelNeuLaden {
