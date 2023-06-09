@@ -19,15 +19,28 @@ func BugAttack() (float32,uint32){
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Vollrechteck(0,0,1200,700)
 	gfx.Stiftfarbe(0,255,0)
-	go bugPackage.CursorPos()
+	go bugPackage.TastaturEingabe()
+	
+	
 	bugPackage.LevelIntro()
-	bugPackage.Startbildschirm() 	
+	bugPackage.Startbildschirm() 
+	/*	
 	bugPackage.LevelTutorial()
 	bugPackage.Level1()
+	bugPackage.LevelTutorial()
 	bugPackage.Level2()
 	bugPackage.Level3()
+	*/
 	//fmt.Println("ENDE")
-	bugPackage.EndbildschirmReal()
+	
+	// Starte nacheinander die Funktionen der Level
+	for _,f:= range bugPackage.LevelArray {
+		if bugPackage.SpielBeendet == true {break} 	// Spiel soll beendet werden? Keine weiteren Level
+		f()
+	}
+	
+	bugPackage.Endbildschirm()
+	
 	endN,endP := bugPackage.GibErgebnis()
 	return endN,endP
 }

@@ -37,6 +37,7 @@ func ZeichneWelt() {
 
 // Wie ZeichneWelt nur mit einigen Änderungen, nur als Animation für den Startbildschirm genutzt
 func ZeichneWeltIntro() {
+	level = 1		// muss auf 1 gesetzt werden, sonst crashed das Spiel, nur hier für die Intro Funktion nötig
 	defer wg.Done()
 	BugAttackTB := textboxen.New(200,150,700,500)
 	BugAttackTB.SetzeZentriert()
@@ -66,9 +67,10 @@ func ZeichneWeltIntro() {
 		gfx.UpdateAn()
 		time.Sleep(1e7)
 	}
+	level=0		// Setze level wieder auf 0 damit es ganz normal los gehen kan
 }
 
-// Hilfsfunktion um die Zahlen (Code) zu zeichnen
+// Hilfsfunktion um die Zahlen (Code) / Welt zu zeichnen
 func zeichneArray() {
 	var s,z uint16
 	gfx.Stiftfarbe(0,0,0)
@@ -77,7 +79,7 @@ func zeichneArray() {
 	sr,sg,sb = 0,255,0
 	for z=0;z<weltH;z++ {
 		for s=0;s<weltB;s++ {
-			male_Zahl(s*zB,y_offset*zH+z*zH,welt[z][s])
+			male_Zahl(s*zB,y_offset*zH+z*zH,welt[z][s])	// y_offset weil die Zahlen erst weiter unten beginnen
 		}
 	}
 }
@@ -134,7 +136,7 @@ func cursorZeichnen() {
 }
 
 // Update Cursor-Position
-func CursorPos() {
+func TastaturEingabe() {
 	var step uint16 = 1
 	for {
 		//gfx.Stiftfarbe(0,255,0)
@@ -165,9 +167,11 @@ func CursorPos() {
 							bugGetroffen()
 				case 120: 	cursor_x, cursor_y = getNextAliveBug() // autoAim
 				case 107: 	killAllBugs()
-				case 'q':	// beende Game
-					gfx.FensterAus()
-					return
+				case 'q':	// beende Level
+							beendeLevel()
+							
+					//gfx.FensterAus()
+					//return
 			
 				default:
 					continue				
@@ -228,19 +232,19 @@ func bugGetroffen() {
 
 // Zählt die Punkte im Array
 func zählePunkte() {
-	for level <4{
-		levelSchloss.Lock()
+	for level <4 && SpielBeendet == false{
+		levelSchloss.Lock()				// nur ich darf auf das "level" zugreifen
 		var abzug uint16
 		var z,s uint16 
-		for z=0;z<weltH;z++ {
-			for s=0;s<weltB;s++ {
-				if welt[z][s] ==2 {abzug+=10}
+		for z=0;z<weltH;z++ {			// zeilen der Welt
+			for s=0;s<weltB;s++ {		// Spalten der Welt
+				if welt[z][s] ==2 {abzug+=10}	// Wenn Feld gegessen (schwarz, 2), ziehe Puntke ab
 			}
 		}
-		abzug+=lvlZeit*50
+		abzug+=lvlZeit*50				// Ziehe zusätzlich Punkte für die vergangene Zeit ab
 		if abzug > maxPunkteProLevel{punkteArray[level-1] = 0		// negative Punkte vermeiden
-		}else {punkteArray[level-1] = maxPunkteProLevel-abzug}
-		levelSchloss.Unlock()
+		}else {punkteArray[level-1] = maxPunkteProLevel-abzug}		// Schreibe die aktuellen Punkte in den PunkteArray
+		levelSchloss.Unlock()			// "level" ist wieder freigegeben
 		time.Sleep(1e8)
 	}
 }
@@ -251,4 +255,19 @@ func lvlTimer() {
 		time.Sleep(1e9)
 		lvlZeit++
 	}
+}
+
+// Beendet ein Level mit 0 Punkten
+func beendeLevel() {
+	if howManyBugs() > 0{
+		killAllBugs()
+		punkteArray[level-1] = 0
+		return
+	}
+	// wenn es keine Bugs gab bin ich in einem Zwischenbildschirm
+	//level = 4
+	SpielBeendet = true
+	//punkteArray[level-1] = 0
+	//Endbildschirm()
+	return
 }

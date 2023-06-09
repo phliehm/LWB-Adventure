@@ -1,0 +1,24 @@
+
+
+To DO:
+
+-Laufen noch go-Routinen wenn BugAttack vorbei ist?
+defer? Wait group? Globale Variable zum beenden?
+
+- Brauche ich sr,sg,sb?
+
+2. autoAim und killAll sinnvoll einbinden
+3. Statusleiste / CD auf den Skills
+4. Levelergebnisse einblenden
+5. Überleitungstexte
+6. Kommentare wärend jedes Levels
+
+7. Musik zu jedem Level ändern
+8. Mehr Level (7 insgesamt?) 
+9. Maussteuerung für Exit? --> einfach Taste drücken
+
+10. Code kommentieren
+11. Klassen ordentlich aufteilen (Bug)
+12. Highscore?
+13. Spielstand speichern (nicht nötig)
+

@@ -4,7 +4,7 @@ import "fmt"
 
 func berechneNote() float32{
 	n:= berechneProzent()
-	//fmt.Println("Prozent: ",n)
+	fmt.Println("Prozent: ",n)
 	if n>=0.90 {return 1.0}
 	if n>=0.85 {return 1.3}
 	if n>=0.80 {return 1.7}

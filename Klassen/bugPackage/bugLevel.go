@@ -74,6 +74,11 @@ func erhöheLevel() {
 
 // Startet ein neues Level mit den gegebenen Parametern
 func levelStart(){
+	if SpielBeendet == true {
+		punkteArray[level-1] = 0	// setze Punkte im Level auf Null weil das Spiel ja beendet wird
+		return
+	}
+	fmt.Println("Starte Level")
 	wg.Add(1)
 	beschreibeArray()
 	createNBugs(anzahlBugsImLevel,lvlSpeed,lvlNervosität)
@@ -101,6 +106,7 @@ func ergebnisLevel() {
 
 // Tutorial
 func Level1(){
+	LevelTutorial()
 	erhöheLevel()
 	anzahlBugsImLevel = 1
 	lvlSpeed = 0
@@ -111,6 +117,7 @@ func Level1(){
 }
 
 func Level2(){
+	LevelTutorial()
 	erhöheLevel()
 	anzahlBugsImLevel = 3
 	lvlSpeed = 2
@@ -121,6 +128,7 @@ func Level2(){
 }
 
 func Level3() {
+	LevelTutorial()
 	erhöheLevel()
 	lvlNervosität = 5
 	anzahlBugsImLevel = 5
@@ -181,7 +189,8 @@ func Endbildschirm() {
 */
 
 // Ergebnisbildschirm / Level
-func EndbildschirmReal() {
+func Endbildschirm() {
+	fmt.Println("ENDBILDSCHIRM")
 	var path string
 	path = ""
 	gfx.Stiftfarbe(255,255,255)
@@ -204,6 +213,7 @@ func EndbildschirmReal() {
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
 	gfx.SchreibeFont(285,170,"Gesamtnote")
 	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	fmt.Println("Final Level: ",level)
 	EndN, EndP = berechneEndNoteUndGesamtPunktzahl()
 	gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",EndN))
 	
@@ -211,6 +221,7 @@ func EndbildschirmReal() {
 	//fmt.Println("level: ",level)
 	for i:=uint16(1); i<4; i++ {
 		//fmt.Println(i)
+		level = i
 		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(punkteArray[i-1]) + " Punkte")
 		gfx.SchreibeFont(710,175+uint16((i-1)*68),"           Note " + fmt.Sprintf("%2.1f",berechneNote()))
 	}
