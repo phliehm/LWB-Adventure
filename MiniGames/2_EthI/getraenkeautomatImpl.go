@@ -61,6 +61,7 @@ package getraenkeautomat
 
 import "fmt"
 import "gfx"
+import "time"
 import "../../Klassen/textboxen"
 import "../../Klassen/buttons"
 
@@ -126,6 +127,8 @@ func Getraenkeautomat() (float32, uint32) {
 	gfx.Stiftfarbe(0,0,0)
 	zeichneSpielfeld(1,0,6.,muenzenAnzahl,weiter,starter,beenden)
 
+	// ---------------- starte Musik ------------------------------- //
+	go hintergrundmusik(beenden)
 	
 	// ----------       Eingabesteuerung     ------------------------//
 	// ----------- Mausabfrage - Spielsteuerung ---------------------//
@@ -150,6 +153,7 @@ func Getraenkeautomat() (float32, uint32) {
 			}
 
 			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende des Spiels
+				gfx.StoppeAlleSounds()
 				break
 			}
 			
@@ -281,7 +285,7 @@ func ladeLevel(ilevel uint16) {
 		einwurf = make([]uint,0)
 		muenzenAnzahl = [3]uint{3,3,3}
 		txt.SchreibeText("Darth Schmidther trinkt ausschließlich " +
-			"Extraschwarzen Kaffee.")
+			"extraschwarzen Kaffee.")
 		getraenkeID = 'E'	
 	} else if ilevel == 5 {
 		automatNr = 2
@@ -323,7 +327,7 @@ func getraenkeID2Name(id rune, automatNr uint) string {
 			case 'B': return "Pfefferminztee"
 			case 'C': return "Melissentee"
 			case 'D': return "Schwarzer Tee"
-			case 'E': return "Grüner Tee"
+			case 'E': return "Kräutertee"
 			case 'F': return "Früchtetee"
 			default: panic("Falsche Getränke ID")
 		}
@@ -690,6 +694,17 @@ func zeichneSpielfeld(ilevel uint16, punkte uint32, note float32,
 
 }
 
+
+// Vor: Ein gfx-Grafikfenster ist geöffnet.
+// Eff: Hintergrundmusik ist gestartet. (Als go-Routine ausführen
+//		damit das Spiel weitergeht.)
+func hintergrundmusik(beenden buttons.Button) {
+	var soundstr string = "Sounds/Music/getraenkeautomat.wav"
+	for beenden.GibAktivitaetButton() {
+		gfx.SpieleSound(soundstr)
+		time.Sleep (time.Duration(19197e6))
+	}
+}
 
 
 
