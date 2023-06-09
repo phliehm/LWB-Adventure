@@ -62,7 +62,7 @@ func bubbleTexte() {
 	texte[8] = "Wie heißt die Veranstaltung mit den meisten SWS?"
 	texte[7] = "Wieviele SWS müssen in der LWB insgesamt absolviert werden? (Überschrift der Ausgabe: GesamtanzahlSWS)"
 	//texte[10] = "Lasse zu jedem Raum die Anzahl der dort stattfindenden Veranstaltungen anzeigen! (Ausgabe aufsteigend, Überschrift der Anzahl-Ausgabe: AnzahlVeranstaltungen)"
-	texte[9] = "Mal schauen, ob Du die sechs Kommandos richtig eingibst, mit denen Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K nach SWS-Anzahl absteigend sortiert angezeigt werden!"
+	texte[9] = "Kannst Du alle sechs Kommandos richtig eingeben, mit denen Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K nach SWS-Anzahl absteigend sortiert angezeigt werden?"
 	texte[10] = "Lasse die Anzahl der Veranstaltungen pro Standort anzeigen! (ohne JOIN!, Ausgabe aufsteigend, Überschrift der Ausgabe: AnzahlVeranstaltungen)"
 }
 
@@ -488,6 +488,7 @@ A:	for i:=1; i<len(texte); i++ {
 			
 			if ted.GibString() == "exit" {
 				i = 11
+				levelpunkte = 0
 				break
 			}
 			
@@ -541,11 +542,13 @@ A:	for i:=1; i<len(texte); i++ {
 					
 					//fmt.Println("Punkte:",fmt.Sprint(punkte))
 					
+					/*
 					if j == 0 {											//Next-Button "ausgrauen"
 						Stiftfarbe(255,255,255)
 						Transparenz(50)
 						Vollrechteck(443,238,84,39)
 					}
+					*/
 					
 					//ausgabe.Zeichnen()
 					Stiftfarbe(255,255,255)
@@ -589,7 +592,6 @@ A:	for i:=1; i<len(texte); i++ {
 		}		
 	}
 	
-	punkte = punkte - 10
 	fmt.Println("Punkte:",fmt.Sprint(punkte))
 	
 	//----------------- Endbildschirm --------------------------------------
@@ -605,7 +607,6 @@ A:	for i:=1; i<len(texte); i++ {
 	LadeBild(960,520,path2 + "Bilder/certified_100.bmp")
 	LadeBild(1080,90,path2 + "Bilder/Zurück-Symbol.bmp")
 	//exit.SetKoordinaten(1080,80,1080,195,1170,195,1170,80)
-	exit.SetzeFarbe(0,0,0)
 	exit.AktiviereKlickbar()
 	
 	SetzeFont(path2 + "Schriftarten/brlnsdb.ttf",60)
@@ -616,13 +617,26 @@ A:	for i:=1; i<len(texte); i++ {
 	
 	Stiftfarbe(0,0,0)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
-	SchreibeFont(295,140,"Du hast die")
-	SchreibeFont(310,260,"erreicht!")
-	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
-	SchreibeFont(285,170,"Gesamtnote")
-	SetzeFont(path2 + "Schriftarten/Starjedi.ttf",42)
-	SchreibeFont(325,195,"1.0")												//TODO
+	if notenberechnung(punkte) == 0.0 {
+		SchreibeFont(295,140,"Du hast die")
+		SchreibeFont(285,170,"Prüfung leider")
+		SetzeFont(path2 + "Schriftarten/Starjedi.ttf",32)
+		Stiftfarbe(255,0,0)
+		SchreibeFont(310,195,"Nicht")
+		SchreibeFont(260,235,"Bestanden!")
+		Stiftfarbe(255,255,255)
+		Vollrechteck(130,470,100,100)						//Herk-Mund überdecken wegen Transparenz
+		LadeBildMitColorKey(80,370,path2 + "Bilder/SQLGame/herk_angry_red_200.bmp",255,255,255)
+	} else {		
+		SchreibeFont(295,140,"Du hast die")
+		SchreibeFont(310,260,"erreicht!")
+		SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+		SchreibeFont(285,170,"Gesamtnote")
+		SetzeFont(path2 + "Schriftarten/Starjedi.ttf",42)
+		SchreibeFont(325,195,fmt.Sprintf("%2.1f",notenberechnung(punkte)))
+	}
 	
+	Stiftfarbe(0,0,0)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	for i:=1; i<len(texte); i++ {
 		if i == 10 {
@@ -642,12 +656,22 @@ A:	for i:=1; i<len(texte); i++ {
 	
 	SchreibeFont(700,550,"----------------------")
 	if punkte == 100 {
-		SchreibeFont(710,580,"Gesamt:   "+fmt.Sprint(punkte)+" Punkte")
-	} else {
 		SchreibeFont(710,580,"Gesamt:    "+fmt.Sprint(punkte)+" Punkte")
+	} else if punkte < 10 {
+		SchreibeFont(710,580,"Gesamt:      "+fmt.Sprint(punkte)+" Punkte")
+	} else {
+		SchreibeFont(710,580,"Gesamt:     "+fmt.Sprint(punkte)+" Punkte")
 	}
 	
-	TastaturLesen1()
+	for {
+		taste, status, mausX, mausY := MausLesen1()
+		if taste==1 && status==1 {
+			if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
+				fmt.Println("exit geklickt")
+				break
+			}
+		}
+	}
 	
 	return punkte, notenberechnung(punkte)	
 	
