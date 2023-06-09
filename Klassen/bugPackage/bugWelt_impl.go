@@ -29,6 +29,7 @@ func ZeichneWelt() {
 		}
 		bugArraySchloss.Unlock()
 		cursorZeichnen()
+		zeichneAlleLadebalken()
 		gfx.UpdateAn()
 		time.Sleep(1e7)
 	}
@@ -150,8 +151,7 @@ func TastaturEingabe() {
 				case 273:		// hoch
 							cursor_y -= step*zH
 							// Wenn der Cursor über dem Weltrand oder über dem FensterRand ist, setze auf andere Seite
-							if cursor_y<y_offset*zH || cursor_y> 1000*zH{cursor_y = y_offset*zH+weltH*zH-zH}	
-							
+							if cursor_y<y_offset*zH || cursor_y> 1000*zH{cursor_y = y_offset*zH+weltH*zH-zH}				
 				case 274:  // runter
 							cursor_y += step*zH
 							if cursor_y>y_offset*zH+weltH*zH-zH {cursor_y = y_offset*zH}
@@ -165,10 +165,10 @@ func TastaturEingabe() {
 							welt[(cursor_y-y_offset*zH)/zH][cursor_x/zB] = 0
 							
 							bugGetroffen()
-				case 120: 	cursor_x, cursor_y = getNextAliveBug() // autoAim
-				case 107: 	killAllBugs()
+				case 'x': 	benutzeAutoAim() // autoAim
+				case 'k': 	killAllBugs()
 				case 'q':	// beende Level
-							beendeLevel()
+							beendeSpiel()
 							
 					//gfx.FensterAus()
 					//return
@@ -232,7 +232,7 @@ func bugGetroffen() {
 
 // Zählt die Punkte im Array
 func zählePunkte() {
-	for level <4 && SpielBeendet == false{
+	for level <=maxLevel && SpielBeendet == false{
 		levelSchloss.Lock()				// nur ich darf auf das "level" zugreifen
 		var abzug uint16
 		var z,s uint16 
@@ -242,7 +242,8 @@ func zählePunkte() {
 			}
 		}
 		abzug+=lvlZeit*50				// Ziehe zusätzlich Punkte für die vergangene Zeit ab
-		if abzug > maxPunkteProLevel{punkteArray[level-1] = 0		// negative Punkte vermeiden
+		if abzug > maxPunkteProLevel{
+			punkteArray[level-1] = 0		// negative Punkte vermeiden
 		}else {punkteArray[level-1] = maxPunkteProLevel-abzug}		// Schreibe die aktuellen Punkte in den PunkteArray
 		levelSchloss.Unlock()			// "level" ist wieder freigegeben
 		time.Sleep(1e8)
@@ -258,16 +259,106 @@ func lvlTimer() {
 }
 
 // Beendet ein Level mit 0 Punkten
-func beendeLevel() {
+func beendeSpiel() {
 	if howManyBugs() > 0{
+		killAllBugsCD = 10		// Erlaubt alle verbleibenden Bugs zu töten
 		killAllBugs()
-		punkteArray[level-1] = 0
-		return
+		fmt.Println("Spiel wird beendet")
+		punkteArray[level-1] = 0	// Setzt Punkte für das aktuelle Level auf 0
+		//return
 	}
-	// wenn es keine Bugs gab bin ich in einem Zwischenbildschirm
-	//level = 4
 	SpielBeendet = true
-	//punkteArray[level-1] = 0
-	//Endbildschirm()
+
 	return
 }
+
+
+type ladebalken struct {
+	wertAdresse *uint16
+	x uint16
+	y uint16
+	r,g,b uint8
+	taste string
+	cdlänge	uint16
+}
+
+func NewLadebalken(wertAdresse *uint16,x,y uint16,r,g,b uint8, taste string, cdl uint16) *ladebalken {
+	l := new(ladebalken)
+	l.x,l.y,l.r,l.g,l.b,l.taste = x,y,r,g,b,taste
+	l.wertAdresse = wertAdresse
+	l.cdlänge = cdl
+	return l
+}
+
+func (l *ladebalken) zeichne() {
+	gfx.Stiftfarbe(l.r,l.g,l.b)
+	gfx.SetzeFont("Schriftarten/ltypeb.ttf",20)
+	gfx.SchreibeFont(l.x,l.y,l.taste)
+	gfx.Vollrechteck(l.x+20,l.y,10* *l.wertAdresse,20)
+	gfx.Rechteck(l.x+20,l.y,100,20)
+}
+
+func (l *ladebalken) cooldown() {
+	*l.wertAdresse = 0		// Setze Cooldown auf 0
+	for lvlLäuft {
+		if *l.wertAdresse == 0 {					
+			for i:=uint16(0);i<=10;i++ {
+				*l.wertAdresse = i		// Überschreibe den Wert an der Adresse
+				time.Sleep(time.Duration(l.cdlänge)*1e6)
+			}
+		}
+	}	
+}
+
+// Zeichnet alle Ladebalken im alleLadebalken-Slice
+func zeichneAlleLadebalken() {
+	for _,l:=range alleLadebalken {
+		if l!=nil {l.zeichne()}
+	}
+}
+
+func entferneAlleLadebalken() {
+	for i,_:=range alleLadebalken {
+		alleLadebalken[i] = nil
+	}
+}
+
+// Alle Bugs mit einem Tastendruck töten
+func killAllBugs() {
+	if killAllBugsCD!=10 || SpielBeendet == true {return}
+	gfx.SpieleSound("Sounds/Retro Sounds/Explosions/Long/sfx_exp_long3.wav")
+	bugArraySchloss.Lock()
+	for _,b:= range bugArray {
+		if b!=nil {
+			b.stirbt = true
+		}
+	}
+	killAllBugsCD = 0
+	bugArraySchloss.Unlock()
+}
+
+func benutzeAutoAim() {
+	if autoAimCD !=10  {return}
+	cursor_x, cursor_y = getNextAliveBug() // autoAim
+	autoAimCD = 0
+}
+
+/*
+// Managed wann killAllBugs verfügbar ist
+func killAllBugsCoolDown() {
+	for lvlLäuft {
+		if killAllBugsCD == 0 {		// Schloss?
+			for i:=uint16(0);i<10;i++ {
+				killAllBugsCD = i
+				time.Sleep(5e8)
+			}
+		}
+	}	
+}
+
+// Zeichnet den CoolDown-Balken für killAllBugs
+func zeichneKillAllBugsBalken() {
+	gfx.Stiftfarbe(0,0,255)
+	gfx.Vollrechteck(500,60,10*killAllBugsCD,10)
+}
+*/

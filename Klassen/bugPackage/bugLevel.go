@@ -84,15 +84,19 @@ func levelStart(){
 	createNBugs(anzahlBugsImLevel,lvlSpeed,lvlNervosität)
 	go ZeichneWelt()
 	go zählePunkte()
-	lvlZeit = 0
+	lvlZeit = 0			// für die Berechnung der Punktzahl
 	lvlLäuft = true
-	go lvlTimer()
+	go lvlTimer()		
+	for _,l:=range alleLadebalken {	// starte den Cooldown aller Ladebalken
+		if l!= nil {go l.cooldown()}
+	}
 	// Warte bis keine Bugs mehr da sind
 	for howManyBugs()>0 {
 		time.Sleep(1e9)
 	}
-	lvlLäuft = false
-	wg.Wait()
+	lvlLäuft = false			// Signalisiert go-Routingen, dass das Level vorbei ist
+	wg.Wait()				// nötig?
+	entferneAlleLadebalken()
 	ergebnisLevel()
 	
 }
@@ -112,6 +116,9 @@ func Level1(){
 	lvlSpeed = 0
 	lvlNervosität = 1
 	gfx.SpieleSound("Sounds/Music/bugWars.wav")
+	//var l ladebalken
+	
+	
 	levelStart()
 	
 }
@@ -122,7 +129,11 @@ func Level2(){
 	anzahlBugsImLevel = 3
 	lvlSpeed = 2
 	lvlNervosität = 2
-	autoAim =true
+	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
+	alleLadebalken = append(alleLadebalken,l)
+
 	//gfx.SpieleSound("Sounds/Music/bugWars.wav")
 	levelStart()
 }
@@ -133,9 +144,44 @@ func Level3() {
 	lvlNervosität = 5
 	anzahlBugsImLevel = 5
 	lvlSpeed = 2
+	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
+	alleLadebalken = append(alleLadebalken,l)
 	levelStart()
 	// Letztes Level vorbei
+	//erhöheLevel()
+}
+
+
+func Level4() {
+	LevelTutorial()
 	erhöheLevel()
+	lvlNervosität = 5
+	anzahlBugsImLevel = 10
+	lvlSpeed = 2
+	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
+	alleLadebalken = append(alleLadebalken,l)
+	levelStart()
+	// Letztes Level vorbei
+	//erhöheLevel()
+}
+
+func Level5() {
+	LevelTutorial()
+	erhöheLevel()
+	lvlNervosität = 5
+	anzahlBugsImLevel = 10
+	lvlSpeed = 2
+	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
+	alleLadebalken = append(alleLadebalken,l)
+	levelStart()
+	// Letztes Level vorbei
+	//erhöheLevel()
 }
 
 
@@ -163,7 +209,7 @@ func LevelTutorial() {
 	Level1StartTB.SetzeFarbe(0,255,0)
 	Level1StartTB.Zeichne()
 	gfx.UpdateAn()
-	gfx.Archivieren()
+	gfx.Archivieren()		// nötig?
 	go amoebiusAndBugAnimation()
 	//go bugLevelAnimation()
 	gfx.TastaturLesen1()
@@ -190,7 +236,6 @@ func Endbildschirm() {
 
 // Ergebnisbildschirm / Level
 func Endbildschirm() {
-	fmt.Println("ENDBILDSCHIRM")
 	var path string
 	path = ""
 	gfx.Stiftfarbe(255,255,255)
@@ -219,7 +264,7 @@ func Endbildschirm() {
 	
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	//fmt.Println("level: ",level)
-	for i:=uint16(1); i<4; i++ {
+	for i:=uint16(1); i<=maxLevel; i++ {
 		//fmt.Println(i)
 		level = i
 		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(punkteArray[i-1]) + " Punkte")
