@@ -4,8 +4,10 @@ import "gfx"
 
 var (
   // Globale Fontvariablen
-  FONTPATH_DESC = "/home/lewein/go/src/felder/fonts/terminus/Terminus-Regular.ttf"
-  FONTPATH_FELD = "/home/lewein/go/src/felder/fonts/terminus/Terminus-Bold.ttf"
+  path_desc = "./Schriftarten/terminus-font/Terminus-Regular.ttf"
+  path_feld = "./Schriftarten/terminus-font/Terminus-Bold.ttf"
+  //FONTPATH_DESC = "/home/lewein/go/src/felder/fonts/terminus/Terminus-Regular.ttf"
+  //FONTPATH_FELD = "/home/lewein/go/src/felder/fonts/terminus/Terminus-Bold.ttf"
   FONTHEIGHT    =  uint16(16)
   FONTWIDTH     =  uint16(8)
   // Globale Hintergrund-Farbvariablen
@@ -45,7 +47,8 @@ func New (x,y uint16, anz uint, ausrichtung byte, titel string) *feld {
   (*f).anz      = uint16(anz)
   (*f).titel    = titel
   (*f).pos      = 0
-  (*f).fontpfad = FONTPATH_FELD
+  //(*f).fontpfad = FONTPATH_FELD
+  (*f).fontpfad = path_feld
   (*f).fontht   = FONTHEIGHT
   (*f).fontwd   = FONTWIDTH
   (*f).text     = ""
@@ -204,7 +207,8 @@ func refresh (f *feld) {
   // Texte werden immer in schwarz dargestellt
   gfx.Stiftfarbe (0x0, 0x0, 0x0)
   // Titel in 12-Punkt setzen
-  gfx.SetzeFont (FONTPATH_DESC, 12)
+  //gfx.SetzeFont (FONTPATH_DESC, 12)
+  gfx.SetzeFont (path_desc, 12)
   // Den Titel aber nur ausgeben, wenn er nicht leer ist.
   if len((*f).titel) > 0 {
     gfx.SchreibeFont (uint16((*f).x), uint16((*f).y)+(*f).fontht+2, (*f).titel)

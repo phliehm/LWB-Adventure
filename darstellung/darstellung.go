@@ -50,16 +50,16 @@ func MainfloorDarstellen() {
 	Stiftfarbe(0,0,0)
 	SetzeFont("./Schriftarten/Starjedi.ttf",80)
 	SchreibeFont(105,290,"1")
-	SchreibeFont(103,442,"1")
+	//SchreibeFont(103,442,"1")
 	SetzeFont("./Schriftarten/Starjedi.ttf",50)
 	SchreibeFont(968,314,"2")
-	SchreibeFont(961,430,"2")
+	//SchreibeFont(961,430,"2")
 	SetzeFont("./Schriftarten/Starjedi.ttf",25)
 	SchreibeFont(436,359,"3")
-	SchreibeFont(438,414,"3")
+	//SchreibeFont(438,414,"3")
 	SetzeFont("./Schriftarten/Starjedi.ttf",20)
 	SchreibeFont(725,368,"4")
-	SchreibeFont(720,415,"4")
+	//SchreibeFont(720,415,"4")
 	LadeBildMitColorKey(1083,275, "./Bilder/MainGame/info-1.bmp", 255,255,255)
 	//LadeBildMitColorKey (105,325, "./Bilder/MainGame/1.bmp", 255,255,255)
 	//LadeBildMitColorKey (965,330, "./Bilder/MainGame/2.bmp", 255,255,255)
@@ -91,15 +91,20 @@ func SemesterraumDarstellen(n int) {
 
 func InfoDarstellen() {
 	
-	var infotext textboxen.Textbox = textboxen.New(570,120,500,350)
+	var infotexthead textboxen.Textbox = textboxen.New(570,120,500,350)
+	var infotext textboxen.Textbox = textboxen.New(570,160,500,310)
 	var ok buttons.Button = buttons.New(917,295,50,40,0,255,0,true,"OK")
 	
 	LadeBildMitColorKey(530,90, "./Bilder/MainGame/bubble2_red.bmp", 255,0,0)
 	LadeBildMitColorKey(955,390, "./Bilder/MainGame/palimpalim.bmp", 255,255,255)
 	
 	infotext.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
-	infotext.SchreibeText("Info: Blablablablabla...")
+	infotext.SchreibeText("Info: Blablablablabla...")									//TODO
 	infotext.Zeichne()
+	infotexthead.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	infotexthead.SetzeSchriftgröße(35)
+	infotexthead.SchreibeText("PALIMPALIM!!!")
+	infotexthead.Zeichne()
 	ok.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
 	ok.ZeichneButton()
 	
@@ -187,7 +192,7 @@ func MinigameLaden(raum,n int) (note float32, punkte uint32){
 		case 2:
 		switch n {
 			case 1:
-			note, punkte = vadeROBIgame.Vaderobi()
+			note, punkte = vaderobigame.Vaderobi()
 			case 2:
 			//TODO (noch kein importierbares package vorhanden)
 		}

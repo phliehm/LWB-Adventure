@@ -41,8 +41,8 @@ func bubbleTexte() {
 	texte[4] = "Welche Lehrveranstaltungen haben etwas mit 'Programmierung' zu tun?"
 	texte[5] = "Ob Du es auch schaffst herauszubekommen, was mein ganz persönliches Lieblingsgetränk ist?"
 	texte[6] = "Wieviele Mini-Games gibt es in der LWB-Adventure-World? (Überschrift der Ausgabe: AnzahlMiniGames)"
-	texte[7] = "Wie heißt die Veranstaltung mit den meisten SWS?"
-	texte[8] = "Wieviele SWS müssen in der gesamten LWB absolviert werden? (Überschrift der Ausgabe: GesamtanzahlSWS)"
+	texte[8] = "Wie heißt die Veranstaltung mit den meisten SWS?"
+	texte[7] = "Wieviele SWS müssen in der LWB insgesamt absolviert werden? (Überschrift der Ausgabe: GesamtanzahlSWS)"
 	texte[9] = "Lasse die Anzahl der Veranstaltungen pro Standort anzeigen! (Ausgabe aufsteigend, Überschrift der Ausgabe: AnzahlVeranstaltungen)"
 	texte[10] = "Mal schauen, ob Du die sechs Kommandos richtig eingibst, mit denen Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K nach SWS-Anzahl absteigend sortiert angezeigt werden!"
 }
@@ -54,11 +54,10 @@ func eingabeTexte() {
 	eingTexte[4] = "SELECT*FROMveranstaltungenWHEREvnameLIKE'%Programmierung';"
 	eingTexte[5] = "SELECTlieblingsgetraenkFROMdozentenWHEREdozname='Herk';"
 	eingTexte[6] = "SELECTCOUNT(*)ASAnzahlMiniGamesFROMmini-games;"
-	eingTexte[7] = "SELECTvname,MAX(sws)FROMveranstaltungen;"
-					//"SELECTvname,MAX(sws)FROMveranstaltungenGROUPBYvname;"			//TODO!!!
-	eingTexte[8] = "SELECTSUM(sws)ASGesamtanzahlSWSFROMveranstaltungen;"
-	eingTexte[9] = "SELECTort,COUNT(*)ASAnzahlVeranstaltungenFROMraeume,veranstaltungenWHEREraumnr=semesterGROUPBYortORDERBYCOUNT(*);"					//TODO
-	eingTexte[10] = "SELECTvname,semester,swsFROMveranstaltungenNATURALJOINdozentenWHEREdozname='WinnietheK'ORDERBYswsDESC;"
+	eingTexte[7] = "SELECTSUM(sws)ASGesamtanzahlSWSFROMveranstaltungen;"
+	eingTexte[8] = "SELECTvnameFROMveranstaltungenWHEREsws=(SELECTMAX(sws)FROMveranstaltungen);"
+	eingTexte[9] = "SELECTort,COUNT(*)ASAnzahlVeranstaltungenFROMraeume,veranstaltungenWHEREraumnr=semesterGROUPBYortORDERBYCOUNT(*);"	//TODO!!!
+	eingTexte[10] = "SELECTvname,semester,swsFROMveranstaltungenNATURALJOINdozentenWHEREdozname='WinnietheK'ORDERBYswsDESC;"			//TODO!!!
 }
 
 func eingabeTexte2() {

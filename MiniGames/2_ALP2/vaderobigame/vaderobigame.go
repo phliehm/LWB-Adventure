@@ -200,7 +200,7 @@ func Vaderobi() (float32,uint32) {
 			//--------------------------------------------------------------------------
 			for {
 						
-				if ted.GibString() == "exit" {
+				if ted.GibString() == "q" {
 					i = len(level)
 					break
 				}
