@@ -17,8 +17,13 @@ import (
 	"../Klassen/spielstaende"
 	"../Klassen/textboxen"
 	"../Klassen/buttons"
+<<<<<<< Updated upstream
 	"fmt"
 	felder "../Klassen/felder2"
+=======
+	//"fmt"
+	//"felder"
+>>>>>>> Stashed changes
 )
 
 
@@ -32,7 +37,7 @@ func StartFenster() spielstaende.Spielstand {
 	var startknopf buttons.Button = buttons.New(950,540,90,50,0,255,0,false," LOS!")
 	var alt buttons.Button = buttons.New(480,540,210,50,0,255,0,false,"  Weiterspielen")
 	var neu buttons.Button = buttons.New(780,540,210,50,0,255,0,false," Überschreiben")
-	var eingabefeld felder.Feld = felder.New (410,  190, 50, 'l', "")
+	//var eingabefeld felder.Feld = felder.New (410,  190, 50, 'l', "")
 
 	// für Spielstand
 	var spielstand spielstaende.Spielstand
@@ -50,8 +55,9 @@ func StartFenster() spielstaende.Spielstand {
 	startText.Zeichne()
 
 	// Eingabe des Namens
-	spielername = eingabefeld.Edit ()
-	fmt.Println("spielername: ",spielername)
+	//spielername = eingabefeld.Edit ()
+	//spielername = eingabefeld2.GibString()
+	//fmt.Println("spielername: ",spielername)
 	
 	spielstand = spielstaende.New(spielername,path)
 	

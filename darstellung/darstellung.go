@@ -68,6 +68,62 @@ func MainfloorDarstellen() {
 	
 }
 
+<<<<<<< Updated upstream
+=======
+/*
+func StartFenster() {
+	
+	//var startText textboxen.Textbox = textboxen.New(60,110,630,480)
+	//var startknopf buttons.Button = buttons.New(600,540,90,50,0,255,0,true," LOS!")
+	var startText textboxen.Textbox = textboxen.New(410,110,630,480)
+	var startknopf buttons.Button = buttons.New(950,540,90,50,0,255,0,true," LOS!")
+	
+	LadeBild(0,50,"./Bilder/MainGame/startbildschirm.bmp")
+	Stiftfarbe(0,0,0)
+	SetzeFont("./Schriftarten/Starjedi.ttf",80)
+	SchreibeFont(105,290,"1")
+	SchreibeFont(103,442,"1")
+	SetzeFont("./Schriftarten/Starjedi.ttf",50)
+	SchreibeFont(968,314,"2")
+	SchreibeFont(961,430,"2")
+	SetzeFont("./Schriftarten/Starjedi.ttf",25)
+	SchreibeFont(436,359,"3")
+	SchreibeFont(438,414,"3")
+	SetzeFont("./Schriftarten/Starjedi.ttf",20)
+	SchreibeFont(725,368,"4")
+	SchreibeFont(720,415,"4")
+	
+	//LadeBildMitColorKey(740,250, "./Bilder/MainGame/Darth-1.bmp", 255,255,255)
+	LadeBildMitColorKey(140,250, "./Bilder/MainGame/Darth-1.bmp", 255,255,255)
+	LadeBildMitColorKey(1083,275, "./Bilder/MainGame/info-1.bmp", 255,255,255)
+	
+	Stiftfarbe(255,255,255)
+	Transparenz(100)
+	//Vollrechteck(50,100,650,500)
+	Vollrechteck(400,100,650,500)
+	Transparenz(0)
+	
+	startText.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	//startText.SetzeSchriftgröße()
+	//startText.SetzeFarbe(255,255,255)
+	startText.SchreibeText("Willkommen zum LWB-Adventure-Game!\n\nBlablablablabla...\nBlablablablabla...\nBlablablablabla...\nBlablablablabla...\n")
+	startText.Zeichne()
+	startknopf.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	startknopf.ZeichneButton()
+	
+	for {
+		taste, status, mausX, mausY := MausLesen1()
+				
+		if taste==1 && status==1 {
+			if startknopf.TesteXYPosInButton(mausX,mausY) {
+				return
+			}
+		}
+	}
+	
+}
+*/
+>>>>>>> Stashed changes
 
 func SemesterraumDarstellen(n int) {
 	
@@ -128,7 +184,37 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,1200,700)
-	LadeBild(250,50,"./Bilder/Tür5.bmp")
+	
+	//LadeBild(250,50,"./Bilder/Tür5.bmp")
+	
+	LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
+	LadeBildMitColorKey(100,350,path + "Bilder/Darth_200.bmp",255,255,255)
+	LadeBild(620,80,path + "Bilder/paper_500.bmp")
+	LadeBild(960,520,path + "Bilder/certified_100.bmp")
+	LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
+	exit.SetzeFarbe(0,0,0)
+	exit.Zeichnen()
+	exit.AktiviereKlickbar()
+	
+	Stiftfarbe(0,255,0)
+	SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	SchreibeFont(330,10,"Super - ALP - Escape")
+	Stiftfarbe(0,0,0)
+	SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	SchreibeFont(295,140,"Du hast die")
+	SchreibeFont(310,260,"erreicht!")
+	SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	SchreibeFont(285,170,"Gesamtnote")
+	SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	SchreibeFont(325,195,"1.0")
+	
+	SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	for i:=1; i<7; i++ {
+		SchreibeFont(710,150+uint16((i-1)*68),"Level "+ fmt.Sprint(i) + ":   xx Punkte")
+		SchreibeFont(710,175+uint16((i-1)*68),"           Note x.x")
+	}
+	SchreibeFont(700,130+uint16(6*70),"----------------------")
+	SchreibeFont(710,160+uint16(6*70),"Gesamt:    xx Punkte")
 		
 	fmt.Println("Zeugnis:")
 	fmt.Println("--------")

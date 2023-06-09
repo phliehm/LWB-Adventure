@@ -17,6 +17,7 @@ var path2 string = "./" //MiniGames/2_ALP2/"
 
 var texte []string = make([]string,14)
 var aktuellerText int = 1
+
 var ausgTexte [][]string = make([][]string,14)
 var ausg1 []string = make ([]string,7)
 var ausg2 []string = make ([]string,7)
@@ -26,10 +27,23 @@ var ausg5 []string = make ([]string,3)
 var ausg6 []string = make ([]string,3)
 var ausg7 []string = make ([]string,3)
 var ausg8 []string = make ([]string,3)
-var ausg9 []string = make ([]string,5)
-var ausg10 []string = make ([]string,7)
+var ausg9 []string = make ([]string,7)
+var ausg10 []string = make ([]string,5)
+
 var eingTexte []string = make([]string,14)
 var eingTexte2 []string = make([]string,14)
+
+var hilfeTexte [][]string = make([][]string,14)
+var hilfen1 []string = make ([]string,3)
+var hilfen2 []string = make ([]string,3)
+var hilfen3 []string = make ([]string,3)
+var hilfen4 []string = make ([]string,3)
+var hilfen5 []string = make ([]string,3)
+var hilfen6 []string = make ([]string,3)
+var hilfen7 []string = make ([]string,3)
+var hilfen8 []string = make ([]string,3)
+var hilfen9 []string = make ([]string,3)
+var hilfen10 []string = make ([]string,3)
 
 //----------------------Hilfsfunktionen----------------------------
 
@@ -43,8 +57,9 @@ func bubbleTexte() {
 	texte[6] = "Wieviele Mini-Games gibt es in der LWB-Adventure-World? (Überschrift der Ausgabe: AnzahlMiniGames)"
 	texte[8] = "Wie heißt die Veranstaltung mit den meisten SWS?"
 	texte[7] = "Wieviele SWS müssen in der LWB insgesamt absolviert werden? (Überschrift der Ausgabe: GesamtanzahlSWS)"
-	texte[9] = "Lasse die Anzahl der Veranstaltungen pro Standort anzeigen! (Ausgabe aufsteigend, Überschrift der Ausgabe: AnzahlVeranstaltungen)"
-	texte[10] = "Mal schauen, ob Du die sechs Kommandos richtig eingibst, mit denen Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K nach SWS-Anzahl absteigend sortiert angezeigt werden!"
+	//texte[10] = "Lasse zu jedem Raum die Anzahl der dort stattfindenden Veranstaltungen anzeigen! (Ausgabe aufsteigend, Überschrift der Anzahl-Ausgabe: AnzahlVeranstaltungen)"
+	texte[9] = "Mal schauen, ob Du die sechs Kommandos richtig eingibst, mit denen Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K nach SWS-Anzahl absteigend sortiert angezeigt werden!"
+	texte[10] = "Lasse die Anzahl der Veranstaltungen pro Standort anzeigen! (ohne JOIN!, Ausgabe aufsteigend, Überschrift der Ausgabe: AnzahlVeranstaltungen)"
 }
 
 func eingabeTexte() {
@@ -56,8 +71,10 @@ func eingabeTexte() {
 	eingTexte[6] = "SELECTCOUNT(*)ASAnzahlMiniGamesFROMmini-games;"
 	eingTexte[7] = "SELECTSUM(sws)ASGesamtanzahlSWSFROMveranstaltungen;"
 	eingTexte[8] = "SELECTvnameFROMveranstaltungenWHEREsws=(SELECTMAX(sws)FROMveranstaltungen);"
-	eingTexte[9] = "SELECTort,COUNT(*)ASAnzahlVeranstaltungenFROMraeume,veranstaltungenWHEREraumnr=semesterGROUPBYortORDERBYCOUNT(*);"	//TODO!!!
-	eingTexte[10] = "SELECTvname,semester,swsFROMveranstaltungenNATURALJOINdozentenWHEREdozname='WinnietheK'ORDERBYswsDESC;"			//TODO!!!
+	//eingTexte[10] = "SELECTsemester,COUNT(*)ASAnzahlVeranstaltungenFROMveranstaltungenGROUPBYsemesterORDERBYsemester";
+	eingTexte[9] = "SELECTvname,semester,swsFROMveranstaltungenNATURALJOINdozentenWHEREdozname='WinnietheK'ORDERBYswsDESC;"
+	eingTexte[10] = "SELECTort,COUNT(*)ASAnzahlVeranstaltungenFROMraeume,veranstaltungenWHEREraumnr=semesterGROUPBYortORDERBYCOUNT(*);"
+	
 }
 
 func eingabeTexte2() {
@@ -73,6 +90,59 @@ func eingabeTexte2() {
 	//eingTexte2[10] = "SELECT vname, semester, sws FROM veranstaltungen NATURAL JOIN dozenten WHERE dozname = 'Winnie the K' ORDER BY sws DESC;"
 }
 
+func hilfeText() {
+	
+	hilfen1[0] = "Hilfe 1.1"
+	hilfen1[1] = "Hilfe 1.2"
+	hilfen1[2] = "Das wäre die richtige Lösung gewesen!"
+	hilfeTexte[1] = hilfen1
+	
+	hilfen2[0] = ""
+	hilfen2[1] = ""
+	hilfen2[2] = ""
+	hilfeTexte[2] = hilfen2
+	
+	hilfen3[0] = ""
+	hilfen3[1] = ""
+	hilfen3[2] = ""
+	hilfeTexte[3] = hilfen3
+	
+	hilfen4[0] = ""
+	hilfen4[1] = ""
+	hilfen4[2] = ""
+	hilfeTexte[4] = hilfen4
+	
+	hilfen5[0] = ""
+	hilfen5[1] = ""
+	hilfen5[2] = ""
+	hilfeTexte[5] = hilfen5
+	
+	hilfen6[0] = ""
+	hilfen6[1] = ""
+	hilfen6[2] = ""
+	hilfeTexte[6] = hilfen6
+	
+	hilfen7[0] = ""
+	hilfen7[1] = ""
+	hilfen7[2] = ""
+	hilfeTexte[7] = hilfen7
+	
+	hilfen8[0] = ""
+	hilfen8[1] = ""
+	hilfen8[2] = ""
+	hilfeTexte[8] = hilfen8
+	
+	hilfen9[0] = ""
+	hilfen9[1] = ""
+	hilfen9[2] = ""
+	hilfeTexte[9] = hilfen9
+	
+	hilfen10[0] = ""
+	hilfen10[1] = ""
+	hilfen10[2] = ""
+	hilfeTexte[10] = hilfen10
+	
+}
 
 func ausgabeTexte() {
 	
@@ -131,21 +201,21 @@ func ausgabeTexte() {
 	ausg8[2] = " 64"
 	ausgTexte[8] = ausg8
 	
-	ausg9[0] = " Ort               Anzahl-Veranstaltungen"
-	ausg9[1] = "------------------------------------------"
-	ausg9[2] = " FU (Dahlem)       6"
-	ausg9[3] = " digital (BBB)     3"
-	ausg9[4] = " STEPS (Mitte)     5"
-	ausgTexte[9] = ausg9
-	
-	ausg10[0] = " V-NAME                                    SEMESTER        SWS"
-	ausg10[1] = "---------------------------------------------------------------"
-	ausg10[2] = " Betriebssystemwerkzeuge                   1. Semester     2"
-	ausg10[3] = " Grundlagen der technischen Informatik     1. Semester     6"
-	ausg10[4] = " Rechnerarchitektur                        2. Semester     4"
-	ausg10[5] = " Fachdidaktik Informatik                   3. Semester     4"
-	ausg10[6] = " Rechnernetze                              4. Semester     2"
+	ausg10[0] = " Ort               Anzahl-Veranstaltungen"
+	ausg10[1] = "------------------------------------------"
+	ausg10[2] = " FU (Dahlem)       6"
+	ausg10[3] = " digital (BBB)     3"
+	ausg10[4] = " STEPS (Mitte)     5"
 	ausgTexte[10] = ausg10
+	
+	ausg9[0] = " V-NAME                                    SEMESTER        SWS"
+	ausg9[1] = "---------------------------------------------------------------"
+	ausg9[2] = " Betriebssystemwerkzeuge                   1. Semester     2"
+	ausg9[3] = " Grundlagen der technischen Informatik     1. Semester     6"
+	ausg9[4] = " Rechnerarchitektur                        2. Semester     4"
+	ausg9[5] = " Fachdidaktik Informatik                   3. Semester     4"
+	ausg9[6] = " Rechnernetze                              4. Semester     2"
+	ausgTexte[9] = ausg9
 }
 
 func erzeugeFehlerausgabe(ausgabe textboxen.Textbox) {
@@ -187,9 +257,15 @@ func SQLgame() {
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,1200,700)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	
+	fmt.Println("Führe bubbleTexte() aus!")
 	bubbleTexte()
+	fmt.Println("Führe eingabeTexte() aus!")
 	eingabeTexte()
+	fmt.Println("Führe ausgabeTexte() aus!")
 	ausgabeTexte()
+	fmt.Println("Führe hilfeText() aus!")
+	hilfeText()
 	
 //------------------Variablen--------------------------------------
 	var next buttons.Button = buttons.New(445,240,80,35,0,255,0,true,"   next")
@@ -293,7 +369,12 @@ func SQLgame() {
 					bubbletext.Zeichne()
 					bubblehead.SchreibeText("Level "+fmt.Sprint(i))
 					bubblehead.Zeichne()
-					next.ZeichneButton()
+					//next.ZeichneButton()
+					//Stiftfarbe(255,255,255)							//next-Button "ausgrauen"
+					//Transparenz(50)
+					//Vollrechteck(443,238,84,39)
+					//Transparenz(0)
+					
 					//next.DeaktiviereButton()
 					if aktuellerText < len(texte)-1 {
 						aktuellerText++
@@ -324,6 +405,7 @@ func SQLgame() {
 				ausgabe.SetzeRahmenFarbe(0,0,0)
 				ausgabe.HintergrundAn(true)
 				ausgabe.SetzeHintergrundFarbe(255,255,255)
+				ausgabe.SetzeFarbe(0,255,0)
 				ausgabe.SchreibeText("")				
 				ausgabe.Zeichne()
 				Stiftfarbe(255,255,255)
@@ -332,19 +414,48 @@ func SQLgame() {
 				//next.AktiviereButton()
 				break
 			} else {
-				Stiftfarbe(255,255,255)
-				Transparenz(50)
-				Vollrechteck(443,238,84,39)
-				Transparenz(0)
-				Vollrechteck(320,375,820,200)
-				Vollrechteck(100,500,100,100)
-				LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/herk_angry_red_200.bmp",255,255,255)
-				erzeugeFehlerausgabe(ausgabe)
-				SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",30)
-				Stiftfarbe(255,0,0)
-				SchreibeFont(225,240,"NOCHMAL!  :-(")
-				ted = texteditoren.New(315,595,830,63,20,true)
-			}					
+				
+				for j:=0; j<3; j++ {
+					
+					if j == 0 {											//Next-Button "ausgrauen"
+						Stiftfarbe(255,255,255)
+						Transparenz(50)
+						Vollrechteck(443,238,84,39)
+					}
+					
+					//ausgabe.Zeichnen()
+					Transparenz(0)
+					Vollrechteck(311,371,838,218)						//alte Ausgabe überdecken
+					//Vollrechteck(320,375,820,200)
+					Vollrechteck(100,500,100,100)						//Herk-Mund überdecken wegen Transparenz
+					LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/herk_angry_red_200.bmp",255,255,255)
+					
+					ausgabe.RahmenAn(false)
+					//ausgabe.SetzeRahmenFarbe(0,0,0)
+					ausgabe.HintergrundAn(false)
+					//ausgabe.SetzeHintergrundFarbe(255,255,255)
+					ausgabe.SetzeFarbe(255,0,0)
+					ausgabe.SchreibeText(hilfeTexte[i][j])				
+					ausgabe.Zeichne()
+					
+					erzeugeFehlerausgabe(ausgabe)
+					
+					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",30)
+					Stiftfarbe(255,0,0)
+					
+					if j<2 {
+						SchreibeFont(225,240,"NOCHMAL!  :-(")
+						ted = texteditoren.New(315,595,830,63,20,true)
+					} else {
+						Stiftfarbe(255,255,255)
+						Vollrechteck(220,235,315,40)
+						Stiftfarbe(255,0,0)
+						SchreibeFont(225,240,"SCHADE!  :-(")
+						next.ZeichneButton()
+					}
+				}
+			}
+			break					
 		}
 	}
 		
