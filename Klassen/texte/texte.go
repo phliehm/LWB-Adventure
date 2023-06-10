@@ -103,7 +103,42 @@ var MusterEinl []string = []string{"   H e r z l i c h    W i l l k o m m e n",
 								"",
 								" und schließlich festigen wir das",
 								"          Wissen per MUSTER-MEMORY ."}
-			
+
+var MusterEins []string = []string{"         M U S T E R  -  M E M O R Y ",
+								"",
+								"               ###   Stufe 1   ###",
+								"",
+								"      Du spielst mit offenen Karten!",
+								"",
+								"",
+								" Finde die zugehörgen Paare und ",
+								"    klicke sie nacheinander an! ",
+								" "}
+
+
+var MusterZwei []string = []string{"         M U S T E R  -  M E M O R Y ",
+								"",
+								"               ###   Stufe 2   ###",
+								"",
+								"    Du spielst mit verdeckten Karten!",
+								"",
+								"",
+								" Finde die zugehörgen Paare und ",
+								"    klicke sie nacheinander an! ",
+								" "}			
+
+
+var MusterDrei []string = []string{"         M U S T E R  -  M E M O R Y ",
+								"",
+								"               ###   Stufe 3   ###",
+								"",
+								"   Die Karten sind nun auf beiden Seiten leer!",
+								"",
+								"",
+								" Finde die zugehörgen Paare hörend ",
+								"    und klicke sie nacheinander an! ",
+								" "}
+
 											
 var MusterV [6]string = [6]string{"(f:w)",			// (f:w)
 								"('f':w)",			// ('f':w)

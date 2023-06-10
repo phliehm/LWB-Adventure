@@ -139,30 +139,38 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	
 	//musterSpiel(obj, maus, akt, signal, tastatur, random, mutex, eingabe, wert, punkte)
 	
-	//time.Sleep( time.Duration(3e9) )
+	
 	
 	*obj = make([]objekte.Objekt,0)
-	*akt = true
+	time.Sleep( time.Duration(3e8) )
+	//*akt = true
 	
-	memorySpiel(obj, akt, 5, random)					// auf Level 5
-	
-	neuerZustand = <- kanal
-	
-	
+	zwischentext(&texte.MusterEins, mutex, stop)
 	memorySpiel(obj, akt, 2, random)					// auf Level 1
-	
 	neuerZustand = <- kanal
 	
+	/*
 	memorySpiel(obj, akt, 1, random)					// auf Level 2
-	
 	neuerZustand = <- kanal
+	*/
 	
+	*obj = make([]objekte.Objekt,0)
+	time.Sleep( time.Duration(3e8) )
+	
+	zwischentext(&texte.MusterZwei, mutex, stop)
 	memorySpiel(obj, akt, 3, random)					// auf Level 3
-	
 	neuerZustand = <- kanal
+	
+	*obj = make([]objekte.Objekt,0)
+	time.Sleep( time.Duration(3e8) )
+	
+	zwischentext(&texte.MusterDrei, mutex, stop)
+	memorySpiel(obj, akt, 5, random)					// auf Level 5
+	neuerZustand = <- kanal
+	
 	
 	fmt.Println(neuerZustand)
-	//for !*signal { time.Sleep( time.Duration(2e9) ) }
+	// for !*signal { time.Sleep( time.Duration(2e9) ) }
 	
 }
 
@@ -235,7 +243,7 @@ Neu0:
 		
 		SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 		Stiftfarbe(180,50,35)
-		SchreibeFont (130, 340 , texte.MusterV[auswahl] )							// Muster-Vorgabe
+		SchreibeFont (130, 340 , texte.MusterV[auswahl] )								// Muster-Vorgabe
 		
 		if wahrOderFalsch == 0 {
 			SchreibeFont (480, 340 , texte.MusterN[ auswahl ][ zufallSpalte ] )			// falsches Muster
@@ -465,13 +473,13 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 		UpdateAus () 										// Nun wird alles im nicht sichtbaren "hinteren" Fenster gezeichnet!
 		
 		Stiftfarbe(255,255,255)
-		Cls()																// Cleart vollständigen Screen
+		Cls()												// Cleart vollständigen Screen
 		
 		if *akt { 
 			ObjAktualisieren(obj)
 			*akt = false
 		} else {
-			Restaurieren(0,0,1200,700)										// Restauriert das alte Hintergrundbild
+			Restaurieren(0,0,1200,700)						// Restauriert das alte Hintergrundbild
 		}
 		
 		if *stop {
