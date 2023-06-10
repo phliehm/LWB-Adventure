@@ -398,8 +398,8 @@ func MinigameLaden(raum,n int) (note float32, punkte uint32){
 			case 1:
 			// note, punkte = muster.Muster()
 			// noch falsche Rückgabe
-			note = 6 
-			punkte = uint32(muster.Muster())
+			// note = 6 
+			note, punkte = muster.Muster()
 			case 2:
 			note, punkte = bauelementeSpiel.BauelementeSpiel()
 		}
