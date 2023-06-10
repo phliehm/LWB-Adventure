@@ -43,9 +43,49 @@ func ladeEndeBildschirm() {										//TODO
 
 func schreibeZertifikat(spielstand spielstaende.Spielstand) {
 
-	//var gamestxt,notentxt string
 	var zertifikatgames textboxen.Textbox = textboxen.New(630,200,450,550)
 	var zertifikatnoten textboxen.Textbox = textboxen.New(1000,200,100,550)
+	var gametitel []string = gametitelSchreiben()
+	var gamenoten []float32 = ordneNotenGamesZu(spielstand)
+	var gamestxt,notentxt string				// Texte für das Zertifikat
+
+	for i:=0; i<len(gamenoten); i++ {
+		gamestxt = gamestxt + gametitel[i] + ":\n"
+		if gamenoten[i] > .5 {
+			notentxt= notentxt + "" +fmt.Sprint(gamenoten[i]) + "\n"
+		} else {
+			notentxt= notentxt + "" +"--"+ "\n"
+		}
+	}
+
+	// Tabellenkopf Zertifikat
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	SchreibeFont(630,150,"Veranstaltung                   Noten")
+
+	// Spieletitel schreiben
+	zertifikatgames.SetzeFarbe(0,0,0)
+	zertifikatgames.SetzeZeilenAbstand(5)
+	zertifikatgames.SetzeSchriftgröße(22)
+	zertifikatgames.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	zertifikatgames.SchreibeText(gamestxt)
+	zertifikatgames.Zeichne()
+
+	// Noten schreiben
+	zertifikatnoten.SetzeFarbe(0,0,0)
+	zertifikatnoten.SetzeZeilenAbstand(5)
+	zertifikatnoten.SetzeSchriftgröße(22)
+	zertifikatnoten.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	zertifikatnoten.SchreibeText(notentxt)
+	zertifikatnoten.Zeichne()
+
+}
+
+/*
+func schreibeSpielstand(spielstand spielstaende.Spielstand) {
+
+	//var gamestxt,notentxt string
+	var text textboxen.Textbox = textboxen.New(630,200,450,550)
+	//var zertifikatnoten textboxen.Textbox = textboxen.New(1000,200,100,550)
 	var gametitel []string = gametitelSchreiben()
 	var gamenoten []float32 = ordneNotenGamesZu(spielstand)
 	var gamestxt,notentxt string				// Texte für das Zertifikat
@@ -76,6 +116,7 @@ func schreibeZertifikat(spielstand spielstaende.Spielstand) {
 	zertifikatnoten.Zeichne()
 
 }
+*/
 
 
 func gametitelSchreiben() []string {
@@ -112,6 +153,9 @@ func gametitelSchreiben() []string {
 	
 func MainfloorDarstellen() {
 	
+	var ende textboxen.Textbox = textboxen.New(1147,508,50,100)
+
+	
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,1200,700)
 	LadeBild(0,50,"./Bilder/mainfloor.bmp")
@@ -133,6 +177,14 @@ func MainfloorDarstellen() {
 	//LadeBildMitColorKey (965,330, "./Bilder/MainGame/2.bmp", 255,255,255)
 	//LadeBildMitColorKey (434,371, "./Bilder/MainGame/3-2.bmp", 255,255,255)
 	//LadeBildMitColorKey (725,376, "./Bilder/MainGame/4.bmp", 255,255,255)
+
+	
+	ende.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	ende.SetzeSchriftgröße(20)
+	ende.SchreibeText("E\n N\n D\n E\n")			//TODO
+	ende.Zeichne()
+
+	SetzeFont("./Schriftarten/Starjedi.ttf",20)
 	
 }
 
@@ -146,6 +198,7 @@ func SemesterraumDarstellen(n int) {
 		LadeBild(0,0,"./Bilder/MainGame/raum1.bmp")
 		case 2:
 		LadeBild(0,0,"./Bilder/MainGame/raum2.bmp")
+		LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
 		case 3:
 		LadeBild(0,0,"./Bilder/MainGame/raum3.bmp")
 		case 4:
@@ -159,23 +212,32 @@ func SemesterraumDarstellen(n int) {
 
 func InfoDarstellen() {
 	
-	var infotexthead textboxen.Textbox = textboxen.New(570,120,500,350)
-	var infotext textboxen.Textbox = textboxen.New(570,160,500,310)
-	var ok buttons.Button = buttons.New(917,295,50,40,0,255,0,true,"OK")
+	// var infotexthead textboxen.Textbox = textboxen.New(570,120,500,350)
+	var infotext textboxen.Textbox = textboxen.New(570,120,400,310)
+	var ok buttons.Button = buttons.New(825,315,50,40,0,255,0,true,"OK")
+	
+	SpieleSound("./Sounds/palim-palim.wav")
 	
 	LadeBildMitColorKey(530,90, "./Bilder/MainGame/bubble2_red.bmp", 255,0,0)
 	LadeBildMitColorKey(955,390, "./Bilder/MainGame/palimpalim.bmp", 255,255,255)
 	
 	infotext.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
-	infotext.SchreibeText("Info: Blablablablabla...")									//TODO
+	infotext.SchreibeText("Klicken Sie sich einfach durch die Welt und" +
+		" bestehen Sie die Prüfungen der LWB Informatik. \n" +
+		" Durch die Türen können Sie neue Räume betreten," +
+		" aber erst wenn Sie eine Freigabe durch bestandene " +
+		" Prüfungen erhalten haben. Wenn Sie eine Prüfung ablegen" + 
+		" wollen, klicken Sie auf einen der Dozenten." + 
+		" Beginnen Sie im offenen Raum 1. \n" + 
+		" Viel Spaß!")
 	infotext.Zeichne()
-	infotexthead.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
-	infotexthead.SetzeSchriftgröße(35)
-	infotexthead.SchreibeText("PALIMPALIM!!!")
-	infotexthead.Zeichne()
+	//infotexthead.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	//infotexthead.SetzeSchriftgröße(35)
+	//infotexthead.SchreibeText("PALIMPALIM!!!")
+	//infotexthead.Zeichne()
+	
 	ok.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
 	ok.ZeichneButton()
-	
 	for {
 		taste, status, mausX, mausY := MausLesen1()
 				
@@ -189,13 +251,8 @@ func InfoDarstellen() {
 }
 
 
-// Eff: Der Endbildschirm mit Zertifikat und Durchschnitt ist angezeigt. 
-func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
-
-	var exit vierecke.Viereck = vierecke.New(1100,565,1190,565,1190,685,1100,685)   	// Position wie in den anderen Räumen
-	// var exit vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
-	var noten []float32 = spielstand.GibNoten()
-
+func ladeEndbildschirmHintergrund() {
+	
 	Stiftfarbe(255,255,255)
 	Cls()
 
@@ -205,15 +262,21 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 	LadeBild(600,80,"./Bilder/MainGame/zertifikat.bmp")
 	LadeBild(940,510,"./Bilder/certified_100.bmp")
 
-	// exit-Schalter einfügen
-	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
-	exit.SetzeFarbe(0,0,0)
-	exit.Zeichnen()
-	exit.AktiviereKlickbar()
+}
+
+
+// Eff: Der Endbildschirm mit Zertifikat und Durchschnitt ist angezeigt. 
+func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
+
+	var exit vierecke.Viereck = vierecke.New(1100,565,1190,565,1190,685,1100,685)   	// Position wie in den anderen Räumen
+	// var exit vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
+	var noten []float32 = spielstand.GibNoten()	
 	
+	// Lade Hintergrundbild
+	ladeEndbildschirmHintergrund()
 	
-	Stiftfarbe(0,0,0)
 	//  Titel schreiben
+	Stiftfarbe(0,0,0)
 	SetzeFont("./Schriftarten/brlnsr.ttf",35)
 	SchreibeFont(50,20,"Herzlichen Glückwunsch zum erfolgreich absolvierten LWB-Adventure!!!")
 	
@@ -238,9 +301,15 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 	Stiftfarbe(0,0,0)
 	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	SchreibeFont(380,632,"Spiel beenden")
-*/	
+*/
 
+	// exit-Schalter einfügen
+	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
+	exit.SetzeFarbe(0,0,0)
+	exit.Zeichnen()
+	exit.AktiviereKlickbar()
 	
+	// Warte auf Mausklick-Entscheidung
 	for {
 		taste, status, mausX, mausY := MausLesen1()
 		if taste==1 && status==1 {
@@ -251,6 +320,71 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 		}
 	}
 	
+}
+
+
+func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) bool {
+	
+	var exit vierecke.Viereck = vierecke.New(1100,565,1190,565,1190,685,1100,685)   	// Position wie in den anderen Räumen
+	var ende vierecke.Viereck = vierecke.New(350,620,550,620,550,670,350,670)
+	var noten []float32 = spielstand.GibNoten()	
+	
+	// Lade Hintergrundbild
+	ladeEndbildschirmHintergrund()
+	
+	//  Titel schreiben
+	Stiftfarbe(0,0,0)
+	SetzeFont("./Schriftarten/brlnsr.ttf",35)
+	SchreibeFont(50,20,"Nicht aufgeben, spielen Sie weiter!!!")
+	
+	// Notendurchschnitt schreiben
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	SchreibeFont(260,145,"Du hast bisher den")
+	SchreibeFont(310,265,"erreicht!")
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	SchreibeFont(230,175,"Notendurchschnitt")
+	SetzeFont("./Schriftarten/Starjedi.ttf",42)
+	SchreibeFont(325,200,fmt.Sprintf("%2.1f",durchschnitt(noten)))
+		
+	// Inhalt des Zertifikates vorbereiten	
+	schreibeZertifikat(spielstand)
+
+	// exit-Schalter einfügen
+	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
+	exit.SetzeFarbe(0,0,0)
+	exit.Zeichnen()
+	exit.AktiviereKlickbar()
+	
+	// Spiel-BeendenSchalter einfügen
+	Stiftfarbe(255,100,0)
+	Vollrechteck(350,620,200,50)
+	Stiftfarbe(0,0,0)
+	Rechteck(350,620,200,50)
+	Stiftfarbe(0,0,0)
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	SchreibeFont(380,632,"Spiel beenden")
+	//ende.SetzeFarbe(0,0,0)
+	ende.Zeichnen()
+	ende.AktiviereKlickbar()
+
+	// Warte auf Mausklick-Entscheidung
+	for {
+		taste, status, mausX, mausY := MausLesen1()
+		if taste==1 && status==1 {
+			if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
+				fmt.Println("exit geklickt")
+				break
+			}
+			if ende.Angeklickt(mausX,mausY) { 							// Ende des Spiels
+				fmt.Println("ende geklickt")
+				return true
+				break
+			}
+		}
+	}
+	
+	return false
+
 }
 
 
