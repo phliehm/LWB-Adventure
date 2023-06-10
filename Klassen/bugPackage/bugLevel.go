@@ -73,7 +73,7 @@ func Startbildschirm() {
 	gfx.Cls()
 	gfx.UpdateAus()
 	gfx.LadeBild(5,5,"Bilder/BugAttack/Amoebius_klein.bmp")
-	gfx.LadeBildMitColorKey(1050,530,"Bilder/FebWebK_red_gespiegelt.bmp",255,0,0)
+	gfx.LadeBildMitColorKey(1050,530,"Bilder/BugAttack/FebWebK_red_gespiegelt.bmp",255,0,0)
 	HelloTB := textboxen.New(130,50,800,500)
 	HelloTB.SchreibeText("Willkomen beim Softwarepraktikum!\n\n" +
 						"Du hast ja schon begonnen! Bevor wir euch eine Einweisung gegeben haben?\n\nVerständlich!\n\n"+
@@ -225,12 +225,12 @@ func Endbildschirm() {
 	gfx.Cls()
 	
 	
-	gfx.LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
+	gfx.LadeBild(150,100,path + "Bilder/Zertifikat/sprechblase_flipped_400.bmp")
 	gfx.LadeBild(230,390,path+"Bilder/BugAttack/FabWeb_fullBody_gespiegelt.bmp")
 	gfx.LadeBildMitColorKey(250,350,path + "Bilder/BugAttack/Amoebius_klein.bmp",0,0,0)
 	
-	gfx.LadeBild(620,80,path + "Bilder/paper_500.bmp")
-	gfx.LadeBild(960,520,path + "Bilder/certified_100.bmp")
+	gfx.LadeBild(620,80,path + "Bilder/Zertifikat/paper_500.bmp")
+	gfx.LadeBild(960,520,path + "Bilder/Zertifikat/certified_100.bmp")
 	//gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
 	
 	gfx.LadeBildMitColorKey(1080,30,path + "Bilder/BugAttack/Bug.bmp",0,0,0)
