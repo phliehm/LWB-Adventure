@@ -15,7 +15,7 @@ package theNETgameSpielfeld
 //import "fmt"
 //import "time"
 //import "../textboxen"
-//import "../netze"
+import "../netze"
 //import "../buttons"
 
 
