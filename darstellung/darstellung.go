@@ -15,8 +15,9 @@ import (
 	"../MiniGames/2_ALP2/vaderobigame"
 //	"../MiniGames/2_ALP2/vadeROBIgame"
 	//"../MiniGames/3_DDI"
+	"../MiniGames/2_EthI"
 	"../MiniGames/3_DBSA"
-	//"../MiniGames/4_BugAttack"
+	"../MiniGames/4_BugAttack"
 	"../MiniGames/4_Moorhuhn"
 	"../MiniGames/theNETgame"
 	"../Klassen/spielstaende"
@@ -197,7 +198,7 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 
 	Stiftfarbe(255,255,255)
 	Cls()
-	
+
 	// Hintergrund gestalten
 	LadeBild(150,100,"./Bilder/sprechblase_flipped_400.bmp")
 	LadeBildMitColorKey(100,350,"./Bilder/Darth_200.bmp",255,255,255)
@@ -274,7 +275,7 @@ func MinigameLaden(raum,n int) (note float32, punkte uint32){
 			case 1:
 			note, punkte = vaderobigame.Vaderobi()
 			case 2:
-			//TODO (noch kein importierbares package vorhanden)
+			note, punkte = getraenkeautomat.Getraenkeautomat()
 		}
 		
 		case 3:
@@ -292,7 +293,7 @@ func MinigameLaden(raum,n int) (note float32, punkte uint32){
 			case 1:
 			note, punkte = moorhuhn.Moorhuhn()
 			case 2:
-			//TODO (noch kein importierbares package vorhanden)
+			note, punkte = bugAttack.BugAttack()
 			case 3:
 			note, punkte = theNETgame.TheNETgame()
 		}
