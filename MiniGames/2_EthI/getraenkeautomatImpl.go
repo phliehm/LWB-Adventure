@@ -1,5 +1,5 @@
 
-// Funktion zum Start des Gertränkeautomatenspiels
+// Paket zum Gertränkeautomatenspiel
 
 // Implementation
 
@@ -151,6 +151,7 @@ func Getraenkeautomat() (float32, uint32) {
 			}
 
 			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende des Spiels
+				beenden.DeaktiviereButton()
 				gfx.StoppeAlleSounds()
 				break
 			}
@@ -676,6 +677,7 @@ func zeichneButtons(weiter,starter,beenden buttons.Button) {
 	}
 }
 
+
 // Vor: Ein passendes gfx-Fenster ist geöffnet.
 // Eff: Das Spielfeld mit Automat, Münzen, Text, J.EthI, Buttons und
 //	 	Spielstand ist gezeichnet.
@@ -721,6 +723,8 @@ func hintergrundmusik(beenden buttons.Button) {
 		gfx.SpieleSound(soundstr)
 		time.Sleep (time.Duration(19197e6))
 	}
+	fmt.Println("Sound gestoppt")
+	//gfx.StoppeAlleSounds()
 }
 
 
