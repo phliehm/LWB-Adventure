@@ -5,15 +5,17 @@ import (
 		"time"
 		)
 		
+//var path string = "../../"
+var path string = ""
 
-var amoebiusArray [13]string = [13]string{"../../Bilder/BugAttack/Amoebius40.bmp","../../Bilder/BugAttack/Amoebius50.bmp",
-	"../../Bilder/BugAttack/Amoebius60.bmp","../../Bilder/BugAttack/Amoebius70.bmp","../../Bilder/BugAttack/Amoebius80.bmp",
-	"../../Bilder/BugAttack/Amoebius90.bmp","../../Bilder/BugAttack/Amoebius100.bmp",
-	"../../Bilder/BugAttack/Amoebius90.bmp","../../Bilder/BugAttack/Amoebius80.bmp",
-	"../../Bilder/BugAttack/Amoebius70.bmp","../../Bilder/BugAttack/Amoebius60.bmp","../../Bilder/BugAttack/Amoebius50.bmp",
-	"../../Bilder/BugAttack/Amoebius40.bmp"}
+var amoebiusArray [13]string = [13]string{path+"Bilder/BugAttack/Amoebius40.bmp",path+"Bilder/BugAttack/Amoebius50.bmp",
+	path+"Bilder/BugAttack/Amoebius60.bmp",path+"Bilder/BugAttack/Amoebius70.bmp",path+"Bilder/BugAttack/Amoebius80.bmp",
+	path+"Bilder/BugAttack/Amoebius90.bmp",path+"Bilder/BugAttack/Amoebius100.bmp",
+	path+"Bilder/BugAttack/Amoebius90.bmp",path+"Bilder/BugAttack/Amoebius80.bmp",
+	path+"Bilder/BugAttack/Amoebius70.bmp",path+"Bilder/BugAttack/Amoebius60.bmp",path+"Bilder/BugAttack/Amoebius50.bmp",
+	path+"Bilder/BugAttack/Amoebius40.bmp"}
 	
-var bugAnimationArray [3]string = [3]string{"../../Bilder/BugAttack/Bug1.bmp","../../Bilder/BugAttack/Bug2.bmp","../../Bilder/BugAttack/Bug3.bmp"}
+var bugAnimationArray [3]string = [3]string{path+"Bilder/BugAttack/Bug1.bmp",path+"Bilder/BugAttack/Bug2.bmp",path+"Bilder/BugAttack/Bug3.bmp"}
 
 func amoebiusAndBugAnimation() {
 	var i uint16

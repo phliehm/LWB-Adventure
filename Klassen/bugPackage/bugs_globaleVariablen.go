@@ -35,7 +35,7 @@ var sr,sg,sb uint8 = 0,0,0
 var punkteTB textboxen.Textbox 
 
 var autoAim bool =true// Drücke "x" um automatisch zum nächsten Bug zu springen
-var killAllBugsCD uint16
+var killNBugsCD uint16
 var autoAimCD uint16
 
 var alleLadebalken []*ladebalken 
@@ -48,10 +48,11 @@ var level, anzahlBugsImLevel uint16
 var levelSchloss sync.Mutex
 var lvlSpeed, lvlNervosität int
 var lvlLäuft bool
-var lvlZeit uint16 
+var lvlZeit uint16 // Zeit im Level
+const maxZeit uint16 = 30 // maximale Zeit
 const maxLevel = 6 
-var lvlMaxPunkte [maxLevel]uint16 = [maxLevel]uint16{4800,4500,4000,4000,4000,4000}
-var lvlMinPunkte [maxLevel]uint16 = [maxLevel]uint16{4000,3000,2000,2000,2000,2000}
+var lvlMaxPunkte [maxLevel]uint16 = [maxLevel]uint16{4800,4500,4000,3500,3000,2000}
+var lvlMinPunkte [maxLevel]uint16 = [maxLevel]uint16{4000,2000,2000,500,0,0}
 var LevelArray [maxLevel]func() = [maxLevel]func(){Level1,Level2,Level3,Level4,Level5,Level6}
 
 const maxPunkteProLevel uint16 = 5000
@@ -60,3 +61,5 @@ var EndN float32
 var EndP uint32
 var SpielBeendet bool		// Spiel geht zum Endbildschirm wenn true
 
+const xposAutoAimBalken,yposAutoAimBalken uint16 = 500,50
+const xposkillNBugs,yposkillNBugs uint16 = 650,50

@@ -9,40 +9,39 @@ import (
 	//"os"
 	)
 
-	
-func Startbildschirm() {
-	punkteTB = textboxen.New(200,10,1000,20)
-	punkteTB.SetzeFarbe(255,255,255)
-	punkteTB.SetzeFont("Schriftarten/ltypeb.ttf")
-	
-	gfx.Stiftfarbe(0,0,0)
-	gfx.Cls()
-	gfx.UpdateAus()
-	gfx.LadeBild(5,5,"Bilder/BugAttack/Amoebius_klein.bmp")
-	gfx.LadeBildMitColorKey(1050,530,"Bilder/FebWebK_red_gespiegelt.bmp",255,0,0)
-	HelloTB := textboxen.New(130,50,800,500)
-	HelloTB.SchreibeText("Willkomen beim Softwarepraktikum!\n\n" +
-						"Du hast ja schon begonnen! Bevor wir euch eine Einweisung gegeben haben?\n\nVerständlich!\n\n"+
-						"Endlich darfst du mal so richtig programmieren, genau das was du ja eigentlich wolltest, "+
-						"ohne diesen ganzen Theoriekram.\n\nDoch scheinbar bist du doch nicht so cool wie du dachtest..."+
-						"Oder hast du wieder während der Vorlesung programmiert??\n"+
-						"Jedenfalls wimmelt es hier nur so von BUGs in deinem Code, deine TeamollegInnen werden nicht erfreut sein."+
-						"\nWer will den schon so eine verBUGgte Klasse benutzen?"+
-						"\n\nDie StudentInnen werden ja hier alle nicht besser, wir vom Dozententeam haben euch extra ein "+
-						"halbautomatisches BUGFIXING-TOOL (hBT) programmiert. Damit solltes selbst du in der Lage sein die Bugs zu beseitigen. "+
-						"Sogar auf einem Apfel.\n\n"+
-						"Gehe einfach mit deinem Cursor an genau die Stelle des Bugs, drücke LEERTASTE....und BAAAAMM!" )
-	HelloTB.SetzeFont("Schriftarten/ltypeb.ttf")
-	HelloTB.SetzeFarbe(0,255,0)
-	HelloTB.SetzeSchriftgröße(25)
-	HelloTB.Zeichne()
-	
-	gfx.UpdateAn()
-	gfx.TastaturLesen1()
-}
 
+var level1Text string = "... Die einfachen Bugs zuerst ... \n\n\nPass auf, dass du nicht verschlimmbesserst!\n\n" + 
+	"Bewege dich mit den Pfeiltasten und nutze das hBT mit LEERTASTE. \n\n"+
+	"Wenn dir das ganze über den Kopf wächst, drücke einfach 'q'."
+var level2Text string = "... Ich frag mich was passiert wenn man nicht in der Mitte bugfixt? ...\n\n" +
+						"'Haben Sie es ausprobiert?' \n\n"+
+						"Den Spruch kennst du doch, oder? Also mach mal, was kann schon schief gehen!\n\n"+
+						"Das mit der SHIFT-Taste hast du mitbekommen? Steht auch oben...aber ihr Studenten lest ja nie."
+						 
+var level3Text string = "... Gleich hab ich den Bug gefunden ...\n\n" +
+						"Diese verflixten Parallelitäts-Bugs! Man denkt man hat sie ...und dann ...\n"+
+						"dann tauchen diese kleinen Käfer einfach irgendwo anders wieder auf.\n\n" +
+						"Ach NSP hast du noch gar nicht gehört? Na kein Wunder!!! Ok, ich hab noch eine kleine Hilfe für dich."+
+						"Aber erzähls dem FabWeb nicht!\n\n" +
+						"Ich hab das hBT verbessert!!! Das findet jetzt sogar automatisch einen Bug...irgendeinen.\n\n"+
+						"Nutze die Zielautomatik und BAAAAAMMM!"
+var level4Text string = "... Einen gefixt, zwei neue gemacht ...\n\n"+
+						"In einer Woche ist Abgabe! Die Zeit arbeitet gegen dich, als beeil dich lieber.\n\n" +
+						"Die Zielautomatik ist jetzt nicht mehr ganz so oft verfügbar, deine KomilitonInnen brauchen die auch.\n\n"+
+						"Eingentlich braucht ihr ein Upgrade mit dem alle Bugs einfach verschwinden ..."
+						
+var level5Text string = "... Was war denn das??? ...\n\n"+
+						"Hast du das programmiert??? Dieses blaue Ding? Nee, das kann nicht von dir sein.\n\n"+
+						"Sieht nach FabWeb aus, als würden die rekursiv einfach nacheinander geBUGfixt werden.\n\n" + 
+						"Jetzt werd aber deswegen nicht schlampig! Du musst trotzdem noch ein paar per Hand fixen.\n"+
+						"Scheinbar hat Mr. FabWeb den Akku begrenzt." 
+var level6Text string = "... Schule + LWB ... kein Problem ...\n\n"+
+						"Erinnert dich das hier auch irgendwie an Schule? Ein Problem gelöst... \n\n"+
+						"In einer Ecke sorgt man für Ruhe, ZACK, fängt es woanders wieder an.\n" +
+						"Sind einfach zu viele in so einer Klasse. ... Klasse...HAHA...verstehste?" 
 
-func LevelIntro() {
+// Startbildschirm wenn man aus dem MainGame kommt
+func BugAttackIntro() {
 	gfx.SpieleSound("Sounds/Music/bugWars.wav")
 	wg.Add(1)
 	beschreibeArrayIntro()
@@ -63,163 +62,69 @@ func LevelIntro() {
 	gfx.StoppeAlleSounds()
 	//time.Sleep(1e9) // Wichtig damit die ZeichneWeltIntro() die Chance hat zu beenden
 }
-
-// Erhöht das Level, sicher
-func erhöheLevel() {
-	levelSchloss.Lock()
-	level++
-	fmt.Println("level: ", level)
-	levelSchloss.Unlock()
-}
-
-// Startet ein neues Level mit den gegebenen Parametern
-func levelStart(){
-	if SpielBeendet == true {
-		punkteArray[level-1] = 0	// setze Punkte im Level auf Null weil das Spiel ja beendet wird
-		return
-	}
-	fmt.Println("Starte Level")
-	wg.Add(1)
-	beschreibeArray()
-	createNBugs(anzahlBugsImLevel,lvlSpeed,lvlNervosität)
-	go ZeichneWelt()
-	go zählePunkte()
-	lvlZeit = 0			// für die Berechnung der Punktzahl
-	lvlLäuft = true
-	go lvlTimer()		
-	for _,l:=range alleLadebalken {	// starte den Cooldown aller Ladebalken
-		if l!= nil {go l.cooldown()}
-	}
-	// Warte bis keine Bugs mehr da sind
-	for howManyBugs()>0 {
-		time.Sleep(1e9)
-	}
-	lvlLäuft = false			// Signalisiert go-Routingen, dass das Level vorbei ist
-	wg.Wait()				// nötig?
-	entferneAlleLadebalken()
-	ergebnisLevel()
 	
+// Einleitungstext
+func Startbildschirm() {
+	punkteTB = textboxen.New(200,10,1000,20)
+	punkteTB.SetzeFarbe(255,255,255)
+	punkteTB.SetzeFont("Schriftarten/ltypeb.ttf")
+	
+	gfx.Stiftfarbe(0,0,0)
+	gfx.Cls()
+	gfx.UpdateAus()
+	gfx.LadeBild(5,5,"Bilder/BugAttack/Amoebius_klein.bmp")
+	gfx.LadeBildMitColorKey(1050,530,"Bilder/FebWebK_red_gespiegelt.bmp",255,0,0)
+	HelloTB := textboxen.New(130,50,800,500)
+	HelloTB.SchreibeText("Willkomen beim Softwarepraktikum!\n\n" +
+						"Du hast ja schon begonnen! Bevor wir euch eine Einweisung gegeben haben?\n\nVerständlich!\n\n"+
+						"Endlich darfst du mal so richtig programmieren, genau das was du ja eigentlich wolltest, "+
+						"ohne diesen ganzen Theoriekram.\n\nDoch scheinbar bist du doch nicht so cool wie du dachtest..."+
+						"Oder hast du wieder während der Vorlesung programmiert??\n"+
+						"Jedenfalls wimmelt es hier nur so von BUGs in deinem Code, deine TeamollegInnen werden nicht erfreut sein."+
+						"\nWer will denn schon so eine verBUGgte Klasse benutzen?"+
+						"\n\nDie StudentInnen werden ja hier alle nicht besser, wir vom Dozententeam haben euch extra ein "+
+						"halbautomatisches BUGFIXING-TOOL (hBT) programmiert. Damit solltest selbst du in der Lage sein die Bugs zu beseitigen. "+
+						"Sogar auf einem Apfel.\n\n"+
+						"Gehe einfach mit deinem Cursor auf einen Bug, drücke LEERTASTE....und BAAAAMM!" )
+	HelloTB.SetzeFont("Schriftarten/ltypeb.ttf")
+	HelloTB.SetzeFarbe(0,255,0)
+	HelloTB.SetzeSchriftgröße(25)
+	HelloTB.Zeichne()
+	
+	gfx.UpdateAn()
+	gfx.TastaturLesen1()
 }
 
-// Zeigt Punkte und Note nach Level an
-func ergebnisLevel() {
-	fmt.Println("Level: ",level)
-	fmt.Println("Punkte: ", punkteArray[level-1])
-	fmt.Println("Note: ", berechneNote())
-}
 
 // Tutorial
 func Level1(){
-	LevelTutorial()
+	LevelTutorial(level1Text)
 	erhöheLevel()
 	anzahlBugsImLevel = 1
 	lvlSpeed = 0
 	lvlNervosität = 1
 	gfx.SpieleSound("Sounds/Music/bugWars.wav")
 	//var l ladebalken
-	
-	
 	levelStart()
 	
 }
 
-func Level2(){
-	LevelTutorial()
-	erhöheLevel()
-	anzahlBugsImLevel = 3
-	lvlSpeed = 2
-	lvlNervosität = 2
-	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
-	alleLadebalken = append(alleLadebalken,lautoaim)
-	/*
-	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
-	alleLadebalken = append(alleLadebalken,l)
-	*/
-	//gfx.SpieleSound("Sounds/Music/bugWars.wav")
-	levelStart()
-}
-
-func Level3() {
-	LevelTutorial()
-	erhöheLevel()
-	lvlNervosität = 5
-	anzahlBugsImLevel = 5
-	lvlSpeed = 2
-	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
-	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
-	alleLadebalken = append(alleLadebalken,l)
-	levelStart()
-	// Letztes Level vorbei
-	//erhöheLevel()
-}
-
-
-func Level4() {
-	LevelTutorial()
-	erhöheLevel()
-	lvlNervosität = 5
-	anzahlBugsImLevel = 10
-	lvlSpeed = 2
-	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
-	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
-	alleLadebalken = append(alleLadebalken,l)
-	levelStart()
-	// Letztes Level vorbei
-	//erhöheLevel()
-}
-
-func Level5() {
-	LevelTutorial()
-	erhöheLevel()
-	lvlNervosität = 5
-	anzahlBugsImLevel = 10
-	lvlSpeed = 2
-	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
-	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
-	alleLadebalken = append(alleLadebalken,l)
-	levelStart()
-	// Letztes Level vorbei
-	//erhöheLevel()
-}
-
-func Level6() {
-	LevelTutorial()
-	erhöheLevel()
-	lvlNervosität = 6
-	anzahlBugsImLevel = 20
-	lvlSpeed = 4
-	lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",1)
-	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killAllBugsCD,400,50,0,255,255,"k",20)
-	alleLadebalken = append(alleLadebalken,l)
-	levelStart()
-	// Letztes Level vorbei
-	//erhöheLevel()
-}
-
-
-func LevelTutorial() {
+func LevelTutorial(text string) {
 	
 	gfx.UpdateAus()
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Cls()
 	
 	//gfx.LadeBild(10,20,"Bilder/Amoebius_klein.bmp")
-	Level1TB:= textboxen.New(300,150,500,200)
-	Level1TB.SchreibeText("Level 1")
+	Level1TB:= textboxen.New(200,150,500,200)
+	Level1TB.SchreibeText("Level " +fmt.Sprint(level+1))
 	Level1TB.SetzeFont("Schriftarten/ltypeb.ttf")
 	Level1TB.SetzeSchriftgröße(40)
 	Level1TB.SetzeFarbe(255,0,0)
 	Level1TB.Zeichne()
 	
-	Level1StartTB:= textboxen.New(300,250,500,200)
-	Level1StartTB.SchreibeText("Die einfachen Bugs zuerst.\n\n\nPass auf, dass du nicht verschlimmbesserst!\n\n" + 
-	"Bewege dich mit den Pfeiltasten und nutze das hBT mit LEERTASTE. Das hBT muss aber zentriert werden!! Also nicht einfach "+
-	"irgendwo Bugfixen. Sonst machst du alles nur noch schlimmer!\n\n"+
-	"Wenn dir das ganze über den Kopf wächst, drücke einfach 'q'." )
+	Level1StartTB:= textboxen.New(200,250,700,500)
+	Level1StartTB.SchreibeText(text)
 	Level1StartTB.SetzeFont("Schriftarten/ltypeb.ttf")
 	Level1StartTB.SetzeSchriftgröße(26)
 	Level1StartTB.SetzeFarbe(0,255,0)
@@ -232,23 +137,85 @@ func LevelTutorial() {
 	quit <- true
 }
 
-
-/*
- * Nicht mehr benötigt?
-func Endbildschirm() {
-	gfx.Cls()
-	BugAttackTB := textboxen.New(200,100,700,500)
-	BugAttackTB.SetzeZentriert()
-	BugAttackTB.SchreibeText(
-		"BUG ATTACK\nNote: "+fmt.Sprint(BerechneNote()))
-	BugAttackTB.SetzeFont("Schriftarten/ltypeb.ttf")
-	BugAttackTB.SetzeFarbe(0,255,0)
-	BugAttackTB.SetzeSchriftgröße(100)
-	BugAttackTB.Zeichne()
-	fmt.Println(BerechneNote())
-	gfx.TastaturLesen1()
+func Level2(){
+	LevelTutorial(level2Text)
+	erhöheLevel()
+	anzahlBugsImLevel = 3
+	lvlSpeed = 2
+	lvlNervosität = 5
+	//lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
+	//alleLadebalken = append(alleLadebalken,lautoaim)
+	/*
+	l := NewLadebalken(&killNBugsCD,400,50,0,255,255,"k",20)
+	alleLadebalken = append(alleLadebalken,l)
+	*/
+	//gfx.SpieleSound("Sounds/Music/bugWars.wav")
+	levelStart()
 }
-*/
+
+func Level3() {
+	LevelTutorial(level3Text)
+	erhöheLevel()
+	anzahlBugsImLevel = 5
+	lvlSpeed = 10
+	lvlNervosität = 50
+	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",1)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	//l := NewLadebalken(&killNBugsCD,400,50,0,255,255,"k",20)
+	//alleLadebalken = append(alleLadebalken,l)
+	levelStart()
+	// Letztes Level vorbei
+	//erhöheLevel()
+}
+
+
+func Level4() {
+	LevelTutorial(level4Text)
+	erhöheLevel()
+	lvlNervosität = 5
+	anzahlBugsImLevel = 10
+	lvlSpeed = 5
+	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",5)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",20)
+	alleLadebalken = append(alleLadebalken,l)
+	levelStart()
+	// Letztes Level vorbei
+	//erhöheLevel()
+}
+
+func Level5() {
+	LevelTutorial(level5Text)
+	erhöheLevel()
+	lvlNervosität = 5
+	anzahlBugsImLevel = 15
+	lvlSpeed = 5
+	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",4)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10)
+	alleLadebalken = append(alleLadebalken,l)
+	levelStart()
+	// Letztes Level vorbei
+	//erhöheLevel()
+}
+
+func Level6() {
+	LevelTutorial(level6Text)
+	erhöheLevel()
+	lvlNervosität = 20
+	anzahlBugsImLevel = 20
+	lvlSpeed = 5
+	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",2)
+	alleLadebalken = append(alleLadebalken,lautoaim)
+	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10)
+	alleLadebalken = append(alleLadebalken,l)
+	levelStart()
+	// Letztes Level vorbei
+	//erhöheLevel()
+}
+
+
+
 
 // Ergebnisbildschirm / Level
 func Endbildschirm() {
@@ -259,13 +226,20 @@ func Endbildschirm() {
 	
 	
 	gfx.LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
-	gfx.LadeBildMitColorKey(100,350,path + "Bilder/BugAttack/Amoebius_klein.bmp",0,0,0)
+	gfx.LadeBild(230,390,path+"Bilder/BugAttack/FabWeb_fullBody_gespiegelt.bmp")
+	gfx.LadeBildMitColorKey(250,350,path + "Bilder/BugAttack/Amoebius_klein.bmp",0,0,0)
+	
 	gfx.LadeBild(620,80,path + "Bilder/paper_500.bmp")
 	gfx.LadeBild(960,520,path + "Bilder/certified_100.bmp")
-	gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
+	//gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
+	
+	gfx.LadeBildMitColorKey(1080,30,path + "Bilder/BugAttack/Bug.bmp",0,0,0)
+	gfx.Stiftfarbe(125,0,0)
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",20)
+	gfx.SchreibeFont(1050,140,"[q] für Exit")
 		
 	gfx.Stiftfarbe(0,255,0)
-	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	gfx.SetzeFont(path + "Schriftarten/ComputerTypewriter.ttf",80)
 	gfx.SchreibeFont(330,10,"Bug  ATTACK")
 	gfx.Stiftfarbe(0,0,0)
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
@@ -292,6 +266,51 @@ func Endbildschirm() {
 
 	gfx.TastaturLesen1()
 	//return gesamtnote, gesamtpunkte
+}
+
+
+// Erhöht das Level, sicher
+func erhöheLevel() {
+	levelSchloss.Lock()
+	level++
+	fmt.Println("level: ", level)
+	levelSchloss.Unlock()
+}
+
+// Startet ein neues Level mit den gegebenen Parametern
+func levelStart(){
+	if SpielBeendet == true {
+		punkteArray[level-1] = 0	// setze Punkte im Level auf Null weil das Spiel ja beendet wird
+		return
+	}
+	fmt.Println("Starte Level")
+	wg.Add(3)
+	beschreibeArray()
+	createNBugs(anzahlBugsImLevel,lvlSpeed,lvlNervosität)
+	go ZeichneWelt()
+	lvlZeit = 0			
+	lvlLäuft = true
+	go zählePunkte()	// für die Berechnung der Punktzahl
+	go lvlTimer()		
+	for _,l:=range alleLadebalken {	// starte den Cooldown aller Ladebalken
+		if l!= nil {go l.cooldown()}
+	}
+	// Warte bis keine Bugs mehr da sind
+	for howManyBugs()>0 {
+		time.Sleep(1e9)
+	}
+	lvlLäuft = false			// Signalisiert go-Routingen, dass das Level vorbei ist
+	wg.Wait()				// Wartet auf alle zu beendenden Go-Routinen
+	entferneAlleLadebalken()
+	ergebnisLevel()
+	
+}
+
+// Zeigt Punkte und Note nach Level an
+func ergebnisLevel() {
+	fmt.Println("Level: ",level)
+	fmt.Println("Punkte: ", punkteArray[level-1])
+	fmt.Println("Note: ", berechneNote())
 }
 
 
