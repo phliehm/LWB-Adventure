@@ -360,8 +360,8 @@ func SQLgame() (punkte uint32, note float32) {
 	
 //------------------Grafik-Elemente--------------------------------
 	
-	LadeBild(150,90,path2 + "Bilder/bubble2_flipped_400.bmp")
-	LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/Herk_200.bmp",255,255,255)
+	LadeBild(150,90,path2 + "Bilder/SQLGame/bubble2_flipped_400.bmp")
+	LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/herk_200.bmp",255,255,255)
 	
 	SetzeFont(path2 + "Schriftarten/brlnsdb.ttf",60)
 	Stiftfarbe(0,255,0)
@@ -601,11 +601,11 @@ A:	for i:=1; i<len(texte); i++ {
 	
 	//SpieleSound(path + "Sounds/the_force.wav")
 	
-	LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
-	LadeBildMitColorKey(80,370,path + "Bilder/SQLGame/Herk_200.bmp",255,255,255)
-	LadeBild(620,80,path2 + "Bilder/paper_500.bmp")
-	LadeBild(960,520,path2 + "Bilder/certified_100.bmp")
-	LadeBild(1080,90,path2 + "Bilder/Zurück-Symbol.bmp")
+	LadeBild(150,100,path + "Bilder/SQLGame/sprechblase_flipped_400.bmp")
+	LadeBildMitColorKey(80,370,path + "Bilder/SQLGame/herk_200.bmp",255,255,255)
+	LadeBild(620,80,path2 + "Bilder/SQLGame/paper_500.bmp")
+	LadeBild(960,520,path2 + "Bilder/SQLGame/certified_100.bmp")
+	LadeBild(1080,90,path2 + "Bilder/SQLGame/Zurück-Symbol.bmp")
 	//exit.SetKoordinaten(1080,80,1080,195,1170,195,1170,80)
 	exit.AktiviereKlickbar()
 	

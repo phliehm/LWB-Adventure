@@ -476,11 +476,11 @@ func Vaderobi() (float32,uint32) {
 		
 		gfx.SpieleSound(path + "Sounds/the_force.wav")
 		
-		gfx.LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
-		gfx.LadeBildMitColorKey(100,350,path + "Bilder/Darth_200.bmp",255,255,255)
-		gfx.LadeBild(620,80,path + "Bilder/paper_500.bmp")
-		gfx.LadeBild(960,520,path + "Bilder/certified_100.bmp")
-		gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
+		gfx.LadeBild(150,100,path + "Bilder/vaderobiGame/sprechblase_flipped_400.bmp")
+		gfx.LadeBildMitColorKey(100,350,path + "Bilder/vaderobiGame/Darth_200.bmp",255,255,255)
+		gfx.LadeBild(620,80,path + "Bilder/vaderobiGame/paper_500.bmp")
+		gfx.LadeBild(960,520,path + "Bilder/vaderobiGame/certified_100.bmp")
+		gfx.LadeBild(1080,30,path + "Bilder/vaderobiGame/Zurück-Symbol.bmp")
 		//exit2.SetzeFarbe(0,0,0)
 		//exit2.Zeichnen()
 		exit2.AktiviereKlickbar()
