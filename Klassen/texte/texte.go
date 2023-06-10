@@ -96,47 +96,46 @@ var MoorOut2 []string = []string{"",
 
 var MusterEinl []string = []string{"   H e r z l i c h    W i l l k o m m e n",
 								"                             zur",
-								"     Funktionalen Programmierung",
+								"   Funktionalen Programmierung",
 								" ",
 								" Heute beschäftigen wir uns zuerst",
-								"          mit der MUSTER-ERKENNUNG",
+								"       mit der MUSTER-ERKENNUNG",
 								"",
 								" und schließlich festigen wir das",
-								"          Wissen per MUSTER-MEMORY ."}
+								"       Wissen im MUSTER-MEMORY ."}
 
 var MusterEins []string = []string{"         M U S T E R  -  M E M O R Y ",
 								"",
-								"               ###   Stufe 1   ###",
+								"              ###   Stufe 1   ###",
 								"",
-								"      Du spielst mit offenen Karten!",
+								"    Du spielst mit offenen Karten!",
 								"",
 								"",
-								" Finde die zugehörgen Paare und ",
-								"    klicke sie nacheinander an! ",
+								" Finde zusammengehörige Paare! ",
+								"",
 								" "}
 
 
 var MusterZwei []string = []string{"         M U S T E R  -  M E M O R Y ",
 								"",
-								"               ###   Stufe 2   ###",
+								"              ###   Stufe 2   ###",
 								"",
-								"    Du spielst mit verdeckten Karten!",
+								" Du spielst mit verdeckten Karten!",
 								"",
 								"",
-								" Finde die zugehörgen Paare und ",
-								"    klicke sie nacheinander an! ",
+								" Finde zusammengehörige Paare! ",
+								"",
 								" "}			
 
 
 var MusterDrei []string = []string{"         M U S T E R  -  M E M O R Y ",
 								"",
-								"               ###   Stufe 3   ###",
+								"              ###   Stufe 3   ###",
 								"",
-								"   Die Karten sind nun auf beiden Seiten leer!",
+								"    Irgendwie sind die Karten nun",
+								" scheinbar auf beiden Seiten leer!",
 								"",
-								"",
-								" Finde die zugehörgen Paare hörend ",
-								"    und klicke sie nacheinander an! ",
+								"            Ordne hörend zu!  :-)",
 								" "}
 
 											
