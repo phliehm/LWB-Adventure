@@ -22,7 +22,7 @@ func BugAttack() (float32,uint32){
 	go bugPackage.TastaturEingabe()
 	
 	
-	bugPackage.LevelIntro()
+	bugPackage.BugAttackIntro()
 	bugPackage.Startbildschirm() 
 	/*	
 	bugPackage.LevelTutorial()

@@ -20,8 +20,9 @@ func ZeichneWelt() {
 		sg = 255	
 		zeichneArray()
 		gfx.LadeBild(0,0,"Bilder/BugAttack/Amoebius_klein.bmp")
-		punkteTB.SchreibeText(manual+"Punkte: "+fmt.Sprint(punkteArray[level-1]))
+		punkteTB.SchreibeText(manual + "Level: " + fmt.Sprint(level) + "  |  "+ "Fähigkeiten: "  )		// MUSS UMBENANNT WERDEN!!! Nur manual
 		punkteTB.Zeichne()
+		
 		bugArraySchloss.Lock()
 		for index,_ := range bugArray {
 			if bugArray[index]==nil {continue}
@@ -30,6 +31,8 @@ func ZeichneWelt() {
 		bugArraySchloss.Unlock()
 		cursorZeichnen()
 		zeichneAlleLadebalken()
+		zeichneZeit()
+		zeichnePunkte()
 		gfx.UpdateAn()
 		time.Sleep(1e7)
 	}
@@ -76,8 +79,8 @@ func zeichneArray() {
 	var s,z uint16
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Vollrechteck(0,0,1200,700)
-	//gfx.Stiftfarbe(0,255,0)
-	sr,sg,sb = 0,255,0
+	
+	sr,sg,sb = 0,200,0
 	for z=0;z<weltH;z++ {
 		for s=0;s<weltB;s++ {
 			male_Zahl(s*zB,y_offset*zH+z*zH,welt[z][s])	// y_offset weil die Zahlen erst weiter unten beginnen
@@ -166,7 +169,7 @@ func TastaturEingabe() {
 							
 							bugGetroffen()
 				case 'x': 	benutzeAutoAim() // autoAim
-				case 'k': 	killAllBugs()
+				case 'k': 	killNBugs(5)
 				case 'q':	// beende Level
 							beendeSpiel()
 							
@@ -232,7 +235,8 @@ func bugGetroffen() {
 
 // Zählt die Punkte im Array
 func zählePunkte() {
-	for level <=maxLevel && SpielBeendet == false{
+	defer wg.Done()
+	for level <=maxLevel && SpielBeendet == false && lvlLäuft == true{
 		levelSchloss.Lock()				// nur ich darf auf das "level" zugreifen
 		var abzug uint16
 		var z,s uint16 
@@ -252,17 +256,18 @@ func zählePunkte() {
 
 // Misst die Zeit in einem Level
 func lvlTimer() {
+	defer wg.Done()
 	for lvlLäuft {
-		time.Sleep(1e9)
 		lvlZeit++
+		time.Sleep(1e9)
 	}
 }
 
 // Beendet ein Level mit 0 Punkten
 func beendeSpiel() {
 	if howManyBugs() > 0{
-		killAllBugsCD = 10		// Erlaubt alle verbleibenden Bugs zu töten
-		killAllBugs()
+		killNBugsCD = 10		// Erlaubt alle verbleibenden Bugs zu töten
+		killNBugs(100)		// tötet alle Bugs
 		fmt.Println("Spiel wird beendet")
 		punkteArray[level-1] = 0	// Setzt Punkte für das aktuelle Level auf 0
 		//return
@@ -330,41 +335,49 @@ func entferneAlleLadebalken() {
 }
 
 // Alle Bugs mit einem Tastendruck töten
-func killAllBugs() {
-	if killAllBugsCD!=10 || SpielBeendet == true {return}
+func killNBugs(n uint16) {
+	var getötet uint16
+	if killNBugsCD!=10 || SpielBeendet == true {return}
 	gfx.SpieleSound("Sounds/Retro Sounds/Explosions/Long/sfx_exp_long3.wav")
 	bugArraySchloss.Lock()
 	for _,b:= range bugArray {
+		if getötet>=n {break}
 		if b!=nil {
+			getötet++
 			b.stirbt = true
 		}
 	}
-	killAllBugsCD = 0
+	killNBugsCD = 0
 	bugArraySchloss.Unlock()
 }
 
+// 
 func benutzeAutoAim() {
 	if autoAimCD !=10  {return}
 	cursor_x, cursor_y = getNextAliveBug() // autoAim
 	autoAimCD = 0
 }
 
-/*
-// Managed wann killAllBugs verfügbar ist
-func killAllBugsCoolDown() {
-	for lvlLäuft {
-		if killAllBugsCD == 0 {		// Schloss?
-			for i:=uint16(0);i<10;i++ {
-				killAllBugsCD = i
-				time.Sleep(5e8)
-			}
-		}
-	}	
+// Zeichnet die verbleibende Zeit im Level 
+func zeichneZeit() {
+	//if lvlLäuft == false {return}
+	if maxZeit-lvlZeit<1 && lvlLäuft == true{			// Wenn Zeit abgelaufen
+		killNBugsCD = 10
+		killNBugs(100)		// Töte alle Bugs
+		punkteArray[level-1] = 0
+		lvlLäuft = false
+		beendeSpiel()
+	}
+	
+	gfx.Stiftfarbe(255,255,255)
+	gfx.SetzeFont("Schriftarten/ltypeb.ttf",20)
+	gfx.SchreibeFont(850,50,"Zeit: ")
+	gfx.SchreibeFont(920,50,fmt.Sprint(maxZeit-lvlZeit))
 }
 
-// Zeichnet den CoolDown-Balken für killAllBugs
-func zeichneKillAllBugsBalken() {
-	gfx.Stiftfarbe(0,0,255)
-	gfx.Vollrechteck(500,60,10*killAllBugsCD,10)
+func zeichnePunkte() {
+	gfx.Stiftfarbe(255,255,255)
+	gfx.SetzeFont("Schriftarten/ltypeb.ttf",20)
+	gfx.SchreibeFont(1000,50,"Punkte: "+fmt.Sprint(punkteArray[level-1]))
+	
 }
-*/

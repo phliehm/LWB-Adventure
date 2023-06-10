@@ -1,10 +1,10 @@
 package bugPackage
 
-import "fmt"
+//import "fmt"
 
 func berechneNote() float32{
 	n:= berechneProzent()
-	fmt.Println("Prozent: ",n*100)
+	//fmt.Println("Prozent: ",n*100)
 	if n>=0.90 {return 1.0}
 	if n>=0.85 {return 1.3}
 	if n>=0.80 {return 1.7}
@@ -23,7 +23,7 @@ func berechneNote() float32{
 
 // a ist x Prozent von b. Ausgabe in 0...1
 func berechneProzent() float32{
-	fmt.Println("PUNKTE: ",punkteArray[level-1])
+	//fmt.Println("PUNKTE: ",punkteArray[level-1])
 	if punkteArray[level-1]<lvlMinPunkte[level-1] {return 0}
 	return float32(punkteArray[level-1]-lvlMinPunkte[level-1])/float32((lvlMaxPunkte[level-1]-lvlMinPunkte[level-1]))
 }
@@ -42,6 +42,6 @@ func berechneEndNoteUndGesamtPunktzahl() (float32,uint32) {
 }
 
 func GibErgebnis() (float32,uint32) {
-	fmt.Println("Ergebnis: ",EndN,EndP)
+	//fmt.Println("Ergebnis: ",EndN,EndP)
 	return EndN,EndP
 }

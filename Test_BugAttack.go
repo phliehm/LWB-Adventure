@@ -9,7 +9,7 @@ import (
 
 func main() {
 		endN,endP := bugAttack.BugAttack()
-		fmt.Println("Gewonnen!!!")
+		//fmt.Println("Gewonnen!!!")
 		fmt.Println(endN,endP)
 		//test.TesteEtwas()
 }
