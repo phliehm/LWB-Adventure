@@ -60,6 +60,7 @@ package getraenkeautomat
 
 
 // ------------  importierte Pakete ------------------------//
+
 //import "fmt"
 //import "gfx"
 //import "../../Klassen/textboxen"
@@ -67,12 +68,14 @@ package getraenkeautomat
 
 
 // ------------ exportierte Variablen -------------------- //
+
 // var noten float32
 // var punkte uint32
 
 
 // ----------   exportierte Methode --------------------- //
-// Vor: Ein gfx-Fenster ist geöffnet.
+
+// Vor: Ein gfx-Fenster (1200x700) ist geöffnet.
 // Erg: Der Spielstand mir Note und Punkte ist geliefert.
 // Eff: Das Getraenkeautomatenspiel ist gestartet.
 // func Getraenkeautomat() (float32, uint32)

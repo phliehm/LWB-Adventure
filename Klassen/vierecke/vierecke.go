@@ -13,6 +13,9 @@ package vierecke
 // New (xA,yA,xB,yB,xC,yC,xD,yD uint16) *data // *data erfüllt das Interface Viereck
 
 type Viereck interface {
+	
+	SetKoordinaten(xA,yA,xB,yB,xC,yC,xD,yD uint16)
+	
 	// Vor.: -
 	// Erg.: Die Koordinaten der vier Eckpunkte des Vierecks sind
 	//       geliefert.

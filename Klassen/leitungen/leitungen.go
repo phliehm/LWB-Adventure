@@ -1,6 +1,14 @@
-// ADT leitungen - Spezifikation und Implementation
+// ADT leitungen - Spezifikation
 
 // Martin Seiß    21.3.2023
+
+// Erg: Eine Instanz des ADT leitungen ist geliefert. Die Leitung
+// 		verläuft vom Ausgang eines Bauelementes (vonID) zu
+//		einem von zwei Eingängen (einNr = 1 oder 2) eines anderen
+//		Bauelementes (nachID). x Bezeichnet die x-Position des 
+//		Knicks in der Leitung.
+// func New(vonID, nachID, einNr, x uint16) *data 
+
 
 package leitungen
 
@@ -28,43 +36,3 @@ type Leitung interface {
 	GibXPos() uint16
 	
 }
-
-
-type data struct {
-	ausBauteilID 	uint16		// Nummer des Bauteils, wo Leitung startet
-	einBauteilID	uint16		// Nummer des Bauteils, wo Leitung endet
-	einNr			uint16		// Nummer des Eingangs (1 oder 2), wo Leitung endet
-	x				uint16		// x-Positon des Leitungsknicks
-}
-
-
-
-func New(vonID, nachID, einNr, x uint16) *data {
-	var l *data = new(data)
-	l.ausBauteilID = vonID
-	l.einBauteilID = nachID
-	l.einNr = einNr
-	l.x = x
-	return l
-}
-
-
-func (l *data) GibVonID() uint16 {
-	return l.ausBauteilID
-}
-
-
-func (l *data) GibNachID() uint16 {
-	return l.einBauteilID
-}
-	
-	
-func (l *data) GibEinNr() uint16 {
-	return l.einNr
-}
-
-	
-func (l *data) GibXPos() uint16 {
-	return l.x
-}
-

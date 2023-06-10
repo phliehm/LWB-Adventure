@@ -46,7 +46,7 @@ func (v *data) GetKoordinaten () (xA,yA,xB,yB,xC,yC,xD,yD uint16) {
 
 // Vor.: -
 // Erg.: Das Viereck hat die eingegebenen Koordinaten.
-func (v *data) SetKoordinaten (xA,yA,xB,yB,xC,yC,xD,yD uint16) () {
+func (v *data) SetKoordinaten (xA,yA,xB,yB,xC,yC,xD,yD uint16) {
 	v.xA = xA
 	v.yA = yA
 	v.xB = xB
