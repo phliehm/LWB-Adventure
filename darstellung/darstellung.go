@@ -29,19 +29,70 @@ import (
 // Globale Variablen
 // ------------------
 
-var gametitel []string = make([]string,9)
-
 
 // interne Hilfsfunktionen
 // ------------------------
+
 
 func ladeEndeBildschirm() {										//TODO
 	Vollrechteck(0,0,1200,700)
 	TastaturLesen1()
 }
 
-func gametitelSchreiben() {										//Bitte überprüfen, ob die Titel zur Noten-Speicherzelle passen!
-	gametitel[1] = "Bauelemente-Spiel (RS)"
+
+func schreibeZertifikat(spielstand spielstaende.Spielstand) {
+
+	//var gamestxt,notentxt string
+	var zertifikatgames textboxen.Textbox = textboxen.New(630,200,450,550)
+	var zertifikatnoten textboxen.Textbox = textboxen.New(1000,200,100,550)
+	var gametitel []string = gametitelSchreiben()
+	var gamenoten []float32 = ordneNotenGamesZu(spielstand)
+	var gamestxt,notentxt string				// Texte für das Zertifikat
+
+	for i:=0; i<len(gamenoten); i++ {
+		gamestxt = gamestxt + gametitel[i] + ":\n"
+		notentxt= notentxt + "" +fmt.Sprint(gamenoten[i]) + "\n"
+	}
+
+	// Tabellenkopf Zertifikat
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	SchreibeFont(630,150,"Veranstaltung                   Noten")
+
+	// Spieletitel schreiben
+	zertifikatgames.SetzeFarbe(0,0,0)
+	zertifikatgames.SetzeZeilenAbstand(5)
+	zertifikatgames.SetzeSchriftgröße(22)
+	zertifikatgames.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	zertifikatgames.SchreibeText(gamestxt)
+	zertifikatgames.Zeichne()
+
+	// Noten schreiben
+	zertifikatnoten.SetzeFarbe(0,0,0)
+	zertifikatnoten.SetzeZeilenAbstand(5)
+	zertifikatnoten.SetzeSchriftgröße(22)
+	zertifikatnoten.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	zertifikatnoten.SchreibeText(notentxt)
+	zertifikatnoten.Zeichne()
+
+}
+
+
+func gametitelSchreiben() []string {
+	
+	var gametitel []string = make([]string,9)
+
+	// Reihenfolge wie im Aufruf im MinigameLaden
+	gametitel[0] = "Bauelemente-Spiel (RS)"
+	gametitel[1] = "Mustererkennung (FP)"
+	gametitel[2] = "Super-ALP2-Escape (ALP2)"
+	gametitel[3] = "Getränkeautomaten-Spiel (EthI)"
+	gametitel[4] = "SQL-Quest (DBSA)"
+	gametitel[5] = "Didaktik-Game (DDI)"
+	gametitel[6] = "Food-Moorhuhn (NSP)"
+	gametitel[7] = "Bug Attack (SWP)"
+	gametitel[8] = "TheNETgame (NET)"
+
+/*	gametitel[1] = "Bauelemente-Spiel (RS)"
 	gametitel[2] = "Mustererkennung (FP)"
 	gametitel[3] = "Super-ALP2-Escape (ALP2)"
 	gametitel[4] = "Getränkeautomaten-Spiel (EthI)"
@@ -49,7 +100,9 @@ func gametitelSchreiben() {										//Bitte überprüfen, ob die Titel zur Note
 	gametitel[6] = "SQL-Quest (DBSA)"
 	gametitel[7] = "Bug Attack (SWP)"
 	gametitel[8] = "Food-Moorhuhn (NSP)"
-	gametitel[9] = "TheNETgame (NET)"
+	gametitel[9] = "TheNETgame (NET)"		*/
+
+	return gametitel
 }
 
 
@@ -81,6 +134,7 @@ func MainfloorDarstellen() {
 	//LadeBildMitColorKey (725,376, "./Bilder/MainGame/4.bmp", 255,255,255)
 	
 }
+
 
 func SemesterraumDarstellen(n int) {
 	
@@ -133,60 +187,58 @@ func InfoDarstellen() {
 	
 }
 
+
+// Eff: Der Endbildschirm mit Zertifikat und Durchschnitt ist angezeigt. 
 func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 
-	var exit vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
-	var zertifikatinhalt textboxen.Textbox = textboxen.New(650,150,480,550)
+	var exit vierecke.Viereck = vierecke.New(1100,565,1190,565,1190,685,1100,685)   	// Position wie in den anderen Räumen
+	// var exit vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
 	var noten []float32 = spielstand.GibNoten()
-	//var punkte []uint32 = spielstand.GibPunkte()
 
 	Stiftfarbe(255,255,255)
 	Cls()
 	
-	//LadeBild(250,50,"./Bilder/Tür5.bmp")
-	
+	// Hintergrund gestalten
 	LadeBild(150,100,"./Bilder/sprechblase_flipped_400.bmp")
 	LadeBildMitColorKey(100,350,"./Bilder/Darth_200.bmp",255,255,255)
 	LadeBild(600,80,"./Bilder/MainGame/zertifikat.bmp")
 	LadeBild(940,510,"./Bilder/certified_100.bmp")
-	LadeBild(1080,30,"./Bilder/Zurück-Symbol.bmp")
+
+	// exit-Schalter einfügen
+	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
 	exit.SetzeFarbe(0,0,0)
 	exit.Zeichnen()
 	exit.AktiviereKlickbar()
 	
+	
 	Stiftfarbe(0,0,0)
-	SetzeFont("./Schriftarten/brlnsr.ttf",42)
-	SchreibeFont(50,10,"Herzlichen Glückwunsch zum erfolgreich absolvierten LWB-Adventure!!!")
-	Stiftfarbe(0,0,0)
+	//  Titel schreiben
+	SetzeFont("./Schriftarten/brlnsr.ttf",35)
+	SchreibeFont(50,20,"Herzlichen Glückwunsch zum erfolgreich absolvierten LWB-Adventure!!!")
+	
+	// Notendurchschnitt schreiben
 	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
 	SchreibeFont(295,145,"Du hast den")
 	SchreibeFont(310,265,"erreicht!")
 	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
 	SchreibeFont(230,175,"Notendurchschnitt")
 	SetzeFont("./Schriftarten/Starjedi.ttf",42)
-	
-	/*
-	var notensumme,abschlussnote float32
-	for i:=0; i<len(noten); i++ {
-		notensumme = notensumme + noten[i]
-	}
-	abschlussnote = notensumme/float32(len(noten))
-	*/
-	
 	SchreibeFont(325,200,fmt.Sprintf("%2.1f",durchschnitt(noten)))
-	
-	//SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	for i:=0; i<len(noten); i++ {
 		
-		zertifikatinhalt.SetzeFarbe(0,0,0)
-		zertifikatinhalt.SetzeZeilenAbstand(5)
-		zertifikatinhalt.SetzeSchriftgröße(22)
-		zertifikatinhalt.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
-		zertifikatinhalt.SchreibeText(gametitel[i]+":   "+fmt.Sprintf("%2.1f",noten[i]))
-		zertifikatinhalt.Zeichne()
-		
-		//SchreibeFont(650,150+uint16((i-1)*68),veranstaltungstitel[i] + ":   "fmt.Sprintf("%2.1f",noten[i]))
-	}
+	// Inhalt des Zertifikates vorbereiten	
+	schreibeZertifikat(spielstand)
+
+/*
+	// Spiel beenden?
+	Stiftfarbe(255,100,0)
+	Vollrechteck(350,620,200,50)
+	Stiftfarbe(0,0,0)
+	Rechteck(350,620,200,50)
+	Stiftfarbe(0,0,0)
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	SchreibeFont(380,632,"Spiel beenden")
+*/	
+
 	
 	for {
 		taste, status, mausX, mausY := MausLesen1()
@@ -197,6 +249,7 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 			}
 		}
 	}
+	
 }
 
 
@@ -290,5 +343,26 @@ func summe(ns []uint32) uint32 {
 	}
 	
 	return erg
+
+}
+
+
+// Erg: Eine Liste von Noten passend zu den 9 Spielen ist geliefert.
+// Anpassung nötig, da 4*3=12 Spielstände möglich!
+func ordneNotenGamesZu(spielstand spielstaende.Spielstand) []float32 {
+	var gamenoten []float32 = make([]float32,9)
+	var noten = spielstand.GibNoten()
+	
+	gamenoten[0] = noten[0]
+	gamenoten[1] = noten[1]
+	gamenoten[2] = noten[3]
+	gamenoten[3] = noten[4]
+	gamenoten[4] = noten[6]
+	gamenoten[5] = noten[7]
+	gamenoten[6] = noten[9]
+	gamenoten[7] = noten[10]
+	gamenoten[8] = noten[11]
+	
+	return gamenoten
 
 }
