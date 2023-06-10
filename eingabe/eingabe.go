@@ -24,11 +24,13 @@ var spielstand spielstaende.Spielstand
 
 
 func klickbarElemente() {
-	
+		
 	var ende, exit, tuer1, tuer2, tuer3, tuer4, tuer5, info vierecke.Viereck
 	var fabweb1, wthek1, darth2, jethi2, herk3, wthek3, darth4, amoebi4, wthek4 vierecke.Viereck
-	
-	ende = vierecke.New(1080,495,1075,615,1130,620,1135,500)
+	//ende = vierecke.New(1080,495,1075,615,1130,620,1135,500)
+	ende = vierecke.New(1080,450,1080,615,1180,620,1180,450)
+
+
 	exit = vierecke.New(1100,565,1190,565,1190,685,1100,685)
 	
 	fabweb1 = vierecke.New(900,265,900,565,1045,565,1045,265)
@@ -46,7 +48,7 @@ func klickbarElemente() {
 	tuer3 = vierecke.New(425,330,430,470,465,460,460,350)
 	tuer4 = vierecke.New(720,355,710,455,740,460,750,340)
 	tuer5 = vierecke.New(570,350,570,435,625,435,625,350)
-	info = vierecke.New(1083,275,1083,325,1133,325,1133,275)
+	info = vierecke.New(1043,235,1043,365,1153,365,1153,235)		//  vergrößert 
 	
 	
 	klickbar[0] = append(klickbar[0],ende,tuer1,tuer2,tuer3,tuer4,tuer5,info)
@@ -71,7 +73,7 @@ func maussteuerung (raumnr int) {
 		el.Zeichnen()
 	}*/
 	
-	for {
+A:	for {
 		taste, status, mausX, mausY := gfx.MausLesen1()
 				
 		if taste==1 && status==1 { 										//LINKE Maustaste gerade gedrückt
@@ -95,13 +97,17 @@ func maussteuerung (raumnr int) {
 								darstellung.EndbildschirmDarstellen(spielstand)
 								raumnr = 0
 								darstellung.MainfloorDarstellen()
+							} else if raumnr == 0 { 		// Spiel beenden
+								fmt.Println("Mülleimer angeklickt")
+								if darstellung.SpielVerlassenDarstellen(spielstand) {
+									break A				// Hauptspiel verlassen!
+								}
+								raumnr = 0
+								darstellung.MainfloorDarstellen()
 							} else {	
 								darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
 							}
-							/*for _,el := range klickbar[raumnr] {
-								el.SetzeFarbe(0,0,0)
-								el.Zeichnen()
-							}*/
+
 							
 							default:									//wenn nicht im mainfloor (raumnr != 0):
 							element.DeaktiviereKlickbar()
