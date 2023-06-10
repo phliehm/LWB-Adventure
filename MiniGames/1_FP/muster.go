@@ -14,7 +14,7 @@ import ( 	. "gfx"
 			)
 
 	
-func Muster() int16 {
+func Muster() (note float32, punktExp uint32) {
 	var mutex sync.Mutex					// erstellt Mutex
 	var gedrueckt uint8
 	var taste,tiefe uint16
@@ -124,10 +124,34 @@ A:	for {
 			}
 		}
 	}
+	
+	ende = true
+	
 	fmt.Println("Vielen Dank für's Spielen!")
 	time.Sleep( time.Duration(2e8) )
 	
-	return punkte
+	
+	if punkte>0 {
+		punktExp = uint32(punkte)
+	} else {
+		punktExp = 0
+	}
+	switch {
+		case punktExp == 0:		note = 5.0
+		case punktExp < 50:		note = 4.7
+		case punktExp < 100:	note = 4.3
+		case punktExp < 150:	note = 4.0
+		case punktExp < 200:	note = 3.7
+		case punktExp < 250:	note = 3.3
+		case punktExp < 300:	note = 3.0
+		case punktExp < 350:	note = 2.7
+		case punktExp < 400:	note = 2.3
+		case punktExp < 450:	note = 2.0
+		case punktExp < 500:	note = 1.7
+		case punktExp < 550:	note = 1.3
+		case punktExp > 550:	note = 1.0
+	}
+	return
 }
 
 func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, 
@@ -152,7 +176,7 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	/*
 	memorySpiel(obj, akt, 1, random)					// auf Level 2
 	neuerZustand = <- kanal
-	*/
+	
 	
 	*obj = make([]objekte.Objekt,0)
 	time.Sleep( time.Duration(3e8) )
@@ -167,9 +191,13 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	zwischentext(&texte.MusterDrei, mutex, stop)
 	memorySpiel(obj, akt, 5, random)					// auf Level 5
 	neuerZustand = <- kanal
+	*/
 	
+	if neuerZustand {
+		fmt.Println("Super")
+	}
 	
-	fmt.Println(neuerZustand)
+	//fmt.Println(neuerZustand)
 	// for !*signal { time.Sleep( time.Duration(2e9) ) }
 	
 }
@@ -182,7 +210,11 @@ func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
 	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 50 )
-	Stiftfarbe(124,212,255)
+	Stiftfarbe(20,20,20)									// schreibt den Schatten
+	for ind,str := range *textArr {
+		SchreibeFont (207, uint16(69+ind*55) ,str )
+	}
+	Stiftfarbe(124,212,255)									// schreibt den eigentlichen Text
 	for ind,str := range *textArr {
 		SchreibeFont (210, uint16(70+ind*55) ,str )
 	}
@@ -670,41 +702,6 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 							}
 							
 						}
-					}
-				}
-			}
-			if taste == 3 && status == 1 { 			//RECHTE Maustaste gerade gedrückt
-				for _,ob := range *obj { 							// Zeichnet alleweiteren Objekte ein
-					if get,lang :=  ob.Getroffen(mausX,mausY,3); get {
-						if lang == 0 {
-							*punkte -= 5
-							
-						} else if lang < 3.5e8 {
-							 *punkte += 20
-							 *diff = 20
-							 fmt.Println("Reaktionszeit: ",lang/1e6, " 20 Punkte")
-						} else if lang < 4.2e8 {
-							 *punkte += 15
-							 *diff = 15
-							 fmt.Println("Reaktionszeit: ",lang/1e6, " 15 Punkte")
-						} else if lang < 5.2e8 {
-							 *punkte += 10
-							 *diff = 10
-							 fmt.Println("Reaktionszeit: ",lang/1e6, " 10 Punkte")
-						} else if lang < 7e8 {
-							 *punkte += 5
-							 *diff = 5
-							 fmt.Println("Reaktionszeit: ",lang/1e6, " 5 Punkte")
-						} else if lang < 1e9 {
-							 *punkte += 2
-							 *diff = 2
-							 fmt.Println("Reaktionszeit: ",lang/1e6, " 2 Punkte")
-						} else {
-							 *punkte += 1
-							 *diff = 1
-							 fmt.Println("Reaktionszeit: ",lang/1e6, " 1 Punkt")
-						}		
-						*akt = true
 					}
 				}
 			}

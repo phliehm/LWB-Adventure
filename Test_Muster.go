@@ -11,5 +11,7 @@ import (. "gfx"
 func main () {
 	Fenster (1200,700)										// Öffnet GFX-Fenster
 	
-	fmt.Println("Du hast ",muster.Muster()," Punkte erreicht!")
+	note,punkte := muster.Muster()
+	fmt.Println("Du hast ",punkte," Punkte erreicht!")
+	fmt.Println("Damit erreichst du die Note ",note," .\nHerzlichen Glückwunsch!")
 }
