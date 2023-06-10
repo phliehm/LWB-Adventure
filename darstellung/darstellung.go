@@ -4,7 +4,7 @@
 
 package darstellung
 
-/* Der ADO vdarstellung übernimmt die Darstellung der Objekte.
+/* Der ADO darstellung übernimmt die Darstellung der Objekte.
  * Die Darstellung wird vom passenden Controller aufgerufen.
  */
 
@@ -33,119 +33,6 @@ import (
 
 // interne Hilfsfunktionen
 // ------------------------
-
-
-func ladeEndeBildschirm() {										//TODO
-	Vollrechteck(0,0,1200,700)
-	TastaturLesen1()
-}
-
-
-func schreibeZertifikat(spielstand spielstaende.Spielstand) {
-
-	var zertifikatgames textboxen.Textbox = textboxen.New(630,200,450,550)
-	var zertifikatnoten textboxen.Textbox = textboxen.New(1000,200,100,550)
-	var gametitel []string = gametitelSchreiben()
-	var gamenoten []float32 = ordneNotenGamesZu(spielstand)
-	var gamestxt,notentxt string				// Texte für das Zertifikat
-
-	for i:=0; i<len(gamenoten); i++ {
-		gamestxt = gamestxt + gametitel[i] + ":\n"
-		if gamenoten[i] > .5 {
-			notentxt= notentxt + "" +fmt.Sprint(gamenoten[i]) + "\n"
-		} else {
-			notentxt= notentxt + "" +"--"+ "\n"
-		}
-	}
-
-	// Tabellenkopf Zertifikat
-	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	SchreibeFont(630,150,"Veranstaltung                   Noten")
-
-	// Spieletitel schreiben
-	zertifikatgames.SetzeFarbe(0,0,0)
-	zertifikatgames.SetzeZeilenAbstand(5)
-	zertifikatgames.SetzeSchriftgröße(22)
-	zertifikatgames.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
-	zertifikatgames.SchreibeText(gamestxt)
-	zertifikatgames.Zeichne()
-
-	// Noten schreiben
-	zertifikatnoten.SetzeFarbe(0,0,0)
-	zertifikatnoten.SetzeZeilenAbstand(5)
-	zertifikatnoten.SetzeSchriftgröße(22)
-	zertifikatnoten.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
-	zertifikatnoten.SchreibeText(notentxt)
-	zertifikatnoten.Zeichne()
-
-}
-
-/*
-func schreibeSpielstand(spielstand spielstaende.Spielstand) {
-
-	//var gamestxt,notentxt string
-	var text textboxen.Textbox = textboxen.New(630,200,450,550)
-	//var zertifikatnoten textboxen.Textbox = textboxen.New(1000,200,100,550)
-	var gametitel []string = gametitelSchreiben()
-	var gamenoten []float32 = ordneNotenGamesZu(spielstand)
-	var gamestxt,notentxt string				// Texte für das Zertifikat
-
-	for i:=0; i<len(gamenoten); i++ {
-		gamestxt = gamestxt + gametitel[i] + ":\n"
-		notentxt= notentxt + "" +fmt.Sprint(gamenoten[i]) + "\n"
-	}
-
-	// Tabellenkopf Zertifikat
-	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	SchreibeFont(630,150,"Veranstaltung                   Noten")
-
-	// Spieletitel schreiben
-	zertifikatgames.SetzeFarbe(0,0,0)
-	zertifikatgames.SetzeZeilenAbstand(5)
-	zertifikatgames.SetzeSchriftgröße(22)
-	zertifikatgames.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
-	zertifikatgames.SchreibeText(gamestxt)
-	zertifikatgames.Zeichne()
-
-	// Noten schreiben
-	zertifikatnoten.SetzeFarbe(0,0,0)
-	zertifikatnoten.SetzeZeilenAbstand(5)
-	zertifikatnoten.SetzeSchriftgröße(22)
-	zertifikatnoten.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
-	zertifikatnoten.SchreibeText(notentxt)
-	zertifikatnoten.Zeichne()
-
-}
-*/
-
-
-func gametitelSchreiben() []string {
-	
-	var gametitel []string = make([]string,9)
-
-	// Reihenfolge wie im Aufruf im MinigameLaden
-	gametitel[0] = "Bauelemente-Spiel (RS)"
-	gametitel[1] = "Mustererkennung (FP)"
-	gametitel[2] = "Super-ALP2-Escape (ALP2)"
-	gametitel[3] = "Getränkeautomaten-Spiel (EthI)"
-	gametitel[4] = "SQL-Quest (DBSA)"
-	gametitel[5] = "Didaktik-Game (DDI)"
-	gametitel[6] = "Food-Moorhuhn (NSP)"
-	gametitel[7] = "Bug Attack (SWP)"
-	gametitel[8] = "TheNETgame (NET)"
-
-/*	gametitel[1] = "Bauelemente-Spiel (RS)"
-	gametitel[2] = "Mustererkennung (FP)"
-	gametitel[3] = "Super-ALP2-Escape (ALP2)"
-	gametitel[4] = "Getränkeautomaten-Spiel (EthI)"
-	gametitel[5] = "Didaktik-Game (DDI)"
-	gametitel[6] = "SQL-Quest (DBSA)"
-	gametitel[7] = "Bug Attack (SWP)"
-	gametitel[8] = "Food-Moorhuhn (NSP)"
-	gametitel[9] = "TheNETgame (NET)"		*/
-
-	return gametitel
-}
 
 
 // Methoden
@@ -239,8 +126,7 @@ func InfoDarstellen() {
 	ok.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
 	ok.ZeichneButton()
 	for {
-		taste, status, mausX, mausY := MausLesen1()
-				
+		taste, status, mausX, mausY := MausLesen1()	
 		if taste==1 && status==1 {
 			if ok.TesteXYPosInButton(mausX,mausY) {
 				return
@@ -251,24 +137,12 @@ func InfoDarstellen() {
 }
 
 
-func ladeEndbildschirmHintergrund() {
-	
-	Stiftfarbe(255,255,255)
-	Cls()
-
-	// Hintergrund gestalten
-	LadeBild(150,100,"./Bilder/sprechblase_flipped_400.bmp")
-	LadeBildMitColorKey(100,350,"./Bilder/Darth_200.bmp",255,255,255)
-	LadeBild(600,80,"./Bilder/MainGame/zertifikat.bmp")
-	LadeBild(940,510,"./Bilder/certified_100.bmp")
-
-}
 
 
 // Eff: Der Endbildschirm mit Zertifikat und Durchschnitt ist angezeigt. 
 func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 
-	var exit vierecke.Viereck = vierecke.New(1100,565,1190,565,1190,685,1100,685)   	// Position wie in den anderen Räumen
+	// var exit vierecke.Viereck = vierecke.New(1100,565,1190,565,1190,685,1100,685)   	// Position wie in den anderen Räumen
 	// var exit vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
 	var noten []float32 = spielstand.GibNoten()	
 	
@@ -292,25 +166,14 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 	// Inhalt des Zertifikates vorbereiten	
 	schreibeZertifikat(spielstand)
 
-/*
-	// Spiel beenden?
-	Stiftfarbe(255,100,0)
-	Vollrechteck(350,620,200,50)
-	Stiftfarbe(0,0,0)
-	Rechteck(350,620,200,50)
-	Stiftfarbe(0,0,0)
-	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	SchreibeFont(380,632,"Spiel beenden")
-*/
 
-	// exit-Schalter einfügen
-	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
-	exit.SetzeFarbe(0,0,0)
-	exit.Zeichnen()
-	exit.AktiviereKlickbar()
+	//exit.SetzeFarbe(0,0,0)
+	//exit.Zeichnen()
+	
+	//exit.AktiviereKlickbar()
 	
 	// Warte auf Mausklick-Entscheidung
-	for {
+/*	for {
 		taste, status, mausX, mausY := MausLesen1()
 		if taste==1 && status==1 {
 			if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
@@ -319,14 +182,16 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 			}
 		}
 	}
+*/
 	
 }
 
 
-func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) bool {
+// Eff: Der Spiel-Verlassen 
+func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) { // bool {
 	
 	var exit vierecke.Viereck = vierecke.New(1100,565,1190,565,1190,685,1100,685)   	// Position wie in den anderen Räumen
-	var ende vierecke.Viereck = vierecke.New(350,620,550,620,550,670,350,670)
+//	var ende vierecke.Viereck = vierecke.New(350,620,550,620,550,670,350,670)
 	var noten []float32 = spielstand.GibNoten()	
 	
 	// Lade Hintergrundbild
@@ -351,8 +216,8 @@ func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) bool {
 
 	// exit-Schalter einfügen
 	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
-	exit.SetzeFarbe(0,0,0)
-	exit.Zeichnen()
+//	exit.SetzeFarbe(0,0,0)
+//	exit.Zeichnen()
 	exit.AktiviereKlickbar()
 	
 	// Spiel-BeendenSchalter einfügen
@@ -363,12 +228,12 @@ func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) bool {
 	Stiftfarbe(0,0,0)
 	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	SchreibeFont(380,632,"Spiel beenden")
-	//ende.SetzeFarbe(0,0,0)
-	ende.Zeichnen()
-	ende.AktiviereKlickbar()
+//	ende.SetzeFarbe(0,0,0)
+//	ende.Zeichnen()
+//	ende.AktiviereKlickbar()
 
 	// Warte auf Mausklick-Entscheidung
-	for {
+/*	for {
 		taste, status, mausX, mausY := MausLesen1()
 		if taste==1 && status==1 {
 			if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
@@ -382,8 +247,8 @@ func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) bool {
 			}
 		}
 	}
-	
-	return false
+*/	
+//	return false
 
 }
 
@@ -501,3 +366,96 @@ func ordneNotenGamesZu(spielstand spielstaende.Spielstand) []float32 {
 	return gamenoten
 
 }
+
+
+func ladeEndeBildschirm() {										//TODO
+	Vollrechteck(0,0,1200,700)
+	TastaturLesen1()
+}
+
+
+func schreibeZertifikat(spielstand spielstaende.Spielstand) {
+
+	var zertifikatgames textboxen.Textbox = textboxen.New(630,200,450,550)
+	var zertifikatnoten textboxen.Textbox = textboxen.New(1000,200,100,550)
+	var gametitel []string = gametitelSchreiben()
+	var gamenoten []float32 = ordneNotenGamesZu(spielstand)
+	var gamestxt,notentxt string				// Texte für das Zertifikat
+
+	for i:=0; i<len(gamenoten); i++ {
+		gamestxt = gamestxt + gametitel[i] + ":\n"
+		if gamenoten[i] > .5 {
+			notentxt= notentxt + "" +fmt.Sprint(gamenoten[i]) + "\n"
+		} else {
+			notentxt= notentxt + "" +"--"+ "\n"
+		}
+	}
+
+	// Tabellenkopf Zertifikat
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	SchreibeFont(630,150,"Veranstaltung                   Noten")
+
+	// Spieletitel schreiben
+	zertifikatgames.SetzeFarbe(0,0,0)
+	zertifikatgames.SetzeZeilenAbstand(5)
+	zertifikatgames.SetzeSchriftgröße(22)
+	zertifikatgames.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	zertifikatgames.SchreibeText(gamestxt)
+	zertifikatgames.Zeichne()
+
+	// Noten schreiben
+	zertifikatnoten.SetzeFarbe(0,0,0)
+	zertifikatnoten.SetzeZeilenAbstand(5)
+	zertifikatnoten.SetzeSchriftgröße(22)
+	zertifikatnoten.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	zertifikatnoten.SchreibeText(notentxt)
+	zertifikatnoten.Zeichne()
+
+}
+
+
+
+func gametitelSchreiben() []string {
+	
+	var gametitel []string = make([]string,9)
+
+	// Reihenfolge wie im Aufruf im MinigameLaden
+	gametitel[0] = "Bauelemente-Spiel (RS)"
+	gametitel[1] = "Mustererkennung (FP)"
+	gametitel[2] = "Super-ALP2-Escape (ALP2)"
+	gametitel[3] = "Getränkeautomaten-Spiel (EthI)"
+	gametitel[4] = "SQL-Quest (DBSA)"
+	gametitel[5] = "Didaktik-Game (DDI)"
+	gametitel[6] = "Food-Moorhuhn (NSP)"
+	gametitel[7] = "Bug Attack (SWP)"
+	gametitel[8] = "TheNETgame (NET)"
+
+/*	gametitel[1] = "Bauelemente-Spiel (RS)"
+	gametitel[2] = "Mustererkennung (FP)"
+	gametitel[3] = "Super-ALP2-Escape (ALP2)"
+	gametitel[4] = "Getränkeautomaten-Spiel (EthI)"
+	gametitel[5] = "Didaktik-Game (DDI)"
+	gametitel[6] = "SQL-Quest (DBSA)"
+	gametitel[7] = "Bug Attack (SWP)"
+	gametitel[8] = "Food-Moorhuhn (NSP)"
+	gametitel[9] = "TheNETgame (NET)"		*/
+
+	return gametitel
+}
+
+
+func ladeEndbildschirmHintergrund() {
+	
+	Stiftfarbe(255,255,255)
+	Cls()
+
+	// Hintergrund gestalten
+	LadeBild(150,100,"./Bilder/sprechblase_flipped_400.bmp")
+	LadeBildMitColorKey(100,350,"./Bilder/Darth_200.bmp",255,255,255)
+	LadeBild(600,80,"./Bilder/MainGame/zertifikat.bmp")
+	LadeBild(940,510,"./Bilder/certified_100.bmp")
+	// Bild für exit-Schalter einfügen
+	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
+	
+}
+

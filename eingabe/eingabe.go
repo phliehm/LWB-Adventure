@@ -17,7 +17,7 @@ import (
 // ------------------
 
 //var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,0)
-var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,6)
+var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,7)
 //var klickElemente0 []vierecke.Viereck = make([]vierecke.Viereck,0)
 var spielstand spielstaende.Spielstand
 
@@ -27,11 +27,12 @@ func klickbarElemente() {
 		
 	var ende, exit, tuer1, tuer2, tuer3, tuer4, tuer5, info vierecke.Viereck
 	var fabweb1, wthek1, darth2, jethi2, herk3, wthek3, darth4, amoebi4, wthek4 vierecke.Viereck
+	var beenden vierecke.Viereck
+	
 	//ende = vierecke.New(1080,495,1075,615,1130,620,1135,500)
 	ende = vierecke.New(1080,450,1080,615,1180,620,1180,450)
-
-
 	exit = vierecke.New(1100,565,1190,565,1190,685,1100,685)
+	beenden = vierecke.New(350,620,550,620,550,670,350,670)
 	
 	fabweb1 = vierecke.New(900,265,900,565,1045,565,1045,265)
 	wthek1 = vierecke.New(85,265,85,560,255,560,255,265)
@@ -50,13 +51,14 @@ func klickbarElemente() {
 	tuer5 = vierecke.New(570,350,570,435,625,435,625,350)
 	info = vierecke.New(1043,235,1043,365,1153,365,1153,235)		//  vergrößert 
 	
-	
 	klickbar[0] = append(klickbar[0],ende,tuer1,tuer2,tuer3,tuer4,tuer5,info)
 	klickbar[1] = append(klickbar[1],exit,fabweb1,wthek1)
 	klickbar[2] = append(klickbar[2],exit,darth2,jethi2)
 	klickbar[3] = append(klickbar[3],exit,herk3,wthek3)
 	klickbar[4] = append(klickbar[4],exit,darth4,amoebi4,wthek4)
-	klickbar[5] = append(klickbar[5],exit)
+	klickbar[5] = append(klickbar[5],exit)				// Raum 5 - Zertifikat
+	klickbar[6] = append(klickbar[6],exit,beenden)		// Mülleimer - Ende
+	
 }
 
 	
@@ -95,17 +97,29 @@ A:	for {
 							} else if raumnr == 5 {
 								fmt.Println("5. Tür angeklickt")
 								darstellung.EndbildschirmDarstellen(spielstand)
-								raumnr = 0
-								darstellung.MainfloorDarstellen()
+								//raumnr = 0
+								//darstellung.MainfloorDarstellen()
 							} else if raumnr == 0 { 		// Spiel beenden
 								fmt.Println("Mülleimer angeklickt")
-								if darstellung.SpielVerlassenDarstellen(spielstand) {
-									break A				// Hauptspiel verlassen!
-								}
-								raumnr = 0
-								darstellung.MainfloorDarstellen()
+								raumnr = 6
+								//if darstellung.SpielVerlassenDarstellen(spielstand) {
+								//	break A				// Hauptspiel verlassen!
+								//}
+								darstellung.SpielVerlassenDarstellen(spielstand)
+								//raumnr = 0
+								//darstellung.MainfloorDarstellen()
 							} else {	
 								darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
+							}
+
+							case 6:					// Spiel verlassen?
+							element.DeaktiviereKlickbar()
+							if index == 0 {								//Element mit index 0 wurde geklickt, also "exit", d.h. ...
+								raumnr = index							//... zurück in den mainfloor (raumnr 0)
+								fmt.Println("Zurück zum Mainfloor!")
+								darstellung.MainfloorDarstellen()		//deshalb mainfloor darstellen
+							} else if index == 1 {						//wenn index 1, beenden, geklickt wurde,
+								break A									//deshalb Spiel beendet
 							}
 
 							
