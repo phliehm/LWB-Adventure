@@ -69,30 +69,23 @@ var MoorScore []string = []string{"  H o l a a d i o o o o o o o o o",
 								"Gruene Wiesen im Sonnenschein.",
 								"Brauchst du zum Gluecklichsein.",
 								"",
+								"               Du hast dich   - ",
+								" gemessen an deinen Kompetenzen",
+								"     -   ideal geschlagen !     :-d",
 								"",
-								"  Du hast dich - gemessen an",
-								"   deinen derzeitigen Kompe-",
-								"    tenzen - ideal geschlagen !"}	
-								
-var MoorOut1 []string = []string{"Als du kamst, ",
+								"                   Druecke \"Q\" !"}	
+
+
+var MoorOut []string = []string{"Als du kamst, ",
 								"         warst du LWB,",
 								"                 jetzt bist du ",
-								"",
 								"                               StEPSi  !  !  !",
 								"",
 								"       erreichte PUNKTE : ",
-								"",
-								"veranstaltungs-NOTE : "}											
-								
-
-var MoorOut2 []string = []string{"",
-								"",
-								"   Moege die Macht . . .",
-								"           . . . immer mit dir sein !",
+								"veranstaltungs-NOTE : ",
 								"",
 								"",
-								" Druecke nicht b, sondern Q ",
-								" zum Verlassen dieses Spiels !"}
+								" Moege die Macht mit dir sein !"}	
 
 var MusterEinl []string = []string{"   H e r z l i c h    W i l l k o m m e n",
 								"                             zur",
@@ -167,8 +160,17 @@ var MusterN [6][]string = [6][]string {{"[1,'a']","\"j\":\"a\"","(True,True)","3
 									{"\"wie\"","[[]]"},										// [f,w]
 									{"\"er\"","1.44"},										// (f,w)
 									{"\"V\"","(\"20\",\"23\")"} }							// (f:a:w)	
+
+var MusterListe1 = [12]string{	"     [ (x:[]) ]", "       [ ['a'] ]", "      ( 'a':y )", "        \"aa\"", 
+								"     ( x:\"b\" )", "        \"bb\"", "     [ x , \"b\" ]", "  [ \"b\" , \"b\" ]",
+								"      ( x , [] )", "     ( 'a' , [] )", "     ( x:'b':y )", "       \"bba\""        }
 	
+var MusterListe2 = [12]string{	"      [(x:y)]", "        [\"a\"]", "        ('x':y)", "         \"xy\"", 
+								"       (b:\"a\")",	"         \"aa\"", "       [a,\"b\"]", "     [\"b\",\"b\"]",
+								"        (u,v)", "(\"Not\",False)", "      (x:'b':y)", "      \"oben\""  }
 	
-	
-	
-	
+var MusterListe3 = [12]string{	"    [(wa:nn)]", "     [[2023]]", "    ('L':iebe)", "      \"LWB\"",
+								"      (bl:\"a\")", "        \"Ja\"", "  [wer,\"MP\"]", " [\"AB\",\"MP\"]",
+								"   (can,find)", "(True,\"Love\")", "    (o:'d':er)", " \"Adventure\""  }	
+
+

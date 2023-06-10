@@ -41,7 +41,7 @@ func Moorhuhn () (note float32, punktExp uint32) {
 	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, &ende, random, &punkte, &punktExp, &note, &mutex)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
-	go maussteuerung(&obj, maus, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte, &diff)
+	go maussteuerung(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte, &diff)
 	
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
@@ -51,12 +51,15 @@ A:	for {
 		taste,gedrueckt,_:= TastaturLesen1()
 		if gedrueckt == 1 {
 			switch taste {
-				case 'q': 													// mit 'q' wird das Programm beendet!
-				if ende { break A }
-				case 'p': 
-				pause = !pause												// Pause-Modus !!
-
-				case 'h':													// für Lvl. 5 zum Vertreiben von Hubi
+				case 'q': 											// mit 'q' wird das Programm beendet!
+				if ende { 
+					break A
+				} else if pause { 
+					ende = true
+					break A
+				}
+				case 'p': pause = !pause							// Pause-Modus !!
+				case 'h':											// für Lvl. 5 zum Vertreiben von Hubi
 				if hubi {
 					hubi = false
 					obj = make([]objekte.Objekt,0)
@@ -72,16 +75,71 @@ A:	for {
 			}
 		}
 	}
-	fmt.Println("Vielen Dank für's Spielen!")
+	// fmt.Println("Vielen Dank für's Spielen!")
 	time.Sleep( time.Duration(2e8) )
 	
+// -----------------------------------------------------------------	
+	
+	punkte = 375
+	
+	if punkte > 0 {
+		punktExp = uint32(punkte)
+	} else {
+		punktExp = 0
+	}
+
+	switch {
+		case punktExp == 0:		note = 6.0
+		case punktExp < 50:		note = 4.7
+		case punktExp < 100:	note = 4.3
+		case punktExp < 150:	note = 4.0
+		case punktExp < 200:	note = 3.7
+		case punktExp < 250:	note = 3.3
+		case punktExp < 300:	note = 3.0
+		case punktExp < 350:	note = 2.7
+		case punktExp < 400:	note = 2.3
+		case punktExp < 450:	note = 2.0
+		case punktExp < 500:	note = 1.7
+		case punktExp < 550:	note = 1.3
+		case punktExp > 550:	note = 1.0
+	}
+	
+	
+	mutex.Lock()
+	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")
+	Transparenz(120)															
+	Vollrechteck(100,50,1000,600)
+	Transparenz(0)
+	SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
+	
+	Stiftfarbe(10,20,20)
+	for ind,str := range texte.MoorOut {
+		SchreibeFont (208, uint16(69+ind*55) ,str )
+	}
+	SchreibeFont (880, 344 ,fmt.Sprint(punkte) )
+	SchreibeFont (880, 399 ,fmt.Sprint(note) )
+	Stiftfarbe(124,212,255)
+	for ind,str := range texte.MoorOut {
+		SchreibeFont (212, uint16(71+ind*55) ,str )
+	}
+	SchreibeFont (884, 346 ,fmt.Sprint(punkte) )
+	SchreibeFont (884, 401 ,fmt.Sprint(note) )
+	Archivieren()
+	mutex.Unlock()
+	
+	Restaurieren(0,0,1200,700)
+	// -----------------------------------------------------------------
+	
+	TastaturLesen1()
 	return
 }
+
+
 
 func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, 
 				punkte *int16, punktExp *uint32, note *float32, mutex *sync.Mutex) {		// füllt Objekte ins Array
 	
-	
+	/*
 	count3 := objekte.New(0,0,0,13)
 	count2 := objekte.New(0,0,0,14)
 	count1 := objekte.New(0,0,0,15)
@@ -214,6 +272,8 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	// ----------------------------------------------------------------------------------------------
 	
+	*/
+	
 	maus.SetzeTyp(16)
 	time.Sleep( time.Duration(2e9) )
 	
@@ -223,66 +283,8 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	maus.SetzeTyp(17)
 	
-	
-	if *punkte > 0 {
-		*punktExp = uint32(*punkte)
-	} else {
-		*punktExp = 0
-	}
-
-	switch {
-		case *punktExp == 0:	*note = 5.0
-		case *punktExp < 50:	*note = 4.7
-		case *punktExp < 100:	*note = 4.3
-		case *punktExp < 150:	*note = 4.0
-		case *punktExp < 200:	*note = 3.7
-		case *punktExp < 250:	*note = 3.3
-		case *punktExp < 300:	*note = 3.0
-		case *punktExp < 350:	*note = 2.7
-		case *punktExp < 400:	*note = 2.3
-		case *punktExp < 450:	*note = 2.0
-		case *punktExp < 500:	*note = 1.7
-		case *punktExp < 550:	*note = 1.3
-		case *punktExp > 550:	*note = 1.0
-	}
-	
-	mutex.Lock()
-	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
-	Transparenz(120)															
-	Vollrechteck(100,50,1000,600)
-	Transparenz(0)
-	SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
-	Stiftfarbe(124,212,255)
-	for ind,str := range texte.MoorOut1 {
-		SchreibeFont (210, uint16(70+ind*55) ,str )
-	}
-	SchreibeFont (855, 400 , fmt.Sprint(*punkte) )
-	SchreibeFont (855, 510 , fmt.Sprint(*note) )
-	
-	Archivieren()
-	mutex.Unlock()
-					
-	*stop = true
-	
 	time.Sleep( time.Duration(1e9) )
 	SpieleSound("./Sounds/Applaus.wav")
-	
-	for *stop { time.Sleep( time.Duration(1e8) ) }
-	
-	// ---
-	
-	mutex.Lock()
-	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
-	Transparenz(120)															
-	Vollrechteck(100,50,1000,600)
-	Transparenz(0)
-	SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
-	Stiftfarbe(124,212,255)
-	for ind,str := range texte.MoorOut2 {
-		SchreibeFont (210, uint16(70+ind*55) ,str )
-	}
-	Archivieren()
-	mutex.Unlock()
 	
 	*ende = true
 	return
@@ -290,15 +292,20 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 
 func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Lock()
-	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")
 	Transparenz(120)
 	Stiftfarbe(76,0,153)														
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
 	SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
+	
+	Stiftfarbe(10,20,20)
+	for ind,str := range *textArr {
+		SchreibeFont (168, uint16(79+ind*55) ,str )
+	}
 	Stiftfarbe(124,212,255)
 	for ind,str := range *textArr {
-		SchreibeFont (210, uint16(70+ind*55) ,str )
+		SchreibeFont (170, uint16(80+ind*55) ,str )
 	}
 	Archivieren()
 	mutex.Unlock()
@@ -309,7 +316,7 @@ func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 
 func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 	mutex.Lock()
-	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")
 	level.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -319,7 +326,7 @@ func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
 
 func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool) {
 	mutex.Lock()
-	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")
 	count3.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -328,7 +335,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")
 	count2.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -337,7 +344,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	time.Sleep( time.Duration(1e9) )
 	
 	mutex.Lock()
-	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")
+	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")
 	count1.Zeichnen()
 	Archivieren()
 	mutex.Unlock()
@@ -369,20 +376,18 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 			Restaurieren(0,0,1200,700)					// Restauriert das alte Hintergrundbild
 		}
 		
-		if *stop {
-			okayObjekt.Zeichnen()
-		}
+		if *stop { okayObjekt.Zeichnen() }				// zeichnet den OK-Knopf
+		if *pause { pauseObjekt.Zeichnen() }			// zeichnet das Pause-Objekt
 		
-		maus.Zeichnen()										// Zeichnet Maus
+		maus.Zeichnen()									// zeichnet Maus
 		
 		SetzeFont ("./Schriftarten/Freshman.ttf", 35 )
 		Stiftfarbe(76,0,153)  
 		SchreibeFont (500,5,"Punkte : "+fmt.Sprint (*punkte,"        Letzter Treffer: ",*diff))	// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)
 		Schreibe (1,1,"FPS:"+fmt.Sprint (anzahl))					// Schreibe links oben FPS
-		if *pause { pauseObjekt.Zeichnen() }
-			
 		
+			
 		if time.Now().UnixNano() - t1 < 1000000000 { //noch in der Sekunde ...
 			anz++
 		} else {
@@ -403,7 +408,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 }
 
 func ObjAktualisieren(obj *[]objekte.Objekt) {
-	LadeBild (0,0, "./Bilder/Seminarraum-3.bmp")		// Hintergrund des Moorhuhn-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")		// Hintergrund des Moorhuhn-Raumes wird gezeichnet
 	
 	for _,ob := range *obj { 								// Zeichnet alleweiteren Objekte ein
 		ob.Zeichnen()
@@ -412,7 +417,7 @@ func ObjAktualisieren(obj *[]objekte.Objekt) {
 }
 
 // Es folgt die CONTROL-Komponente 1 --- Kein Bestandteil der Welt, also unabhängig -----
-func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause,stop,hubi,akt,ende *bool, punkte, diff *int16) {
+func maussteuerung (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.Objekt, pause,stop,hubi,akt,ende *bool, punkte, diff *int16) {
 	/*var taste uint8
 	var status int8 */
 	for {
@@ -420,15 +425,21 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause
 		
 		maus.SetzeKoordinaten(mausX,mausY)					// Aktualisiert Maus-Koordinaten
 		
-		if *stop {
+		if *ende {
+			return
+		} else if *pause {		
+			if taste==1 && status==1 { 						//LINKE Maustaste gerade gedrückt
+				if ja,_ := pauseObjekt.Getroffen(mausX,mausY,1); ja {
+					*ende = true
+					return
+				}
+			}
+		} else if *stop {
 			if taste==1 && status==1 { 						//LINKE Maustaste gerade gedrückt
 				if ja,_ := okayObjekt.Getroffen(mausX,mausY,1); ja {
 					*stop = false
 				}
 			}
-		} else if *ende {
-			return
-		} else if *pause {	
 		} else if *hubi {									// falls ein Hubi (Lvl 5) aktiv ist
 			if status==1 {
 				SpieleSound("./Sounds/Baeb.wav")
@@ -509,5 +520,6 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, pause
 			}
 		}
 	}
+	fmt.Println("Beende Maussteuerung!")
 }
 

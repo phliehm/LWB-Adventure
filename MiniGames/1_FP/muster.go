@@ -126,6 +126,7 @@ A:	for {
 	}
 	
 	ende = true
+	time.Sleep( time.Duration(1e9) )
 	
 	fmt.Println("Vielen Dank für's Spielen!")
 	time.Sleep( time.Duration(2e8) )
@@ -151,9 +152,64 @@ A:	for {
 		case punktExp < 550:	note = 1.3
 		case punktExp > 550:	note = 1.0
 	}
+		
+	// Endbildschirm()
+	
 	return
 }
 
+/*
+func Endbildschirm() {
+	var path string
+	path = ""
+	gfx.Stiftfarbe(255,255,255)
+	gfx.Cls()
+	
+	
+	gfx.LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
+	gfx.LadeBild(230,390,path+"Bilder/BugAttack/FabWeb_fullBody_gespiegelt.bmp")
+	gfx.LadeBildMitColorKey(250,350,path + "Bilder/BugAttack/Amoebius_klein.bmp",0,0,0)
+	
+	gfx.LadeBild(620,80,path + "Bilder/paper_500.bmp")
+	gfx.LadeBild(960,520,path + "Bilder/certified_100.bmp")
+	//gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
+	
+	gfx.LadeBildMitColorKey(1080,30,path + "Bilder/BugAttack/Bug.bmp",0,0,0)
+	gfx.Stiftfarbe(125,0,0)
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",20)
+	gfx.SchreibeFont(1050,140,"[q] für Exit")
+		
+	gfx.Stiftfarbe(0,255,0)
+	gfx.SetzeFont(path + "Schriftarten/ComputerTypewriter.ttf",80)
+	gfx.SchreibeFont(330,10,"Bug  ATTACK")
+	gfx.Stiftfarbe(0,0,0)
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	gfx.SchreibeFont(295,140,"Du hast die")
+	gfx.SchreibeFont(310,260,"erreicht!")
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	gfx.SchreibeFont(285,170,"Gesamtnote")
+	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	fmt.Println("Final Level: ",level)
+	EndN, EndP = berechneEndNoteUndGesamtPunktzahl()
+	gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",EndN))
+	
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	//fmt.Println("level: ",level)
+	for i:=uint16(1); i<=maxLevel; i++ {
+		//fmt.Println(i)
+		level = i
+		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(punkteArray[i-1]) + " Punkte")
+		gfx.SchreibeFont(710,175+uint16((i-1)*68),"           Note " + fmt.Sprintf("%2.1f",berechneNote()))
+	}
+	gfx.SchreibeFont(700,130+uint16(6*70),"----------------------")
+	
+	gfx.SchreibeFont(710,160+uint16(6*70),"Gesamt:    " + fmt.Sprint(EndP) + " Punkte")
+
+	gfx.TastaturLesen1()
+	//return gesamtnote, gesamtpunkte
+}
+*/
+	
 func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, 
 			eingabe *string, wert *uint8, punkte *int16, kanal chan bool) {
 	var neuerZustand bool
@@ -204,7 +260,7 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 
 func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Lock()
-	LadeBild (0,0, "./Bilder/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/FP/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
 	Transparenz(120)
 	Stiftfarbe(76,0,153)														
 	Vollrechteck(100,50,1000,600)
@@ -389,7 +445,7 @@ Neu2:
 }
 
 func musterabfrage(i int) {
-	LadeBild (0,0, "./Bilder/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/FP/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
 	
 	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 	
@@ -409,7 +465,7 @@ func musterabfrage(i int) {
 }
 
 func mustereingabe(i,opt int) {
-	LadeBild (0,0, "./Bilder/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/FP/Funktionale.bmp")			// Hintergrund des Muster-Raumes wird gezeichnet
 	
 	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 70 )
 	
@@ -453,18 +509,11 @@ func memorySpiel(obj *[]objekte.Objekt, akt *bool, level uint8, rand *rand.Rand)
 	var neu objekte.Objekt
 	
 	switch level {					// Karten-Beschriftung als Liste
-		case 1:
-		musterListe = [12]string{	"     [ (x:[]) ]","       [ ['a'] ]","      ( 'a':y )","        \"aa\"","     ( x:\"b\" )", "        \"bb\"",
-								"     [ x , \"b\" ]","  [ \"b\" , \"b\" ]","      ( x , [] )","     ( 'a' , [] )","     ( x:'b':y )","       \"bba\""}
-		case 2:
-		musterListe = [12]string{	"      [(ix:y)]","        [\"a\"]","        ('x':y)","         \"xy\"","       (b:\"a\")", "         \"aa\"",
-								"       [a,\"b\"]","     [\"b\",\"b\"]","        (u,v)","(\"Not\",False)","      (x:'b':y)","      \"oben\""}
-		case 3:
-		musterListe = [12]string{	"    [(wa:nn)]","     [[2023]]","    ('L':iebe)","      \"LWB\"","      (bl:\"a\")", "        \"Ja\"",
-								"  [wer,\"MP\"]"," [\"AB\",\"MP\"]","   (can,find)","(True,\"Love\")","    (o:'d':er)"," \"Adventure\""}
+		case 1:	musterListe = texte.MusterListe1
+		case 2:	musterListe = texte.MusterListe2
+		case 3:	musterListe = texte.MusterListe3
 	}
-	// zugehörige Typen zu den Beschriftungen:
-	typListe := [12]int64{1,1,2,2,3,3,4,4,5,5,6,6}
+	typListe := [12]int64{1,1,2,2,3,3,4,4,5,5,6,6}	// zugehörige Typen zu den Karten-Beschriftungen
 	
 	rand.Shuffle(12, func(i,j int) {
 		typListe[i],	typListe[j] 	= typListe[j],	 typListe[i] 
@@ -551,7 +600,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 }
 
 func ObjAktualisieren(obj *[]objekte.Objekt) {
-	LadeBild (0,0, "./Bilder/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
+	LadeBild (0,0, "./Bilder/FP/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
 	
 	for _,ob := range *obj { 								// Zeichnet alleweiteren Objekte ein
 		ob.Zeichnen()
@@ -567,7 +616,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 	var zaehler uint8									// überprüft, wie viele Paare aufgedeckt wurden
 	
 	for {
-		taste, status, mausX, mausY := MausLesen1()
+		/*taste,*/_, status, mausX, mausY := MausLesen1()
 		// fmt.Println(taste, status, mausX, mausY)
 		maus.SetzeKoordinaten(mausX,mausY)					// Aktualisiert Maus-Koordinaten
 		
@@ -580,7 +629,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 		} else if *ende {
 			return
 		} else {
-			if taste==1 && status==1 { 						//LINKE Maustaste gerade gedrückt
+			if /* taste==1 &&*/ status==1 { 						//LINKE Maustaste gerade gedrückt
 				if warten {
 					if objektSpeicher.GibTyp() == 34 {
 						objektSpeicher2.SetzeTyp(32)

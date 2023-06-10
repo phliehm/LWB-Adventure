@@ -88,9 +88,21 @@ func (ob *data) Zeichnen() {
 			Stiftfarbe(230,230,230)
 			Vollellipse(600,350,550,200)
 			Stiftfarbe(125,0,64)  
-			SchreibeFont (205,254,"PAUSE")
+			SchreibeFont (205,234,"PAUSE")
 			Stiftfarbe(255,0,127)  
-			SchreibeFont (200,250,"PAUSE")							// Schreibe mittig Pause
+			SchreibeFont (200,230,"PAUSE")							// Schreibe mittig Pause
+			SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
+			Stiftfarbe(100,200,100)
+			Vollrechteck(452,437, 140,55)
+			Stiftfarbe(125,0,64)  
+			SchreibeFont (273,442,"Klicke HIER zum Beenden ,")
+			Stiftfarbe(255,0,127)  
+			SchreibeFont (270,440,"Klicke HIER zum Beenden ,")
+			SetzeFont ("./Schriftarten/Freshman.ttf", 40 )
+			Stiftfarbe(125,0,64)  
+			SchreibeFont (422,491,"bestaetige mit \"Q\" !")
+			Stiftfarbe(255,0,127)  
+			SchreibeFont (420,490,"bestaetige mit \"Q\" !")
 			
 // rotes Quadrat ab linker oberer Ecke			// DUMMY
 			case 2:		
@@ -380,11 +392,11 @@ func (ob *data) Zeichnen() {
 
 // Heidi			
 			case 16:																														
-			LadeBild (ob.x,ob.y, "./Bilder/Heidi-2.bmp")
+			LadeBild (ob.x,ob.y, "./Bilder/Moorhuhn/Heidi.bmp")
 
 // StEPS-Logo			
 			case 17:																														
-			LadeBild (ob.x,ob.y, "./Bilder/StEPS-Logo-2.bmp")
+			LadeBild (ob.x,ob.y, "./Bilder/Moorhuhn/StEPS-Logo-2.bmp")
 
 // Kaffee-Tasse 2 ab linker oberer Ecke			
 			case 18:			
@@ -472,9 +484,9 @@ func (ob *data) Zeichnen() {
 // OK - Objekt			
 			case 20:															
 			Stiftfarbe(153,0,153)
-			Vollrechteck(480,570,240,80)
+			Vollrechteck(430,570,340,80)
 			Stiftfarbe(255,0,255)
-			Vollrechteck(490,577,220,66)
+			Vollrechteck(445,577,310,66)
 			SetzeFont ("./Schriftarten/Freshman.ttf", 56 )
 			Stiftfarbe(124,212,255)
 			SchreibeFont (554,584,"O K")
@@ -518,19 +530,19 @@ func (ob *data) Zeichnen() {
 // FebWeb - Normal			
 			case 25:															
 			Transparenz(150)
-			LadeBild (ob.x-124,ob.y-137, "./Bilder/FebWebK.bmp")
+			LadeBild (ob.x-124,ob.y-137, "./Bilder/FP/FebWebK.bmp")
 			Transparenz(0)
 						
 // FebWeb - JA			
 			case 26:															
 			Transparenz(80)
-			LadeBild (ob.x-124,ob.y-137, "./Bilder/FebWebJ.bmp")
+			LadeBild (ob.x-124,ob.y-137, "./Bilder/FP/FebWebJ.bmp")
 			Transparenz(0)
 			
 // FebWeb - NEIN
 			case 27:															
 			Transparenz(80)
-			LadeBild (ob.x-124,ob.y-137, "./Bilder/FebWebN.bmp")
+			LadeBild (ob.x-124,ob.y-137, "./Bilder/FP/FebWebN.bmp")
 			Transparenz(0)
 			
 // Spielkarte zugedeckt - ab linker oberer Ecke		
@@ -600,6 +612,14 @@ func (ob *data) Zeichnen() {
 func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// Checkt, ob Hit-Box getroffen
 	if ob.aktiv {		
 		switch ob.typ {
+			case 1:							// Pause-Objekt
+			if 451 < x && x < 593 	&& 	436 < y && y < 493 {
+				SpieleNote("5A",0.1,0)
+				return true, 0
+			} else {
+				return false, 0
+			}
+			Vollrechteck(452,437, 140,55)
 			case 2:
 			if ob.x <= x && x < ob.x+ob.qua 	&& 	ob.y <= y && y < ob.y+ob.qua {
 				ob.aktiv = false
@@ -669,7 +689,7 @@ func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// 
 				return false, 0
 			}  
 			case 20:
-			if 480 < x && x < 720 	&& 	570 < y && y < 650 {
+			if 430 < x && x < 770 	&& 	570 < y && y < 650 {
 				SpieleNote("5A",0.1,0)
 				return true, 0
 			} else {
