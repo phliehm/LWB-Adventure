@@ -70,8 +70,7 @@ A:	for {
 					SpieleSound("./Sounds/Baeb.wav")
 					punkte -= 5
 				}
-				case 'b':
-				SpieleSound("./Sounds/Roar.wav")
+				case 'b': SpieleSound("./Sounds/Roar.wav")
 			}
 		}
 	}
@@ -79,8 +78,6 @@ A:	for {
 	time.Sleep( time.Duration(2e8) )
 	
 // -----------------------------------------------------------------	
-	
-	punkte = 375
 	
 	if punkte > 0 {
 		punktExp = uint32(punkte)
@@ -104,26 +101,28 @@ A:	for {
 		case punktExp > 550:	note = 1.0
 	}
 	
-	
 	mutex.Lock()
 	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")
 	Transparenz(120)															
 	Vollrechteck(100,50,1000,600)
 	Transparenz(0)
+	LadeBild (180,200, "./Bilder/Moorhuhn/StEPS-Logo-2.bmp")
 	SetzeFont ("./Schriftarten/Freshman.ttf", 50 )
 	
-	Stiftfarbe(10,20,20)
+	Stiftfarbe(70,20,20)
 	for ind,str := range texte.MoorOut {
 		SchreibeFont (208, uint16(69+ind*55) ,str )
 	}
 	SchreibeFont (880, 344 ,fmt.Sprint(punkte) )
 	SchreibeFont (880, 399 ,fmt.Sprint(note) )
-	Stiftfarbe(124,212,255)
+
+	Stiftfarbe(255,124,212)
 	for ind,str := range texte.MoorOut {
 		SchreibeFont (212, uint16(71+ind*55) ,str )
 	}
 	SchreibeFont (884, 346 ,fmt.Sprint(punkte) )
 	SchreibeFont (884, 401 ,fmt.Sprint(note) )
+	
 	Archivieren()
 	mutex.Unlock()
 	
@@ -134,12 +133,10 @@ A:	for {
 	return
 }
 
-
-
 func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, 
 				punkte *int16, punktExp *uint32, note *float32, mutex *sync.Mutex) {		// füllt Objekte ins Array
 	
-	/*
+	
 	count3 := objekte.New(0,0,0,13)
 	count2 := objekte.New(0,0,0,14)
 	count1 := objekte.New(0,0,0,15)
@@ -272,8 +269,6 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	// ----------------------------------------------------------------------------------------------
 	
-	*/
-	
 	maus.SetzeTyp(16)
 	time.Sleep( time.Duration(2e9) )
 	
@@ -356,7 +351,7 @@ func Countdown(count3,count2,count1 objekte.Objekt, mutex *sync.Mutex, akt *bool
 	*akt = true
 }
 
-// Es folgt die VIEW-Komponente
+
 func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.Objekt, pause, stop ,akt, ende *bool, punkte, diff *int16, mutex *sync.Mutex) {   	
 	var t1 int64 = time.Now().UnixNano() 		//Startzeit
 	var anz,anzahl int                  		// zur Bestimmung der Frames pro Sekunde
@@ -382,8 +377,11 @@ func view_komponente (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte
 		maus.Zeichnen()									// zeichnet Maus
 		
 		SetzeFont ("./Schriftarten/Freshman.ttf", 35 )
-		Stiftfarbe(76,0,153)  
-		SchreibeFont (500,5,"Punkte : "+fmt.Sprint (*punkte,"        Letzter Treffer: ",*diff))	// Schreibe rechts oben Punkte
+		//Stiftfarbe(76,0,153)  
+		Stiftfarbe(70,20,20)		
+		SchreibeFont (455,5,"Punkte : "+fmt.Sprint (*punkte,"           Letzter Treffer : ",*diff))	// Schreibe Punkte
+		Stiftfarbe(255,124,212)
+		SchreibeFont (458,7,"Punkte : "+fmt.Sprint (*punkte,"           Letzter Treffer : ",*diff))	// Schreibe Punkte
 		Stiftfarbe(100,10,155)
 		Schreibe (1,1,"FPS:"+fmt.Sprint (anzahl))					// Schreibe links oben FPS
 		

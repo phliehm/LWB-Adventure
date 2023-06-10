@@ -16,6 +16,7 @@ import ( 	. "gfx"
 	
 func Muster() (note float32, punktExp uint32) {
 	var mutex sync.Mutex					// erstellt Mutex
+	var wg sync.WaitGroup					// erstellt Waitgroup
 	var gedrueckt uint8
 	var taste,tiefe uint16
 	
@@ -43,19 +44,19 @@ func Muster() (note float32, punktExp uint32) {
 	Fenstertitel("Muster, Muster, nichts als Muster - und dazwischen Muster")								// Gibt Fenster-Titel 
 	
 	// Das Hauptprogramm startet die View-Komponente als nebenläufigen Prozess!
-	go view_komponente(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &mutex, &eingabe)
+	go view_komponente(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &mutex, &eingabe, &wg)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &eingabe, &wert, &punkte, kanal)
+	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &eingabe, &wert, &punkte, kanal, &wg)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
-	go maussteuerung(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &wert, kanal)
+	go maussteuerung(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &wert, kanal, &wg)
 	
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
 	// Wir fragen hier nur die Tastatur ab.
 	
-	
+	wg.Add(3)
 	
 	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 28 )
 	
@@ -124,9 +125,11 @@ A:	for {
 			}
 		}
 	}
-	
+	fmt.Println("Ausgebrochen")
+	stop = false 
+	kanal <- false
 	ende = true
-	time.Sleep( time.Duration(1e9) )
+	
 	
 	fmt.Println("Vielen Dank für's Spielen!")
 	time.Sleep( time.Duration(2e8) )
@@ -155,6 +158,7 @@ A:	for {
 		
 	// Endbildschirm()
 	
+	wg.Wait()
 	return
 }
 
@@ -211,15 +215,22 @@ func Endbildschirm() {
 */
 	
 func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, 
-			eingabe *string, wert *uint8, punkte *int16, kanal chan bool) {
+			eingabe *string, wert *uint8, punkte *int16, kanal chan bool, wg *sync.WaitGroup) {
 	var neuerZustand bool
 	
+	defer wg.Done()
 	
 	zwischentext(&texte.MusterEinl, mutex, stop)		// Einleitungs-Text
 	
-	//musterSpiel(obj, maus, akt, signal, tastatur, random, mutex, eingabe, wert, punkte)
+	/*
+	musterSpiel(obj, maus, akt, signal, tastatur, random, mutex, eingabe, wert, punkte, kanal)
 	
-	
+	neuerZustand = <- kanal
+	if !neuerZustand { 
+		fmt.Println("Beende spielablauf")
+		return 
+	}
+	*/
 	
 	*obj = make([]objekte.Objekt,0)
 	time.Sleep( time.Duration(3e8) )
@@ -228,11 +239,15 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	zwischentext(&texte.MusterEins, mutex, stop)
 	memorySpiel(obj, akt, 2, random)					// auf Level 1
 	neuerZustand = <- kanal
+	if !neuerZustand { 
+		fmt.Println("Beende spielablauf")
+		return 
+	}
 	
 	/*
 	memorySpiel(obj, akt, 1, random)					// auf Level 2
 	neuerZustand = <- kanal
-	
+	if !neuerZustand { return }
 	
 	*obj = make([]objekte.Objekt,0)
 	time.Sleep( time.Duration(3e8) )
@@ -240,6 +255,7 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	zwischentext(&texte.MusterZwei, mutex, stop)
 	memorySpiel(obj, akt, 3, random)					// auf Level 3
 	neuerZustand = <- kanal
+	if !neuerZustand { return }
 	
 	*obj = make([]objekte.Objekt,0)
 	time.Sleep( time.Duration(3e8) )
@@ -247,11 +263,9 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	zwischentext(&texte.MusterDrei, mutex, stop)
 	memorySpiel(obj, akt, 5, random)					// auf Level 5
 	neuerZustand = <- kanal
+	if !neuerZustand { return }
 	*/
 	
-	if neuerZustand {
-		fmt.Println("Super")
-	}
 	
 	//fmt.Println(neuerZustand)
 	// for !*signal { time.Sleep( time.Duration(2e9) ) }
@@ -282,7 +296,7 @@ func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 }
 
 func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastatur *bool, rand *rand.Rand, 
-							mutex *sync.Mutex, eingabe *string, wert *uint8, punkte *int16) { // gibt Muster zur Abfrage
+							mutex *sync.Mutex, eingabe *string, wert *uint8, punkte *int16, kanal chan bool) { // gibt Muster zur Abfrage
 	
 	var zufallSpalte int
 	var versuch uint8									// zählt, ob es schon einen Lösungsversuch gab
@@ -296,6 +310,7 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 	passtNicht 	:= objekte.New(0, 0, 0, 23)				// Passt-Nicht-Objekt
 	
 	*obj = append(*obj, passt, passtNicht)
+	
 	
 	for i:=1;i<11;i++ {					// Schleife für die Abfrage von 10 Mustern
 		
@@ -441,7 +456,7 @@ Neu2:
 	}
 	*tastatur = false
 	*eingabe = ""
-
+	kanal <- true
 }
 
 func musterabfrage(i int) {
@@ -544,10 +559,12 @@ func memorySpiel(obj *[]objekte.Objekt, akt *bool, level uint8, rand *rand.Rand)
 
 // Es folgt die VIEW-Komponente
 func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signal, stop ,akt, ende *bool, 
-													punkte, diff *int16, mutex *sync.Mutex, eingabe *string) {   	
+													punkte, diff *int16, mutex *sync.Mutex, eingabe *string, wg *sync.WaitGroup) {   	
 	var t1 int64 = time.Now().UnixNano() 		//Startzeit
 	var anz,anzahl int                  		// zur Bestimmung der Frames pro Sekunde
 	var verzögerung = 90
+	
+	defer wg.Done()
 	
 	for { //Endlos ...
 		mutex.Lock()
@@ -575,10 +592,10 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 		SchreibeFont (500,12,"Punkte : "+fmt.Sprint (*punkte))				// Schreibe rechts oben Punkte
 		Stiftfarbe(100,10,155)
 		Schreibe (2,2,"FPS:"+fmt.Sprint (anzahl))							// Schreibe links oben FPS
+		
 		if *signal {  }
 			
 		maus.Zeichnen()														// Zeichnet Maus
-			
 		
 		if time.Now().UnixNano() - t1 < 1000000000 { //noch in der Sekunde ...
 			anz++
@@ -593,9 +610,11 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 		UpdateAn () 										// Nun wird der gezeichnete Frame sichtbar gemacht!
 		mutex.Unlock()
 		
-		if *ende { return }
+		if *ende { 
+			fmt.Println("View-Komponente beendet!")
+			return 
+		}
 		time.Sleep(time.Duration(verzögerung * 1e5)) 		// Immer ca. 100 FPS !!
-		
 	}
 }
 
@@ -609,25 +628,29 @@ func ObjAktualisieren(obj *[]objekte.Objekt) {
 }
 
 // Es folgt die CONTROL-Komponente 1 --- Kein Bestandteil der Welt, also unabhängig -----
-func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signal, stop, akt, ende *bool, punkte, diff *int16, wert *uint8, kanal chan bool) {
+func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signal, stop, akt, ende *bool, 
+					punkte, diff *int16, wert *uint8, kanal chan bool, wg *sync.WaitGroup) {
 	//var taste uint8
 	var aufgedeckt,warten bool = false,false			// gibt an, ob eine Karte aufgedeckt wurde, auf das Zudecken gewartet wird
 	var objektSpeicher,objektSpeicher2 objekte.Objekt	// Speichert aufgedeckte Karten
 	var zaehler uint8									// überprüft, wie viele Paare aufgedeckt wurden
+	
+	defer wg.Done()
 	
 	for {
 		/*taste,*/_, status, mausX, mausY := MausLesen1()
 		// fmt.Println(taste, status, mausX, mausY)
 		maus.SetzeKoordinaten(mausX,mausY)					// Aktualisiert Maus-Koordinaten
 		
-		if *stop {
+		if *ende {
+			fmt.Println("Maussteuerung beendet")
+			return
+		} else if *stop {
 			if status==1 { 									// Maustaste wird gedrückt
 				if ja,_ := okayObjekt.Getroffen(mausX,mausY,1); ja {
 					*stop = false
 				}
 			}
-		} else if *ende {
-			return
 		} else {
 			if /* taste==1 &&*/ status==1 { 						//LINKE Maustaste gerade gedrückt
 				if warten {
