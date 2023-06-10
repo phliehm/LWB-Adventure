@@ -153,7 +153,7 @@ func (b *bug) eatCode() {
 func (b *bug) startMoving() {
 	
 	for b.stirbt == false {		
-		time.Sleep(time.Duration(1e9+rand.Intn(5000/b.nervosität)*1e6)) // Warte zufällige Zeit bevor sich Position ändert
+		time.Sleep(time.Duration(5e8+rand.Intn(5000/b.nervosität)*1e6)) // Warte zufällige Zeit bevor sich Position ändert
 		if b.stirbt == true {return}		// verhindert Bewegung nachdem Bug am sterben ist
 		bugArraySchloss.Lock()
 		var new_x, new_y uint16
