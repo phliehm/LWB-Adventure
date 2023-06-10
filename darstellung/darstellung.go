@@ -45,7 +45,7 @@ func MainfloorDarstellen() {
 	
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,1200,700)
-	LadeBild(0,50,"./Bilder/MainGame/mainfloor.bmp")
+	LadeBild(0,50,"./Bilder/mainfloor.bmp")
 	Stiftfarbe(0,0,0)
 	SetzeFont("./Schriftarten/Starjedi.ttf",80)
 	SchreibeFont(105,290,"1")
@@ -85,7 +85,7 @@ func SemesterraumDarstellen(n int) {
 		LadeBild(0,0,"./Bilder/MainGame/raum1.bmp")
 		case 2:
 		LadeBild(0,0,"./Bilder/MainGame/raum2.bmp")
-		LadeBild(1100,565,"./Bilder/MainGame/Zurück-Symbol.bmp")
+		LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
 		case 3:
 		LadeBild(0,0,"./Bilder/MainGame/raum3.bmp")
 		case 4:
@@ -137,21 +137,6 @@ func InfoDarstellen() {
 }
 
 
-<<<<<<< Updated upstream
-=======
-func ladeEndbildschirmHintergrund() {
-	
-	Stiftfarbe(255,255,255)
-	Cls()
-
-	// Hintergrund gestalten
-	LadeBild(150,100,"./Bilder/MainGame/sprechblase_flipped_400.bmp")
-	LadeBildMitColorKey(100,350,"./Bilder/MainGame/Darth_200.bmp",255,255,255)
-	LadeBild(600,80,"./Bilder/MainGame/zertifikat.bmp")
-	LadeBild(940,510,"./Bilder/MainGame/certified_100.bmp")
-
-}
->>>>>>> Stashed changes
 
 
 // Eff: Der Endbildschirm mit Zertifikat und Durchschnitt ist angezeigt. 
@@ -182,18 +167,10 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 	schreibeZertifikat(spielstand)
 
 
-<<<<<<< Updated upstream
 	//exit.SetzeFarbe(0,0,0)
 	//exit.Zeichnen()
 	
 	//exit.AktiviereKlickbar()
-=======
-	// exit-Schalter einfügen
-	LadeBild(1100,565,"./Bilder/MainGame/Zurück-Symbol.bmp")
-	exit.SetzeFarbe(0,0,0)
-	exit.Zeichnen()
-	exit.AktiviereKlickbar()
->>>>>>> Stashed changes
 	
 	// Warte auf Mausklick-Entscheidung
 /*	for {
@@ -238,15 +215,9 @@ func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) { // bool {
 	schreibeZertifikat(spielstand)
 
 	// exit-Schalter einfügen
-<<<<<<< Updated upstream
 	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
 //	exit.SetzeFarbe(0,0,0)
 //	exit.Zeichnen()
-=======
-	LadeBild(1100,565,"./Bilder/MainGame/Zurück-Symbol.bmp")
-	exit.SetzeFarbe(0,0,0)
-	exit.Zeichnen()
->>>>>>> Stashed changes
 	exit.AktiviereKlickbar()
 	
 	// Spiel-BeendenSchalter einfügen
