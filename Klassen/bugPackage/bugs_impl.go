@@ -263,6 +263,16 @@ func babyBugs(b *bug) {
 	
 }
 
+
+
+
+
+
+/*
+ * 
+ *		WEITERE FUNKTIONEN DIE ALLE BUGS BETREFFEN
+ * 
+ */
 // Gibt Anzahl der Bugs zurück
 func howManyBugs() int {
 	var anzahl int
@@ -286,25 +296,16 @@ func cleanBugArray() {
 			// entferne Bug wenn er tot ist
 			if b!=nil && b.alive == false { 
 				bugArray[index] = nil
-				
 			}
 		}
 		bugArraySchloss.Unlock()
-		time.Sleep(1e9)
+		time.Sleep(1e8)
 	}
 }
 
-// Alle Bugs mit einem Tastendruck töten
-func killAllBugs() {
-	gfx.SpieleSound("Sounds/Retro Sounds/Explosions/Long/sfx_exp_long3.wav")
-	bugArraySchloss.Lock()
-	for _,b:= range bugArray {
-		if b!=nil {
-			b.stirbt = true
-		}
-	}
-	bugArraySchloss.Unlock()
-}
+
+
+
 // Zum debugging, anzeigen wie viele Bugs es gibt
 func ShowBugs(){
 	for{

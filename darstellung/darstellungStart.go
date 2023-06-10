@@ -51,6 +51,7 @@ func StartFenster() spielstaende.Spielstand {
 
 	// Eingabe des Namens
 	spielername = eingabefeld.Edit ()
+	//spielername = eingabefeld2.GibString()
 	fmt.Println("spielername: ",spielername)
 	
 	spielstand = spielstaende.New(spielername,path)

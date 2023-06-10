@@ -88,9 +88,13 @@ func maussteuerung (raumnr int) {
 							raumnr = index								//neue raumnr ist index des geklickten Elements (hier der angeklickten Tür, entspricht dem Semester)
 							if raumnr == 6 {
 								darstellung.InfoDarstellen()
+								raumnr = 0
 								darstellung.MainfloorDarstellen()
 							} else if raumnr == 5 {
+								fmt.Println("5. Tür angeklickt")
 								darstellung.EndbildschirmDarstellen(spielstand)
+								raumnr = 0
+								darstellung.MainfloorDarstellen()
 							} else {	
 								darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
 							}

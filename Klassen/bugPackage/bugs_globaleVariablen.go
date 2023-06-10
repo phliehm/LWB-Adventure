@@ -35,7 +35,12 @@ var sr,sg,sb uint8 = 0,0,0
 var punkteTB textboxen.Textbox 
 
 var autoAim bool =true// Drücke "x" um automatisch zum nächsten Bug zu springen
-var quit chan bool = make(chan bool)
+var killAllBugsCD uint16
+var autoAimCD uint16
+
+var alleLadebalken []*ladebalken 
+
+var quit chan bool = make(chan bool)		// beendet die Animation von Amoebius und dem Bugs
 
 var wg sync.WaitGroup
 
@@ -44,10 +49,14 @@ var levelSchloss sync.Mutex
 var lvlSpeed, lvlNervosität int
 var lvlLäuft bool
 var lvlZeit uint16 
-var lvlMaxPunkte [3]uint16 = [3]uint16{4800,4500,4000}
-var lvlMinPunkte [3]uint16 = [3]uint16{4000,3000,2000}
+const maxLevel = 6 
+var lvlMaxPunkte [maxLevel]uint16 = [maxLevel]uint16{4800,4500,4000,4000,4000,4000}
+var lvlMinPunkte [maxLevel]uint16 = [maxLevel]uint16{4000,3000,2000,2000,2000,2000}
+var LevelArray [maxLevel]func() = [maxLevel]func(){Level1,Level2,Level3,Level4,Level5,Level6}
+
 const maxPunkteProLevel uint16 = 5000
-var punkteArray [3]uint16 // Punktestand für jedes Level 
+var punkteArray [maxLevel]uint16 // Punktestand für jedes Level 
 var EndN float32
 var EndP uint32
+var SpielBeendet bool		// Spiel geht zum Endbildschirm wenn true
 
