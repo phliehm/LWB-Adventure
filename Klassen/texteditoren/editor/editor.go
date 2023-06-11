@@ -33,8 +33,8 @@ func String (f Folge, startposition uint) (erg string) {
 }
 
 func updateFenster (xpos,ypos,breite,höhe uint16, schriftgr int) {
-	spaltenanzahl = uint(breite)
-	zeilenanzahl = uint(höhe)
+	zeilenanzahl = uint(höhe/uint16(schriftgr+8))
+	spaltenanzahl = uint(breite/uint16(schriftgr*52/100))
 	gfx.UpdateAus()
 	gfx.Stiftfarbe(255,255,255)
 	gfx.Vollrechteck (xpos+1,ypos+1,breite-2,höhe-2)

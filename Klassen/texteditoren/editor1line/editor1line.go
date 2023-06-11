@@ -7,7 +7,7 @@ package editor1line
 // --->                     2.) Kein Flackern des Editorfensters mehr!
 //-----------------------------------------------------------------------------------------------
 
-import ("gfx"; . "../folgen")
+import ("fmt";"gfx"; . "../folgen")
 
 //const spaltenanzahl, zeilenanzahl = 64, 21
 var spaltenanzahl, zeilenanzahl uint
@@ -33,8 +33,11 @@ func String (f Folge, startposition uint) (erg string) {
 }
 
 func updateFenster (xpos,ypos,breite,höhe uint16, schriftgr int) {
-	spaltenanzahl = uint(breite)
-	zeilenanzahl = uint(höhe)
+		
+	zeilenanzahl = uint((höhe)/(uint16(schriftgr+8)))+1
+	spaltenanzahl = uint(((2*breite)/(uint16(schriftgr)))-2)
+	fmt.Println(spaltenanzahl, zeilenanzahl)
+	//spaltenanzahl = 81
 	gfx.UpdateAus()
 	
 	//schwarze Schrift auf weißem Hintergrund
@@ -102,10 +105,15 @@ func updateFenster (xpos,ypos,breite,höhe uint16, schriftgr int) {
 	//gfx.SchreibeFont  (230,572,fmt.Sprint(zeilen.AktuellerIndex()+1))
 	gfx.Stiftfarbe(255,255,255)
 	gfx.SchreibeFont (xpos+8 + uint16((f.AktuellerIndex()-startspalte)*(uint(schriftgr)/2)),ypos+8 + (uint16(schriftgr)*uint16(index-startzeile)),"_") //Kursor
+	
+	gfx.Stiftfarbe(0,0,0)
+	gfx.Vollrechteck(xpos+breite-12,ypos,17,höhe)
+	
 	gfx.UpdateAn()
 }
 	
 func Editor(xpos, ypos, breite, höhe uint16, schriftgr int) (eingabe string) {
+		
 	zeilen.EinfuegenVor (New (rune(0)))  //Die erste Zeile ist immer da.
 	zeilen.Positionieren (0) //Die erste Zeile ist am Anfang aktuell.
 	if !gfx.FensterOffen () { gfx.Fenster(1200,700) }
