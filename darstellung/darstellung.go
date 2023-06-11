@@ -14,7 +14,7 @@ import (
 	"../MiniGames/bauelementeSpiel"
 	"../MiniGames/2_ALP2/vaderobigame"
 //	"../MiniGames/2_ALP2/vadeROBIgame"
-	//"../MiniGames/3_DDI"
+	"../MiniGames/3_DDI"
 	"../MiniGames/2_EthI"
 	"../MiniGames/3_DBSA"
 	"../MiniGames/4_BugAttack"
@@ -390,7 +390,7 @@ func MinigameLaden(raum,n int) (note float32, punkte uint32){
 			case 1:
 			note, punkte = sqlGame.SQLgame()
 			case 2:
-			//TODO (noch kein importierbares package vorhanden)
+			note, punkte = fachjargon.FachJargon()
 		}
 		
 		case 4:

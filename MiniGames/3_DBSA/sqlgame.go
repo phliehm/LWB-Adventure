@@ -332,13 +332,11 @@ func notenberechnung(punkte uint32) float32 {
 }
 
 
-
-
 // Vor: Ein gfx-Grafikfenster ist geöffnet.
 // Eff: Hintergrundmusik ist gestartet. (Als go-Routine ausführen
 //		damit das Spiel weitergeht.)
 func hintergrundMusik(musikstopp bool) {	
-	var soundstr string = "Sounds/Music/8-bit-arcade.wav"
+	var soundstr string = "./MiniGames/3_DBSA/8-bit-arcade.wav"
 	for !musikstopp {
 		SpieleSound(soundstr)
 		time.Sleep (time.Duration(95e9))
@@ -563,7 +561,7 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 					Stiftfarbe(0,255,0)									// schreibe RICHTIG! in die Sprechblase
 					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",28)
 					SchreibeFont(230,240,"RICHTIG!!!  :-)")
-					SpieleSound("./Sounds/success.wav")
+					SpieleSound("./MiniGames/3_DBSA/success.wav")
 					punkte = punkte + levelpunkte						// addiere aktuelle Levelpunkte zur Gesamtpunktzahl
 					punktespeicher[i] = levelpunkte						// speichere aktuelle Levelpunkte im Punktespeicher-Slice
 					punktenoteSchreiben(punktenote,levelpunkte,punkte)	// aktualisiere Punkte- und Note-Anzeige
@@ -633,14 +631,14 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 					
 					if j<3 {											// ... und NOCHMAL! in die Sprechblase schreiben
 						SchreibeFont(225,240,"NOCHMAL!  :-(")						
-						SpieleSound("./Sounds/ehhh.wav")
+						SpieleSound("./MiniGames/3_DBSA/ehh.wav")
 						ted = texteditoren.New(315,595,830,63,20,true)
 					} else {
 						Stiftfarbe(255,255,255)
 						Vollrechteck(220,239,315,40)
 						Stiftfarbe(255,0,0)
 						SchreibeFont(225,240,"SCHADE!  :-(")			// beim 4. Versuch SCHADE! in die Sprechblase schreiben
-						SpieleSound("./Sounds/uh-oh.wav")
+						SpieleSound("./MiniGames/3_DBSA/uh-oh.wav")
 						next.ZeichneButton()							// und next-Button für Übergang ins nächste Level zeichnen
 					}
 				}
