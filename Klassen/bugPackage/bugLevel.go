@@ -236,7 +236,8 @@ func Endbildschirm() {
 	gfx.LadeBildMitColorKey(1080,30,path + "Bilder/BugAttack/Bug.bmp",0,0,0)
 	gfx.Stiftfarbe(125,0,0)
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",20)
-	gfx.SchreibeFont(1050,140,"[q] für Exit")
+	gfx.SchreibeFont(1070,140,"2 mal [q]")
+	gfx.SchreibeFont(1070,170,"für Exit")
 		
 	gfx.Stiftfarbe(0,255,0)
 	gfx.SetzeFont(path + "Schriftarten/ComputerTypewriter.ttf",80)

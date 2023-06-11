@@ -140,48 +140,53 @@ func cursorZeichnen() {
 }
 
 // Update Cursor-Position
-func TastaturEingabe() {
+func TastaturEingabe(c chan bool) {
 	var step uint16 = 1
 	for {
-		//gfx.Stiftfarbe(0,255,0)
-		taste, gedrueckt, tiefe = gfx.TastaturLesen1()
-		if tiefe==1 {
-			step=10
-		}else {step=1}
-		if gedrueckt == 1 {
-			//fmt.Println(taste)
-			switch taste {
-				case 273:		// hoch
-							cursor_y -= step*zH
-							// Wenn der Cursor über dem Weltrand oder über dem FensterRand ist, setze auf andere Seite
-							if cursor_y<y_offset*zH || cursor_y> 1000*zH{cursor_y = y_offset*zH+weltH*zH-zH}				
-				case 274:  // runter
-							cursor_y += step*zH
-							if cursor_y>y_offset*zH+weltH*zH-zH {cursor_y = y_offset*zH}
-				case 275:	// rechts
-							cursor_x += step*zB
-							if cursor_x>weltB*zB-zB {cursor_x = 0}
-				case 276:	// links
-							cursor_x -= step*zB
-							if cursor_x>weltB*zB-zB {cursor_x = weltB*zB-zB}
-				case 32 : 	// Schießen
-							welt[(cursor_y-y_offset*zH)/zH][cursor_x/zB] = 0
-							
-							bugGetroffen()
-				case 'x': 	benutzeAutoAim() // autoAim
-				case 'k': 	killNBugs(5)
-				case 'q':	// beende Level
-							beendeSpiel()
-							
-					//gfx.FensterAus()
-					//return
-			
-				default:
-					continue				
-			}
-		//fmt.Println(taste,tiefe,cursor_x,cursor_y)	
+		select {
+			case <-c:
+				return
+			default:
+				//gfx.Stiftfarbe(0,255,0)
+				taste, gedrueckt, tiefe = gfx.TastaturLesen1()
+				if tiefe==1 {
+					step=10
+				}else {step=1}
+				if gedrueckt == 1 {
+					//fmt.Println(taste)
+					switch taste {
+						case 273:		// hoch
+									cursor_y -= step*zH
+									// Wenn der Cursor über dem Weltrand oder über dem FensterRand ist, setze auf andere Seite
+									if cursor_y<y_offset*zH || cursor_y> 1000*zH{cursor_y = y_offset*zH+weltH*zH-zH}				
+						case 274:  // runter
+									cursor_y += step*zH
+									if cursor_y>y_offset*zH+weltH*zH-zH {cursor_y = y_offset*zH}
+						case 275:	// rechts
+									cursor_x += step*zB
+									if cursor_x>weltB*zB-zB {cursor_x = 0}
+						case 276:	// links
+									cursor_x -= step*zB
+									if cursor_x>weltB*zB-zB {cursor_x = weltB*zB-zB}
+						case 32 : 	// Schießen
+									welt[(cursor_y-y_offset*zH)/zH][cursor_x/zB] = 0
+									
+									bugGetroffen()
+						case 'x': 	benutzeAutoAim() // autoAim
+						case 'k': 	killNBugs(5)
+						case 'q':	// beende Level
+									beendeSpiel()
+									
+							//gfx.FensterAus()
+							//return
+					
+						default:
+							continue				
+					}
+				//fmt.Println(taste,tiefe,cursor_x,cursor_y)	
+				}
+				time.Sleep(1e6)
 		}
-		time.Sleep(1e6)
 	}
 }
 

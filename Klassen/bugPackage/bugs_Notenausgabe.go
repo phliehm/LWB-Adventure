@@ -28,6 +28,20 @@ func berechneProzent() float32{
 	return float32(punkteArray[level-1]-lvlMinPunkte[level-1])/float32((lvlMaxPunkte[level-1]-lvlMinPunkte[level-1]))
 }
 
+func rundeNote(n float32) float32{
+	if n<1.15 {return 1.0}
+	if n<1.5 {return 1.3}
+	if n<1.85 {return 1.7}
+	if n<2.15 {return 2.0}
+	if n<2.5 {return 2.3}
+	if n<2.85 {return 2.7}
+	if n<3.15 {return 3.0}
+	if n<3.5 {return 3.3}
+	if n<3.85 {return 3.7}
+	if n<4.15 {return 4.0}
+	if n<4.5 {return 4.3}
+	return 5.0
+}
 
 // Erg.: Endnote für das MainGame
 func berechneEndNoteUndGesamtPunktzahl() (float32,uint32) {
@@ -38,8 +52,9 @@ func berechneEndNoteUndGesamtPunktzahl() (float32,uint32) {
 		summeNoten+= berechneNote()
 		summePunkte+=uint32(punkte)
 	}
-	return summeNoten/float32(len(punkteArray)),summePunkte
+	return rundeNote(summeNoten/float32(len(punkteArray))),summePunkte
 }
+
 
 func GibErgebnis() (float32,uint32) {
 	//fmt.Println("Ergebnis: ",EndN,EndP)
