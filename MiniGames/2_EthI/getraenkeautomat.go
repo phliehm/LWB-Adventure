@@ -1,5 +1,5 @@
 
-// Funktion zum Start des Gertränkeautomatenspiels
+// Paket zum Getränkeautomatenspiel
 
 // Spezifikation
 
@@ -73,7 +73,7 @@ package getraenkeautomat
 // var punkte uint32
 
 
-// ----------   exportierte Methode --------------------- //
+// -----------------   Funktion -------------------------- //
 
 // Vor: Ein gfx-Fenster (1200x700) ist geöffnet.
 // Erg: Der Spielstand mir Note und Punkte ist geliefert.

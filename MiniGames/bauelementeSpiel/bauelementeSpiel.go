@@ -16,13 +16,13 @@ package bauelementeSpiel
 // import "../../Klassen/buttons"
 
 
-// ------------ exportierte Variablen -------------------- //
+// ------------ exportierte Variablen ------------------------- //
 
 // var noten float32
 // var punkte uint32
 
 
-// ----------   exportierte Methode --------------------- //
+// ---------------   Funktionen -------------------------------- //
 
 // Vor: Ein gfx-Fenster (1200x700) ist geöffnet.
 // Eff: Bauelementespiel ist gestartet.

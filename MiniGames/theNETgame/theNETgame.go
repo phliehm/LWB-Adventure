@@ -5,16 +5,19 @@
 // Martin Seiß    24.4.2023	(Start)
 
 
+
+
 package theNETgame
 
 
 // ------------  importierte Pakete ------------------------//
 
+// import "fmt"
 // import "gfx"
 // import "time"
 // import "../../Klassen/buttons"
-// import	"../../Klassen/textboxen"
-// import  spielfelder "../../Klassen/theNETgameSpielfeld"
+// import "../../Klassen/textboxen"
+// import spielfelder "../../Klassen/theNETgameSpielfeld"
 
 
 // ------------ exportierte Variablen -------------------- //

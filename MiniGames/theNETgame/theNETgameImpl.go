@@ -2,6 +2,10 @@
 
 // Martin Seiß    24.4.2023	(Start)
 
+// TO DO: 1.	Theoretische minimale Kosten sind manchmal größer als 
+//				erspielten Werte. Entweder Fehler in der Implementation 
+//				des Dijkstra-Algorithmus oder in der Kostenmessung.
+//		  2.	Übriggebleibender Kredit nicht gleich Punktezuwachs.
 
 
 package theNETgame
@@ -10,6 +14,7 @@ package theNETgame
 //import "fmt"
 import "gfx"
 import "time"
+import "fmt"
 import "../../Klassen/buttons"
 import	"../../Klassen/textboxen"
 import  spielfelder "../../Klassen/theNETgameSpielfeld"
@@ -155,14 +160,72 @@ func TheNETgame() (float32,uint32) {
 		time.Sleep(1e7)
 
 	}
+	
+	endbildschirm(ilevel+1, 5, sf.GibNote(),sf.GibPunktzahl())	
 
-return sf.GibNote(),uint32(sf.GibPunktzahl()) 
+	return sf.GibNote(),uint32(sf.GibPunktzahl()) 
 	
 }
 
 
 
 // ------------------    Hilfsfunktionen   --------------------  //
+
+
+
+// Vor: Ein passendes gfx-Fenster (1200x700) ist geöffnet. Level > 0.
+// Eff: Der Endbildschirm für das Spiel ist angezeigt und kann mit einem
+//		Mausklick auf das Verlassen-Symbol verlassen werden.
+func endbildschirm(level uint16, maxlevel uint16, note float32, punkte uint16) {
+	
+	var path string = ""
+	var beenden buttons.Button
+	var text textboxen.Textbox
+	beenden = buttons.New(1100,570,99,129,255,255,100,true,"")
+
+	// Lade Hintergrund
+	gfx.Stiftfarbe(255,255,255)
+	gfx.Cls()
+	gfx.LadeBild(150,80,path + "Bilder/Zertifikat/sprechblase_flipped_400.bmp")
+	gfx.LadeBild(20,350,path+"Bilder/Martin/WtheK_black.bmp")
+	gfx.LadeBild(620,80,path + "Bilder/Zertifikat/paper_500.bmp")
+	gfx.LadeBild(960,520,path + "Bilder/Zertifikat/certified_100.bmp")
+	gfx.LadeBild(1100,570,path + "Bilder/Martin/Zurück-Symbol.bmp")
+	
+	// Ausgabe der Gesamtnote	
+	gfx.Stiftfarbe(0,0,0)
+	gfx.SetzeFont(path + "Schriftarten/ComputerTypewriter.ttf",80)
+	gfx.SchreibeFont(300,10,"the-NET-Game")
+	gfx.Stiftfarbe(0,0,0)
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	gfx.SchreibeFont(295,120,"Du hast die")
+	gfx.SchreibeFont(310,240,"erreicht!")
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	gfx.SchreibeFont(285,150,"Gesamtnote")
+	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	fmt.Println("Final Level: ",level)
+	gfx.SchreibeFont(325,175,fmt.Sprintf("%2.1f",note))
+
+	// Schreibe die Punkte pro Level und Gesamtpunkte
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	text = textboxen.New(710,275,350,600)
+	text.SetzeSchriftgröße(32)
+	text.SchreibeText("Sie haben " + fmt.Sprint(level-1) + " von " +
+			fmt.Sprint(maxlevel) + " Level geschafft und dabei " + 
+			fmt.Sprint(punkte) + " Punkte erspielt.\n\n" +
+			"Kommen Sie bald wieder!")
+	text.Zeichne()		
+
+	// Warte auf Mausklick auf Beenden/Verlassen/Tür-Symbol 
+	for {
+		taste, status, mausX, mausY := gfx.MausLesen1()
+		if taste==1 && status==1 {
+			if beenden.TesteXYPosInButton(mausX,mausY) {break}
+		}
+	}
+
+}
+
 
 
 // Erg: Ein aktiver Button für einen Router-Knoten ist für die vorgegebenen Position

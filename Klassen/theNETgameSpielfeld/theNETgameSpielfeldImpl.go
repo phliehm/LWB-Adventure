@@ -364,12 +364,12 @@ func (sf *data) zeichneComputer() {
 		r,g,_ := sf.Knotenfarbe(ids[i])
 		if ids[i] != 0 && ids[i] != max && ids[i] != sf.paketid {
 			if r == 255 {
-				gfx.LadeBild(x-20,y-25,"Bilder/Computer_klein_rot.bmp")
-				gfx.LadeBild(x-20,y-40,"Bilder/Feuer.bmp")
+				gfx.LadeBild(x-20,y-25,"Bilder/Martin/theNETgame/Computer_klein_rot.bmp")
+				gfx.LadeBild(x-20,y-40,"Bilder/Martin/theNETgame/Feuer.bmp")
 			} else if g == 255 {
-				gfx.LadeBild(x-20,y-25,"Bilder/Computer_klein_gruen.bmp")
+				gfx.LadeBild(x-20,y-25,"Bilder/Martin/theNETgame/Computer_klein_gruen.bmp")
 			} else {
-				gfx.LadeBild(x-20,y-25,"Bilder/Computer_klein.bmp")
+				gfx.LadeBild(x-20,y-25,"Bilder/Martin/theNETgame/Computer_klein.bmp")
 			}
 		}
 	}
@@ -401,7 +401,7 @@ func (sf *data) zeichneDarthSchmidter() {
 					} else {
 						y = y + (y0-y)/2
 					}
-					gfx.LadeBild(x-16,y-25,"Bilder/DarthSchmidtarExtraTiny.bmp")
+					gfx.LadeBild(x-16,y-25,"Bilder/Martin/theNETgame/DarthSchmidtarExtraTiny.bmp")
 				}
 			}
 		}
@@ -415,9 +415,9 @@ func (sf *data) zeichneDarthSchmidter() {
 //		befindet, gezeichnet.
 func (sf *data) zeichnePaket() {
 	var x,y uint16 = sf.KnotenKoordinaten(sf.paketid)
-	gfx.LadeBild(x-25,y-25,"Bilder/paket_klein.bmp")
+	gfx.LadeBild(x-25,y-25,"Bilder/Martin/theNETgame/paket_klein.bmp")
 	if sf.GibVerloren() > 0 {
-		gfx.LadeBild(x-20,y-40,"Bilder/Feuer.bmp")
+		gfx.LadeBild(x-20,y-40,"Bilder/Martin/theNETgame/Feuer.bmp")
 	}
 }
 
@@ -434,9 +434,9 @@ func (sf *data) zeichneSpielfeld() {
 	gfx.Stiftfarbe(0,0,0)		
 
 	if sf.GibVerloren() == 0 {
-		gfx.LadeBild(840,10,"Bilder/WtheK_black.bmp")
+		gfx.LadeBild(840,10,"Bilder/Martin/WtheK_black.bmp")
 	} else {
-		gfx.LadeBild(840,10,"Bilder/WtheK_black_sad.bmp")
+		gfx.LadeBild(840,10,"Bilder/Martin/WtheK_black_sad.bmp")
 	}
 	gfx.Linie(830,0,830,700-1)
 	gfx.Linie(830,380,1200-1,380)

@@ -253,12 +253,67 @@ func Getraenkeautomat() (float32, uint32) {
 		}
 	}
 
+	endbildschirm(ilevel+1, 6, note)
+
 	return note,punkte
 	
 }
 
 
 // ---------------   Hilfsfunktionen   -------------------------//
+
+
+// Vor: Ein passendes gfx-Fenster (1200x700) ist geöffnet. Level > 0.
+// Eff: Der Endbildschirm für das Spiel ist angezeigt und kann mit einem
+//		Mausklick auf das Verlassen-Symbol verlassen werden.
+func endbildschirm(level uint16, maxlevel uint16, note float32) {
+	
+	var path string = ""
+	var beenden buttons.Button
+	var text textboxen.Textbox
+	beenden = buttons.New(1100,570,99,129,255,255,100,true,"")
+
+	// Lade Hintergrund
+	gfx.Stiftfarbe(255,255,255)
+	gfx.Cls()
+	gfx.LadeBild(150,80,path + "Bilder/Zertifikat/sprechblase_flipped_400.bmp")
+	gfx.LadeBild(20,350,path+"Bilder/Martin/getraenkeautomat/Jethi_klein.bmp")
+	gfx.LadeBild(620,80,path + "Bilder/Zertifikat/paper_500.bmp")
+	gfx.LadeBild(960,520,path + "Bilder/Zertifikat/certified_100.bmp")
+	gfx.LadeBild(1100,570,path + "Bilder/Martin/Zurück-Symbol.bmp")
+	
+	// Ausgabe der Gesamtnote	
+	gfx.Stiftfarbe(0,0,0)
+	gfx.SetzeFont(path + "Schriftarten/ComputerTypewriter.ttf",80)
+	gfx.SchreibeFont(25,10,"Getraenkeautomatenspiel")
+	gfx.Stiftfarbe(0,0,0)
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	gfx.SchreibeFont(295,120,"Du hast die")
+	gfx.SchreibeFont(310,240,"erreicht!")
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	gfx.SchreibeFont(285,150,"Gesamtnote")
+	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	fmt.Println("Final Level: ",level)
+	gfx.SchreibeFont(325,175,fmt.Sprintf("%2.1f",note))
+
+	// Schreibe die Punkte pro Level und Gesamtpunkte
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	text = textboxen.New(710,300,350,600)
+	text.SetzeSchriftgröße(32)
+	text.SchreibeText("Sie haben " + fmt.Sprint(level-1) + " von " +
+			fmt.Sprint(maxlevel) + " Level geschafft. \n\n" +
+			"Kommen Sie bald wieder!")
+	text.Zeichne()		
+
+	// Warte auf Mausklick auf Beenden/Verlassen/Tür-Symbol 
+	for {
+		taste, status, mausX, mausY := gfx.MausLesen1()
+		if taste==1 && status==1 {
+			if beenden.TesteXYPosInButton(mausX,mausY) {break}
+		}
+	}
+
+}
 
 
 // Eff: Weist den Levelparametern die richtigen Werte zu.
@@ -614,7 +669,7 @@ func zeichneAutomat() {
 	gfx.Rechteck(10,10,650,680)
 	
 	// Display
-	gfx.LadeBild(550,30,"Bilder/Display.bmp")
+	gfx.LadeBild(550,30,"Bilder/Martin/getraenkeautomat/Display.bmp")
 	gfx.Rechteck(550,30,91,400)
 
 	// Reset-Button
@@ -629,13 +684,13 @@ func zeichneAutomat() {
 	gfx.Stiftfarbe(255,255,255)		
 	gfx.Vollrechteck(20,20,500,500)
 	if automatNr == 1 {
-		gfx.LadeBildMitColorKey (40,60,path+"Bilder/Automat1.bmp",0,0,0)
+		gfx.LadeBildMitColorKey (40,60,path+"Bilder/Martin/getraenkeautomat/Automat1.bmp",0,0,0)
 	} else {
-		gfx.LadeBildMitColorKey (30,100,path+"Bilder/Automat2.bmp",0,0,0)
+		gfx.LadeBildMitColorKey (30,100,path+"Bilder/Martin/getraenkeautomat/Automat2.bmp",0,0,0)
 	}
 	
 	// Ausgabe
-	gfx.LadeBild(70,530,"Bilder/Ausschank.bmp")
+	gfx.LadeBild(70,530,"Bilder/Martin/getraenkeautomat/Ausschank.bmp")
 
 	// Getränkeliste
 	gfx.Stiftfarbe(255,211,155)		
@@ -694,7 +749,7 @@ func zeichneSpielfeld(ilevel uint16, punkte uint32, note float32,
 	gfx.Stiftfarbe(0,0,0)		
 
 	// Dozentenbild
-	gfx.LadeBild(840,10,path + "Bilder/Jethi_klein.bmp")
+	gfx.LadeBild(840,10,path + "Bilder/Martin/getraenkeautomat/Jethi_klein.bmp")
 	gfx.Linie(830,0,830,700-1)
 	gfx.Linie(830,380,1200-1,380)
 
@@ -723,8 +778,7 @@ func hintergrundmusik(beenden buttons.Button) {
 		gfx.SpieleSound(soundstr)
 		time.Sleep (time.Duration(19197e6))
 	}
-	fmt.Println("Sound gestoppt")
-	//gfx.StoppeAlleSounds()
+	//fmt.Println("Sound gestoppt")
 }
 
 

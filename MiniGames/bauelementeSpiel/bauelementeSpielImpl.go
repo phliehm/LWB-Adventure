@@ -188,12 +188,67 @@ func BauelementeSpiel() (float32,uint32) {
 		}
 	}
 
-return berechneNoteFloat32(gPunkte,maxPunkte),uint32(gPunkte)
+	endbildschirm(ilevel+1, berechneNoteFloat32(gPunkte,maxPunkte), ePunkte, gPunkte)
+
+	return berechneNoteFloat32(gPunkte,maxPunkte),uint32(gPunkte)
 	
 }
 
 
+
 // ---------------  Hilfsfunktionen  -------------------------------//
+
+
+// Vor: Ein passendes gfx-Fenster (1200x700) ist geöffnet.
+// Eff: Der Endbildschirm für das Spiel ist angezeigt und kann mit einem
+//		Mausklick auf das Verlassen-Symbol verlassen werden.
+func endbildschirm(level uint16, note float32, ePunkte []uint16, gPunkte uint16) {
+	
+	var path string = ""
+	var beenden buttons.Button
+	beenden = buttons.New(1100,570,99,129,255,255,100,true,"")
+
+	// Lade Hintergrund
+	gfx.Stiftfarbe(255,255,255)
+	gfx.Cls()
+	gfx.LadeBild(150,80,path + "Bilder/Zertifikat/sprechblase_flipped_400.bmp")
+	gfx.LadeBild(20,350,path+"Bilder/Martin/WtheK_black.bmp")
+	gfx.LadeBild(620,80,path + "Bilder/Zertifikat/paper_500.bmp")
+	gfx.LadeBild(960,520,path + "Bilder/Zertifikat/certified_100.bmp")
+	gfx.LadeBild(1100,570,path + "Bilder/Martin/Zurück-Symbol.bmp")
+	
+	// Ausgabe der Gesamtnote	
+	gfx.Stiftfarbe(0,0,0)
+	gfx.SetzeFont(path + "Schriftarten/ComputerTypewriter.ttf",80)
+	gfx.SchreibeFont(200,10,"Bauelementespiel")
+	gfx.Stiftfarbe(0,0,0)
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	gfx.SchreibeFont(295,120,"Sie haben die")
+	gfx.SchreibeFont(310,240,"erreicht!")
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	gfx.SchreibeFont(285,150,"Gesamtnote")
+	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
+	fmt.Println("Final Level: ",level)
+	gfx.SchreibeFont(325,175,fmt.Sprintf("%2.1f",note))
+
+	// Schreibe die Punkte pro Level und Gesamtpunkte
+	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	for i:=1; i<=len(ePunkte); i++ {
+		gfx.SchreibeFont(710,150+uint16((i-1)*30), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(ePunkte[i-1]) + " Punkte")
+	}
+	gfx.SchreibeFont(700,140+uint16(len(ePunkte)*30),"----------------------")
+	gfx.SchreibeFont(710,160+uint16(len(ePunkte)*30),"Gesamt:    " + fmt.Sprint(gPunkte) + " Punkte")
+
+	// Warte auf Mausklick auf Beenden/Verlassen/Tür-Symbol 
+	for {
+		taste, status, mausX, mausY := gfx.MausLesen1()
+		if taste==1 && status==1 {
+			if beenden.TesteXYPosInButton(mausX,mausY) {break}
+		}
+	}
+
+}
+
 
 
 // Erg: Ein aktiver Button mit vorgegebenen Position und Größe
@@ -423,9 +478,9 @@ func zeichneSpielfeld(happy bool, xSize, ilevel, punkte, maxPunkte uint16, sk sc
 	gfx.Stiftfarbe(0,0,0)		
 
 	if happy {
-		gfx.LadeBild(840,10,path + "Bilder/WtheK_black.bmp")
+		gfx.LadeBild(840,10,path + "Bilder/Martin/WtheK_black.bmp")
 	} else {
-		gfx.LadeBild(840,10,path + "Bilder/WtheK_black_sad.bmp")
+		gfx.LadeBild(840,10,path + "Bilder/Martin/WtheK_black_sad.bmp")
 	}
 	gfx.Linie(830,0,830,700-1)
 	gfx.Linie(830,380,1200-1,380)
