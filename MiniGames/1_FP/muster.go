@@ -125,7 +125,7 @@ A:	for {
 			}
 		}
 	}
-	fmt.Println("Ausgebrochen")
+	fmt.Println("Ausgebrochen in Main!")
 	stop = false 
 	kanal <- false
 	ende = true
@@ -156,63 +156,51 @@ A:	for {
 		case punktExp > 550:	note = 1.0
 	}
 		
-	// Endbildschirm()
+	Endbildschirm(punktExp,note)
 	
 	wg.Wait()
 	return
 }
 
-/*
-func Endbildschirm() {
-	var path string
-	path = ""
-	gfx.Stiftfarbe(255,255,255)
-	gfx.Cls()
-	
-	
-	gfx.LadeBild(150,100,path + "Bilder/sprechblase_flipped_400.bmp")
-	gfx.LadeBild(230,390,path+"Bilder/BugAttack/FabWeb_fullBody_gespiegelt.bmp")
-	gfx.LadeBildMitColorKey(250,350,path + "Bilder/BugAttack/Amoebius_klein.bmp",0,0,0)
-	
-	gfx.LadeBild(620,80,path + "Bilder/paper_500.bmp")
-	gfx.LadeBild(960,520,path + "Bilder/certified_100.bmp")
-	//gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
-	
-	gfx.LadeBildMitColorKey(1080,30,path + "Bilder/BugAttack/Bug.bmp",0,0,0)
-	gfx.Stiftfarbe(125,0,0)
-	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",20)
-	gfx.SchreibeFont(1050,140,"[q] für Exit")
-		
-	gfx.Stiftfarbe(0,255,0)
-	gfx.SetzeFont(path + "Schriftarten/ComputerTypewriter.ttf",80)
-	gfx.SchreibeFont(330,10,"Bug  ATTACK")
-	gfx.Stiftfarbe(0,0,0)
-	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
-	gfx.SchreibeFont(295,140,"Du hast die")
-	gfx.SchreibeFont(310,260,"erreicht!")
-	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
-	gfx.SchreibeFont(285,170,"Gesamtnote")
-	gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",42)
-	fmt.Println("Final Level: ",level)
-	EndN, EndP = berechneEndNoteUndGesamtPunktzahl()
-	gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",EndN))
-	
-	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	//fmt.Println("level: ",level)
-	for i:=uint16(1); i<=maxLevel; i++ {
-		//fmt.Println(i)
-		level = i
-		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(punkteArray[i-1]) + " Punkte")
-		gfx.SchreibeFont(710,175+uint16((i-1)*68),"           Note " + fmt.Sprintf("%2.1f",berechneNote()))
-	}
-	gfx.SchreibeFont(700,130+uint16(6*70),"----------------------")
-	
-	gfx.SchreibeFont(710,160+uint16(6*70),"Gesamt:    " + fmt.Sprint(EndP) + " Punkte")
 
-	gfx.TastaturLesen1()
+func Endbildschirm(EndP uint32, note float32) {
+	
+	Stiftfarbe(255,255,255)
+	Cls()
+	
+	LadeBild(150,100, "./Bilder/Zertifikat/sprechblase_flipped_400.bmp")
+	LadeBild(230,390, "./Bilder/FP/FabWeb_fullBody_gespiegelt.bmp")
+	// LadeBildMitColorKey(250,350, "./Bilder/FP/Amoebius_klein.bmp",0,0,0)
+	
+	LadeBild(620,80, "./Bilder/Zertifikat/paper_500.bmp")
+	LadeBild(960,520, "./Bilder/Zertifikat/certified_100.bmp")
+	
+	// LadeBildMitColorKey(1080,30, "./Bilder/BugAttack/Bug.bmp",0,0,0)  // Raumbild ?!
+		
+	Stiftfarbe(0,255,0)
+	SetzeFont( "./Schriftarten/ComputerTypewriter.ttf",70)
+	SchreibeFont(50,10,"Funktionale  Programmierung")
+	Stiftfarbe(0,0,0)
+	SetzeFont( "./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
+	SchreibeFont(295,140,"Du hast die")
+	SchreibeFont(310,260,"erreicht!")
+	SetzeFont( "./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
+	SchreibeFont(285,170,"Gesamtnote")
+	SetzeFont( "./Schriftarten/Starjedi.ttf",42)
+	//fmt.Println("Final Level: ",level)
+	SchreibeFont(325,195,fmt.Sprintf("%2.1f",note))
+	
+	SetzeFont( "./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	//fmt.Println("level: ",level)
+	
+	SchreibeFont(700,130+uint16(5*70),"----------------------")
+	
+	SchreibeFont(710,160+uint16(5*70),"Gesamt:    " + fmt.Sprint(EndP) + " Punkte")
+
+	TastaturLesen1()
 	//return gesamtnote, gesamtpunkte
 }
-*/
+
 	
 func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, 
 			eingabe *string, wert *uint8, punkte *int16, kanal chan bool, wg *sync.WaitGroup) {
@@ -238,6 +226,7 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	
 	zwischentext(&texte.MusterEins, mutex, stop)
 	memorySpiel(obj, akt, 2, random)					// auf Level 1
+	
 	neuerZustand = <- kanal
 	if !neuerZustand { 
 		fmt.Println("Beende spielablauf")
@@ -262,14 +251,14 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	
 	zwischentext(&texte.MusterDrei, mutex, stop)
 	memorySpiel(obj, akt, 5, random)					// auf Level 5
-	neuerZustand = <- kanal
-	if !neuerZustand { return }
+	
 	*/
 	
-	
-	//fmt.Println(neuerZustand)
-	// for !*signal { time.Sleep( time.Duration(2e9) ) }
-	
+	neuerZustand = <- kanal
+	if !neuerZustand { 
+		fmt.Println("Beende spielablauf")
+		return 
+	}
 }
 
 func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
