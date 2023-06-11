@@ -32,7 +32,7 @@ type bug struct {
 	dying uint16	// Für die Animation zum Sterben
 	a uint16		// AnimatiosSchritt
 	stirbt bool 	// true wenn Bug getroffen wurde und stirbt
-	typ uint8 		// Art des Bugs
+	typ uint8 		// Art des Bugs	(Wird nicht verwendet, könnte man aber nutzen um verschiedne Bugs zu erzeugen, mit verschiedenen Eigenschaften
 	speed int 		// Geschwindigkeit des Bugs, also wie weit bewegt er sich pro Schritt
 	nervosität int // wie oft bewegt sich der Bug
 	r,g,b uint8		// Farbe des Bugs
