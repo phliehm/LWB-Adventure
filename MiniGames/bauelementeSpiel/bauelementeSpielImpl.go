@@ -7,12 +7,13 @@
 
 package bauelementeSpiel
 
-import sch "../../Klassen/schaltungen"
-import level "../../Klassen/beLevel"
+
 import "fmt"
 import "gfx"
-import "../../Klassen/buttons"
 import "time"
+import sch "../../Klassen/schaltungen"
+import level "../../Klassen/beLevel"
+import "../../Klassen/buttons"
 
 var path string = "" //"../"
 
@@ -160,7 +161,9 @@ func BauelementeSpiel() (float32,uint32) {
 				neuZeichnen = true
 			}
 			if beenden.TesteXYPosInButton(mausX,mausY) { // Ende des Spiels
+				beenden.DeaktiviereButton()
 				gfx.StoppeAlleSounds()
+				fmt.Println("Spiel beenden")
 				break
 			}
 			if levelNeuLaden {
@@ -234,7 +237,8 @@ func alleLampenAn(sk sch.Schaltung) bool {
 }
 
 
-// Erg:_Ein string-Slice für den Willkommenstext ist geliefert.
+// Erg:_Ein string-Slice für den Willkommenstext und Kurzanleitung
+//		ist geliefert.
 func WillkommenText() []string {
 	var erg []string = make([]string,0)
 	erg = append(erg,"Willkommen zur Prüfung der")
@@ -380,7 +384,7 @@ func berechneNoteFloat32(punkte, maxPunkte uint16) float32 {
 
 
 // Vor: Ein passendes gfx-Fenster ist geöffnet.
-// Eff: Schriebt Note, Pukte und Level ins Spielfeld.
+// Eff: Schriebt Note, Punkte und Level ins Spielfeld.
 func schreibeSpielstand(level,punkte, maxPunkte uint16) {
 	var note string =  berechneNote(punkte, maxPunkte)
 	gfx.SchreibeFont(20,15,"Level: " + fmt.Sprint(level))
