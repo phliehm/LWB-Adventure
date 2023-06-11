@@ -10,7 +10,9 @@ import (
 	
 		)
 
+
 func BugAttack() (float32,uint32){
+	c := make(chan bool) 		// Zum beenden der Go-Routine
 	rand.Seed(time.Now().UnixNano())		// Seed für Zufallszahlen
 	//-----------------initialisiere gfx-Fenster-----------------------	
 	if ! gfx.FensterOffen() {
@@ -19,7 +21,7 @@ func BugAttack() (float32,uint32){
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Vollrechteck(0,0,1200,700)
 	gfx.Stiftfarbe(0,255,0)
-	go bugPackage.TastaturEingabe()
+	go bugPackage.TastaturEingabe(c)
 	
 	
 	bugPackage.BugAttackIntro()
@@ -40,7 +42,8 @@ func BugAttack() (float32,uint32){
 	}
 	
 	bugPackage.Endbildschirm()
-	
+	gfx.StoppeAlleSounds()
 	endN,endP := bugPackage.GibErgebnis()
+	c<-true						// Beendet Tastatureingabe
 	return endN,endP
 }
