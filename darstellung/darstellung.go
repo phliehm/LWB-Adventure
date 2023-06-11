@@ -90,6 +90,30 @@ func SemesterraumDarstellen(n int) {
 	
 }
 
+func HeidiDarstellen() (sign, no buttons.Button) {
+	
+	sign = buttons.New(0,0,150,35,0,255,0,true," Unterschreiben")
+	no = buttons.New(0,0,50,35,255,0,0,true," NÖ")
+	var text textboxen.Textbox = textboxen.New(0,0,270,140)
+	
+	LadeBildMitColorKey(620,350,"./Bilder/MainGame/heidi_100.bmp",255,255,255)
+	LadeBildMitColorKey(345,145,"./Bilder/MainGame/bubble2_red_350.bmp",255,0,0)					//Heidi-Bubble
+	
+	sign.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	sign.SetzePosition(385,270)
+	sign.ZeichneButton()
+	no.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	no.SetzePosition(570,270)
+	no.ZeichneButton()
+	text.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	text.SetzeSchriftgröße(16)	
+	text.SetzePosition(385,170) 
+	text.SchreibeText("Heidi:\n\nDiesen Raum dürfen Sie nur betreten, wenn Sie die Hausordnung unterschreiben!")
+	text.Zeichne()
+	
+	return
+}
+
 func InfoDarstellen() {
 	
 	// var infotexthead textboxen.Textbox = textboxen.New(570,120,500,350)
