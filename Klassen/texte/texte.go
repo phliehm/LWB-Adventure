@@ -1,7 +1,9 @@
 package texte
+
 // Autor: B. Schneider
 // Datum: 05.04.2023
 
+// Dieses Paket stellt globale Variablen in Form von Array/Slice-Texten für verschiedene Spiele zur Verfügung.
 
 var MoorEinl []string = []string{"           S E M I N A R R A U M",
 								"",

@@ -16,7 +16,10 @@ type data struct {                                      // Zugriff
 	erstellt int64			// Zeit der Erstellung
 }
 
-
+// Vor.: --
+// Eff.: Das neue Objekt enthält die Erstellungszeit und ist aktiv.
+// Erg.: Ein neues Obekt mit den Koordinaten x,y und der Quadrat-Größe qua
+//       mit dem Typ typ ist geliefert. Sein "inhalt" ist leer.
 func New (x,y, qua uint16, typ uint8) *data {
 	var ob *data
 	ob = new(data)
@@ -29,43 +32,64 @@ func New (x,y, qua uint16, typ uint8) *data {
 	return ob
 }
 
+// Vor.: --
+// Eff.: Das Objekt hat nun die neuen Koordinaten.
 func (ob *data) SetzeKoordinaten(x,y uint16) {
 	ob.x = x
 	ob.y = y
 }
 
+// Vor.: --
+// Erg.: Die Koordinaten den Objekts sind geliefert.
 func (ob *data) GibKoordinaten() (uint16,uint16) {
 	return ob.x, ob.y
 }
 
+// Vor.: --
+// Eff.: Das Objekt hat nun den neuen Typ. 
 func (ob *data) SetzeTyp(t uint8) {
 	ob.typ = t
 }
 
+// Vor.: --
+// Erg.: Der Typ des Objekts ist geliefert.
 func (ob *data) GibTyp() (uint8) {
 	return ob.typ
 }
 
+// Vor.: --
+// Eff.: Das Objekt ist nun (nicht [mehr]) aktiv.
+	// (Nur) aktive Objekte werden in den Methoden gezeichnet und getroffen. 
 func (ob *data) SetzeAkt(akt bool) {
 	ob.aktiv = akt
 }
 
+// Vor.: --
+// Erg.: True ist geliefert, genau dann wenn das Objekt aktiv ist.  	
 func (ob *data) GibAkt() (bool) {
 	return ob.aktiv
 }
 
+// Vor.: --
+// Eff.: Das Objekt hat nun den eingegebenen Inhalt.
 func (ob *data) SetzeInhalt(inhalt string) {
 	ob.inhalt = inhalt
 }
 
+// Vor.: --
+// Eff.: Das Objekt hat nun die eingegebene Erstellung. 
 func (ob *data) SetzeErstellung(erstellt int64) {
 	ob.erstellt = erstellt
 }
 
+// Vor.: --
+// Erg.: Liefert die Erstellung des Objekts.  	
 func (ob *data) GibErstellung() (int64) {
 	return ob.erstellt
 }
 
+// Vor.: Das Objekt ist aktiv. Das gfx-Fenster ist offen.
+// Eff.: Zeichnet das Objekt im gfx-Fenster.
 func (ob *data) Zeichnen() {
 	if ob.aktiv {
 		switch ob.typ {
@@ -609,6 +633,11 @@ func (ob *data) Zeichnen() {
 	}
 }
 
+// Vor.: Das Objekt ist aktiv.
+// Eff.: Das Objekt erhält Koordinaten (z.B. eines Maus-Klicks) und optional eine 
+	// Spezifizierung opt der Art des Treffers (z.B. linke/recht Maustaste).
+// Erg.: True ist geliefert gdw die definierten Trefferbedingungen des entsprechenden Objekts erfüllt sind.
+	// Außerdem ist der Erstellungswert des Objekts geliefert (um z.B. seine Lebenszeit zu bestimmen).
 func (ob *data) Getroffen(x,y uint16, opt uint8) (bool,int64) {														// Checkt, ob Hit-Box getroffen
 	if ob.aktiv {		
 		switch ob.typ {
