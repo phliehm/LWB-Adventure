@@ -631,7 +631,8 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 					
 					if j<3 {											// ... und NOCHMAL! in die Sprechblase schreiben
 						SchreibeFont(225,240,"NOCHMAL!  :-(")						
-						SpieleSound("./MiniGames/3_DBSA/ehh.wav")
+						SpieleSound("./MiniGames/3_DBSA/eh.wav")
+						//SpieleSound("./Sounds/ehhh.wav")
 						ted = texteditoren.New(315,595,830,63,20,true)
 					} else {
 						Stiftfarbe(255,255,255)
