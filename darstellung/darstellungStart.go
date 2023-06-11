@@ -42,7 +42,6 @@ func StartFenster() spielstaende.Spielstand {
 	var punkte []uint32 = make([]uint32,12)		// 12 = maximale Anzahl der Minispiele: 3 Spiele je Semester
 	var noten []float32 = make([]float32,12)
 	
-
 	
 	zeichneStartHintergrund()
 	startText.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
@@ -51,12 +50,15 @@ func StartFenster() spielstaende.Spielstand {
 
 	// Eingabe des Namens
 	spielername = eingabefeld.Edit ()
-	//spielername = eingabefeld2.GibString()
 	fmt.Println("spielername: ",spielername)
 	
+	// Spielstand anlegen oder laden
 	spielstand = spielstaende.New(spielername,path)
-	
-	if spielstand.GibVorhanden() {
+
+	if spielername == "Supermensch" {
+		noten = []float32{4,4,4, 4,4,4, 4,4,4, 4,4,4}
+		spielstand.Speichern(noten,punkte)
+	} else if spielstand.GibVorhanden() {
 		zeichneStartHintergrund() 
 		startText.SchreibeText("Es existiert ein alter Spielstand.\n\n"+
 			"Weiterspielen oder Überschreiben?")
@@ -116,48 +118,6 @@ func StartFenster() spielstaende.Spielstand {
 }
 
 
-
-/*
-func Startbildschirm() spielstaende.Spielstand {
-	
-	//  ------------------   Initialisierung   --------------------  //
-	var spielstand spielstaende.Spielstand
-	var spielername string
-	var laden string
-	var path string = "./SAVE"	// Pfad in dem sich die Speicher-
-								// standsdateien befinden 
-	var punkte []uint32 = make([]uint32,12)		// 12 = maximale Anzahl der Minispiele: 3 Spiele je Semester
-	var noten []float32 = make([]float32,12)
-	
-	
-	//  ----------  Beispiel 1: Lade Spielstand  -------------------//	
-	fmt.Println("Geben Sie Ihren Spielernamen ein:")
-	fmt.Scanln(&spielername)
-	
-	spielstand = spielstaende.New(spielername,path)
-	if spielstand.GibVorhanden() {
-		fmt.Println("Es existiert ein alter Spielstand.")
-		for laden != "W" {
-			fmt.Println("(W)eiterspielen oder (U)eberschreiben?")
-			fmt.Scanln(&laden)
-			if laden == "W" {
-				break
-			} else if laden == "U" {
-				spielstand.Speichern(noten,punkte)
-				break
-			} else {
-				fmt.Println("Eingabe ungültig!")
-				fmt.Println()				
-			}
-		}
-	} else {
-		spielstand.Speichern(noten,punkte)		// Grundzustand
-	}
-	
-	return spielstand
-	
-}
-*/
 
 // -------------   Hilfsfunktionen  -------------------------//
 

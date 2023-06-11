@@ -130,8 +130,6 @@ func InfoDarstellen() {
 }
 
 
-
-
 // Eff: Der Endbildschirm mit Zertifikat und Durchschnitt ist angezeigt. 
 func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 

@@ -66,6 +66,9 @@ func maussteuerung (raumnr int) {
 	
 	var note float32
 	var punkte uint32
+	var nschluessel uint16 = gibSchluesselzahl(spielstand)
+	
+	fmt.Println("Anzahl Schluessel: ",nschluessel)
 	
 	//var taste uint8
 	//var status int8
@@ -95,8 +98,14 @@ A:	for {
 								raumnr = 0
 								darstellung.MainfloorDarstellen()
 							} else if raumnr == 5 {
-								fmt.Println("5. Tür angeklickt")
-								darstellung.EndbildschirmDarstellen(spielstand)
+								if nschluessel == 5	{
+									fmt.Println("5. Tür angeklickt")
+									darstellung.EndbildschirmDarstellen(spielstand)
+								} else {	// Raum zu, kein Schlüssel da
+									raumnr = 0
+									gfx.SpieleSound("Sounds/Beep.wav")
+									// darstellung.MainfloorDarstellen()
+								}
 								//raumnr = 0
 								//darstellung.MainfloorDarstellen()
 							} else if raumnr == 0 { 		// Spiel beenden
@@ -108,8 +117,13 @@ A:	for {
 								darstellung.SpielVerlassenDarstellen(spielstand)
 								//raumnr = 0
 								//darstellung.MainfloorDarstellen()
-							} else {	
-								darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
+							} else {
+								if nschluessel >= uint16(index)	{
+									darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
+								} else { 			// Raum zu, kein Schlüssel da
+									raumnr = 0
+									gfx.SpieleSound("Sounds/Beep.wav")
+								}
 							}
 
 							case 6:					// Spiel verlassen?
@@ -134,23 +148,10 @@ A:	for {
 									el.Zeichnen()
 								}*/
 
-							} else {																//wenn nicht "exit" (index 0) geklickt wurde,
-								
-								start,no := darstellung.BubbleLaden(raumnr,index)
-								
-								//Mauslese-Schleife							
-								for {
-									taste, status, mausX, mausY := gfx.MausLesen1()
-									if taste==1 && status==1 {									
-										if start.TesteXYPosInButton(mausX,mausY) {					//und der Start-Button angeklickt wurde,
-											note,punkte = darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
-											speichereMax(note,punkte,raumnr,index)					// Das beste Ergebnis wird gespeichert.
-											break
-										} else if no.TesteXYPosInButton(mausX,mausY) {
-											break
-										}
-									}
-								}
+							} else {									//wenn nicht "exit" (index 0) geklickt wurde,
+								note,punkte = darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
+								speichereMax(note,punkte,raumnr,index)		// Das beste Ergebnis wird gespeichert.
+								nschluessel = gibSchluesselzahl(spielstand) // Bestimme die neue Schluesselzahl
 								darstellung.SemesterraumDarstellen(raumnr)
 							}
 						}
@@ -187,6 +188,25 @@ func Eingabe() {
 
 
 //  ----------------      Hilfsfunktionen     ---------------------  //
+
+
+// Erg: Die Anzahl der Schlüssel = Anzahl der geöffneten Räume ist
+//		geliefert.
+func gibSchluesselzahl(spielstand spielstaende.Spielstand) uint16 {
+
+	var noten []float32 = spielstand.GibNoten()
+	var nschluessel uint16 = 1
+
+	if noten[0] < 4.1 && noten[1] < 4.1 && noten[0] > 0.1 && noten[1] > 0.1 {nschluessel++}
+	if noten[3] < 4.1 && noten[4] < 4.1 && noten[3] > 0.1 && noten[4] > 0.1 {nschluessel++}
+	if noten[6] < 4.1 && noten[7] < 4.1 && noten[6] > 0.1 && noten[7] > 0.1 {nschluessel++}
+	if noten[9] < 4.1 && noten[10] < 4.1 && noten[11] < 4.1 &&
+		noten[9] > 0.1 && noten[10] > 0.1 && noten[11] > 0.1 {nschluessel++}
+	
+	return nschluessel
+
+}
+
 
 
 // Eff: Die bessere Note ist gespeichert. Bei Notengleichstand ist die
