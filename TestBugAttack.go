@@ -1,3 +1,8 @@
+/* Philipp Liehm
+ * Juni 2023
+ * LWB-Adventure: BugAttack
+ */
+
 package main
 
 
@@ -12,5 +17,5 @@ func main() {
 		//fmt.Println("Gewonnen!!!")
 		fmt.Println(endN,endP)
 		//test.TesteEtwas()
-}
+}                
 

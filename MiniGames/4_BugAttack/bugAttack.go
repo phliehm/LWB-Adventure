@@ -1,3 +1,9 @@
+/* Philipp Liehm
+ * Juni 2023
+ * LWB-Adventure: BugAttack
+ */
+
+
 package bugAttack
 
 import (
@@ -6,47 +12,36 @@ import (
 		"time"
 		"gfx"
 		"math/rand"
-		//"../../Klassen/textboxen"
-		//"fmt"
-	
 		)
 
-
+// Main-Spiel Funktion, wird von LWB-Adventure aufgerufen
 func BugAttack() (float32,uint32){
-	c := make(chan bool) 		// Zum beenden der Go-Routine
+	c := make(chan bool) 				// Zum beenden der Go-Routine
 	rand.Seed(time.Now().UnixNano())		// Seed für Zufallszahlen
 	//-----------------initialisiere gfx-Fenster-----------------------	
-	if ! gfx.FensterOffen() {
+	if ! gfx.FensterOffen() {			// Test oder MainGame
 		gfx.Fenster(1200,700)
 	}
-	gfx.Stiftfarbe(0,0,0)
+	gfx.Stiftfarbe(0,0,0)				// Schwarzes Fenster machen
 	gfx.Vollrechteck(0,0,1200,700)
-	gfx.Stiftfarbe(0,255,0)
-	go audioloops.LoopInfinite("Sounds/Music/bugAttack.wav",48000)
-	go bugPackage.TastaturEingabe(c)
+	gfx.Stiftfarbe(0,255,0)				
+	go audioloops.LoopInfinite("Sounds/Music/bugAttack.wav",48000)		// Musik läuft das ganze Spiel und wird immer wieder neu gestartet
+	go bugPackage.TastaturEingabe(c)	// Starte Tastatur-Eingabe
 	
 	
-	bugPackage.BugAttackIntro()
-	bugPackage.Startbildschirm() 
-	/*	
-	bugPackage.LevelTutorial()
-	bugPackage.Level1()
-	bugPackage.LevelTutorial()
-	bugPackage.Level2()
-	bugPackage.Level3()
-	*/
-	//fmt.Println("ENDE")
+	bugPackage.BugAttackIntro()			// Intro-Bildschirm mit Animation
+	bugPackage.Startbildschirm() 		// Einstiegstext
 	
 	// Starte nacheinander die Funktionen der Level
 	for _,f:= range bugPackage.LevelArray {
 		if bugPackage.SpielBeendet == true {break} 	// Spiel soll beendet werden? Keine weiteren Level
-		f()
+		f()								// Starte aktuelles Level
 	}
 	
-	bugPackage.Endbildschirm()
+	bugPackage.Endbildschirm()			// Zertifikat
 	
-	endN,endP := bugPackage.GibErgebnis()
+	endN,endP := bugPackage.GibErgebnis()		// Hole die Ergebniswerte
 	c<-true						// Beendet Tastatureingabe
-	audioloops.StoppeAudio()	
-	return endN,endP
+	audioloops.StoppeAudio()		// Stoppe die Musik
+	return endN,endP			// übergebe Ergebnisse an LWB-Adventure
 }

@@ -41,11 +41,15 @@ func LoopDuration(audiodatei string, dateiLänge uint, loopLänge uint) () {
 	
 }
 
+// Vor.: gfx Fenster ist offen
+// Eff.: Alle Sounds sind gestoppt
 func StoppeAudio () {
 	gfx.StoppeAlleSounds()
 	musikAn = false		// Damit Loop nicht wieder neu anfängt
 }
 
+// Vor.: gfx Fenster ist offen
+// Eff.: Eine Audiodatei wird immer wieder abgespielt, bis ein Stop-Signal für die Musik kommt
 func LoopInfinite(audiodatei string, dateiLänge uint) {
 	musikAn=true
 	for musikAn {

@@ -1,3 +1,13 @@
+/* Philipp Liehm
+ * Juni 2023
+ * LWB-Adventure: BugAttack
+ *
+ * BugLevel:
+ * 
+ * Beinhaltet Funktionen zum Ausführen der verschiedenen Level 
+ * 
+ */
+
 package bugPackage
 
 import (
@@ -9,7 +19,7 @@ import (
 	//"os"
 	)
 
-
+// Texte für die Zwischensequenzen
 var level1Text string = "... Die einfachen Bugs zuerst ... \n\n\nPass auf, dass du nicht verschlimmbesserst!\n\n" + 
 	"Bewege dich mit den Pfeiltasten und nutze das hBT mit LEERTASTE. \n\n"+
 	"Wenn dir das ganze über den Kopf wächst, drücke einfach 'q'."
@@ -94,7 +104,7 @@ func Startbildschirm() {
 }
 
 
-// Tutorial
+// Erstes Level
 func Level1(){
 	LevelTutorial(level1Text)
 	erhöheLevel()
@@ -106,6 +116,7 @@ func Level1(){
 	
 }
 
+// 
 func LevelTutorial(text string) {
 	
 	gfx.UpdateAus()
@@ -131,79 +142,72 @@ func LevelTutorial(text string) {
 	go amoebiusAndBugAnimation()
 	//go bugLevelAnimation()
 	gfx.TastaturLesen1()
-	quit <- true
+	quit <- true				// Beende Amoebius und Bug Animation
 }
 
+// Level 2
 func Level2(){
 	LevelTutorial(level2Text)
 	erhöheLevel()
 	anzahlBugsImLevel = 3
 	lvlSpeed = 2
 	lvlNervosität = 5
-	//lautoaim := NewLadebalken(&autoAimCD,600,50,255,0,255,"x",5)
-	//alleLadebalken = append(alleLadebalken,lautoaim)
-	/*
-	l := NewLadebalken(&killNBugsCD,400,50,0,255,255,"k",20)
-	alleLadebalken = append(alleLadebalken,l)
-	*/
 	levelStart()
 }
 
+// Level 3
 func Level3() {
 	LevelTutorial(level3Text)
 	erhöheLevel()
 	anzahlBugsImLevel = 5
 	lvlSpeed = 10
 	lvlNervosität = 50
-	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",1,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
+	lautoaim := newLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",1,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
 	alleLadebalken = append(alleLadebalken,lautoaim)
-	//l := NewLadebalken(&killNBugsCD,400,50,0,255,255,"k",20)
-	//alleLadebalken = append(alleLadebalken,l)
 	levelStart()
-	// Letztes Level vorbei
-	//erhöheLevel()
+
 }
 
-
+// Level 4
 func Level4() {
 	LevelTutorial(level4Text)
 	erhöheLevel()
 	lvlNervosität = 5
 	anzahlBugsImLevel = 10
 	lvlSpeed = 5
-	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",5,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
+	lautoaim := newLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",5,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
 	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",20,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
+	l := newLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",20,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
 	alleLadebalken = append(alleLadebalken,l)
 	levelStart()
-	// Letztes Level vorbei
-	//erhöheLevel()
 }
 
+// Level 5
 func Level5() {
 	LevelTutorial(level5Text)
 	erhöheLevel()
 	lvlNervosität = 5
 	anzahlBugsImLevel = 15
 	lvlSpeed = 5
-	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",4,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
+	lautoaim := newLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",4,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
 	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
+	l := newLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
 	alleLadebalken = append(alleLadebalken,l)
 	levelStart()
 	// Letztes Level vorbei
 	//erhöheLevel()
 }
 
+// Level 6
 func Level6() {
 	LevelTutorial(level6Text)
 	erhöheLevel()
 	lvlNervosität = 20
 	anzahlBugsImLevel = 20
 	lvlSpeed = 5
-	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",2,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
+	lautoaim := newLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",2,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
 	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
+	l := newLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
 	alleLadebalken = append(alleLadebalken,l)
 	levelStart()
 	// Letztes Level vorbei
@@ -220,24 +224,28 @@ func Endbildschirm() {
 	gfx.Stiftfarbe(255,255,255)
 	gfx.Cls()
 	
-	
+	// Zertifikat Hintergrund
 	gfx.LadeBild(150,100,path + "Bilder/Zertifikat/sprechblase_flipped_400.bmp")
 	gfx.LadeBild(230,390,path+"Bilder/BugAttack/FabWeb_fullBody_gespiegelt.bmp")
 	gfx.LadeBildMitColorKey(250,350,path + "Bilder/BugAttack/Amoebius_klein.bmp",0,0,0)
-	
 	gfx.LadeBild(620,80,path + "Bilder/Zertifikat/paper_500.bmp")
 	gfx.LadeBild(960,520,path + "Bilder/Zertifikat/certified_100.bmp")
 	//gfx.LadeBild(1080,30,path + "Bilder/Zurück-Symbol.bmp")
 	
+	// Exit Anweisung
 	gfx.LadeBildMitColorKey(1080,30,path + "Bilder/BugAttack/Bug.bmp",0,0,0)
 	gfx.Stiftfarbe(125,0,0)
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",20)
 	gfx.SchreibeFont(1070,140,"2 mal [q]")
 	gfx.SchreibeFont(1070,170,"für Exit")
 		
+	
+	// Überschrift
 	gfx.Stiftfarbe(0,255,0)
 	gfx.SetzeFont(path + "Schriftarten/ComputerTypewriter.ttf",80)
 	gfx.SchreibeFont(330,10,"Bug  ATTACK")
+	
+	// Sprechblase
 	gfx.Stiftfarbe(0,0,0)
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
 	gfx.SchreibeFont(295,140,"Du hast die")
@@ -249,10 +257,9 @@ func Endbildschirm() {
 	EndN, EndP = berechneEndNoteUndGesamtPunktzahl()
 	gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",EndN))
 	
+	// Inhalt des Zertifikats
 	gfx.SetzeFont(path + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	//fmt.Println("level: ",level)
 	for i:=uint16(1); i<=maxLevel; i++ {
-		//fmt.Println(i)
 		level = i
 		gfx.SchreibeFont(710,150+uint16((i-1)*68), "Level "+ fmt.Sprint(i) + ":   "+ fmt.Sprint(punkteArray[i-1]) + " Punkte")
 		gfx.SchreibeFont(710,175+uint16((i-1)*68),"           Note " + fmt.Sprintf("%2.1f",berechneNote()))
@@ -262,7 +269,6 @@ func Endbildschirm() {
 	gfx.SchreibeFont(710,160+uint16(6*70),"Gesamt:    " + fmt.Sprint(EndP) + " Punkte")
 
 	gfx.TastaturLesen1()
-	//return gesamtnote, gesamtpunkte
 }
 
 
@@ -270,7 +276,7 @@ func Endbildschirm() {
 func erhöheLevel() {
 	levelSchloss.Lock()
 	level++
-	fmt.Println("level: ", level)
+	//fmt.Println("level: ", level)
 	levelSchloss.Unlock()
 }
 
@@ -298,8 +304,9 @@ func levelStart(){
 	}
 	lvlLäuft = false			// Signalisiert go-Routingen, dass das Level vorbei ist
 	wg.Wait()				// Wartet auf alle zu beendenden Go-Routinen
+	time.Sleep(1e9)			// Wartet damit die Ladebalken schließen können.
 	entferneAlleLadebalken()	// Löscht alle Ladebalken eines Levels
-	ergebnisLevel()				// Gibt das Ergebnis des Levels in der Konsole aus
+	//ergebnisLevel()				// Gibt das Ergebnis des Levels in der Konsole aus
 	
 }
 
@@ -310,22 +317,3 @@ func ergebnisLevel() {
 	fmt.Println("Note: ", berechneNote())
 }
 
-
-/*
- * Funktion um einen stillsitzenden Bug zu generieren und anzeigen zu lassen, für Fotos;)
-func BugFoto() {
-	gfx.Stiftfarbe(0,0,0)
-	beschreibeArraySchwarz()
-	//beschreibeArray()
-	b1 := NewBug(50,30)
-	b1.speed=0
-	go b1.bugAnimation()
-	go b1.startMoving()
-	//beschreibeArray()
-	bugArray[0]=b1
-	go ZeichneWelt(punkteTB)
-	for howManyBugs()>0 {
-		time.Sleep(1e9)
-	}
-	gfx.TastaturLesen1()
-}*/

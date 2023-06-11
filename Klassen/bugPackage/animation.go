@@ -1,3 +1,11 @@
+/* Philipp Liehm
+ * Juni 2023
+ * LWB-Adventure: BugAttack
+ * 
+ * Animation von Amoebius und einem Bug
+ * 
+ */
+
 package bugPackage
 
 import (
@@ -8,25 +16,29 @@ import (
 //var path string = "../../"
 var path string = ""
 
+// Array aus dem nacheinander die Bilder für die Animation des bewegenden Amoebius geladen werden
 var amoebiusArray [13]string = [13]string{path+"Bilder/BugAttack/Amoebius40.bmp",path+"Bilder/BugAttack/Amoebius50.bmp",
 	path+"Bilder/BugAttack/Amoebius60.bmp",path+"Bilder/BugAttack/Amoebius70.bmp",path+"Bilder/BugAttack/Amoebius80.bmp",
 	path+"Bilder/BugAttack/Amoebius90.bmp",path+"Bilder/BugAttack/Amoebius100.bmp",
 	path+"Bilder/BugAttack/Amoebius90.bmp",path+"Bilder/BugAttack/Amoebius80.bmp",
 	path+"Bilder/BugAttack/Amoebius70.bmp",path+"Bilder/BugAttack/Amoebius60.bmp",path+"Bilder/BugAttack/Amoebius50.bmp",
 	path+"Bilder/BugAttack/Amoebius40.bmp"}
-	
+
+// Array aus dem nacheinander die Bilder für die Animation des bewegenden Bugs geladen werden 	
 var bugAnimationArray [3]string = [3]string{path+"Bilder/BugAttack/Bug1.bmp",path+"Bilder/BugAttack/Bug2.bmp",path+"Bilder/BugAttack/Bug3.bmp"}
 
+// Vor.: es existiert eine Welt
+// Eff.: Animation läuft
 func amoebiusAndBugAnimation() {
 	var i uint16
 	for {
 		// Bewege Amoebius nacht rechts
-		for i=0;i<1000;i+=130{
+		for i=0;i<1000;i+=130{			// Maximal bis 1000 und mit Schrittweite 130
 			// Iteriere über jedes Bild für die Animation, dabei wir das Bild immer leicht verschoben
 			for j,b :=  range amoebiusArray {
 				// Wenn ein BeendenSignal kommt, return 
 				select {
-					case <-quit:
+					case <-quit:			// Wenn nicht mehr in einem Zwischenbildschirm, beende Animation
 						return
 					default: 
 						gfx.UpdateAus()
@@ -42,21 +54,3 @@ func amoebiusAndBugAnimation() {
 	}
 }
 
-/*
-func bugLevelAnimation() {
-	var i uint16
-	for {
-		for i=0;i<1000;i+=130 {
-			for j,b := range bugAnimationArray {
-				select {
-					case <-quit:
-						return
-					default:
-						gfx.LadeBildMitColorKey(0+i+uint16(j)*40,150,b,0,0,0)
-						time.Sleep(4e8)
-				}
-			}
-		}
-	}
-}
-*/

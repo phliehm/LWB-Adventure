@@ -1,7 +1,16 @@
+/* Philipp Liehm
+ * Juni 2023
+ * LWB-Adventure: BugAttack
+ * 
+ * Funktionen zur Berechnung der Punkte und Noten
+ */
+
 package bugPackage
 
 //import "fmt"
 
+// Vor.: keine
+// Erg.: Note ist geliefert
 func berechneNote() float32{
 	n:= berechneProzent()
 	//fmt.Println("Prozent: ",n*100)
@@ -21,13 +30,16 @@ func berechneNote() float32{
 	return 5.0
 } 
 
-// a ist x Prozent von b. Ausgabe in 0...1
+// Vor: keine
+// Erg.: Prozentualer Anteil der erreichten Punkte in einem Level ist geliefert
 func berechneProzent() float32{
 	//fmt.Println("PUNKTE: ",punkteArray[level-1])
 	if punkteArray[level-1]<lvlMinPunkte[level-1] {return 0}
 	return float32(punkteArray[level-1]-lvlMinPunkte[level-1])/float32((lvlMaxPunkte[level-1]-lvlMinPunkte[level-1]))
 }
 
+// Vor.:
+// Erg.: Gerundete Note ist geliefert
 func rundeNote(n float32) float32{
 	if n<1.15 {return 1.0}
 	if n<1.5 {return 1.3}
@@ -43,6 +55,7 @@ func rundeNote(n float32) float32{
 	return 5.0
 }
 
+// Vor.: keine
 // Erg.: Endnote für das MainGame
 func berechneEndNoteUndGesamtPunktzahl() (float32,uint32) {
 	var summePunkte uint32
@@ -55,8 +68,8 @@ func berechneEndNoteUndGesamtPunktzahl() (float32,uint32) {
 	return rundeNote(summeNoten/float32(len(punkteArray))),summePunkte
 }
 
-
+// Vor.: keine
+// Erg.: Endnote und Endpunktzahl ist geliefert
 func GibErgebnis() (float32,uint32) {
-	//fmt.Println("Ergebnis: ",EndN,EndP)
 	return EndN,EndP
 }

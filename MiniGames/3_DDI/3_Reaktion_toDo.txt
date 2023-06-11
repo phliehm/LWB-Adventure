@@ -1,8 +1,0 @@
-Was? Fenster mit Folien --> Es werden Fragen gestellt, diese müssen mit 
-Tasten beantwortet werden.
-
-- Aufgabe erstellen
-- Tastendruck registrieren
-- Wie wird Zeitmessung gemacht?
-- Punkte speichern
-- 
