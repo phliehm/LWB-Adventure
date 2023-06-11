@@ -32,7 +32,7 @@ func New(posx,posy,breite,höhe uint16, schriftgr int, einzeilig bool) *data {
 	//ted.font = gfx.GibFont()
 	if !gfx.FensterOffen () { gfx.Fenster(1200,700) }
 	gfx.Stiftfarbe(0,0,0)
-	gfx.Rechteck(posx,posy,breite,höhe)
+	gfx.Vollrechteck(posx,posy,breite,höhe)
 	if einzeilig {
 		ted.text = editor1line.Editor(posx,posy,breite,höhe,schriftgr)
 	} else {

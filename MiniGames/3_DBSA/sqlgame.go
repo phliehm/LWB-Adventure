@@ -124,7 +124,7 @@ func hilfeTexteSchreiben() {
 	
 	hilfen4[0] = ""
 	hilfen4[1] = "Hilfe 1: Nutze ... WHERE ... LIKE ...!"
-	hilfen4[2] = "Hilfe 2: Wie wäre es mit ... '%Programmierung' ?"
+	hilfen4[2] = "Hilfe 2: Wie wäre es bzgl. vname mit ... '%Programmierung' ?"
 	hilfen4[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT * FROM veranstaltungen WHERE vname LIKE '%Programmierung';"
 	hilfeTexte[4] = hilfen4
 	
@@ -135,7 +135,7 @@ func hilfeTexteSchreiben() {
 	hilfeTexte[5] = hilfen5
 	
 	hilfen6[0] = ""
-	hilfen6[1] = "Hilfe 1: Nutze SELECT COUNT(*) ... !"
+	hilfen6[1] = "Hilfe 1: Nutze SELECT COUNT(*) ... und das Alias-Kommando!"
 	hilfen6[2] = "Hilfe 2: Um die Ausgabe-Überschrift festzulegen, brauchst Du zwischen COUNT(*) und FROM das Kommando AS ... !"
 	hilfen6[3] = "Leider war auch der 3. Versuch falsch!\nDas wäre die richtige Lösung gewesen:\n\nSELECT COUNT(*) AS AnzahlMiniGames FROM mini-games;"
 	hilfeTexte[6] = hilfen6
@@ -209,27 +209,20 @@ func ausgabeTexte() {
 	ausg5[2] = " Melissentee"
 	ausgTexte[5] = ausg5
 	
-	ausg6[0] = " Anzahl_Minigames"
+	ausg6[0] = " AnzahlMiniGames"
 	ausg6[1] = "------------------"
 	ausg6[2] = " 9"
 	ausgTexte[6] = ausg6
 	
-	ausg7[0] = " V-NAME                         SWS"
-	ausg7[1] = "-----------------------------------------"
-	ausg7[2] = " Funktionale Programmierung     8"
+	ausg7[0] = " GesamtanzahlSWS"
+	ausg7[1] = "-----------------"
+	ausg7[2] = " 64"
 	ausgTexte[7] = ausg7
 	
-	ausg8[0] = " Gesamtanzahl_SWS"
-	ausg8[1] = "-----------------"
-	ausg8[2] = " 64"
+	ausg8[0] = " V-NAME                         SWS"
+	ausg8[1] = "-----------------------------------------"
+	ausg8[2] = " Funktionale Programmierung     8"
 	ausgTexte[8] = ausg8
-	
-	ausg10[0] = " Ort               Anzahl-Veranstaltungen"
-	ausg10[1] = "------------------------------------------"
-	ausg10[2] = " FU (Dahlem)       6"
-	ausg10[3] = " digital (BBB)     3"
-	ausg10[4] = " STEPS (Mitte)     5"
-	ausgTexte[10] = ausg10
 	
 	ausg9[0] = " V-NAME                                    SEMESTER        SWS"
 	ausg9[1] = "---------------------------------------------------------------"
@@ -239,6 +232,13 @@ func ausgabeTexte() {
 	ausg9[5] = " Fachdidaktik Informatik                   3. Semester     4"
 	ausg9[6] = " Rechnernetze                              4. Semester     2"
 	ausgTexte[9] = ausg9
+	
+	ausg10[0] = " ORT               AnzahlVeranstaltungen"
+	ausg10[1] = "------------------------------------------"
+	ausg10[2] = " FU (Dahlem)       6"
+	ausg10[3] = " digital (BBB)     3"
+	ausg10[4] = " STEPS (Mitte)     5"
+	ausgTexte[10] = ausg10
 }
 
 // Darstellung des initialen Ausgabe-Textes mit Hinweisen
@@ -326,7 +326,7 @@ func notenberechnung(punkte uint32) float32 {
 		return 3.3
 	} else if punkte >= 50 {
 		return 4.0
-	} else { return 0.0 }
+	} else { return 6.0 }
 }
 
 
@@ -520,6 +520,7 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 			if ted.GibString() == "exit" {								// wenn Beenden-Kommando eingetippt wurde,
 				i = 11													// setze i auf 11, um gleich aus Level-Schleife auszusteigen
 				levelpunkte = 0											// setze aktuelle levelpunkte auf 0, da Level nicht beendet wurde
+				aktuellerText = 0
 				break													// und verlasse Tastaturlese-Schleife
 			}
 			
@@ -563,6 +564,13 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 				
 				// 2. Fall: falsche Eingabe
 				} else {
+					
+					if ted.GibString() == "exit" {						// wenn Beenden-Kommando eingetippt wurde,
+						i = 11											// setze i auf 11, um gleich aus Level-Schleife auszusteigen
+						levelpunkte = 0									// setze aktuelle levelpunkte auf 0, da Level nicht beendet wurde
+						aktuellerText = 0
+						continue A										// und verlasse Tastaturlese-Schleife
+					}
 					
 					switch j {											// Fallunterscheidung: Punktabzüge im 1./2./3./4. Versuch
 						case 0:											// 1. Versuch falsch:
@@ -650,7 +658,7 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 	// Text und Abschlussnote in Sprechblase schreiben
 	Stiftfarbe(0,0,0)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
-	if notenberechnung(punkte) == 0.0 {									// falls nicht bestanden (Note schlechter als 4,0)
+	if notenberechnung(punkte) == 6.0 {									// falls nicht bestanden (Note schlechter als 4,0)
 		
 		SchreibeFont(295,140,"Du hast die")
 		SchreibeFont(285,170,"Prüfung leider")
