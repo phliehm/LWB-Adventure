@@ -55,7 +55,8 @@ func MainfloorDarstellen() {
 	SchreibeFont(436,359,"3")
 	SetzeFont("./Schriftarten/Starjedi.ttf",20)
 	SchreibeFont(725,368,"4")
-	LadeBildMitColorKey(1083,275, "./Bilder/MainGame/info-1.bmp", 255,255,255)
+	LadeBildMitColorKey(1083,275,"./Bilder/MainGame/info-1.bmp", 255,255,255)
+	LadeBildMitColorKey(588,370,"./Bilder/MainGame/zeugnis-symbol.bmp",255,255,255)
 	
 	//ende.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
 	ende.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
