@@ -13,7 +13,5 @@ func main () {
 	i,j := moorhuhn.Moorhuhn()
 	// i,j := float32(1.30000),uint32(123)
 	
-	fmt.Println( fmt.Sprint(i) )
-	
 	fmt.Printf("Du hast %d Punkte und die Note %.1f erreicht!",j,i)
 }

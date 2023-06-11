@@ -90,23 +90,33 @@ var MoorOut []string = []string{"Als du kamst, ",
 								" Moege die Macht mit dir sein !"}	
 
 var MusterEinl []string = []string{"   H e r z l i c h    W i l l k o m m e n",
-								"                             zur",
+								"    zum  M U S T E R - S P I E L  der",
 								"   Funktionalen Programmierung",
 								" ",
-								" Heute beschäftigen wir uns zuerst",
-								"       mit der MUSTER-ERKENNUNG",
+								" Im ersten Teil geht es um die",
+								"        MUSTER-ERKENNUNG",
 								"",
 								" und schließlich festigen wir das",
 								"       Wissen im MUSTER-MEMORY ."}
 
-var MusterEins []string = []string{"         M U S T E R  -  M E M O R Y ",
+var MusterErk []string = []string{" M U S T E R  -  E R K E N N U N G",
 								"",
-								"              ###   Stufe 1   ###",
+								" Entscheide, ob das Muster passt!",
+								" ",
+								" Wenn JA, gib die Bindungen an,",
+								"       FALLS diese existieren.",
+								" ",
+								" Eingabe von Sonderzeichen:",
+								"                     Shift + 0-9"}
+								
+var MusterEins []string = []string{"       M U S T E R  -  M E M O R Y ",
 								"",
-								"    Du spielst mit offenen Karten!",
+								"            ###   Stufe 1   ###",
+								"",
+								"  Du spielst mit offenen Karten!",
 								"",
 								"",
-								" Finde zusammengehörige Paare! ",
+								"Finde zusammengehörige Paare! ",
 								"",
 								" "}
 
@@ -167,8 +177,8 @@ var MusterListe1 = [12]string{	"     [ (x:[]) ]", "       [ ['a'] ]", "      ( '
 								"     ( x:\"b\" )", "        \"bb\"", "     [ x , \"b\" ]", "  [ \"b\" , \"b\" ]",
 								"      ( x , [] )", "     ( 'a' , [] )", "     ( x:'b':y )", "       \"bba\""        }
 	
-var MusterListe2 = [12]string{	"      [(x:y)]", "        [\"a\"]", "        ('x':y)", "         \"xy\"", 
-								"       (b:\"a\")",	"         \"aa\"", "       [a,\"b\"]", "     [\"b\",\"b\"]",
+var MusterListe2 = [12]string{	"       [(x:y)]", "    [\"unten\"]", "       ('F':a)", "        \"FP\"", 
+								"       (x:\"a\")",	"         \"Ja\"", "       [a,\"B\"]", "   [\"LW\",\"B\"]",
 								"        (u,v)", "(\"Not\",False)", "      (x:'b':y)", "      \"oben\""  }
 	
 var MusterListe3 = [12]string{	"    [(wa:nn)]", "     [[2023]]", "    ('L':iebe)", "      \"LWB\"",

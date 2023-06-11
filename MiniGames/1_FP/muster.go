@@ -12,7 +12,6 @@ import ( 	. "gfx"
 			"../../Klassen/texte"
 			"math/rand"
 			)
-
 	
 func Muster() (note float32, punktExp uint32) {
 	var mutex sync.Mutex					// erstellt Mutex
@@ -22,6 +21,7 @@ func Muster() (note float32, punktExp uint32) {
 	
 	var eingabe string						// zur "Editor"-Eingabe
 	var punkte int16 = 0					// Spiel-Punktzahl
+	var punkteArr [4]int16					// Slice für Punktzahlen
 	var diff int16 = 0						// Punkte-Veränderung
 	var wert uint8
 	
@@ -47,16 +47,17 @@ func Muster() (note float32, punktExp uint32) {
 	go view_komponente(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &mutex, &eingabe, &wg)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &eingabe, &wert, &punkte, kanal, &wg)
+	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &ende, &eingabe, &wert, &punkte, &punkteArr, kanal, &wg)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
 	go maussteuerung(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &wert, kanal, &wg)
 	
+	go musikhintergrund(&ende)
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
 	// Wir fragen hier nur die Tastatur ab.
 	
-	wg.Add(3)
+	wg.Add(3)						// Wait-Group erhält Counter 3 zum Warten auf das Ende der nebenläufigen Prozesse
 	
 	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 28 )
 	
@@ -64,7 +65,6 @@ func Muster() (note float32, punktExp uint32) {
 A:	for {
 		taste, gedrueckt, tiefe = TastaturLesen1()
 		
-		//fmt.Println (taste,gedrueckt,tiefe)
 		if tastatur {
 			if gedrueckt == 1  { 						// Beim Drücken der Taste, nicht beim Loslassen!
 				switch {
@@ -125,16 +125,18 @@ A:	for {
 			}
 		}
 	}
-	fmt.Println("Ausgebrochen in Main!")
-	stop = false 
-	kanal <- false
-	ende = true
 	
+	stop = false
+	ende = true 
+	if !signal {
+		signal = true
+	} else {
+		kanal <- false
+	}
 	
-	fmt.Println("Vielen Dank für's Spielen!")
-	time.Sleep( time.Duration(2e8) )
+	wg.Wait()
 	
-	
+	punkte = punkteArr[0] + punkteArr[1] + punkteArr[2] + punkteArr[3]
 	if punkte>0 {
 		punktExp = uint32(punkte)
 	} else {
@@ -142,44 +144,52 @@ A:	for {
 	}
 	switch {
 		case punktExp == 0:		note = 5.0
-		case punktExp < 50:		note = 4.7
-		case punktExp < 100:	note = 4.3
-		case punktExp < 150:	note = 4.0
-		case punktExp < 200:	note = 3.7
-		case punktExp < 250:	note = 3.3
-		case punktExp < 300:	note = 3.0
-		case punktExp < 350:	note = 2.7
-		case punktExp < 400:	note = 2.3
-		case punktExp < 450:	note = 2.0
-		case punktExp < 500:	note = 1.7
-		case punktExp < 550:	note = 1.3
-		case punktExp > 550:	note = 1.0
+		case punktExp < 135:	note = 4.7
+		case punktExp < 270:	note = 4.3
+		case punktExp < 405:	note = 4.0
+		case punktExp < 540:	note = 3.7
+		case punktExp < 675:	note = 3.3
+		case punktExp < 810:	note = 3.0
+		case punktExp < 945:	note = 2.7
+		case punktExp < 1080:	note = 2.3
+		case punktExp < 1215:	note = 2.0
+		case punktExp < 1350:	note = 1.7
+		case punktExp < 1485:	note = 1.3
+		case punktExp > 1615:	note = 1.0
 	}
 		
-	Endbildschirm(punktExp,note)
+	endbildschirm(punktExp,punkteArr,note)
 	
-	wg.Wait()
+	fmt.Println("Du hast ",punktExp," Punkte erreicht!")
+	fmt.Println("Damit erreichst du die Note ",note," .\nHerzlichen Glückwunsch!")
+	time.Sleep( time.Duration(1e9) )
+	
 	return
 }
 
+func musikhintergrund(ende *bool) {
+	for !*ende {
+		SpieleSound("./Sounds/Muster.wav")
+		time.Sleep( time.Duration(38e8) )
+	}
+}
 
-func Endbildschirm(EndP uint32, note float32) {
+func endbildschirm(EndP uint32, punkteArr [4]int16, note float32) {
 	
 	Stiftfarbe(255,255,255)
 	Cls()
 	
 	LadeBild(150,100, "./Bilder/Zertifikat/sprechblase_flipped_400.bmp")
 	LadeBild(230,390, "./Bilder/FP/FabWeb_fullBody_gespiegelt.bmp")
-	// LadeBildMitColorKey(250,350, "./Bilder/FP/Amoebius_klein.bmp",0,0,0)
 	
 	LadeBild(620,80, "./Bilder/Zertifikat/paper_500.bmp")
 	LadeBild(960,520, "./Bilder/Zertifikat/certified_100.bmp")
+	LadeBild(720,550, "./Bilder/FP/fu-logo.bmp")
 	
-	// LadeBildMitColorKey(1080,30, "./Bilder/BugAttack/Bug.bmp",0,0,0)  // Raumbild ?!
 		
 	Stiftfarbe(0,255,0)
 	SetzeFont( "./Schriftarten/ComputerTypewriter.ttf",70)
-	SchreibeFont(50,10,"Funktionale  Programmierung")
+	SchreibeFont(40,10,"Funktionale  Programmierung")
 	Stiftfarbe(0,0,0)
 	SetzeFont( "./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
 	SchreibeFont(295,140,"Du hast die")
@@ -187,78 +197,85 @@ func Endbildschirm(EndP uint32, note float32) {
 	SetzeFont( "./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
 	SchreibeFont(285,170,"Gesamtnote")
 	SetzeFont( "./Schriftarten/Starjedi.ttf",42)
-	//fmt.Println("Final Level: ",level)
+	
 	SchreibeFont(325,195,fmt.Sprintf("%2.1f",note))
 	
 	SetzeFont( "./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	//fmt.Println("level: ",level)
 	
-	SchreibeFont(700,130+uint16(5*70),"----------------------")
-	
-	SchreibeFont(710,160+uint16(5*70),"Gesamt:    " + fmt.Sprint(EndP) + " Punkte")
+	SchreibeFont(730,160+uint16(0*35),"Muster-Erkennung: ")
+	SchreibeFont(850,160+uint16(1*35), fmt.Sprint(punkteArr[0]) + " Punkte")
+	SchreibeFont(730,160+uint16(2*35),"Muster-Memory Lvl. 1: ")
+	SchreibeFont(850,160+uint16(3*35), fmt.Sprint(punkteArr[1]) + " Punkte")
+	SchreibeFont(730,160+uint16(4*35),"Muster-Memory Lvl. 2: ")
+	SchreibeFont(850,160+uint16(5*35), fmt.Sprint(punkteArr[2]) + " Punkte")
+	SchreibeFont(730,160+uint16(6*35),"Muster-Memory Lvl. 3: ")
+	SchreibeFont(850,160+uint16(7*35), fmt.Sprint(punkteArr[3]) + " Punkte")
+	SchreibeFont(720,150+uint16(8*35),"----------------------")
+	SchreibeFont(730,180+uint16(8*35),"Gesamt:    " + fmt.Sprint(EndP) + " Punkte")
 
 	TastaturLesen1()
-	//return gesamtnote, gesamtpunkte
 }
 
 	
-func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal *bool, 
-			eingabe *string, wert *uint8, punkte *int16, kanal chan bool, wg *sync.WaitGroup) {
+func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal, ende *bool, 
+			eingabe *string, wert *uint8, punkte *int16, punkteArr *[4]int16, kanal chan bool, wg *sync.WaitGroup) {
 	var neuerZustand bool
 	
 	defer wg.Done()
+	time.Sleep( time.Duration(1e8) )
+	zwischentext(&texte.MusterEinl, mutex, stop)			// Einleitungs-Text
 	
-	zwischentext(&texte.MusterEinl, mutex, stop)		// Einleitungs-Text
+	if *ende {return}
 	
-	/*
-	musterSpiel(obj, maus, akt, signal, tastatur, random, mutex, eingabe, wert, punkte, kanal)
+	zwischentext(&texte.MusterErk, mutex, stop)
 	
-	neuerZustand = <- kanal
-	if !neuerZustand { 
-		fmt.Println("Beende spielablauf")
+	musterSpiel(obj, maus, akt, signal, tastatur, ende, random, mutex, eingabe, wert, punkte, kanal)
+	if *ende { 
+		fmt.Println("Beende spielablauf")	
 		return 
 	}
-	*/
+	
+	punkteArr[0] = *punkte
+	*punkte = 0
 	
 	*obj = make([]objekte.Objekt,0)
-	time.Sleep( time.Duration(3e8) )
-	//*akt = true
+	time.Sleep( time.Duration(1e9) )
 	
 	zwischentext(&texte.MusterEins, mutex, stop)
 	memorySpiel(obj, akt, 2, random)					// auf Level 1
 	
-	neuerZustand = <- kanal
-	if !neuerZustand { 
-		fmt.Println("Beende spielablauf")
-		return 
-	}
 	
-	/*
-	memorySpiel(obj, akt, 1, random)					// auf Level 2
 	neuerZustand = <- kanal
+	punkteArr[1] = *punkte						// speichert Punkte für Lvl.1
+	*punkte = 0	
 	if !neuerZustand { return }
-	
-	*obj = make([]objekte.Objekt,0)
-	time.Sleep( time.Duration(3e8) )
+										
+	time.Sleep( time.Duration(2e9) )
+	*obj = make([]objekte.Objekt,0)				// ---- leere und warte
+	time.Sleep( time.Duration(1e8) )
 	
 	zwischentext(&texte.MusterZwei, mutex, stop)
-	memorySpiel(obj, akt, 3, random)					// auf Level 3
+	memorySpiel(obj, akt, 3, random)					// auf Level 2
+	
 	neuerZustand = <- kanal
+	punkteArr[2] = *punkte						// speichert Punkte für Lvl.2
+	*punkte = 0	
 	if !neuerZustand { return }
 	
-	*obj = make([]objekte.Objekt,0)
-	time.Sleep( time.Duration(3e8) )
+	
+	time.Sleep( time.Duration(2e9) )
+	*obj = make([]objekte.Objekt,0)				// ---- leere und warte
+	time.Sleep( time.Duration(1e8) )
 	
 	zwischentext(&texte.MusterDrei, mutex, stop)
-	memorySpiel(obj, akt, 5, random)					// auf Level 5
-	
-	*/
-	
+	memorySpiel(obj, akt, 5, random)					// auf Level 3
+		
 	neuerZustand = <- kanal
-	if !neuerZustand { 
-		fmt.Println("Beende spielablauf")
-		return 
-	}
+	punkteArr[3] = *punkte						// speichert Punkte für Lvl.3
+	if !neuerZustand { return }
+	
+	fmt.Println("Beende Spielablauf")
+	*signal = false
 }
 
 func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
@@ -275,7 +292,7 @@ func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	}
 	Stiftfarbe(124,212,255)									// schreibt den eigentlichen Text
 	for ind,str := range *textArr {
-		SchreibeFont (210, uint16(70+ind*55) ,str )
+		SchreibeFont (211, uint16(71+ind*55) ,str )
 	}
 	Archivieren()
 	mutex.Unlock()
@@ -284,7 +301,7 @@ func zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	for *stop { time.Sleep( time.Duration(1e8) ) }
 }
 
-func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastatur *bool, rand *rand.Rand, 
+func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastatur, ende *bool, rand *rand.Rand, 
 							mutex *sync.Mutex, eingabe *string, wert *uint8, punkte *int16, kanal chan bool) { // gibt Muster zur Abfrage
 	
 	var zufallSpalte int
@@ -307,6 +324,9 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 			passt.SetzeAkt(true)
 			passtNicht.SetzeAkt(true)
 			*tastatur = false
+		} else if *ende {
+			fmt.Println("Beende Muster-Spiel.")
+			return
 		}
 		
 Neu0:			
@@ -350,6 +370,10 @@ Neu0:
 		// -----
 		
 		for !*signal { time.Sleep( time.Duration(2e8) ) }
+		if *ende { 
+			fmt.Println("Beende Muster-Spiel.")
+			return
+		}
 		*signal = false
 		if *wert == uint8(wahrOderFalsch) {
 			SpieleSound("./Sounds/Sparkle.wav")
@@ -367,7 +391,7 @@ Neu0:
 		if wahrOderFalsch == 1 {
 			passt.SetzeAkt(false)
 			passtNicht.SetzeAkt(false)
-			*tastatur = true													// aktiviert die Tastatur-Eingabe
+			*tastatur = true							// aktiviert die Tastatur-Eingabe
 			
 			// -------------------------------------- Zeichnet den Hintergrund zur Mustereingabe "f="
 			mutex.Lock()
@@ -386,6 +410,10 @@ Neu0:
 			
 Neu1:		// -----
 			for !*signal { time.Sleep( time.Duration(2e8) ) }
+			if *ende { 
+				fmt.Println("Beende Muster-Spiel.")
+				return
+			}
 			*signal = false
 																							
 			if *eingabe == texte.MusterL[ auswahl ][ zufallSpalte ][0] {		// ABFRAGE: richtiges Muster: Lösung 1
@@ -422,6 +450,10 @@ Neu1:		// -----
 			// -----
 Neu2:			
 			for !*signal { time.Sleep( time.Duration(2e8) ) }
+			if *ende { 
+				fmt.Println("Beende Muster-Spiel.")
+				return
+			}
 			*signal = false
 																							
 			if *eingabe == texte.MusterL[ auswahl ][ zufallSpalte ][1] {		// ABFRAGE: richtiges Muster: Lösung 2
@@ -441,11 +473,11 @@ Neu2:
 				versuch = 0
 			}
 		}
-		time.Sleep( time.Duration(2e9) )				// vor neuem Muster warte 2 Sekunden
+		time.Sleep( time.Duration(2e8) )				// vor neuem Muster warte 0,2 Sekunden
 	}
 	*tastatur = false
 	*eingabe = ""
-	kanal <- true
+	// kanal <- true
 }
 
 func musterabfrage(i int) {
@@ -563,7 +595,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 		Cls()												// Cleart vollständigen Screen
 		
 		if *akt { 
-			ObjAktualisieren(obj)
+			objAktualisieren(obj)
 			*akt = false
 		} else {
 			Restaurieren(0,0,1200,700)						// Restauriert das alte Hintergrundbild
@@ -607,7 +639,7 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 	}
 }
 
-func ObjAktualisieren(obj *[]objekte.Objekt) {
+func objAktualisieren(obj *[]objekte.Objekt) {
 	LadeBild (0,0, "./Bilder/FP/Funktionale.bmp")		// Hintergrund des Muster-Raumes wird gezeichnet
 	
 	for _,ob := range *obj { 								// Zeichnet alleweiteren Objekte ein
@@ -616,10 +648,10 @@ func ObjAktualisieren(obj *[]objekte.Objekt) {
 	Archivieren()											// Speichert das Hintergrund-Bild
 }
 
-// Es folgt die CONTROL-Komponente 1 --- Kein Bestandteil der Welt, also unabhängig -----
+// Es folgt die Maus-Komponente 1 --- Kein Bestandteil der Welt, also unabhängig -----
 func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signal, stop, akt, ende *bool, 
 					punkte, diff *int16, wert *uint8, kanal chan bool, wg *sync.WaitGroup) {
-	//var taste uint8
+	
 	var aufgedeckt,warten bool = false,false			// gibt an, ob eine Karte aufgedeckt wurde, auf das Zudecken gewartet wird
 	var objektSpeicher,objektSpeicher2 objekte.Objekt	// Speichert aufgedeckte Karten
 	var zaehler uint8									// überprüft, wie viele Paare aufgedeckt wurden
@@ -627,21 +659,20 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 	defer wg.Done()
 	
 	for {
-		/*taste,*/_, status, mausX, mausY := MausLesen1()
-		// fmt.Println(taste, status, mausX, mausY)
-		maus.SetzeKoordinaten(mausX,mausY)					// Aktualisiert Maus-Koordinaten
+		_, status, mausX, mausY := MausLesen1()
+		maus.SetzeKoordinaten(mausX,mausY)								// Aktualisiert Maus-Koordinaten
 		
 		if *ende {
 			fmt.Println("Maussteuerung beendet")
 			return
-		} else if *stop {
-			if status==1 { 									// Maustaste wird gedrückt
+		} else if *stop {												// bei Zwischenanzeigen wird auf "OK" gewartet
+			if status==1 { 												// Maustaste wird gedrückt
 				if ja,_ := okayObjekt.Getroffen(mausX,mausY,1); ja {
 					*stop = false
 				}
 			}
 		} else {
-			if /* taste==1 &&*/ status==1 { 						//LINKE Maustaste gerade gedrückt
+			if status==1 { 									// Maustaste im normalen Modus gedrückt
 				if warten {
 					if objektSpeicher.GibTyp() == 34 {
 						objektSpeicher2.SetzeTyp(32)
@@ -677,7 +708,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 									if zaehler == 6 {
 										zaehler = 0
 										kanal <- true
-										*signal = true
+										//*signal = true
 									}
 									go setzeMaus(maus)
 								} else {
@@ -709,7 +740,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 									if zaehler == 6 {
 										zaehler = 0
 										kanal <- true
-										*signal = true
+										//*signal = true
 									}
 									go setzeMaus(maus)
 								} else {
@@ -724,7 +755,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 								aufgedeckt = false
 								*akt = true
 
-							} else if !aufgedeckt && ob.GibTyp() == 35 {			// Fälle für Level 5 SOUND
+							} else if !aufgedeckt && ob.GibTyp() == 35 {			// Fälle für Level 3 SOUND
 								ob.SetzeTyp(36)
 								go spieleKlang(lang)
 								objektSpeicher = ob
@@ -742,8 +773,9 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 									zaehler++
 									if zaehler == 6 {
 										zaehler = 0
+										fmt.Println("Sende Signal in maussteuerung")
 										kanal <- true
-										*signal = true
+										//*signal = true
 									}
 									go setzeMaus(maus)
 								} else {
@@ -754,12 +786,11 @@ func maussteuerung (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signa
 									go setzeMaus(maus)
 								}
 								aufgedeckt = false
-								*akt = true //
+								*akt = true 
 						
 							} else {
 								*wert = uint8(lang)
 								*signal = true
-								//SpieleSound("./Sounds/Beep.wav")
 							}
 							
 						}
@@ -784,14 +815,4 @@ func spieleKlang(lang int64) {
 		case 5: SpieleSound("./Sounds/5Zuckerfee.wav")
 		case 6: SpieleSound("./Sounds/6Jahreszeiten.wav")
 	}
-	/*
-	switch lang {
-		case 1: SpieleNote("4D",0.7,0.1); SpieleNote("4F",0.7,0.1); SpieleNote("4G#",0.7,0.1); SpieleNote("4H",0.7,0.1)	// VERM aufsteigend
-		case 2: SpieleNote("4D",0.7,0.1); SpieleNote("4F#",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5D",0.7,0.1) // ÜB aufsteigend
-		case 3: SpieleNote("4D",0.7,0.1); SpieleNote("4F#",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5C",0.7,0.1) // DUR7 aufsteigend
-		case 4: SpieleNote("4D",0.7,0.1); SpieleNote("4F#",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5C#",0.7,0.1) // DUR7+ aufsteigend
-		case 5: SpieleNote("4D",0.7,0.1); SpieleNote("4F",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5C#",0.7,0.1) // MOLL7+ aufsteigend
-		case 6: SpieleNote("4D",0.7,0.1); SpieleNote("4F",0.7,0.1); SpieleNote("4A",0.7,0.1); SpieleNote("5C",0.7,0.1) // MOLL7 aufsteigend
-	}
-	*/
 }	

@@ -1,7 +1,7 @@
 package main
 // Autor: B. Schneider
 // Datum: 20.03.2023
-// Zweck: SWP - Minigame Moorhuhn
+// Zweck: SWP - Testdatei zum Muster-Minigame 
 //--------------------------------------------------------------------
 
 import (. "gfx"

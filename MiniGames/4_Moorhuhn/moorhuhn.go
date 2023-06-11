@@ -43,6 +43,7 @@ func Moorhuhn () (note float32, punktExp uint32) {
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
 	go maussteuerung(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte, &diff)
 	
+	go musikhintergrund(&ende)
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
 	// Wir fragen hier nur die Tastatur ab.
@@ -128,9 +129,17 @@ A:	for {
 	
 	Restaurieren(0,0,1200,700)
 	// -----------------------------------------------------------------
+	fmt.Printf("Du hast %d Punkte und die Note %.1f erreicht!",punktExp,note)
 	
 	TastaturLesen1()
 	return
+}
+
+func musikhintergrund(ende *bool) {
+	for !*ende {
+		SpieleSound("./Sounds/Moorhuhn.wav")
+		time.Sleep( time.Duration(38e8) )
+	}
 }
 
 func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, 
