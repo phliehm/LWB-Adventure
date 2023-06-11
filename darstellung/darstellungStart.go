@@ -18,7 +18,7 @@ import (
 	"../Klassen/textboxen"
 	"../Klassen/buttons"
 	"fmt"
-	felder "../Klassen/felder2"
+	"../Materialordner/felder"
 )
 
 
@@ -32,7 +32,8 @@ func StartFenster() spielstaende.Spielstand {
 	var startknopf buttons.Button = buttons.New(950,540,90,50,0,255,0,false," LOS!")
 	var alt buttons.Button = buttons.New(480,540,210,50,0,255,0,false,"  Weiterspielen")
 	var neu buttons.Button = buttons.New(780,540,210,50,0,255,0,false," Überschreiben")
-	var eingabefeld felder.Feld = felder.New (410,  190, 50, 'l', "")
+	var eingabefeld felder.Feld = felder.New (415,  250, 30, 'l', "")
+	var fontsize uint16 = 32 // Werte 12, 14, 16, 20, 22, 24, 28 und 32
 
 	// für Spielstand
 	var spielstand spielstaende.Spielstand
@@ -44,11 +45,13 @@ func StartFenster() spielstaende.Spielstand {
 	
 	
 	zeichneStartHintergrund()
+	startText.SetzeSchriftgröße(int(fontsize))
 	startText.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
 	startText.SchreibeText("Willkommen zum LWB-Adventure-Game!\n\nSchreiben Sie sich ein und das Abenteuer kann beginnen: \n")
 	startText.Zeichne()
 
 	// Eingabe des Namens
+	eingabefeld.SetzeZeichensatzgroesse(fontsize)
 	spielername = eingabefeld.Edit ()
 	fmt.Println("spielername: ",spielername)
 	
