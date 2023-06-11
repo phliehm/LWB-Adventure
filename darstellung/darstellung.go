@@ -14,7 +14,7 @@ import (
 	"../MiniGames/bauelementeSpiel"
 	"../MiniGames/2_ALP2/vaderobigame"
 //	"../MiniGames/2_ALP2/vadeROBIgame"
-	//"../MiniGames/3_DDI"
+	"../MiniGames/3_DDI"
 	"../MiniGames/2_EthI"
 	"../MiniGames/3_DBSA"
 	"../MiniGames/4_BugAttack"
@@ -55,7 +55,8 @@ func MainfloorDarstellen() {
 	SchreibeFont(436,359,"3")
 	SetzeFont("./Schriftarten/Starjedi.ttf",20)
 	SchreibeFont(725,368,"4")
-	LadeBildMitColorKey(1083,275, "./Bilder/MainGame/info-1.bmp", 255,255,255)
+	LadeBildMitColorKey(1083,275,"./Bilder/MainGame/info-1.bmp", 255,255,255)
+	LadeBildMitColorKey(588,370,"./Bilder/MainGame/zeugnis-symbol.bmp",255,255,255)
 	
 	//ende.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
 	ende.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
@@ -88,6 +89,30 @@ func SemesterraumDarstellen(n int) {
 		
 	}
 	
+}
+
+func HeidiDarstellen() (sign, no buttons.Button) {
+	
+	sign = buttons.New(0,0,150,35,0,255,0,true," Unterschreiben")
+	no = buttons.New(0,0,50,35,255,0,0,true," NÖ")
+	var text textboxen.Textbox = textboxen.New(0,0,270,140)
+	
+	LadeBildMitColorKey(620,350,"./Bilder/MainGame/heidi_100.bmp",255,255,255)
+	LadeBildMitColorKey(345,145,"./Bilder/MainGame/bubble2_red_350.bmp",255,0,0)					//Heidi-Bubble
+	
+	sign.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	sign.SetzePosition(385,270)
+	sign.ZeichneButton()
+	no.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	no.SetzePosition(570,270)
+	no.ZeichneButton()
+	text.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	text.SetzeSchriftgröße(16)	
+	text.SetzePosition(385,170) 
+	text.SchreibeText("Heidi:\n\nDiesen Raum dürfen Sie nur betreten, wenn Sie die Hausordnung unterschreiben!")
+	text.Zeichne()
+	
+	return
 }
 
 func InfoDarstellen() {
@@ -365,7 +390,7 @@ func MinigameLaden(raum,n int) (note float32, punkte uint32){
 			case 1:
 			note, punkte = sqlGame.SQLgame()
 			case 2:
-			//TODO (noch kein importierbares package vorhanden)
+			note, punkte = fachjargon.FachJargon()
 		}
 		
 		case 4:

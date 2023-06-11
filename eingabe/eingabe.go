@@ -119,7 +119,30 @@ A:	for {
 								//darstellung.MainfloorDarstellen()
 							} else {
 								if nschluessel >= uint16(index)	{
-									darstellung.SemesterraumDarstellen(index)	//also wird der jeweilige Semesterraum dargestellt
+									
+									if raumnr == 4 {														//wenn die Semester-Tür 4 angeklickt wurde,
+									
+										sign, no := darstellung.HeidiDarstellen()							//Heidi mit Bubble und Unterschrift-Aufforderung darstellen
+										
+										//Mauslese-Schleife							
+										for {
+											taste, status, mausX, mausY := gfx.MausLesen1()
+											if taste==1 && status==1 {									
+												if sign.TesteXYPosInButton(mausX,mausY) {					//wenn der sign-Button angeklickt wurde,
+													darstellung.SemesterraumDarstellen(index)
+													break													//Mauslese-Schleife verlassen und weiter in den Semesterraum
+												} else if no.TesteXYPosInButton(mausX,mausY) {				//wenn der no-Button angeklickt wurde,
+													raumnr = 0
+													darstellung.MainfloorDarstellen()						//aus Mauslese-Schleife und zurück in den mainfloor
+													break													
+												}
+											}
+										}
+										
+									} else {
+										darstellung.SemesterraumDarstellen(index)							//also wird der jeweilige Semesterraum dargestellt
+									}
+									
 								} else { 			// Raum zu, kein Schlüssel da
 									raumnr = 0
 									gfx.SpieleSound("Sounds/Beep.wav")
@@ -149,9 +172,23 @@ A:	for {
 								}*/
 
 							} else {									//wenn nicht "exit" (index 0) geklickt wurde,
-								note,punkte = darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
-								speichereMax(note,punkte,raumnr,index)		// Das beste Ergebnis wird gespeichert.
-								nschluessel = gibSchluesselzahl(spielstand) // Bestimme die neue Schluesselzahl
+							
+								start,no := darstellung.BubbleLaden(raumnr,index)
+								
+								//Mauslese-Schleife							
+								for {
+									taste, status, mausX, mausY := gfx.MausLesen1()
+									if taste==1 && status==1 {									
+										if start.TesteXYPosInButton(mausX,mausY) {					//und der Start-Button angeklickt wurde,
+											note,punkte = darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
+											speichereMax(note,punkte,raumnr,index)					// Das beste Ergebnis wird gespeichert.
+											nschluessel = gibSchluesselzahl(spielstand) 			// Bestimme die neue Schluesselzahl
+											break
+										} else if no.TesteXYPosInButton(mausX,mausY) {
+											break
+										}
+									}
+								}
 								darstellung.SemesterraumDarstellen(raumnr)
 							}
 						}
