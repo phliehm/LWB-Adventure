@@ -29,7 +29,7 @@ type Texteditor interface {
 	
 	IstEinzeilig() bool
 	
-	NeuerTexteditor(posx,posy,breite,höhe uint16, schriftgr int, einzeilig bool)
+	//NeuerTexteditor(posx,posy,breite,höhe uint16, schriftgr int, einzeilig bool) Texteditor
 	
 	GibString() string
 	

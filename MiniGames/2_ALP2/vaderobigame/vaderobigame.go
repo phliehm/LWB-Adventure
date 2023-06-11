@@ -7,7 +7,6 @@ package vaderobigame
 import (
 	"fmt"
 	"gfx"
-	//"time"
 	. "../vaderobi"
 	"../../../Klassen/texteditoren"
 	"../../../Klassen/vierecke"
@@ -53,23 +52,6 @@ func notenberechnung(punkte uint) float32 {
 		return 4.0
 	} else { return 0.0 }
 }
-
-/*
-func maussteuerung(exit1, exit2 vierecke.Viereck) {
-	
-	fmt.Println("maussteuerungs-Schleife läuft")
-	for {
-		taste, status, mausX, mausY := gfx.MausLesen1()
-		if taste==1 && status==1 {
-			if exit1.Angeklickt(mausX,mausY) { 							// Ende des Spiels
-				fmt.Println("exit1 geklickt")
-				fmt.Println("return erreicht")
-				beenden1 = true
-			}
-		}
-	}
-}
-*/
 
 func aufgabentexte(n int) {																		//TODO
 	
@@ -527,6 +509,7 @@ func Vaderobi() (float32,uint32) {
 			if taste==1 && status==1 {
 				if exit2.Angeklickt(mausX,mausY) { 							// Ende des Spiels
 					fmt.Println("exit2 geklickt")
+					gfx.StoppeAlleSounds()
 					break
 				}
 			}
