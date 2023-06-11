@@ -16,13 +16,18 @@ import (
 var path string = ""
 var path2 string = "./" //MiniGames/2_ALP2/"
 
-var punkte, fehler uint32
-//var note float32
+var punkte, fehler uint32							// Punkte-/Fehler-Variable
 
-var texte []string = make([]string,11)
-var aktuellerText int = 1
+//----------------String-Slices für Texte-------------------------------
+//----------------------------------------------------------------------
 
-var ausgTexte [][]string = make([][]string,11)
+var texte []string = make([]string,11)				// Bubble-Texte (Aufgaben/Level 1-10)
+var aktuellerText int = 1							// aktueller Aufgaben-/Level-Text
+
+var eingTexte []string = make([]string,11)			// Lösungen (richtige Eingaben, Level 1-10)
+var eingTexte2 []string = make([]string,11)			// Alternativ-Lösungen (Level 1-10)
+
+var ausgTexte [][]string = make([][]string,11)		// Ausgaben bei richtiger Anfrage (Level 1-10)
 var ausg1 []string = make ([]string,7)
 var ausg2 []string = make ([]string,7)
 var ausg3 []string = make ([]string,8)
@@ -34,10 +39,7 @@ var ausg8 []string = make ([]string,3)
 var ausg9 []string = make ([]string,7)
 var ausg10 []string = make ([]string,5)
 
-var eingTexte []string = make([]string,11)
-var eingTexte2 []string = make([]string,11)
-
-var hilfeTexte [][]string = make([][]string,11)
+var hilfeTexte [][]string = make([][]string,11)		// Hilfen bei falscher Eingabe/Anfrage  (Level 1-10)
 var hilfen1 []string = make ([]string,4)
 var hilfen2 []string = make ([]string,4)
 var hilfen3 []string = make ([]string,4)
@@ -49,23 +51,27 @@ var hilfen8 []string = make ([]string,4)
 var hilfen9 []string = make ([]string,4)
 var hilfen10 []string = make ([]string,4)
 
-//----------------------Hilfsfunktionen----------------------------
 
+//----------------------Hilfsfunktionen---------------------------------
+//----------------------------------------------------------------------
+
+// fülle Bubble-Texte-Slice mit Aufgaben-/Level-Texten
 func bubbleTexte() {
 	texte[0] = "Um die DBSA-Prüfung zu bestehen,\nmusst Du Dein SQL-Wissen nutzen,\num alle Geheimnisse der LWB-Welt\nzu enthüllen!"
 	texte[1] = "Die LWB-Adventure-World ist zwar nicht ganz so verwirrend wie die STEPS-World, aber was für Räume gibt es denn hier eigentlich?"
-	texte[2] = "Welche Lehrveranstaltungen finden im 4. Semester statt?"
-	texte[3] = "Wie heißen die Dozenten im LWB-Adventure?"
-	texte[4] = "Welche Lehrveranstaltungen haben etwas mit 'Programmierung' zu tun?"
+	texte[2] = "Einiges hast Du schon geschafft, aber welche Lehrveranstaltungen erwarten Dich wohl im 4. Semester?"
+	texte[3] = "Vielleicht hast Du beim Spielen schon einige kennengelernt, aber wie heißen denn die Dozenten hier im LWB-Adventure?"
+	texte[4] = "Um das zu lernen, hast Du Dich für die LWB beworben. Aber welche Lehr-\nveranstaltungen haben denn nun konkret etwas mit 'Programmierung' zu tun?"
 	texte[5] = "Ob Du es auch schaffst herauszubekommen, was mein ganz persönliches Lieblingsgetränk ist?"
-	texte[6] = "Wieviele Mini-Games gibt es in der LWB-Adventure-World? (Überschrift der Ausgabe: AnzahlMiniGames)"
-	texte[8] = "Wie heißt die Veranstaltung mit den meisten SWS?"
-	texte[7] = "Wieviele SWS müssen in der LWB insgesamt absolviert werden? (Überschrift der Ausgabe: GesamtanzahlSWS)"
+	texte[6] = "Du hast schon einige gespielt, doch wieviele Mini-Games gibt es denn hier in der LWB-Adventure-World? (Ausgaben-\nÜberschrift: AnzahlMiniGames)"
+	texte[8] = "Die LWB-Tage sind ja meistens ziemlich abwechslungsreich, aber wie heißt denn die Veranstaltung mit den meisten SWS?"
+	texte[7] = "Wieviele SWS müssen in der LWB insgesamt absolviert werden? (Ausgaben-Überschrift: GesamtanzahlSWS)"
 	//texte[10] = "Lasse zu jedem Raum die Anzahl der dort stattfindenden Veranstaltungen anzeigen! (Ausgabe aufsteigend, Überschrift der Anzahl-Ausgabe: AnzahlVeranstaltungen)"
-	texte[9] = "Kannst Du alle sechs Kommandos richtig eingeben, mit denen Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K nach SWS-Anzahl absteigend sortiert angezeigt werden?"
-	texte[10] = "Lasse die Anzahl der Veranstaltungen pro Standort anzeigen! (ohne JOIN!, Ausgabe aufsteigend, Überschrift der Ausgabe: AnzahlVeranstaltungen)"
+	texte[9] = "Schaffst Du es Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K absteigend sortiert nach SWS-Anzahl anzeigen zu lassen?"
+	texte[10] = "Finde zum Schluss die Veranstaltungs-\nAnzahl pro Standort heraus! (ohne JOIN, Ausgabe aufsteigend, Ausgaben-\nÜberschrift: AnzahlVeranstaltungen)"
 }
 
+// fülle Eingaben-Slice mit richtigen Lösungen ohne Leerzeichen (Level 1-10)
 func eingabeTexte() {
 	eingTexte[1] = "SELECT*FROMraeume;"
 	eingTexte[2] = "SELECT*FROMveranstaltungenWHEREsemester=4;"
@@ -81,20 +87,22 @@ func eingabeTexte() {
 	
 }
 
+// fülle zweites Eingaben-Slice mit Alternativ-Lösungen ohne Leerzeichen (bisher nur für Level 4, da alles andere eindeutig ist)
 func eingabeTexte2() {
-	//eingTexte2[1] = ""
-	//eingTexte2[2] = ""
-	//eingTexte2[3] = ""
+	eingTexte2[1] = "keine Alternative"
+	eingTexte2[2] = "keine Alternative"
+	eingTexte2[3] = "keine Alternative"
 	eingTexte2[4] = "SELECT*FROMveranstaltungenWHEREvnameLIKE'%Programmierung%';"
-	//eingTexte2[5] = ""
-	//eingTexte2[6] = ""
-	//eingTexte2[7] = ""
-	//eingTexte2[8] = ""
-	//eingTexte2[9] = ""
-	//eingTexte2[10] = ""
+	eingTexte2[5] = "keine Alternative"
+	eingTexte2[6] = "keine Alternative"
+	eingTexte2[7] = "keine Alternative"
+	eingTexte2[8] = "keine Alternative"
+	eingTexte2[9] = "keine Alternative"
+	eingTexte2[10] = "keine Alternative"
 }
 
-func hilfeText() {
+// fülle Hilfen-Slice mit gestaffelten Hilfen (Level 1-10)
+func hilfeTexteSchreiben() {
 	
 	hilfen1[0] = ""
 	hilfen1[1] = "Hilfe 1: Nutze SELECT ... FROM ...!"
@@ -158,6 +166,7 @@ func hilfeText() {
 	
 }
 
+// fülle Ausgaben-Slice mit den Ergebnissen zur richtigen Anfrage (Level 1-10)
 func ausgabeTexte() {
 	
 	ausg1[0] = " RAUM-NR.     RAUM-NAME                      ORT"
@@ -197,7 +206,7 @@ func ausgabeTexte() {
 	
 	ausg5[0] = " LIEBLINGSGETRÄNK"
 	ausg5[1] = "------------------"
-	ausg5[2] = " Beruhigungstee"											// WIRKLICH??? :D
+	ausg5[2] = " Melissentee"
 	ausgTexte[5] = ausg5
 	
 	ausg6[0] = " Anzahl_Minigames"
@@ -232,6 +241,7 @@ func ausgabeTexte() {
 	ausgTexte[9] = ausg9
 }
 
+// Darstellung des initialen Ausgabe-Textes mit Hinweisen
 func initialausgabe(ausgabe textboxen.Textbox) {
 	//Stiftfarbe(255,255,255)
 	//Vollrechteck(310,370,840,210)
@@ -247,6 +257,7 @@ func initialausgabe(ausgabe textboxen.Textbox) {
 	//ausgabe.RahmenAn(false)
 }
 
+// Darstellung der Fehlerausgabe (bei falscher Eingabe)
 func erzeugeFehlerausgabe() {
 	var falschausgabe textboxen.Textbox = textboxen.New(320,380,820,43)
 	falschausgabe.RahmenAn(true)
@@ -259,6 +270,7 @@ func erzeugeFehlerausgabe() {
 	falschausgabe.Zeichne()
 }
 
+// Darstellung der jeweiligen Ausgabe mit dem Ergebnis der richtigen Anfrage
 func erzeugeAusgabe(n int) {
 	Stiftfarbe(0,255,0)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",20)
@@ -267,7 +279,7 @@ func erzeugeAusgabe(n int) {
 	}
 }
 
-//Punkte und Note ausgeben
+// Darstellung der Punkte- und Note-Anzeige
 func punktenoteSchreiben(punktenote textboxen.Textbox, levelpunkte, punkte uint32) {
 	punktenote.HintergrundAn(true)
 	punktenote.SetzeHintergrundFarbe(255,255,255)
@@ -278,12 +290,13 @@ func punktenoteSchreiben(punktenote textboxen.Textbox, levelpunkte, punkte uint3
 	}
 	
 	if notenberechnung(punkte) > 0 {
-		punktenote.SetzeHöhe(250)
+		punktenote.SetzeHöhe(150)
 		punktenote.SchreibeText("Punkte: "+fmt.Sprint(punkte)+"\n\nNote: "+fmt.Sprintf("%2.1f",notenberechnung(punkte)))
 	}
 	punktenote.Zeichne()
 }
 
+// entfernt alle Leerzeichen aus der Texteditor-Eingabe (um verschiedene Leerzeichen-Schreibweisen abzufangen)
 func ohneLeerzeichen(s string) string {
 	var erg string
 	for _,zeichen := range s {
@@ -294,6 +307,7 @@ func ohneLeerzeichen(s string) string {
 	return erg
 }
 
+// Berechnung der Note aus der Punktzahl
 func notenberechnung(punkte uint32) float32 {
 	if punkte >= 100 { return 1.0
 	} else if punkte >= 90 { 
@@ -315,31 +329,36 @@ func notenberechnung(punkte uint32) float32 {
 	} else { return 0.0 }
 }
 
-//func SQLgame() (float32,uint32) {
-func SQLgame() (punkte uint32, note float32) {
+
+// eigentliche (exportierbare) Spiel-Funktion "SQLgame()"
+//----------------------------------------------------------------------
+// Vor.: -
+// Eff.: Das SQLgame (Spiel "SQL-Quest") ist gestartet.
+// Erg.: Die erspielte Gesamtpunktzahl (uint32) und die daraus berechnete Note (float32) ist geliefert.
+
+func SQLgame() (note float32, punkte uint32) {
 	
-	//punkte = 10
-	//fmt.Println("Punkte:",fmt.Sprint(punkte))
-	
-//-----------------initialisiere gfx-Fenster-----------------------	
+//-----------------initialisiere gfx-Fenster----------------------------	
 	if ! FensterOffen() {
 		Fenster(1200,700)
 	}
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,1200,700)
-	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	
-	fmt.Println("Führe bubbleTexte() aus!")
+
+//------------------Füllen der Text-Slices------------------------------	
+	//fmt.Println("Führe bubbleTexte() aus!")
 	bubbleTexte()
-	fmt.Println("Führe eingabeTexte() aus!")
+	//fmt.Println("Führe eingabeTexte() aus!")
 	eingabeTexte()
-	fmt.Println("Führe ausgabeTexte() aus!")
+	eingabeTexte2()
+	//fmt.Println("Führe ausgabeTexte() aus!")
 	ausgabeTexte()
-	fmt.Println("Führe hilfeText() aus!")
-	hilfeText()
+	//fmt.Println("Führe hilfeText() aus!")
+	hilfeTexteSchreiben()
 	
-//------------------Variablen--------------------------------------
+//------------------Variablen-------------------------------------------
 	
+	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	var next buttons.Button = buttons.New(445,240,80,35,0,255,0,true,"   next")
 	var firsted textboxen.Textbox = textboxen.New(320,600,820,48)
 	var ausgabe textboxen.Textbox = textboxen.New(320,380,820,190)
@@ -356,25 +375,29 @@ func SQLgame() (punkte uint32, note float32) {
 	var ted texteditoren.Texteditor
 	var exit vierecke.Viereck = vierecke.New(1080,90,1080,205,1170,205,1170,90)
 	var punktespeicher []uint32
+	
+	// Slice zum Speichern der einzelnen Levelpunkte (für das Abschluss-Zertifikat)
 	punktespeicher = make([]uint32,len(texte))
+	
 	
 //------------------Grafik-Elemente--------------------------------
 	
 	LadeBild(150,90,path2 + "Bilder/SQLGame/bubble2_flipped_400.bmp")
 	LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/herk_200.bmp",255,255,255)
 	
+	// Überschrift des Spiel-Fensters
 	SetzeFont(path2 + "Schriftarten/brlnsdb.ttf",60)
 	Stiftfarbe(0,255,0)
 	SchreibeFont(70,10,"SQL-Quest:")
 	SetzeFont(path2 + "Schriftarten/brlnsr.ttf",50)
 	SchreibeFont(390,20,"Explore the LWB-Adventure-World!")
 	
-	//punktenote.SetzeZeilenAbstand(5)
+	// Darstellung der Punkte- und Note-Anzeige
 	punktenote.SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf")
 	punktenote.SetzeSchriftgröße(20)
 	punktenote.SchreibeText("Punkte: 0\n\nNote:")
 	punktenote.Zeichne()
-	
+	// zu Beginn (und solange schlechter als 4,0) keine Note, sondern durchgefallen
 	durchgefallen.SetzeZeilenAbstand(5)
 	durchgefallen.SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf")
 	durchgefallen.SetzeSchriftgröße(20)
@@ -382,12 +405,14 @@ func SQLgame() (punkte uint32, note float32) {
 	durchgefallen.SchreibeText("nicht bestanden")
 	durchgefallen.Zeichne()
 	
-	//infotext.SetzeFarbe(0,0,0)
+	// allgemeiner Spiel-Infotext mit Erläuterung und Anleitung
+	infotext.SetzeFarbe(0,0,0)
 	infotext.SetzeZeilenAbstand(5)
 	infotext.SetzeSchriftgröße(18)
 	infotext.SchreibeText("Herk hat eine Datenbank erstellt, die alle Geheimnisse der LWB-Welt enthält. Würdig darauf zuzugreifen sind nur jene, die SQL beherrschen.\nAlso schärfe Deinen Verstand und gib die richtigen Anfragen ein, um die Geheimnisse zu ergründen!\n\nFolgende Tabellen sind in seiner Datenbank enthalten:")
 	infotext.Zeichne()
 	
+	// Info-Kasten mit Liste der Tabellen und Attribute, die aus der Spiel-Datenbank abgerufen werden können
 	datainfo.RahmenAn(true)
 	datainfo.HintergrundAn(true)
 	datainfo.SetzeRahmenFarbe(0,0,0)
@@ -399,6 +424,7 @@ func SQLgame() (punkte uint32, note float32) {
 	datainfo.SchreibeText("> raeume (raumnr, raumname, ort)\n> dozenten (doznr, dozname, lieblingsgetraenk)\n> veranstaltungen (vnr, vname, doznr, semester, sws)\n> mini-games (gamenr, gamename, vnr, maxpunktzahl)")
 	datainfo.Zeichne()
 	
+	// Darstellung des initialen Ausgabe-Textes mit Hinweisen
 	initialausgabe(ausgabe)
 	
 	/*
@@ -410,14 +436,14 @@ func SQLgame() (punkte uint32, note float32) {
 	fehlerausgabe.SchreibeText("Falsche Eingabe! Überprüfe die Anfrage und kontrolliere die Schreibweise!")
 	*/
 	
+	// Darstellung eines Start-Texteditors (als Textfeld) mit Hinweisen zur Eingabe der SQL-Anfragen
 	firsted.HintergrundAn(true)
 	firsted.SetzeHintergrundFarbe(0,0,0)
 	firsted.SetzeFarbe(255,255,255)
 	firsted.SchreibeText("SELECT ...  <-- Gib Deine SQL-Anfrage hier ein und führe Sie mit ENTER aus!")
 	firsted.Zeichne()
 	
-	//bubbletext.RahmenAn(true)
-	//bubbletext.SetzeRahmenFarbe(0,0,0)
+	// Darstellung der Sprechblase mit Willkommens-Text
 	bubbletext.HintergrundAn(true)
 	bubbletext.SetzeHintergrundFarbe(255,255,255)
 	bubbletext.SetzeZeilenAbstand(3)
@@ -428,29 +454,31 @@ func SQLgame() (punkte uint32, note float32) {
 	bubblehead.SchreibeText("Willkommen zum SQL-Quest!")
 	bubblehead.Zeichne()
 	
+	// Darstellung des next-Buttons, mit dem weiter geklickt werden kann
 	next.SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf")
 	next.ZeichneButton()
-	
-//----------------Eingabe-Verarbeitung----------------------------
 
-	//ted = texteditoren.New(315,440,830,218,20,true)
 	
-//----------------Spiel-Steuerung-----------------------------------
+//-------------------Spiel-Steuerung------------------------------------
+//----------------------und---------------------------------------------
+//----------------Eingabe-Verarbeitung----------------------------------
 
-A:	for i:=1; i<len(texte); i++ {
+// Level-Schleife
+A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
+																		// Levelanzahl = len(texte)
 		fmt.Println("aktuelles i:",i)
 		
-		var levelpunkte uint32 = 10
-	
+		var levelpunkte uint32 = 10										// initialisiere Variable levelpunkte mit Maxpunktzahl 10	
+																		// (für falsche Eingaben gibt es dann Abzüge)
+		// Mauslese-Schleife -----------------------------------------------------------------------------------------------------														
 		for {
 
 			taste, status, mausX, mausY := MausLesen1()
 			if taste==1 && status==1 {
-				if next.TesteXYPosInButton(mausX,mausY) {
+				if next.TesteXYPosInButton(mausX,mausY) {				// wenn next-Button geklickt:
 					fmt.Println("Weiter angeklickt!")
 					
-					if i == 1 {
-						//Beenden-Hinweis nach dem ersten Klick auf den next-Button
+					if i == 1 {											// Beenden-Hinweis nach dem ersten Klick auf den next-Button
 						Stiftfarbe(0,0,0)
 						SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf",14)
 						SchreibeFont(30,280,"Beenden des")
@@ -459,103 +487,100 @@ A:	for i:=1; i<len(texte); i++ {
 						SchreibeFont(30,340,"und ENTER!")
 					}
 					
-					Stiftfarbe(255,255,255)
+					Stiftfarbe(255,255,255)								// schreibe aktuellen Aufgaben-/Leveltext in Sprechblase
 					Vollrechteck(220,115,305,170)
+					bubbletext.SetzeSchriftgröße(16)
 					bubbletext.SchreibeText(texte[aktuellerText])
 					bubbletext.Zeichne()
-					bubblehead.SchreibeText("Level "+fmt.Sprint(i))
+					bubblehead.SchreibeText("Level "+fmt.Sprint(i))		// Level-Zahl entspricht dem i aus der Level-Schleife
 					bubblehead.Zeichne()
 					initialausgabe(ausgabe)
+					
 					//next.ZeichneButton()
-					//Stiftfarbe(255,255,255)							//next-Button "ausgrauen"
+					//Stiftfarbe(255,255,255)							//next-Button "ausgrauen" --> nicht notwendig
 					//Transparenz(50)
 					//Vollrechteck(443,238,84,39)
 					//Transparenz(0)
-					
 					//next.DeaktiviereButton()
-					if aktuellerText < len(texte)-1 {
-						aktuellerText++
+					
+					if aktuellerText < len(texte)-1 {					// solange das letzte Level noch nicht erreicht ist,
+						aktuellerText++									// aktuellerText inkrementieren: nächster Leveltext ist aktuell
 					}
-					break
+					break												// verlasse Mauslese-Schleife, da jetzt erst Tastatur-Eingabe
 				}
 			}
 		}
 						
-		//----------------Eingabe-Verarbeitung--------------
+		//----------------Eingabe-Verarbeitung--------------------------
 		ted = texteditoren.New(315,595,830,63,20,true)
-					
+				
+		// Tastaturlese-Schleife -------------------------------------------------------------------------------------------			
 		for {
 			
-			if ted.GibString() == "exit" {
-				i = 11
-				levelpunkte = 0
-				break
+			if ted.GibString() == "exit" {								// wenn Beenden-Kommando eingetippt wurde,
+				i = 11													// setze i auf 11, um gleich aus Level-Schleife auszusteigen
+				levelpunkte = 0											// setze aktuelle levelpunkte auf 0, da Level nicht beendet wurde
+				break													// und verlasse Tastaturlese-Schleife
 			}
 			
+			// 4 Eingabe-Versuche pro Level-Schleife (für gestaffelte Hilfen) ------------------------------------------------------
 			for j:=0; j<4; j++ {
 			
-				//var eing string = ohneLeerzeichen(ted.GibString())
-				//if  eing == eingTexte[i] || eing == eingTexte2[i] {
-								
-				if ohneLeerzeichen(ted.GibString()) == eingTexte[i] || ted.GibString() == "42" {
+				var eing string = ohneLeerzeichen(ted.GibString())		// Variable für Texteditor-Eingabe
+				
+				// Fall 1: richtige Lösung (durch richtige Eingabe(-Alternative) oder Cheat-Code 42)
+				if  eing == eingTexte[i] || eing == eingTexte2[i] || ted.GibString() == "42" {
+					
 					//Stiftfarbe(255,255,255)
 					//Vollrechteck(443,238,84,39)
-					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",30)
-					Stiftfarbe(255,255,255)
-					Vollrechteck(220,235,315,40)
-					Vollrechteck(100,500,100,100)
+					Stiftfarbe(255,255,255)								// (da weiß im Herk-Bild transparent dargestellt wird,											
+					Vollrechteck(100,500,100,100)						// sind weiße Rechtecke als Hintergrund nötig)
+																		// lade Bild mit fröhlichem Herk
 					LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/herk_200.bmp",255,255,255)
-					Stiftfarbe(0,255,0)
-					SchreibeFont(230,240,"RICHTIG!!!  :-)")
-					punkte = punkte + levelpunkte
-					punktespeicher[i] = levelpunkte
-					punktenoteSchreiben(punktenote,levelpunkte,punkte)
-					//fmt.Println("Punkte:",fmt.Sprint(punkte))
-					next.ZeichneButton()
 					
-					ausgabe.RahmenAn(true)
-					ausgabe.SetzeRahmenFarbe(0,0,0)
+					Vollrechteck(220,239,315,40)						// weißer Hintergrund für RICHTIG!
+					Stiftfarbe(0,255,0)									// schreibe RICHTIG! in die Sprechblase
+					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",28)
+					SchreibeFont(230,240,"RICHTIG!!!  :-)")
+					punkte = punkte + levelpunkte						// addiere aktuelle Levelpunkte zur Gesamtpunktzahl
+					punktespeicher[i] = levelpunkte						// speichere aktuelle Levelpunkte im Punktespeicher-Slice
+					punktenoteSchreiben(punktenote,levelpunkte,punkte)	// aktualisiere Punkte- und Note-Anzeige
+					next.ZeichneButton()								// zeichne vorher durch Leveltext verdeckten next-Button neu
+					
+					ausgabe.RahmenAn(true)								// überdecke Initial-/Fehler-Ausgabe bzw. Hilfe-Text
+					ausgabe.SetzeRahmenFarbe(0,0,0)						// mit leerem Ausgabefeld ...
 					ausgabe.SetzeHöhe(190)
 					ausgabe.HintergrundAn(true)
 					ausgabe.SetzeHintergrundFarbe(255,255,255)
 					ausgabe.SetzeFarbe(0,255,0)
 					ausgabe.SchreibeText("")				
 					ausgabe.Zeichne()
-					Stiftfarbe(255,255,255)
+					Stiftfarbe(255,255,255)								// ... und weißem Hintergrund für ...
 					Vollrechteck(311,375,838,200)
-					erzeugeAusgabe(i)
+					erzeugeAusgabe(i)									// ... die aktuelle Ausgaben-Darstellung mit dem Ergebnis zur richtigen Anfrage
 					//next.AktiviereButton()
-					continue A
+					continue A											// weiter mit nächstem Level-Schleifen-Durchgang (Sprungmarke A)
+				
+				// 2. Fall: falsche Eingabe
 				} else {
 					
-					switch j {
-						case 0:
-						levelpunkte = levelpunkte - 1
-						case 1:
-						levelpunkte = levelpunkte - 2
-						case 2:
-						levelpunkte = levelpunkte - 3
-						case 3:
-						levelpunkte = levelpunkte - 4
+					switch j {											// Fallunterscheidung: Punktabzüge im 1./2./3./4. Versuch
+						case 0:											// 1. Versuch falsch:
+						levelpunkte = levelpunkte - 1					//                    1 Punkt  Abzug (Levelpunkte: 9)
+						case 1:											// 2. Versuch falsch:
+						levelpunkte = levelpunkte - 2					//                    2 Punkte Abzug (Levelpunkte: 7)
+						case 2:											// 3. Versuch falsch:
+						levelpunkte = levelpunkte - 3					//                    3 Punkte Abzug (Levelpunkte: 4)
+						case 3:											// 4. Versuch falsch:
+						levelpunkte = levelpunkte - 4					//                    4 Punkte Abzug (Levelpunkte: 0)
 					}
-					//punktenoteSchreiben(punktenote,levelpunkte,punkte)
 					
-					//fmt.Println("Punkte:",fmt.Sprint(punkte))
-					
-					/*
-					if j == 0 {											//Next-Button "ausgrauen"
-						Stiftfarbe(255,255,255)
-						Transparenz(50)
-						Vollrechteck(443,238,84,39)
-					}
-					*/
-					
-					//ausgabe.Zeichnen()
-					Stiftfarbe(255,255,255)
-					Transparenz(0)
-					Vollrechteck(311,371,838,218)						//alte Ausgabe überdecken
+					Stiftfarbe(255,255,255)								
+					//Transparenz(0)									
+					Vollrechteck(311,371,838,218)						// für Fehlerausgaben und Hilfen: alte Ausgabe überdecken
 					//Vollrechteck(320,375,820,200)
-					Vollrechteck(100,500,100,100)						//Herk-Mund überdecken wegen Transparenz
+					Vollrechteck(100,500,100,100)						// Herk-Mund überdecken wegen Transparenz
+																		// und Bild mit erschrockenem Herk laden
 					LadeBildMitColorKey(50,400,path2 + "Bilder/SQLGame/herk_angry_red_200.bmp",255,255,255)
 					
 					ausgabe.RahmenAn(false)
@@ -566,41 +591,47 @@ A:	for i:=1; i<len(texte); i++ {
 					ausgabe.RahmenAn(true)
 					ausgabe.SetzeRahmenFarbe(0,0,0)
 					ausgabe.SetzeFarbe(255,0,0)
-					ausgabe.SchreibeText(hilfeTexte[i][j])				
+					ausgabe.SchreibeText(hilfeTexte[i][j])				// je nach Versuch entsprechenden Hilfetext anzeigen			
 					ausgabe.Zeichne()
 					
-					if j<3 { erzeugeFehlerausgabe() }
+					if j<3 { erzeugeFehlerausgabe() }					// beim 1. - 3. Versuch Fehlerausgabe anzeigen ...
 					
-					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",30)
+					Stiftfarbe(255,255,255)
+					Vollrechteck(220,239,315,40)						// weißer Hintergrund für NOCHMAL/SCHADE!
+					
+					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",28)	 
 					Stiftfarbe(255,0,0)
 					
-					if j<3 {
+					if j<3 {											// ... und NOCHMAL! in die Sprechblase schreiben
 						SchreibeFont(225,240,"NOCHMAL!  :-(")
 						ted = texteditoren.New(315,595,830,63,20,true)
 					} else {
 						Stiftfarbe(255,255,255)
-						Vollrechteck(220,235,315,40)
+						Vollrechteck(220,239,315,40)
 						Stiftfarbe(255,0,0)
-						SchreibeFont(225,240,"SCHADE!  :-(")
-						next.ZeichneButton()
+						SchreibeFont(225,240,"SCHADE!  :-(")			// beim 4. Versuch SCHADE! in die Sprechblase schreiben
+						next.ZeichneButton()							// und next-Button für Übergang ins nächste Level zeichnen
 					}
 				}
 	
 			}
 			fmt.Println("Punkte:",fmt.Sprint(punkte))
-			break					
-		}		
+			break														// Tastaturlese-Schleife verlassen
+		}																// und weiter mit nächstem Level-Schleifen-Durchgang
 	}
 	
 	fmt.Println("Punkte:",fmt.Sprint(punkte))
 	
+	// nach letztem Level-Schleifen-Durchgang:
+	
 	//----------------- Endbildschirm --------------------------------------
 	
 	Stiftfarbe(255,255,255)
-	Cls()
+	Cls()																// Fenster neu (weiß)
 	
-	//SpieleSound(path + "Sounds/the_force.wav")
+	//SpieleSound(path + "?")
 	
+	// Grafik-Elemente und klickbares Beenden-Viereck laden
 	LadeBild(150,100,path + "Bilder/SQLGame/sprechblase_flipped_400.bmp")
 	LadeBildMitColorKey(80,370,path + "Bilder/SQLGame/herk_200.bmp",255,255,255)
 	LadeBild(620,80,path2 + "Bilder/SQLGame/paper_500.bmp")
@@ -609,15 +640,18 @@ A:	for i:=1; i<len(texte); i++ {
 	//exit.SetKoordinaten(1080,80,1080,195,1170,195,1170,80)
 	exit.AktiviereKlickbar()
 	
+	// Endbildschirm-Überschrift schreiben
 	SetzeFont(path2 + "Schriftarten/brlnsdb.ttf",60)
 	Stiftfarbe(0,255,0)
 	SchreibeFont(70,10,"SQL-Quest:")
 	SetzeFont(path2 + "Schriftarten/brlnsr.ttf",50)
 	SchreibeFont(390,20,"Explore the LWB-Adventure-World!")
 	
+	// Text und Abschlussnote in Sprechblase schreiben
 	Stiftfarbe(0,0,0)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
-	if notenberechnung(punkte) == 0.0 {
+	if notenberechnung(punkte) == 0.0 {									// falls nicht bestanden (Note schlechter als 4,0)
+		
 		SchreibeFont(295,140,"Du hast die")
 		SchreibeFont(285,170,"Prüfung leider")
 		SetzeFont(path2 + "Schriftarten/Starjedi.ttf",32)
@@ -627,18 +661,25 @@ A:	for i:=1; i<len(texte); i++ {
 		Stiftfarbe(255,255,255)
 		Vollrechteck(130,470,100,100)						//Herk-Mund überdecken wegen Transparenz
 		LadeBildMitColorKey(80,370,path2 + "Bilder/SQLGame/herk_angry_red_200.bmp",255,255,255)
-	} else {		
+		
+	} else {															// falls bestanden (Note mindestens 4,0)
+		
 		SchreibeFont(295,140,"Du hast die")
 		SchreibeFont(310,260,"erreicht!")
 		SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",32)
 		SchreibeFont(285,170,"Gesamtnote")
 		SetzeFont(path2 + "Schriftarten/Starjedi.ttf",42)
 		SchreibeFont(325,195,fmt.Sprintf("%2.1f",notenberechnung(punkte)))
+		
 	}
 	
+	// Zertifikats-Inhalt (Liste mit Punkten pro Level) schreiben
 	Stiftfarbe(0,0,0)
 	SetzeFont(path2 + "Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-	for i:=1; i<len(texte); i++ {
+	
+	for i:=1; i<len(texte); i++ {										// Schleife durch die Level, Länge: Level-Anzahl
+		
+		// unterscheide nach Stellenanzahl der Punktzahl(en) wegen Leerzeichen
 		if i == 10 {
 			if punktespeicher[i] < 10 {
 				SchreibeFont(710,150+uint16((i-1)*40),"Level "+ fmt.Sprint(i) + ":    "+fmt.Sprint(punktespeicher[i])+" Punkte")
@@ -654,6 +695,7 @@ A:	for i:=1; i<len(texte); i++ {
 		}
 	}
 	
+	// Zertifikats-Inhalt (Gesamtpunktzahl) schreiben 
 	SchreibeFont(700,550,"----------------------")
 	if punkte == 100 {
 		SchreibeFont(710,580,"Gesamt:    "+fmt.Sprint(punkte)+" Punkte")
@@ -663,6 +705,7 @@ A:	for i:=1; i<len(texte); i++ {
 		SchreibeFont(710,580,"Gesamt:     "+fmt.Sprint(punkte)+" Punkte")
 	}
 	
+	// Mauslese-Schleife zum Beenden des Spiels druch Klick auf Zurück-Symbol (exit-Viereck)
 	for {
 		taste, status, mausX, mausY := MausLesen1()
 		if taste==1 && status==1 {
@@ -673,6 +716,6 @@ A:	for i:=1; i<len(texte); i++ {
 		}
 	}
 	
-	return punkte, notenberechnung(punkte)	
+	return notenberechnung(punkte), punkte								// Rückgabe der Gesamtpunktzahl und Note für das Spiel
 	
 }

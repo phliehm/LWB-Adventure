@@ -45,29 +45,22 @@ func MainfloorDarstellen() {
 	
 	Stiftfarbe(255,255,255)
 	Vollrechteck(0,0,1200,700)
-	LadeBild(0,50,"./Bilder/mainfloor.bmp")
+	LadeBild(0,50,"./Bilder/MainGame/mainfloor.bmp")
 	Stiftfarbe(0,0,0)
 	SetzeFont("./Schriftarten/Starjedi.ttf",80)
 	SchreibeFont(105,290,"1")
-	//SchreibeFont(103,442,"1")
 	SetzeFont("./Schriftarten/Starjedi.ttf",50)
 	SchreibeFont(968,314,"2")
-	//SchreibeFont(961,430,"2")
 	SetzeFont("./Schriftarten/Starjedi.ttf",25)
 	SchreibeFont(436,359,"3")
-	//SchreibeFont(438,414,"3")
 	SetzeFont("./Schriftarten/Starjedi.ttf",20)
 	SchreibeFont(725,368,"4")
-	//SchreibeFont(720,415,"4")
 	LadeBildMitColorKey(1083,275, "./Bilder/MainGame/info-1.bmp", 255,255,255)
-	//LadeBildMitColorKey (105,325, "./Bilder/MainGame/1.bmp", 255,255,255)
-	//LadeBildMitColorKey (965,330, "./Bilder/MainGame/2.bmp", 255,255,255)
-	//LadeBildMitColorKey (434,371, "./Bilder/MainGame/3-2.bmp", 255,255,255)
-	//LadeBildMitColorKey (725,376, "./Bilder/MainGame/4.bmp", 255,255,255)
-
 	
-	ende.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	//ende.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	ende.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
 	ende.SetzeSchriftgröße(20)
+	ende.SetzeFarbe(255,255,255)
 	ende.SchreibeText("E\n N\n D\n E\n")			//TODO
 	ende.Zeichne()
 
@@ -84,8 +77,8 @@ func SemesterraumDarstellen(n int) {
 		case 1:
 		LadeBild(0,0,"./Bilder/MainGame/raum1.bmp")
 		case 2:
-		LadeBild(0,0,"./Bilder/MainGame/raum2.bmp")
-		LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
+		LadeBild(0,0,"./Bilder/MainGame/raum2.bmp")		
+		LadeBildMitColorKey(1125,570,"./Bilder/MainGame/Zurück-Symbol_green.bmp",0,255,0)	
 		case 3:
 		LadeBild(0,0,"./Bilder/MainGame/raum3.bmp")
 		case 4:
@@ -215,7 +208,7 @@ func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) { // bool {
 	schreibeZertifikat(spielstand)
 
 	// exit-Schalter einfügen
-	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
+	LadeBild(1100,565,"./Bilder/MainGame/Zurück-Symbol.bmp")
 //	exit.SetzeFarbe(0,0,0)
 //	exit.Zeichnen()
 	exit.AktiviereKlickbar()
@@ -252,6 +245,98 @@ func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) { // bool {
 
 }
 
+// Erg: Zum angeklickten Dozenten erscheint eine Sprechblase mit Start-Button für das Mini-Game zu seiner Veranstaltung.
+func BubbleLaden(raum,n int) (start,no buttons.Button) {
+	
+	start = buttons.New(0,0,80,35,0,255,0,true," START") //325,160
+	no = buttons.New(0,0,50,35,255,0,0,true," NÖ")
+	var text textboxen.Textbox = textboxen.New(0,0,270,140)
+	
+	start.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	no.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	text.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	text.SetzeSchriftgröße(16)
+	
+	switch raum {
+		
+		case 1:
+		switch n {
+			case 1:
+			LadeBildMitColorKey(610,85,"./Bilder/MainGame/bubble2_red_350.bmp",255,0,0)					//FabWeb-Bubble
+			start.SetzePosition(760,210)
+			no.SetzePosition(850,210)
+			text.SetzePosition(635,110) 
+			text.SchreibeText("FabWeb:\n\nWillkommen zum MUSTER-MEMORY!\nHier kannst Du Deine FP-Skills testen!\n\nViel Erfolg!")
+			
+			case 2:
+			LadeBildMitColorKey(185,110,"./Bilder/MainGame/bubble2_red_flipped_350.bmp",255,0,0)		//WtheK-Bubble
+			start.SetzePosition(370,235)
+			no.SetzePosition(460,235)
+			text.SetzePosition(245,135) 
+			text.SchreibeText("Winnie the K:\n\nWillkommen zum BAUELEMENTE-SPIEL!\nStelle Deine Schaltungs-\nKompetenzen unter Beweis!\n\nViel Erfolg!")
+		}
+		
+		case 2:
+		switch n {
+			case 1:
+			LadeBildMitColorKey(190,205,"./Bilder/MainGame/bubble2_red_flipped_350.bmp",255,0,0)		//Darth-Bubble
+			start.SetzePosition(375,335)
+			no.SetzePosition(465,335)
+			text.SetzePosition(250,235) 
+			text.SchreibeText("Darth Schmidter:\n\nWillkommen zum SUPER-ALP2-ESCAPE!\nMay the force be with you and Vaderobi!\n\nViel Erfolg!")
+			case 2:
+			LadeBildMitColorKey(490,190,"./Bilder/MainGame/bubble2_red_350.bmp",255,0,0)				//J.EthI-Bubble
+			start.SetzePosition(640,315)
+			no.SetzePosition(730,315)
+			text.SetzePosition(515,215)
+			text.SchreibeText("J.EthI:\n\nWillkommen zum GETRÄNKE-\nAUTOMATEN-SPIEL! Versorge die Dozenten 'automatisch' mit ihren Lieblingsgetränken!\n\nViel Erfolg!")
+		}
+		
+		case 3:
+		switch n {
+			case 1:
+			LadeBildMitColorKey(105,65,"./Bilder/MainGame/bubble2_red_flipped_350.bmp",255,0,0)			//Herk-Bubble
+			start.SetzePosition(290,190)
+			no.SetzePosition(380,190)
+			text.SetzePosition(165,90) 
+			text.SchreibeText("Herk:\n\nWillkommen zum SQL-Quest!\nStelle die richtigen (An-)Fragen und enthülle meine Datenbank-\nGeheimnisse!\n\nViel Erfolg!")
+			case 2:
+			LadeBildMitColorKey(630,90,"./Bilder/MainGame/bubble2_red_flipped_350.bmp",255,0,0)			//WtheK-Bubble
+			start.SetzePosition(815,215)
+			no.SetzePosition(905,215)
+			text.SetzePosition(690,115) 
+			text.SchreibeText("Winnie the K:\n\nWillkommen zum DIDAKTIK-\nSTRESSTEST! Hier kannst Du testen, ob Du wirklich zur Lehrkraft taugst... (;\n\nViel Erfolg!")
+		}
+		
+		case 4:
+		switch n {
+			case 1:
+			LadeBildMitColorKey(340,10,"./Bilder/MainGame/bubble2_red_flipped_350.bmp",255,0,0)			//Darth-Bubble
+			start.SetzePosition(525,135)
+			no.SetzePosition(615,135)
+			text.SetzePosition(400,35) 
+			text.SchreibeText("Darth Schmidter:\n\nWillkommen zu FOOD-MOORHUHN!\nHunger versus Hausordnung - angewandte NSP!\n\nViel Erfolg!")
+			case 2:
+			LadeBildMitColorKey(710,350,"./Bilder/MainGame/bubble2_red_downflipped_350.bmp",255,0,0)	//Amoebi-Bubble
+			start.SetzePosition(860,555)
+			no.SetzePosition(950,555)
+			text.SetzePosition(735,455) 
+			text.SchreibeText("Amoebi:\n\nWillkommen zu BUG-ATTACK!\nDebugging intense for SWP!\n\nViel Erfolg!")
+			case 3:
+			LadeBildMitColorKey(375,60,"./Bilder/MainGame/bubble2_red_350.bmp",255,0,0)					//WtheK-Bubble
+			start.SetzePosition(525,185)
+			no.SetzePosition(615,185)
+			text.SetzePosition(400,85) 
+			text.SchreibeText("Winnie the K:\n\nWillkommen zu theNETgame!\nKampf des Paketboten gegen Router-Pannen und Darth Schmidter!\n\nViel Erfolg!")
+		}			
+	}
+	
+	start.ZeichneButton()
+	no.ZeichneButton()
+	text.Zeichne()
+	return
+	
+}
 
 // Erg: Die erspielte Note und die Punkte sind geliefert.
 func MinigameLaden(raum,n int) (note float32, punkte uint32){
@@ -280,9 +365,7 @@ func MinigameLaden(raum,n int) (note float32, punkte uint32){
 		case 3:
 		switch n {
 			case 1:
-			sqlGame.SQLgame()		// Ausgabe fehlt noch
-			note, punkte = 6,0
-			//note, punkte = sqlGame.SQLgame()
+			note, punkte = sqlGame.SQLgame()
 			case 2:
 			//TODO (noch kein importierbares package vorhanden)
 		}
@@ -419,7 +502,7 @@ func gametitelSchreiben() []string {
 	
 	var gametitel []string = make([]string,9)
 
-	// Reihenfolge wie im Aufruf im MinigameLaden
+	// Reihenfolge wie im Aufruf in MinigameLaden
 	gametitel[0] = "Bauelemente-Spiel (RS)"
 	gametitel[1] = "Mustererkennung (FP)"
 	gametitel[2] = "Super-ALP2-Escape (ALP2)"
@@ -429,17 +512,7 @@ func gametitelSchreiben() []string {
 	gametitel[6] = "Food-Moorhuhn (NSP)"
 	gametitel[7] = "Bug Attack (SWP)"
 	gametitel[8] = "TheNETgame (NET)"
-
-/*	gametitel[1] = "Bauelemente-Spiel (RS)"
-	gametitel[2] = "Mustererkennung (FP)"
-	gametitel[3] = "Super-ALP2-Escape (ALP2)"
-	gametitel[4] = "Getränkeautomaten-Spiel (EthI)"
-	gametitel[5] = "Didaktik-Game (DDI)"
-	gametitel[6] = "SQL-Quest (DBSA)"
-	gametitel[7] = "Bug Attack (SWP)"
-	gametitel[8] = "Food-Moorhuhn (NSP)"
-	gametitel[9] = "TheNETgame (NET)"		*/
-
+	
 	return gametitel
 }
 
@@ -450,12 +523,12 @@ func ladeEndbildschirmHintergrund() {
 	Cls()
 
 	// Hintergrund gestalten
-	LadeBild(150,100,"./Bilder/sprechblase_flipped_400.bmp")
-	LadeBildMitColorKey(100,350,"./Bilder/Darth_200.bmp",255,255,255)
+	LadeBild(150,100,"./Bilder/MainGame/sprechblase_flipped_400.bmp")
+	LadeBildMitColorKey(100,350,"./Bilder/MainGame/Darth_200.bmp",255,255,255)
 	LadeBild(600,80,"./Bilder/MainGame/zertifikat.bmp")
-	LadeBild(940,510,"./Bilder/certified_100.bmp")
+	LadeBild(940,510,"./Bilder/MainGame/certified_100.bmp")
 	// Bild für exit-Schalter einfügen
-	LadeBild(1100,565,"./Bilder/Zurück-Symbol.bmp")
+	LadeBild(1100,565,"./Bilder/MainGame/Zurück-Symbol.bmp")
 	
 }
 

@@ -134,9 +134,23 @@ A:	for {
 									el.Zeichnen()
 								}*/
 
-							} else {									//wenn nicht "exit" (index 0) geklickt wurde,
-								note,punkte = darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
-								speichereMax(note,punkte,raumnr,index)		// Das beste Ergebnis wird gespeichert.
+							} else {																//wenn nicht "exit" (index 0) geklickt wurde,
+								
+								start,no := darstellung.BubbleLaden(raumnr,index)
+								
+								//Mauslese-Schleife							
+								for {
+									taste, status, mausX, mausY := gfx.MausLesen1()
+									if taste==1 && status==1 {									
+										if start.TesteXYPosInButton(mausX,mausY) {					//und der Start-Button angeklickt wurde,
+											note,punkte = darstellung.MinigameLaden(raumnr,index)	//dem angeklickten Element (Dozenten) zugehöriges Spiel starten
+											speichereMax(note,punkte,raumnr,index)					// Das beste Ergebnis wird gespeichert.
+											break
+										} else if no.TesteXYPosInButton(mausX,mausY) {
+											break
+										}
+									}
+								}
 								darstellung.SemesterraumDarstellen(raumnr)
 							}
 						}

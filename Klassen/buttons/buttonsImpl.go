@@ -37,6 +37,11 @@ func New(x,y,bb,hh uint16, r,g,b uint8, aktiv bool, beschriftung string) *data {
 }
 
 
+func (but *data) SetzePosition(x,y uint16) {
+	but.x = x
+	but.y = y
+}
+
 func (but *data) TesteXYPosInButton(x,y uint16) bool {
 	if but.aktiv {
 		if but.x <= x &&  x <= but.x+but.br {

@@ -25,6 +25,11 @@ package buttons
 
 type Button interface {
 
+	// Vor: -
+	// Eff: Die x-y-Position ist entsprechend der Eingabe neu gesetzt.
+	// Erg: -
+	SetzePosition(x,y uint16)
+
 	// Vor: Button ist aktiv.
 	// Eff: -
 	// Erg: True ist geliefert, wenn die x-y-Position mit dem 
