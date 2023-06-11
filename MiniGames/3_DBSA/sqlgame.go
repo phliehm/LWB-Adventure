@@ -335,9 +335,9 @@ func notenberechnung(punkte uint32) float32 {
 // Vor: Ein gfx-Grafikfenster ist geöffnet.
 // Eff: Hintergrundmusik ist gestartet. (Als go-Routine ausführen
 //		damit das Spiel weitergeht.)
-func hintergrundMusik(musikstopp bool) {	
+func hintergrundMusik(pmusikstopp *bool) {	
 	var soundstr string = "./MiniGames/3_DBSA/8-bit-arcade.wav"
-	for !musikstopp {
+	for !(*pmusikstopp) {
 		SpieleSound(soundstr)
 		time.Sleep (time.Duration(95e9))
 	}
@@ -396,7 +396,7 @@ func SQLgame() (note float32, punkte uint32) {
 	
 
 //-----------------starte Hintergrund-Musik-----------------------------
-	go hintergrundMusik(musikstopp)
+	go hintergrundMusik(&musikstopp)
 	
 //------------------Grafik-Elemente--------------------------------
 	
@@ -740,6 +740,7 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 		if taste==1 && status==1 {
 			if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
 				musikstopp = true
+				StoppeAlleSounds()
 				fmt.Println("exit geklickt")
 				break
 			}
