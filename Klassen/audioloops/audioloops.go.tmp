@@ -8,13 +8,13 @@ package audioloops
  * 
  */
 
+var musikAn bool
+
 import (
 	"gfx"
 	"time"
-	)
 	
-var musikAn bool
-	
+)
 // Vor.: Ein gfx Fenster muss geöffnet sein,
 //		 Idealerweise ist die Länge des Loops ein Vielfaches (oder etwas kleiner) der Audiodatei
 // Eff.: Die "audiodatei" der Länge "dateiLänge" (in ms) wird so lange abgespielt
@@ -44,12 +44,4 @@ func LoopDuration(audiodatei string, dateiLänge uint, loopLänge uint) () {
 func StoppeAudio () {
 	gfx.StoppeAlleSounds()
 	musikAn = false		// Damit Loop nicht wieder neu anfängt
-}
-
-func LoopInfinite(audiodatei string, dateiLänge uint) {
-	musikAn=true
-	for musikAn {
-		gfx.SpieleSound(audiodatei)
-		time.Sleep(time.Duration(dateiLänge)*time.Millisecond)
-	}
 }

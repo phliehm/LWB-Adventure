@@ -2,6 +2,7 @@ package bugAttack
 
 import (
 		"../../Klassen/bugPackage"
+		"../../Klassen/audioloops"
 		"time"
 		"gfx"
 		"math/rand"
@@ -21,6 +22,7 @@ func BugAttack() (float32,uint32){
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Vollrechteck(0,0,1200,700)
 	gfx.Stiftfarbe(0,255,0)
+	go audioloops.LoopInfinite("Sounds/Music/bugAttack.wav",48000)
 	go bugPackage.TastaturEingabe(c)
 	
 	
@@ -42,8 +44,9 @@ func BugAttack() (float32,uint32){
 	}
 	
 	bugPackage.Endbildschirm()
-	gfx.StoppeAlleSounds()
+	
 	endN,endP := bugPackage.GibErgebnis()
 	c<-true						// Beendet Tastatureingabe
+	audioloops.StoppeAudio()	
 	return endN,endP
 }

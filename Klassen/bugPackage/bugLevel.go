@@ -42,7 +42,6 @@ var level6Text string = "... Schule + LWB ... kein Problem ...\n\n"+
 
 // Startbildschirm wenn man aus dem MainGame kommt
 func BugAttackIntro() {
-	gfx.SpieleSound("Sounds/Music/bugWars.wav")
 	wg.Add(1)
 	beschreibeArrayIntro()
 	createNBugs(20,5,5)
@@ -59,7 +58,6 @@ func BugAttackIntro() {
 	}
 	bugArraySchloss.Unlock()
 	wg.Wait()
-	gfx.StoppeAlleSounds()
 	//time.Sleep(1e9) // Wichtig damit die ZeichneWeltIntro() die Chance hat zu beenden
 }
 	
@@ -103,7 +101,6 @@ func Level1(){
 	anzahlBugsImLevel = 1
 	lvlSpeed = 0
 	lvlNervosität = 1
-	gfx.SpieleSound("Sounds/Music/bugWars.wav")
 	//var l ladebalken
 	levelStart()
 	
@@ -149,7 +146,6 @@ func Level2(){
 	l := NewLadebalken(&killNBugsCD,400,50,0,255,255,"k",20)
 	alleLadebalken = append(alleLadebalken,l)
 	*/
-	//gfx.SpieleSound("Sounds/Music/bugWars.wav")
 	levelStart()
 }
 
@@ -159,7 +155,7 @@ func Level3() {
 	anzahlBugsImLevel = 5
 	lvlSpeed = 10
 	lvlNervosität = 50
-	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",1)
+	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",1,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
 	alleLadebalken = append(alleLadebalken,lautoaim)
 	//l := NewLadebalken(&killNBugsCD,400,50,0,255,255,"k",20)
 	//alleLadebalken = append(alleLadebalken,l)
@@ -175,9 +171,9 @@ func Level4() {
 	lvlNervosität = 5
 	anzahlBugsImLevel = 10
 	lvlSpeed = 5
-	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",5)
+	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",5,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
 	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",20)
+	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",20,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
 	alleLadebalken = append(alleLadebalken,l)
 	levelStart()
 	// Letztes Level vorbei
@@ -190,9 +186,9 @@ func Level5() {
 	lvlNervosität = 5
 	anzahlBugsImLevel = 15
 	lvlSpeed = 5
-	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",4)
+	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",4,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
 	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10)
+	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
 	alleLadebalken = append(alleLadebalken,l)
 	levelStart()
 	// Letztes Level vorbei
@@ -205,9 +201,9 @@ func Level6() {
 	lvlNervosität = 20
 	anzahlBugsImLevel = 20
 	lvlSpeed = 5
-	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",2)
+	lautoaim := NewLadebalken(&autoAimCD,xposAutoAimBalken,yposAutoAimBalken,255,0,255,"x",2,"Sounds/Retro Sounds/General Sounds/Coins/sfx_coin_double1.wav")
 	alleLadebalken = append(alleLadebalken,lautoaim)
-	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10)
+	l := NewLadebalken(&killNBugsCD,xposkillNBugs,yposkillNBugs,0,255,255,"k",10,"Sounds/Retro Sounds/General Sounds/Fanfares/sfx_sounds_fanfare1.wav")
 	alleLadebalken = append(alleLadebalken,l)
 	levelStart()
 	// Letztes Level vorbei
@@ -284,15 +280,15 @@ func levelStart(){
 		punkteArray[level-1] = 0	// setze Punkte im Level auf Null weil das Spiel ja beendet wird
 		return
 	}
-	fmt.Println("Starte Level")
-	wg.Add(3)
-	beschreibeArray()
-	createNBugs(anzahlBugsImLevel,lvlSpeed,lvlNervosität)
-	go ZeichneWelt()
-	lvlZeit = 0			
-	lvlLäuft = true
+	//fmt.Println("Starte Level")
+	wg.Add(3)				// warte später auf 3 Go-Routinen
+	beschreibeArray()		// Füllt das Level mit Zahlen
+	createNBugs(anzahlBugsImLevel,lvlSpeed,lvlNervosität)	// Füge Bugs hinzu
+	go ZeichneWelt()		// Starte mit dem Zeichnen der Welt
+	lvlZeit = 0				// Die Zeit im Level ist 0
+	lvlLäuft = true			// Das Level beginnt
 	go zählePunkte()	// für die Berechnung der Punktzahl
-	go lvlTimer()		
+	go lvlTimer()			// Zählt Zeit nach unten
 	for _,l:=range alleLadebalken {	// starte den Cooldown aller Ladebalken
 		if l!= nil {go l.cooldown()}
 	}
@@ -302,8 +298,8 @@ func levelStart(){
 	}
 	lvlLäuft = false			// Signalisiert go-Routingen, dass das Level vorbei ist
 	wg.Wait()				// Wartet auf alle zu beendenden Go-Routinen
-	entferneAlleLadebalken()
-	ergebnisLevel()
+	entferneAlleLadebalken()	// Löscht alle Ladebalken eines Levels
+	ergebnisLevel()				// Gibt das Ergebnis des Levels in der Konsole aus
 	
 }
 

@@ -51,8 +51,8 @@ var lvlLäuft bool
 var lvlZeit uint16 // Zeit im Level
 const maxZeit uint16 = 30 // maximale Zeit
 const maxLevel = 6 
-var lvlMaxPunkte [maxLevel]uint16 = [maxLevel]uint16{4800,4500,4000,3500,3000,2000}
-var lvlMinPunkte [maxLevel]uint16 = [maxLevel]uint16{4000,2000,2000,500,0,0}
+var lvlMaxPunkte [maxLevel]uint16 = [maxLevel]uint16{4850,4700,4000,3500,3000,1500}
+var lvlMinPunkte [maxLevel]uint16 = [maxLevel]uint16{4500,3500,3000,1500,0,0}
 var LevelArray [maxLevel]func() = [maxLevel]func(){Level1,Level2,Level3,Level4,Level5,Level6}
 
 const maxPunkteProLevel uint16 = 5000

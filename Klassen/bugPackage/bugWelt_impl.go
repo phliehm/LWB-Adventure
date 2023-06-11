@@ -141,7 +141,7 @@ func cursorZeichnen() {
 
 // Update Cursor-Position
 func TastaturEingabe(c chan bool) {
-	var step uint16 = 1
+	var step uint16 = 1				// Variable für Schrittweite des Cursors wenn SHIFT gedrückt wird
 	for {
 		select {
 			case <-c:
@@ -150,7 +150,7 @@ func TastaturEingabe(c chan bool) {
 				//gfx.Stiftfarbe(0,255,0)
 				taste, gedrueckt, tiefe = gfx.TastaturLesen1()
 				if tiefe==1 {
-					step=10
+					step=10			// 10-fache Schrittweite
 				}else {step=1}
 				if gedrueckt == 1 {
 					//fmt.Println(taste)
@@ -158,8 +158,9 @@ func TastaturEingabe(c chan bool) {
 						case 273:		// hoch
 									cursor_y -= step*zH
 									// Wenn der Cursor über dem Weltrand oder über dem FensterRand ist, setze auf andere Seite
-									if cursor_y<y_offset*zH || cursor_y> 1000*zH{cursor_y = y_offset*zH+weltH*zH-zH}				
-						case 274:  // runter
+									// Die 1000 sorgt hier nur für eine (zu) große Zahl, wie sie bei kleiner 0 auftreten würde	
+									if cursor_y<y_offset*zH || cursor_y> 1000*zH{cursor_y = y_offset*zH+weltH*zH-zH}			
+						case 274:  // runter	
 									cursor_y += step*zH
 									if cursor_y>y_offset*zH+weltH*zH-zH {cursor_y = y_offset*zH}
 						case 275:	// rechts
@@ -173,8 +174,8 @@ func TastaturEingabe(c chan bool) {
 									
 									bugGetroffen()
 						case 'x': 	benutzeAutoAim() // autoAim
-						case 'k': 	killNBugs(5)
-						case 'q':	// beende Level
+						case 'k': 	killNBugs(5)	// Hier kann mein einstellen wie viele Bugs mit 'k' getötet werden sollen
+						case 'q':	// Geht zum Endbildschirm
 									beendeSpiel()
 									
 							//gfx.FensterAus()
@@ -290,13 +291,15 @@ type ladebalken struct {
 	r,g,b uint8
 	taste string
 	cdlänge	uint16
+	sound string
 }
 
-func NewLadebalken(wertAdresse *uint16,x,y uint16,r,g,b uint8, taste string, cdl uint16) *ladebalken {
+func NewLadebalken(wertAdresse *uint16,x,y uint16,r,g,b uint8, taste string, cdl uint16,sound string) *ladebalken {
 	l := new(ladebalken)
 	l.x,l.y,l.r,l.g,l.b,l.taste = x,y,r,g,b,taste
 	l.wertAdresse = wertAdresse
 	l.cdlänge = cdl
+	l.sound = sound
 	return l
 }
 
@@ -310,17 +313,22 @@ func (l *ladebalken) zeichne() {
 
 func (l *ladebalken) cooldown() {
 	*l.wertAdresse = 0		// Setze Cooldown auf 0
-	for lvlLäuft {
-		if *l.wertAdresse != 0 {
-			time.Sleep(1e8)
+	for lvlLäuft {			// solange ich noch im Level bin
+		if *l.wertAdresse != 0 {		// Wenn der CD nicht 0 ist mache weiter in der Schleife
+			time.Sleep(1e8)		
 			continue		
 		}			
-		for i:=uint16(0);i<=10;i++ {
+		for i:=uint16(0);i<=10;i++ {			// Lade die Fähigkeit 10 mal
 			if lvlLäuft == false {	// Falls das Level beendet ist, beende diese Methode
 				return
-				}			
+				}	
+			fmt.Println("CD: ",l.cdlänge," Wert: ",*l.wertAdresse)
+					
 			*l.wertAdresse = i		// Überschreibe den Wert an der Adresse
-			time.Sleep(time.Duration(l.cdlänge)*1e8)
+			if *l.wertAdresse == 10	{		// wenn voll geladen, spiele Sound
+				gfx.SpieleSound(l.sound)
+			}
+			time.Sleep(time.Duration(l.cdlänge)*1e8)	// warte bis zum nächsten Ladeschritt
 		}
 	}
 		time.Sleep(1e8)
@@ -333,6 +341,7 @@ func zeichneAlleLadebalken() {
 	}
 }
 
+// Löscht Ladebalken eines Levels
 func entferneAlleLadebalken() {
 	for i,_:=range alleLadebalken {
 		alleLadebalken[i] = nil
@@ -367,7 +376,7 @@ func benutzeAutoAim() {
 func zeichneZeit() {
 	//if lvlLäuft == false {return}
 	if maxZeit-lvlZeit<1 && lvlLäuft == true{			// Wenn Zeit abgelaufen
-		killNBugsCD = 10
+		killNBugsCD = 10		// Setze CD hoch damit man alle Bugs töten kann 
 		killNBugs(100)		// Töte alle Bugs
 		punkteArray[level-1] = 0
 		lvlLäuft = false
