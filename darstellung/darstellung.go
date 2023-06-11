@@ -503,8 +503,8 @@ func gametitelSchreiben() []string {
 	var gametitel []string = make([]string,9)
 
 	// Reihenfolge wie im Aufruf in MinigameLaden
-	gametitel[0] = "Bauelemente-Spiel (RS)"
-	gametitel[1] = "Mustererkennung (FP)"
+	gametitel[0] = "Mustererkennung (FP)"
+	gametitel[1] = "Bauelemente-Spiel (RS)"
 	gametitel[2] = "Super-ALP2-Escape (ALP2)"
 	gametitel[3] = "Getränkeautomaten-Spiel (EthI)"
 	gametitel[4] = "SQL-Quest (DBSA)"
