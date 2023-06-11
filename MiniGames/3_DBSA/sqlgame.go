@@ -7,6 +7,7 @@ package sqlGame
 import (
 	. "gfx"
 	"fmt"
+	"time"
 	"../../Klassen/buttons"
 	"../../Klassen/textboxen"
 	"../../Klassen/texteditoren"
@@ -17,6 +18,7 @@ var path string = ""
 var path2 string = "./" //MiniGames/2_ALP2/"
 
 var punkte, fehler uint32							// Punkte-/Fehler-Variable
+var musikstopp bool
 
 //----------------String-Slices für Texte-------------------------------
 //----------------------------------------------------------------------
@@ -330,6 +332,21 @@ func notenberechnung(punkte uint32) float32 {
 }
 
 
+
+
+// Vor: Ein gfx-Grafikfenster ist geöffnet.
+// Eff: Hintergrundmusik ist gestartet. (Als go-Routine ausführen
+//		damit das Spiel weitergeht.)
+func hintergrundMusik(musikstopp bool) {	
+	var soundstr string = "Sounds/Music/8-bit-arcade.wav"
+	for !musikstopp {
+		SpieleSound(soundstr)
+		time.Sleep (time.Duration(95e9))
+	}
+	//fmt.Println("Sound gestoppt")
+}
+
+
 // eigentliche (exportierbare) Spiel-Funktion "SQLgame()"
 //----------------------------------------------------------------------
 // Vor.: -
@@ -379,6 +396,9 @@ func SQLgame() (note float32, punkte uint32) {
 	// Slice zum Speichern der einzelnen Levelpunkte (für das Abschluss-Zertifikat)
 	punktespeicher = make([]uint32,len(texte))
 	
+
+//-----------------starte Hintergrund-Musik-----------------------------
+	go hintergrundMusik(musikstopp)
 	
 //------------------Grafik-Elemente--------------------------------
 	
@@ -543,6 +563,7 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 					Stiftfarbe(0,255,0)									// schreibe RICHTIG! in die Sprechblase
 					SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",28)
 					SchreibeFont(230,240,"RICHTIG!!!  :-)")
+					SpieleSound("./Sounds/success.wav")
 					punkte = punkte + levelpunkte						// addiere aktuelle Levelpunkte zur Gesamtpunktzahl
 					punktespeicher[i] = levelpunkte						// speichere aktuelle Levelpunkte im Punktespeicher-Slice
 					punktenoteSchreiben(punktenote,levelpunkte,punkte)	// aktualisiere Punkte- und Note-Anzeige
@@ -611,13 +632,15 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 					Stiftfarbe(255,0,0)
 					
 					if j<3 {											// ... und NOCHMAL! in die Sprechblase schreiben
-						SchreibeFont(225,240,"NOCHMAL!  :-(")
+						SchreibeFont(225,240,"NOCHMAL!  :-(")						
+						SpieleSound("./Sounds/ehhh.wav")
 						ted = texteditoren.New(315,595,830,63,20,true)
 					} else {
 						Stiftfarbe(255,255,255)
 						Vollrechteck(220,239,315,40)
 						Stiftfarbe(255,0,0)
 						SchreibeFont(225,240,"SCHADE!  :-(")			// beim 4. Versuch SCHADE! in die Sprechblase schreiben
+						SpieleSound("./Sounds/uh-oh.wav")
 						next.ZeichneButton()							// und next-Button für Übergang ins nächste Level zeichnen
 					}
 				}
@@ -718,6 +741,7 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 		taste, status, mausX, mausY := MausLesen1()
 		if taste==1 && status==1 {
 			if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
+				musikstopp = true
 				fmt.Println("exit geklickt")
 				break
 			}
