@@ -1,0 +1,36 @@
+ToDo
+
+Test-Dateien für Klassen erstellen
+
+UML-Diagramme   (jeder für ein Spiel nach Vorlage)
+
+README neu schreiben (gfx-Hinweis)  & Anleitung (pdf & txt) --> Philipp
+
+Lastenheft --> Ben (+jeder einzelnen Stichpunkt für EIN eigenes Game)
+
+ER-Dia als PDF in Dokumentation laden --> Martin
+
+MainFloor
+    - Symbol für Zeugnistür
+
+Infofenster:
+    - Anzahl der Schlüssel?
+
+Schlüssel-Modus? --> Wunsch-Kriterien oder Martin :-)
+
+Startbildschirm: --> Annalena
+    - Schrift und Eingabe-Feld größer?
+
+
+Raum 4
+    - STEPS-Logo an die Tafel --> Annalena
+    - Wenn man das erste mal in Raum 4 geht: Heidi lässt dich Hausordnung unterschreiben --> Jedes weitere mal: "Es wird hier nicht gegessen und getrunken!" --> Martin & Annalena
+
+Zeugnisraum: --> Annalena
+    - Tür-Symbol
+    - Zeugnisscreen von AnCy + Gesamtduchschnittsnote
+    - Alle Dozenten + Heidi
+    - Konfetti, je mehr desto besser die Note   (mehrere Bilder nacheinander einfügen...)
+    
+Montag: Kompilieren!!!
+
