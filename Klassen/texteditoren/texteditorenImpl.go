@@ -13,8 +13,6 @@ import (
 
 type data struct {
 	x,y,breite,höhe uint16 	// Koordinaten und breite und Höhe
-	//const spaltenanzahl, zeilenanzahl = 64, 21 entspricht breite und höhe?!
-	//font string
 	schriftgr int
 	text string
 	einzeilig bool
@@ -28,8 +26,6 @@ func New(posx,posy,breite,höhe uint16, schriftgr int, einzeilig bool) *data {
 	ted.höhe = höhe
 	ted.breite = breite
 	ted.einzeilig = einzeilig
-	//ted.schriftgr = 20
-	//ted.font = gfx.GibFont()
 	if !gfx.FensterOffen () { gfx.Fenster(1200,700) }
 	gfx.Stiftfarbe(0,0,0)
 	gfx.Vollrechteck(posx,posy,breite,höhe)
@@ -41,14 +37,6 @@ func New(posx,posy,breite,höhe uint16, schriftgr int, einzeilig bool) *data {
 	return ted
 }
 
-/*
-func darstellen(posx,posy,breite,höhe uint16) {
-	if !gfx.FensterOffen () { gfx.Fenster(1200,700) }
-	gfx.Stiftfarbe(0,0,0)
-	gfx.Vollrechteck(posx,posy,breite,höhe)
-	editor.Editor(posx,posy) 
-}
-*/
 
 //-------------------------- Methoden ---------------------------- 
 
@@ -60,16 +48,6 @@ func (ted *data) SetzePosition(xneu,yneu uint16) {
 	ted.x = xneu
 	ted.y = yneu
 }
-
-/*
-func (ted *data) GibFont() string {
-	return ted.font
-}
-
-func (ted *data) SetzeFont(fontneu string) {
-	ted.font = 
-}
-*/
 
 func (ted *data) GibSchriftgröße() (schriftgr int) {
 	return ted.schriftgr
@@ -99,9 +77,11 @@ func (ted *data) IstEinzeilig() bool {
 	return ted.einzeilig
 }
 
-func (ted *data) NeuerTexteditor(posx,posy,breite,höhe uint16, schriftgr int, einzeilig bool) {
+/*
+func (ted *data) NeuerTexteditor(posx,posy,breite,höhe uint16, schriftgr int, einzeilig bool) *data {
 	ted = New(posx,posy,breite,höhe,schriftgr,einzeilig)
 }
+*/
 
 func (ted *data) GibString() string {
 	return ted.text
