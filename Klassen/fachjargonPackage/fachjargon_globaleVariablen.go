@@ -1,3 +1,10 @@
+/* Philipp Liehm
+ * Juni 2023
+ * LWB-Adventure: FachJargon
+ * 
+ * Globale Variablen und Initialisierungsfunktionen für FachJargon
+ */
+
 package fachjargonPackage
 import "fmt"
 
