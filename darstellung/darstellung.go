@@ -198,8 +198,9 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 	SchreibeFont(325,200,fmt.Sprintf("%2.1f",durchschnitt(noten)))
 		
 	// Inhalt des Zertifikates vorbereiten	
-	schreibeZertifikat(spielstand)
-
+	schreibeZertifikatEnde(spielstand)
+	
+	
 
 	//exit.SetzeFarbe(0,0,0)
 	//exit.Zeichnen()
@@ -509,7 +510,7 @@ func schreibeZertifikat(spielstand spielstaende.Spielstand) {
 	for i:=0; i<len(gamenoten); i++ {
 		gamestxt = gamestxt + gametitel[i] + ":\n"
 		if gamenoten[i] > .5 {
-			notentxt= notentxt + "" +fmt.Sprint(gamenoten[i]) + "\n"
+			notentxt= notentxt + "" +fmt.Sprintf("%2.1f",gamenoten[i]) + "\n"
 		} else {
 			notentxt= notentxt + "" +"--"+ "\n"
 		}
@@ -537,7 +538,65 @@ func schreibeZertifikat(spielstand spielstaende.Spielstand) {
 
 }
 
+// Anders als der Zwischenstand, Achtung, hier wird auch das Bild der Dozenten eingefügt
+func schreibeZertifikatEnde(spielstand spielstaende.Spielstand) {
 
+	var zertifikatgames textboxen.Textbox = textboxen.New(630,250,450,550)
+	var zertifikatnoten textboxen.Textbox = textboxen.New(1000,250,100,550)
+	var gametitel []string = gametitelSchreiben()
+	var gamenoten []float32 = ordneNotenGamesZu(spielstand)
+	var gamestxt,notentxt string				// Texte für das Zertifikat
+
+	for i:=0; i<len(gamenoten); i++ {
+		gamestxt = gamestxt + gametitel[i] + ":\n"
+		if gamenoten[i] > .5 {
+			notentxt= notentxt + "" +fmt.Sprintf("%2.1f",gamenoten[i]) + "\n"
+		} else {
+			notentxt= notentxt + "" +"--"+ "\n"
+		}
+	}
+
+	// Tabellenkopf Zertifikat
+	SetzeFont("./Schriftarten/collegeb.ttf",30)
+	SchreibeFont(740,130, "NICHT-Zeugnis")
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+	SchreibeFont(630,200,"Veranstaltung                   Noten")
+	Linie(630,225,1040,225)
+
+	// Spieletitel schreiben
+	zertifikatgames.SetzeFarbe(0,0,0)
+	zertifikatgames.SetzeZeilenAbstand(7)
+	zertifikatgames.SetzeSchriftgröße(22)
+	zertifikatgames.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	zertifikatgames.SchreibeText(gamestxt)
+	zertifikatgames.Zeichne()
+
+	// Noten schreiben
+	zertifikatnoten.SetzeFarbe(0,0,0)
+	zertifikatnoten.SetzeZeilenAbstand(7)
+	zertifikatnoten.SetzeSchriftgröße(22)
+	zertifikatnoten.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	zertifikatnoten.SchreibeText(notentxt)
+	zertifikatnoten.Zeichne()
+	
+	// FU-Logo
+	LadeBild(630,530,"./Bilder/FP/fu-logo.bmp")
+	
+	// Alle Dozenten
+	alleDozentenUndKonfetti()
+	
+}
+
+func alleDozentenUndKonfetti() {
+	// Alle Dozenten
+	Stiftfarbe(255,255,255)
+	Vollrechteck(0,360,320,340)	// Überschreibe Vader
+	LadeBildMitColorKey(0,375,"./Bilder/MainGame/Alle_Dozenten.bmp",255,255,255)
+	
+	SpieleSound("./Sounds/Applaus.wav")
+	
+	// Konfetti
+}
 
 func gametitelSchreiben() []string {
 	
