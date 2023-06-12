@@ -1,3 +1,10 @@
+/* Philipp Liehm
+ * Juni 2023
+ * LWB-Adventure: FachJargon
+ * 
+ * Funktionen zum Zeichnen der Level
+ */
+
 package fachjargonPackage
 
 import (

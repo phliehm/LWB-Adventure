@@ -1,3 +1,9 @@
+/* Philipp Liehm
+ * Juni 2023
+ * LWB-Adventure: BugAttack
+ * 
+ * Malt Pixel für Pixel einzelne Zahlen
+ */
 package bugPackage
 
 import (
