@@ -74,8 +74,8 @@ func aufgabentexte(n int) {																		//TODO
 		gfx.SchreibeFont(695,184,"Lasern()     Entlasern()       Markieren()")
 		gfx.SchreibeFont(695,203,"Mauern()     Entmauern()       Demarkieren()")
 		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
-		gfx.SchreibeFont(695,232,"Wenn Du Dich noch an das robi-Paket aus ALP2 erinnerst,")
-		gfx.SchreibeFont(695,253,"kannst Du auch andere Befehle ausprobieren!")
+		gfx.SchreibeFont(695,232,"Du kannst auch andere ALP2-robi-Befehle ausprobieren")
+		gfx.SchreibeFont(695,253,"und versuchen Befehle mit ...Und...() zu kombinieren!")
 		gfx.Stiftfarbe(0,255,0)
 		gfx.SchreibeFont(695,278,"Wenn Du Dich bereit fühlst mit Level 1 zu starten,")
 		gfx.SchreibeFont(695,299,"gehe zum Ziel in der linken oberen Ecke des Spielfelds!")
@@ -91,18 +91,46 @@ func aufgabentexte(n int) {																		//TODO
 		gfx.SchreibeFont(695,184,"Lasern()     Entlasern()       Markieren()")
 		gfx.SchreibeFont(695,203,"Mauern()     Entmauern()       Demarkieren()")
 		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
-		gfx.SchreibeFont(695,232,"Markiere jeden Deiner Schritte und hinterlasse einen")
-		gfx.SchreibeFont(695,253,"Laser-Kreis an jeder Stelle, die Du entmauert hast.")
-		gfx.Stiftfarbe(0,255,0)
-		gfx.SchreibeFont(695,278,"Wenn Du dabei keine Fehler machst und den kürzesten Weg mit")		//für alle, also unter dem switch?
-		gfx.SchreibeFont(695,299,"den wenigsten Befehlen findest, gibt es die Bestnote!")
+		gfx.SchreibeFont(695,232,"Im ersten Level gibt es noch keine Zusatz-Aufgaben,")
+		gfx.SchreibeFont(695,253,"aber auch hier geht es schon um Effizienz:")
 		case 2:
-		case 3:
-		case 4:
-		case 5:
-		case 6:
+		gfx.Stiftfarbe(0,0,0)
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
+		gfx.SchreibeFont(695,70,"Lotse den VADEROBI mit möglichst wenigen Befehlen")
+		gfx.SchreibeFont(694,91,"zum Ziel in der linken oberen Ecke des Spielfelds!")
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-4.49.2.ttf",14)
+		gfx.SchreibeFont(695,122,"Folgende Befehle kannst Du dafür nacheinander eingeben und")
+		gfx.SchreibeFont(695,141,"den VADEROBI mit der ENTER-Taste ausführen lassen:")
+		gfx.SchreibeFont(695,165,"Laufen()     LinksDrehen()     RechtsDrehen()")
+		gfx.SchreibeFont(695,184,"Lasern()     Entlasern()       Markieren()")
+		gfx.SchreibeFont(695,203,"Mauern()     Entmauern()       Demarkieren()")
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
+		gfx.SchreibeFont(695,232,"Markiere auf dem Weg zum Ziel jeden Deiner Schritte!")
+		gfx.SchreibeFont(695,253,"und denke an die maximale Effizienz (Kombis möglich!):")
 		default:
+		gfx.Stiftfarbe(0,0,0)
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
+		gfx.SchreibeFont(695,70,"Lotse den VADEROBI mit möglichst wenigen Befehlen")
+		gfx.SchreibeFont(694,91,"zum Ziel in der linken oberen Ecke des Spielfelds!")
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-4.49.2.ttf",14)
+		gfx.SchreibeFont(695,122,"Folgende Befehle kannst Du dafür nacheinander eingeben und")
+		gfx.SchreibeFont(695,141,"den VADEROBI mit der ENTER-Taste ausführen lassen:")
+		gfx.SchreibeFont(695,165,"Laufen()     LinksDrehen()     RechtsDrehen()")
+		gfx.SchreibeFont(695,184,"Lasern()     Entlasern()       Markieren()")
+		gfx.SchreibeFont(695,203,"Mauern()     Entmauern()       Demarkieren()")
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
+		gfx.SchreibeFont(695,232,"Markiere jeden Deiner Schritte UND hinterlasse einen")
+		gfx.SchreibeFont(695,253,"Laser-Kreis an jeder Stelle, die Du entmauert hast.")
+		//case 3:
+		//case 4:
+		//case 5:
+		//case 6:
+		//default:
 	}
+	
+	gfx.Stiftfarbe(0,255,0)
+	gfx.SchreibeFont(695,278,"Wenn Du keine Fehler machst und den kürzesten Weg mit")
+	gfx.SchreibeFont(695,299,"den wenigsten Befehlen findest, gibt es die Bestnote!")
 	
 }
 
@@ -118,11 +146,11 @@ func Vaderobi() (float32,uint32) {
 	var level []string
 	level = [] string {"Start-Welt","Welt_FU","Welt_Steps","Welt_robi","Welt_SCM","Welt_CYR","Welt_ALP"}
 	var min []uint
-	min = []uint {0,37,31,31,30,40,35}
+	min = []uint {0,21,28,31,28,24,29}
 	var minlaser []uint
-	minlaser = []uint {0,1,3,3,2,1,2}
+	minlaser = []uint {0,0,0,3,2,1,2}
 	var minmark []uint
-	minmark = []uint {0,15,12,13,11,16,14}
+	minmark = []uint {0,0,12,13,11,16,14}
 	
 	//Initialisierung der Variablen und Speicher-Slices für Punkte und Noten
 	var punktespeicher []uint
@@ -229,6 +257,19 @@ func Vaderobi() (float32,uint32) {
 						gfx.SpieleSound("./Sounds/sfx_sounds_impact11.wav")
 						korrekteBefehle++
 						}
+					case "LaufenUndMarkieren()":
+					gfx.SpieleSound("./Sounds/vader_breathing.wav")
+					markanz++
+					Markieren()
+					switch Laufen1() {
+						case false:
+						fehler++
+						gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
+						Melden("FEHLER: **Laufen...()** NICHT MÖGLICH!")
+						case true:
+						gfx.SpieleSound("./Sounds/sfx_sounds_impact11.wav")
+						korrekteBefehle++
+						}
 					case "LinksDrehen()":
 					korrekteBefehle++
 					gfx.SpieleSound("./Sounds/sfx_sounds_impact2.wav")
@@ -325,6 +366,32 @@ func Vaderobi() (float32,uint32) {
 						fehler++
 						gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
 						Melden("FEHLER: **Entmauern()** NICHT MÖGLICH!")
+						case true:
+						gfx.SpieleSound("./Sounds/sfx_sounds_falling6.wav")
+						korrekteBefehle++
+						}
+					case "EntmauernUndLasern()":
+					Legen1()
+					gfx.SpieleSound("./Sounds/sfx_movement_portal1.wav")
+					laseranz++
+					switch Entmauern1() {
+						case false:
+						fehler++
+						gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
+						Melden("FEHLER: **Entmauern...()** NICHT MÖGLICH!")
+						case true:
+						gfx.SpieleSound("./Sounds/sfx_sounds_falling6.wav")
+						korrekteBefehle++
+						}
+					case "LasernUndEntmauern()":
+					Legen1()
+					gfx.SpieleSound("./Sounds/sfx_movement_portal1.wav")
+					laseranz++
+					switch Entmauern1() {
+						case false:
+						fehler++
+						gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
+						Melden("FEHLER: **Entmauern...()** NICHT MÖGLICH!")
 						case true:
 						gfx.SpieleSound("./Sounds/sfx_sounds_falling6.wav")
 						korrekteBefehle++
