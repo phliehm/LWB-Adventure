@@ -1,5 +1,5 @@
 //Annalena Cyriacus
-//12. Juni 2023
+//Juni 2023
 //LWB-Adventure: Minigame "SQL-Quest"
 
 package sqlGame
@@ -68,6 +68,7 @@ func bubbleTexte() {
 	texte[6] = "Du hast schon einige gespielt, doch wieviele Mini-Games gibt es denn hier in der LWB-Adventure-World? (Ausgaben-\nÜberschrift: AnzahlMiniGames)"
 	texte[8] = "Die LWB-Tage sind ja meistens ziemlich abwechslungsreich, aber wie heißt denn die Veranstaltung mit den meisten SWS?"
 	texte[7] = "Wieviele SWS müssen in der LWB insgesamt absolviert werden? (Ausgaben-Überschrift: GesamtanzahlSWS)"
+	//texte[10] = "Lasse zu jedem Raum die Anzahl der dort stattfindenden Veranstaltungen anzeigen! (Ausgabe aufsteigend, Überschrift der Anzahl-Ausgabe: AnzahlVeranstaltungen)"
 	texte[9] = "Schaffst Du es Dir die Namen, Semester und SWS aller Veranstaltungen von Winnie the K absteigend sortiert nach SWS-Anzahl anzeigen zu lassen?"
 	texte[10] = "Finde zum Schluss die Veranstaltungs-\nAnzahl pro Standort heraus! (ohne JOIN, Ausgabe aufsteigend, Ausgaben-\nÜberschrift: AnzahlVeranstaltungen)"
 }
@@ -82,6 +83,7 @@ func eingabeTexte() {
 	eingTexte[6] = "SELECTCOUNT(*)ASAnzahlMiniGamesFROMmini-games;"
 	eingTexte[7] = "SELECTSUM(sws)ASGesamtanzahlSWSFROMveranstaltungen;"
 	eingTexte[8] = "SELECTvnameFROMveranstaltungenWHEREsws=(SELECTMAX(sws)FROMveranstaltungen);"
+	//eingTexte[10] = "SELECTsemester,COUNT(*)ASAnzahlVeranstaltungenFROMveranstaltungenGROUPBYsemesterORDERBYsemester";
 	eingTexte[9] = "SELECTvname,semester,swsFROMveranstaltungenNATURALJOINdozentenWHEREdozname='WinnietheK'ORDERBYswsDESC;"
 	eingTexte[10] = "SELECTort,COUNT(*)ASAnzahlVeranstaltungenFROMraeume,veranstaltungenWHEREraumnr=semesterGROUPBYortORDERBYCOUNT(*);"
 	
@@ -243,6 +245,8 @@ func ausgabeTexte() {
 
 // Darstellung des initialen Ausgabe-Textes mit Hinweisen
 func initialausgabe(ausgabe textboxen.Textbox) {
+	//Stiftfarbe(255,255,255)
+	//Vollrechteck(310,370,840,210)
 	ausgabe.SetzeHöhe(190)
 	ausgabe.RahmenAn(true)
 	ausgabe.SetzeRahmenFarbe(0,0,0)
@@ -252,6 +256,7 @@ func initialausgabe(ausgabe textboxen.Textbox) {
 	ausgabe.SetzeZeilenAbstand(5)
 	ausgabe.SchreibeText("Hier erscheint das Ergebnis Deiner SQL-Anfrage, sobald Du sie eingegeben und mit ENTER ausgeführt hast! (Hinweis: Kommandos GROSS schreiben, alles andere klein!)")
 	ausgabe.Zeichne()
+	//ausgabe.RahmenAn(false)
 }
 
 // Darstellung der Fehlerausgabe (bei falscher Eingabe)
@@ -260,6 +265,7 @@ func erzeugeFehlerausgabe() {
 	falschausgabe.RahmenAn(true)
 	falschausgabe.SetzeRahmenFarbe(255,0,0)
 	falschausgabe.SetzePosition(320,527)
+	//falschausgabe.SetzeHöhe(43)
 	falschausgabe.SetzeZeilenAbstand(3)
 	falschausgabe.SetzeFarbe(255,0,0)
 	falschausgabe.SchreibeText("FALSCHE EINGABE! --> Überprüfe die Anfrage / korrigiere die Schreibweise!!!\n(Kommandos GROSS, sonst klein, strings mit '...' und Simikolon nicht vergessen!)")
@@ -335,6 +341,7 @@ func hintergrundMusik(pmusikstopp *bool) {
 		SpieleSound(soundstr)
 		time.Sleep (time.Duration(95e9))
 	}
+	//fmt.Println("Sound gestoppt")
 }
 
 
@@ -354,10 +361,14 @@ func SQLgame() (note float32, punkte uint32) {
 	Vollrechteck(0,0,1200,700)
 
 //------------------Füllen der Text-Slices------------------------------	
+	//fmt.Println("Führe bubbleTexte() aus!")
 	bubbleTexte()
+	//fmt.Println("Führe eingabeTexte() aus!")
 	eingabeTexte()
 	eingabeTexte2()
+	//fmt.Println("Führe ausgabeTexte() aus!")
 	ausgabeTexte()
+	//fmt.Println("Führe hilfeText() aus!")
 	hilfeTexteSchreiben()
 	
 //------------------Variablen-------------------------------------------
@@ -366,7 +377,9 @@ func SQLgame() (note float32, punkte uint32) {
 	var next buttons.Button = buttons.New(445,240,80,35,0,255,0,true,"   next")
 	var firsted textboxen.Textbox = textboxen.New(320,600,820,48)
 	var ausgabe textboxen.Textbox = textboxen.New(320,380,820,190)
+	//var falschausgabe textboxen.Textbox = textboxen.New(320,380,820,43)
 	var datainfo textboxen.Textbox = textboxen.New(610,265,530,85)
+	//var fehlerausgabe textboxen.Textbox = textboxen.New(320,550,820,25)
 	SetzeFont(path2 + "Schriftarten/Ubuntu-B.ttf",50)
 	var bubblehead textboxen.Textbox = textboxen.New(220,115,305,155)
 	SetzeFont(path2 + "Schriftarten/Ubuntu-R.ttf",50)
@@ -431,7 +444,16 @@ func SQLgame() (note float32, punkte uint32) {
 	
 	// Darstellung des initialen Ausgabe-Textes mit Hinweisen
 	initialausgabe(ausgabe)
-		
+	
+	/*
+	fehlerausgabe.RahmenAn(true)
+	fehlerausgabe.SetzeRahmenFarbe(255,0,0)
+	fehlerausgabe.HintergrundAn(true)
+	fehlerausgabe.SetzeHintergrundFarbe(255,255,255)
+	fehlerausgabe.SetzeFarbe(255,0,0)
+	fehlerausgabe.SchreibeText("Falsche Eingabe! Überprüfe die Anfrage und kontrolliere die Schreibweise!")
+	*/
+	
 	// Darstellung eines Start-Texteditors (als Textfeld) mit Hinweisen zur Eingabe der SQL-Anfragen
 	firsted.HintergrundAn(true)
 	firsted.SetzeHintergrundFarbe(0,0,0)
@@ -556,6 +578,7 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 					Stiftfarbe(255,255,255)								// ... und weißem Hintergrund für ...
 					Vollrechteck(311,375,838,200)
 					erzeugeAusgabe(i)									// ... die aktuelle Ausgaben-Darstellung mit dem Ergebnis zur richtigen Anfrage
+					//next.AktiviereButton()
 					continue A											// weiter mit nächstem Level-Schleifen-Durchgang (Sprungmarke A)
 				
 				// 2. Fall: falsche Eingabe
