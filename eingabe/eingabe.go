@@ -121,9 +121,8 @@ A:	for {
 							} else {
 								if nschluessel >= uint16(index)	{
 									
-									if raumnr == 4 {														//wenn die Semester-Tür 4 angeklickt wurde,
+									if raumnr == 4 && !hoSigned {														//wenn die Semester-Tür 4 angeklickt wurde,
 									
-										if !hoSigned {
 											fmt.Println("Noch nicht unterschrieben!")
 											sign, no := darstellung.HeidiDarstellen()						//Heidi mit Bubble und Unterschrift-Aufforderung darstellen
 
@@ -142,11 +141,10 @@ A:	for {
 													}
 												}
 											} 
-										} else  {
-											//darstellung.SemesterraumDarstellen(index)
+									} else  {
+											fmt.Println("Raum darstellen: ",index)
 											darstellung.SemesterraumDarstellen(index)							//also wird der jeweilige Semesterraum dargestellt
-										}
-									}	
+									} 
 									
 								} else { 			// Raum zu, kein Schlüssel da
 									raumnr = 0
