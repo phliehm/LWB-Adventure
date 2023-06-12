@@ -9,7 +9,7 @@ import ( "fmt" ; "./vierecke" ; "gfx")
 func main () {
 	
 	var farbwert uint8 = 255
-	var v1,v2,v3,v4,v5 vierecke.Viereck
+	var v1,v2,v3,v4,v5,v6 vierecke.Viereck
 	
 	v1 = vierecke.New(300,300,200,500,700,500,600,300)
 	v2 = vierecke.New(935,290,935,520,1010,545,1020,255)
@@ -35,15 +35,15 @@ func main () {
 	v1.SetKoordinaten(45,235,40,595,220,595,220,235)
 	
 	fmt.Println ("v1 - kodiert:",v1.Kodieren())
-	v5 = v1.Kopie().(vierecke.Viereck)
-	fmt.Println ("v5 - kodiert:",v5.Kodieren())
+	v6 = v1.Kopie().(vierecke.Viereck)
+	fmt.Println ("v6 - kodiert:",v6.Kodieren())
 	
 	gfx.Fenster(1200,700)
 	
 	fmt.Println ("v1, v2 und v5 werden gezeichnet!")
 	v1.Zeichnen()
 	v2.Zeichnen()
-	v5.Zeichne()
+	v5.Zeichnen()
 	
 	r1,g1,b1 := v1.GibFarbe()
 	fmt.Println ("Farbe von v1:",r1,g1,b1)
@@ -86,11 +86,12 @@ func main () {
 			}
 			if v5.Angeklickt(mausX, mausY) {
 				fmt.Println("v5 wurde angeklickt, sodass das gfx-Fenster nun mit einem Tastendruck geschlossen werden kann!")
+				break
 			}
 		}
 	}
 	
-	fmt.Println("hi")
+	fmt.Println("Und tschüss!")
 	gfx.TastaturLesen1()
 	
 }
