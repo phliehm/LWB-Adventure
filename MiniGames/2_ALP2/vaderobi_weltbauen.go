@@ -3,8 +3,9 @@ package main
 import . "./vaderobi"
 
 func main () {
-	WeltLaden("Welt_FU_")
+	WeltOeffnen()
+	//WeltLaden("Welt_FU")
 	Baumodus ()
-	WeltSpeichern ("Welt_FU")
+	WeltSpeichern ("Start-Welt")
 }
 

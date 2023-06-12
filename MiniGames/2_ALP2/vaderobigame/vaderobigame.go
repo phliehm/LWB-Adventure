@@ -15,7 +15,11 @@ import (
 var path string = "" //"../"
 var path2 string = "./MiniGames/2_ALP2/"
 
-func rotesKreuz() {						//rotes Kreuz oben links
+//-------------------------Hilfsfunktionen------------------------------
+//----------------------------------------------------------------------
+
+//Darstellung rotes Kreuz oben links in vaderobis Welt
+func rotesKreuz() {
 	gfx.Stiftfarbe(255,0,0)
 	gfx.Volldreieck(3,3,71,67,71,71)
 	gfx.Volldreieck(3,3,7,3,71,71)
@@ -32,6 +36,7 @@ func rotesKreuz() {						//rotes Kreuz oben links
 	gfx.Volldreieck(71,3,3,71,7,71)
 }
 
+//Berechnung der Note aus Punktzahl 
 func notenberechnung(punkte uint) float32 {
 	if punkte >= 100 { return 1.0
 	} else if punkte >= 90 { 
@@ -53,9 +58,27 @@ func notenberechnung(punkte uint) float32 {
 	} else { return 0.0 }
 }
 
+// Darstellung der Aufgabentexte der verschiedenen Level
 func aufgabentexte(n int) {																		//TODO
 	
 	switch n {
+		case 0:
+		gfx.Stiftfarbe(0,0,0)
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
+		gfx.SchreibeFont(695,70,"Kleine Vorübung: Probiere aus, was VADEROBI alles kann! ")
+		gfx.SchreibeFont(694,91,"Hier gibt es noch keine Punkte, also lass es krachen!")
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-4.49.2.ttf",14)
+		gfx.SchreibeFont(695,122,"Folgende Befehle kannst Du einzeln per Tastatur eingeben")
+		gfx.SchreibeFont(695,141,"und den VADEROBI mit der ENTER-Taste ausführen lassen:")
+		gfx.SchreibeFont(695,165,"Laufen()     LinksDrehen()     RechtsDrehen()")
+		gfx.SchreibeFont(695,184,"Lasern()     Entlasern()       Markieren()")
+		gfx.SchreibeFont(695,203,"Mauern()     Entmauern()       Demarkieren()")
+		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
+		gfx.SchreibeFont(695,232,"Wenn Du Dich noch an das robi-Paket aus ALP2 erinnerst,")
+		gfx.SchreibeFont(695,253,"kannst Du auch andere Befehle ausprobieren!")
+		gfx.Stiftfarbe(0,255,0)
+		gfx.SchreibeFont(695,278,"Wenn Du Dich bereit fühlst mit Level 1 zu starten,")
+		gfx.SchreibeFont(695,299,"gehe zum Ziel in der linken oberen Ecke des Spielfelds!")
 		case 1:
 		gfx.Stiftfarbe(0,0,0)
 		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",16)
@@ -83,11 +106,17 @@ func aufgabentexte(n int) {																		//TODO
 	
 }
 
+
+// eigentliche (exportierbare) Spiel-Funktion "Vaderobi()"
+//----------------------------------------------------------------------
+// Vor.: -
+// Eff.: Das vaderobigame (Spiel "SUPER-ALP2-Escape") ist gestartet.
+// Erg.: Die erspielte Gesamtpunktzahl (uint32) und die daraus berechnete Note (float32) ist geliefert.
 func Vaderobi() (float32,uint32) {
-//func Vaderobi() {
 	
+	//Initialisierung der Slices für Level-Welten und Mindestanzahlen (für Befehle, Laser- und Markierungen)
 	var level []string
-	level = [] string {"","Welt_FU","Welt_Steps","Welt_robi","Welt_SCM","Welt_CYR","Welt_ALP"}
+	level = [] string {"Start-Welt","Welt_FU","Welt_Steps","Welt_robi","Welt_SCM","Welt_CYR","Welt_ALP"}
 	var min []uint
 	min = []uint {0,37,31,31,30,40,35}
 	var minlaser []uint
@@ -95,28 +124,30 @@ func Vaderobi() (float32,uint32) {
 	var minmark []uint
 	minmark = []uint {0,15,12,13,11,16,14}
 	
+	//Initialisierung der Variablen und Speicher-Slices für Punkte und Noten
 	var punktespeicher []uint
 	punktespeicher = make([]uint,len(level))
 	var notenspeicher []float32
 	notenspeicher = make([]float32,len(level))
 	var gesamtpunkte uint32
 	var gesamtnote float32
-	//var maxpunktzahl uint
+	//var maxpunktzahl uint (optional, ggf. TODO)
 	
-	//var exit1 vierecke.Viereck = vierecke.New(1080,560,1080,680,1170,1680,1170,560)
-	var exit2 vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
+	//Initialisierung des klickbaren Beenden-Symbols (für End-Bildschirm)
+	var exit vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
 	
 	//---------------------------------------------------------------------
 	
+	//Initialisiere Darstellung der vaderobi-Welt
 	WeltOeffnen()
 	
-	//go maussteuerung(exit1,exit2)
-	
+	//Spiel-Schleife
 	for {
-			
-		for i:=1; i<len(level); i++ {									// Schleife durch die Level
+		
+		//Level-Schleife	
+		for i:=0; i<len(level); i++ {
 						
-			//var min uint = 31
+			//Initialisierung verschiedener Steuer- und Speicher-Variablen
 			var laseranz, markanz, eingaben, fehler, korrekteBefehle uint
 			var punkte, punktabzug uint
 			var note float32 = 0.0
@@ -126,10 +157,11 @@ func Vaderobi() (float32,uint32) {
 			//---------------------------------------------------------------------------
 			
 			gfx.UpdateAus()
-			gfx.Stiftfarbe(255,255,255)	
+			// erneuere Spiel-Fenster
+			gfx.Stiftfarbe(255,255,255)
 			gfx.Cls()
 			
-			//WeltLaden
+			//aktuelle Level-Welt laden
 			WeltLaden(level[i])
 			rotesKreuz()
 			Schrittmodus(false)
@@ -163,16 +195,12 @@ func Vaderobi() (float32,uint32) {
 			gfx.SchreibeFont(1020,410,"Fehler:     "+fmt.Sprint(fehler))
 			
 			//Sound
-			if i == 1 {
+			if i == 0 {
 				gfx.SpieleSound("./Sounds/lordvaderrise.wav")
 			} else {
 				gfx.SpieleSound("./Sounds/imperial_march.wav")
 			}
-			
-			//fmt.Println("Zeichne Zurück-Symbol")
-			//gfx.LadeBild(1080,560,"Zurück-Symbol.bmp")
-			//exit1.Zeichnen()
-			//exit1.AktiviereKlickbar()			
+						
 			gfx.UpdateAn()
 			
 			//Texteditor
@@ -181,12 +209,15 @@ func Vaderobi() (float32,uint32) {
 			//Eingabe-Verarbeitung
 			//--------------------------------------------------------------------------
 			for {
-						
+					
+				//vorzeitiges Beenden	
 				if ted.GibString() == "exit" {
 					i = len(level)
+					gfx.StoppeAlleSounds()
 					break
 				}
-						
+				
+				//Fallunterscheidung Eingabe		
 				switch ted.GibString() {
 					case "Laufen()":
 					switch Laufen1() {
@@ -259,7 +290,7 @@ func Vaderobi() (float32,uint32) {
 						gfx.SpieleSound("./Sounds/light-saber-off.wav")
 						laseranz--
 						}
-					case "HatLaserpower()":
+					case "HatKloetze()":
 					if HatKloetze() {
 						Melden("Keine Sorge, ich habe noch Laserpower!")
 					} else {
@@ -272,7 +303,6 @@ func Vaderobi() (float32,uint32) {
 						gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
 						Melden("FEHLER: **Lasern()** NICHT MÖGLICH!")
 						case true:
-						//gfx.SpieleSound("./Sounds/sfx_wpn_laser5.wav")
 						gfx.SpieleSound("./Sounds/light-saber-on.wav")
 						korrekteBefehle++
 						laseranz++
@@ -299,7 +329,7 @@ func Vaderobi() (float32,uint32) {
 						gfx.SpieleSound("./Sounds/sfx_sounds_falling6.wav")
 						korrekteBefehle++
 						}
-					case "Baumodus()":
+					case "Baumodus()":														//Cheat-Modus
 					gfx.SpieleSound("./Sounds/ooh_sw_luke_dontdothat.wav")
 					Baumodus()
 					default:
@@ -308,45 +338,44 @@ func Vaderobi() (float32,uint32) {
 					Melden("Eingabefehler! -> Nochmal überlegen und ggf. Syntax prüfen!")
 				}
 				
-				//Punkte-Berechnung
-				eingaben++
-				punkte = 100+min[i]
-				if punkte >= eingaben {
-					punkte = punkte - eingaben
-				} else {
-					punkte = 0
-				}
-				if punkte >= fehler {
-					punkte = punkte - fehler
-				} else {
-					punkte = 0
+				if i > 0 {
+					//Punkte-Berechnung
+					eingaben++
+					punkte = 100+min[i]
+					if punkte >= eingaben {
+						punkte = punkte - eingaben
+					} else {
+						punkte = 0
+					}
+					if punkte >= fehler {
+						punkte = punkte - fehler
+					} else {
+						punkte = 0
+					}
+					
+					//Zeichne Zähler
+					gfx.UpdateAus()
+					gfx.Stiftfarbe(255,255,255)
+					gfx.Vollrechteck(1020,380,180,100)
+					gfx.Stiftfarbe(0,0,0)
+					gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
+					if eingaben > 9 {
+						gfx.SchreibeFont(1020,380,"Eingaben:  "+fmt.Sprint(eingaben))
+					} else {
+						gfx.SchreibeFont(1020,380,"Eingaben:   "+fmt.Sprint(eingaben))
+					}
+					gfx.Stiftfarbe(255,0,0)
+					if fehler > 9 {
+						gfx.SchreibeFont(1020,410,"Fehler:    "+fmt.Sprint(fehler))
+					} else {
+						gfx.SchreibeFont(1020,410,"Fehler:     "+fmt.Sprint(fehler))
+					}
+					gfx.Stiftfarbe(0,0,0)
+							
+					gfx.UpdateAn()
 				}
 				
-				//Zeichne Zähler
-				gfx.UpdateAus()
-				gfx.Stiftfarbe(255,255,255)											//Test
-				gfx.Vollrechteck(1020,380,180,100)
-				gfx.Stiftfarbe(0,0,0)
-				gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
-				if eingaben > 9 {
-					gfx.SchreibeFont(1020,380,"Eingaben:  "+fmt.Sprint(eingaben))
-				} else {
-					gfx.SchreibeFont(1020,380,"Eingaben:   "+fmt.Sprint(eingaben))
-				}
-				gfx.Stiftfarbe(255,0,0)
-				if fehler > 9 {
-					gfx.SchreibeFont(1020,410,"Fehler:    "+fmt.Sprint(fehler))
-				} else {
-					gfx.SchreibeFont(1020,410,"Fehler:     "+fmt.Sprint(fehler))
-				}
-				gfx.Stiftfarbe(0,0,0)
-				
-				//fmt.Println("Zeichne Zurück-Symbol")
-				//gfx.LadeBild(1080,560,"Zurück-Symbol.bmp")							//?
-						
-				gfx.UpdateAn()
-				
-				//Level geschafft?
+				//prüfe, ob Level geschafft
 				if InLinkerObererEcke() {
 					Legen1()
 					gfx.SpieleSound("./Sounds/laser_all2easy.wav")
@@ -405,43 +434,44 @@ func Vaderobi() (float32,uint32) {
 						gfx.SchreibeFont(1020,470,"Punkte:     "+fmt.Sprint(punkte))
 					}
 					
-					//Level-Punkte in Punktespeicher schreiben und Level-Note berechnen
-					punktespeicher[i] = punkte
-					note = notenberechnung(punkte)
-					notenspeicher[i] = note
-					gesamtpunkte = gesamtpunkte + uint32(punkte)
-					gesamtnote = notenberechnung(uint(gesamtpunkte)/uint(i))
-					fmt.Println(gesamtnote)
-					
-					//Zeichne Level-Abschluss-Meldung
-					gfx.Stiftfarbe(0,0,0)
-					gfx.Vollrechteck(150,225,375,225)
-					gfx.Stiftfarbe(0,255,0)
-					gfx.Vollrechteck(160,235,355,205)
-					gfx.Stiftfarbe(0,0,0)
-					gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",32)
-					
-					if note == 0.0 {												//TODO: Level wiederholen!!!
-						gfx.Stiftfarbe(255,0,0)
-						gfx.Vollrechteck(160,235,355,205)
+					if i > 0 {
+						//Level-Punkte in Punktespeicher schreiben und Level-Note berechnen
+						punktespeicher[i] = punkte
+						note = notenberechnung(punkte)
+						notenspeicher[i] = note
+						gesamtpunkte = gesamtpunkte + uint32(punkte)
+						gesamtnote = notenberechnung(uint(gesamtpunkte)/uint(i))
+						fmt.Println(gesamtnote)
+						
+						//Zeichne Level-Abschluss-Meldung
 						gfx.Stiftfarbe(0,0,0)
-						gfx.SchreibeFont(170,255,"Level geschafft!")
-						gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",30)
-						gfx.SchreibeFont(230,315,"Aber leider")
-						gfx.SchreibeFont(172,360,"nicht bestanden!!!")
-						gfx.SpieleSound("./Sounds/vader_breathing.wav")
-					} else {
-						gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",32)
+						gfx.Vollrechteck(150,225,375,225)
 						gfx.Stiftfarbe(0,255,0)
 						gfx.Vollrechteck(160,235,355,205)
 						gfx.Stiftfarbe(0,0,0)
-						gfx.SchreibeFont(275,255,"Yeah!!!")
-						gfx.SchreibeFont(170,300,"Level geschafft!")
-						gfx.SchreibeFont(250,360,"Note: " + fmt.Sprintf("%2.1f",note))
-						gfx.SpieleSound("./Sounds/swsidious_youhavebeenwelltrained.wav")
+						gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",32)
+					
+						if note == 0.0 {												//TODO: Level wiederholen!!!
+							gfx.Stiftfarbe(255,0,0)
+							gfx.Vollrechteck(160,235,355,205)
+							gfx.Stiftfarbe(0,0,0)
+							gfx.SchreibeFont(170,255,"Level geschafft!")
+							gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",30)
+							gfx.SchreibeFont(230,315,"Aber leider")
+							gfx.SchreibeFont(172,360,"nicht bestanden!!!")
+							gfx.SpieleSound("./Sounds/vader_breathing.wav")
+						} else {
+							gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",32)
+							gfx.Stiftfarbe(0,255,0)
+							gfx.Vollrechteck(160,235,355,205)
+							gfx.Stiftfarbe(0,0,0)
+							gfx.SchreibeFont(275,255,"Yeah!!!")
+							gfx.SchreibeFont(170,300,"Level geschafft!")
+							gfx.SchreibeFont(250,360,"Note: " + fmt.Sprintf("%2.1f",note))
+							gfx.SpieleSound("./Sounds/swsidious_youhavebeenwelltrained.wav")
+						}
+						Melden("Level geschafft! :) Weiter geht's!")
 					}
-					Melden("Level geschafft! :) Weiter geht's!")
-					//Fertig()
 					break
 				}
 				
@@ -452,20 +482,19 @@ func Vaderobi() (float32,uint32) {
 		//----------------------------------------------------------------------------
 		}
 			
-		//----------------- Endbildschirm --------------------------------------
-		gfx.Stiftfarbe(255,255,255)
+		//----------------- Endbildschirm --------------------------------------------
+		gfx.Stiftfarbe(255,255,255)										// Lösche Inhalt des gfx-Fensters
 		gfx.Cls()
 		
 		gfx.SpieleSound(path + "Sounds/the_force.wav")
 		
+		//Grafik (Bilder)
 		gfx.LadeBild(150,100,path + "Bilder/vaderobiGame/sprechblase_flipped_400.bmp")
 		gfx.LadeBildMitColorKey(100,350,path + "Bilder/vaderobiGame/Darth_200.bmp",255,255,255)
 		gfx.LadeBild(620,80,path + "Bilder/vaderobiGame/paper_500.bmp")
 		gfx.LadeBild(960,520,path + "Bilder/vaderobiGame/certified_100.bmp")
 		gfx.LadeBild(1080,30,path + "Bilder/vaderobiGame/Zurück-Symbol.bmp")
-		//exit2.SetzeFarbe(0,0,0)
-		//exit2.Zeichnen()
-		exit2.AktiviereKlickbar()
+		exit.AktiviereKlickbar()
 		fmt.Println("exit aktiviert")
 		
 		//Überschrift	
@@ -494,6 +523,7 @@ func Vaderobi() (float32,uint32) {
 			gfx.SchreibeFont(325,195,fmt.Sprintf("%2.1f",gesamtnote))
 		}
 		
+		//Inhalt Abschluss-Zertifikat für Mini-Game
 		gfx.Stiftfarbe(0,0,0)
 		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 		
@@ -504,11 +534,12 @@ func Vaderobi() (float32,uint32) {
 		gfx.SchreibeFont(700,130+uint16(6*70),"----------------------")
 		gfx.SchreibeFont(710,160+uint16(6*70),"Gesamt:    " + fmt.Sprint(gesamtpunkte) + " Punkte")	
 		
+		//Mauslese-Schleife für Klick auf Exit-Symbol
 		for {
 			taste, status, mausX, mausY := gfx.MausLesen1()
 			if taste==1 && status==1 {
-				if exit2.Angeklickt(mausX,mausY) { 							// Ende des Spiels
-					fmt.Println("exit2 geklickt")
+				if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
+					//fmt.Println("exit geklickt")
 					gfx.StoppeAlleSounds()
 					break
 				}
@@ -517,6 +548,7 @@ func Vaderobi() (float32,uint32) {
 		break
 	}		
 	
+	//Rückgabe von Note und Gesamtpunktzahl
 	return gesamtnote, gesamtpunkte
 
 }
