@@ -30,7 +30,6 @@ import (
 // Globale Variablen
 // ------------------
 
-
 // interne Hilfsfunktionen
 // ------------------------
 
@@ -96,21 +95,40 @@ func HeidiDarstellen() (sign, no buttons.Button) {
 	sign = buttons.New(0,0,150,35,0,255,0,true," Unterschreiben")
 	no = buttons.New(0,0,50,35,255,0,0,true," NÖ")
 	var text textboxen.Textbox = textboxen.New(0,0,270,140)
+	var hausord textboxen.Textbox = textboxen.New(750,150,290,500)
 	
-	LadeBildMitColorKey(620,350,"./Bilder/MainGame/heidi_100.bmp",255,255,255)
-	LadeBildMitColorKey(345,145,"./Bilder/MainGame/bubble2_red_350.bmp",255,0,0)					//Heidi-Bubble
+	LadeBildMitColorKey(520,350,"./Bilder/MainGame/heidi_100.bmp",255,255,255)
+	LadeBildMitColorKey(245,145,"./Bilder/MainGame/bubble2_red_350.bmp",255,0,0)					//Heidi-Bubble
 	
 	sign.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
-	sign.SetzePosition(385,270)
+	sign.SetzePosition(285,270)
 	sign.ZeichneButton()
 	no.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
-	no.SetzePosition(570,270)
+	no.SetzePosition(470,270)
 	no.ZeichneButton()
 	text.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
 	text.SetzeSchriftgröße(16)	
-	text.SetzePosition(385,170) 
+	text.SetzePosition(285,170) 
 	text.SchreibeText("Heidi:\n\nDiesen Raum dürfen Sie nur betreten, wenn Sie die Hausordnung unterschreiben!")
 	text.Zeichne()
+	
+	// Hausordnung einblenden
+	LadeBild(680,60,"./Bilder/Zertifikat/paper_500.bmp")
+	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",25)
+	SchreibeFont(760,100,"Hausordnung")
+	hausord.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
+	//hausord.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
+	hausord.SetzeSchriftgröße(16)	
+	//hausord.SetzePosition(385,170) 
+	hausord.SchreibeText("" + 
+	"1. Die Haus- und Raumordnung gilt für alle Personen, die sich in den Räumlichkeiten des StEPS aufhalten.\n\n" +
+	"2. Das Verzehren von Speisen und Getränken ist in allen Seminar- und Vorlesungsräumen nicht gestattet. Hiervon sind ausschließlich Wasserflaschen und auslaufsichere Becher (z.B. sog. Thermobecher) ausgenommen.\n\n" +
+	"3. Der Umgang mit offenem Feuer im Gebäude ist untersagt.\n\n" +
+	"4. Roller und Elektrokleinstfahr- zeuge sind nicht in den Räumlichkeiten des StEPS oder in den Korridoren zu benutzen.\n\n" +
+	"5. Das Gießen der Pflanzen ist zu unterlassen.\n\n" +
+	"6. Hierbei ist im Besonderen darauf zu achten, dass die Stühle nach den angegebenen Hinweisen hochgestellt sind.\n\n" +
+	"...")
+	hausord.Zeichne()
 	
 	return
 }

@@ -67,7 +67,8 @@ func maussteuerung (raumnr int) {
 	var note float32
 	var punkte uint32
 	var nschluessel uint16 = gibSchluesselzahl(spielstand)
-	
+	var hoSigned bool 				// Hausordnung unterschrieben?
+
 	fmt.Println("Anzahl Schluessel: ",nschluessel)
 	
 	//var taste uint8
@@ -122,26 +123,30 @@ A:	for {
 									
 									if raumnr == 4 {														//wenn die Semester-Tür 4 angeklickt wurde,
 									
-										sign, no := darstellung.HeidiDarstellen()							//Heidi mit Bubble und Unterschrift-Aufforderung darstellen
-										
-										//Mauslese-Schleife							
-										for {
-											taste, status, mausX, mausY := gfx.MausLesen1()
-											if taste==1 && status==1 {									
-												if sign.TesteXYPosInButton(mausX,mausY) {					//wenn der sign-Button angeklickt wurde,
-													darstellung.SemesterraumDarstellen(index)
-													break													//Mauslese-Schleife verlassen und weiter in den Semesterraum
-												} else if no.TesteXYPosInButton(mausX,mausY) {				//wenn der no-Button angeklickt wurde,
-													raumnr = 0
-													darstellung.MainfloorDarstellen()						//aus Mauslese-Schleife und zurück in den mainfloor
-													break													
+										if !hoSigned {
+											fmt.Println("Noch nicht unterschrieben!")
+											sign, no := darstellung.HeidiDarstellen()						//Heidi mit Bubble und Unterschrift-Aufforderung darstellen
+
+											//Mauslese-Schleife							
+											for {
+												taste, status, mausX, mausY := gfx.MausLesen1()
+												if taste==1 && status==1 {									
+													if sign.TesteXYPosInButton(mausX,mausY) {					//wenn der sign-Button angeklickt wurde,
+														darstellung.SemesterraumDarstellen(index)
+														hoSigned = true
+														break													//Mauslese-Schleife verlassen und weiter in den Semesterraum
+													} else if no.TesteXYPosInButton(mausX,mausY) {				//wenn der no-Button angeklickt wurde,
+														raumnr = 0
+														darstellung.MainfloorDarstellen()						//aus Mauslese-Schleife und zurück in den mainfloor
+														break													
+													}
 												}
-											}
+											} 
+										} else  {
+											//darstellung.SemesterraumDarstellen(index)
+											darstellung.SemesterraumDarstellen(index)							//also wird der jeweilige Semesterraum dargestellt
 										}
-										
-									} else {
-										darstellung.SemesterraumDarstellen(index)							//also wird der jeweilige Semesterraum dargestellt
-									}
+									}	
 									
 								} else { 			// Raum zu, kein Schlüssel da
 									raumnr = 0
