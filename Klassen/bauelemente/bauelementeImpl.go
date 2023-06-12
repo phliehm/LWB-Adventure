@@ -46,7 +46,8 @@ type data struct {
 	typ				Bautyp
 	berechnet		bool		// Wurde der Ausgang berechnet?
 	verbindungen	[]l.Leitung	// Liste aller Verbindungen, die an den
-								// Eingängen enden	
+								// Eingängen enden
+	font			string		// Dateiname des Fonts mit relativen Pfad
 }
 
 
@@ -64,6 +65,7 @@ func New(id,x,y uint16, eingang1,eingang2,ausgang bool, typ Bautyp) *data {
 	}
 	bt.ausgang = ausgang
 	bt.typ = typ
+	bt.font = path + "Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf"
 	return bt
 }
 
@@ -168,8 +170,8 @@ func (bt *data) ZeichneBauelement(xSize uint16) {
 	var fSize uint16 = xSize/2		// Größe des Fonts
 
 	gfx.Stiftfarbe(0,0,0)
-	gfx.SetzeFont (path + "Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf",int(fSize))
-	
+	gfx.SetzeFont (bt.font,int(fSize))
+
 	if bt.typ == Schalter {
 		dickeLinie(bt.x-xSize/2,bt.y,bt.x-xSize/6,bt.y,size)
 		dickeLinie(bt.x+xSize/6,bt.y,bt.x+xSize/2,bt.y,size)
@@ -237,6 +239,11 @@ func (bt *data) ZeichneLeitung(xSize,x,y uint16, v l.Leitung) {
 
 }
 
+
+func (bt *data) SetzeFont(font string) {
+	bt.font = font
+}
+
 //  -------------    Hilfsfunktionen   ----------------------- //
 
 
@@ -267,3 +274,5 @@ func dickesRechteck(x0,y0,b,h,size uint16) {
 			gfx.Rechteck(x0+i,y0+i,b-2*i,h-2*i)
 	}
 }
+
+

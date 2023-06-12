@@ -22,6 +22,13 @@
 //
 // Bauelelemente können mit Leitungen verbunden werden.
 
+//func New(id,x,y uint16, eingang1,eingang2,ausgang bool, typ Bautyp) *data
+
+
+// Font muss ggf einmal gesetzt werden
+// z.B: and.SetzeFont("../Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf")
+// gfx.SetzeFont("Schriftarten/terminus-font/TerminusTTF-4.49.2.ttf")
+
 
 package bauelemente
 
@@ -114,9 +121,14 @@ type Bauelement interface {
 	
 	// Vor: Ein gfx-Grafikfenster ist geöffnet. xSize gibt die Größe
 	//		in Pixel des zu zeichnenden Bauelementes in x Richtung an.
+	//		Der Font wurde gesetzt.
+	// Eff: Der Font wird gesetzt.
 	// Eff: Das Leitung ist vom Eingang des Bauelements zur x,y-Position
 	//		gezeichnet.
 	// Erg: -
 	ZeichneLeitung(xSize,x,y uint16, v l.Leitung)
+	
+	// Vor: Ein gfx-Grafikfenster ist geöffet.
+	SetzeFont(font string)
 
 }
