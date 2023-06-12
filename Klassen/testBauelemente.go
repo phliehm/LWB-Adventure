@@ -5,7 +5,7 @@
 
 package main
 
-//import sch "./schaltungen"
+import l "./leitungen"
 import b "./bauelemente"
 import "fmt"
 import "gfx"
@@ -258,13 +258,19 @@ func main() {
 	fmt.Println("Gib Verbindungen: ",lampe.GibVerbindungen())
 	
 	lampe.ZeichneBauelement(xSize)
+
+	fmt.Scanln()
+
+	// Füge Leitungen zwischen Schalter und AND_Gatter hinzu.
+	var l1 l.Leitung = l.New(1, 2, 1, 225)
+	var l2 l.Leitung = l.New(1, 2, 2, 255)
+	schalter.VerbindungZumEingang(l1)
+	schalter.VerbindungZumEingang(l2)
+	ll := schalter.GibVerbindungen()
+	fmt.Println("Verbindungen 1 des Schalters",ll[0])
+	fmt.Println("Verbindungen 2 des Schalters",ll[1])
+
 	
-/*
-	or = New(1,200,100, false,false,false, b.OR)
-
-	xor = New(1,200,100, false,false,false, b.XOR)
-*/
-
 	fmt.Scanln()
 
 	
