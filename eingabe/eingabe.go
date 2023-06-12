@@ -234,7 +234,7 @@ func speichereMax(note1 float32,punkte1 uint32,raumnr,index int)	{
 	fmt.Println("Spielnr:", ispiel)
 	
 	// erstes Spiel? oder bessere Note? oder bessere Punkte?
-	if noten[ispiel] == 0 || note1 < noten[ispiel] || 
+	if noten[ispiel] == 0 || note1 < noten[ispiel] && note1 > 0.1 || 
 			(note1 == noten[ispiel] && punkte1 > punkte[ispiel]) {
 		noten[ispiel] = note1
 		punkte[ispiel] = punkte1
