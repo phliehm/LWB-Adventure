@@ -338,7 +338,7 @@ func notenberechnung(punkte uint32) float32 {
 func hintergrundMusik(pmusikstopp *bool) {	
 	var soundstr string = "./MiniGames/3_DBSA/8-bit-arcade.wav"
 	for !(*pmusikstopp) {
-		SpieleSound(soundstr)nieweöniewe
+		SpieleSound(soundstr)
 		time.Sleep (time.Duration(95e9))
 	}
 	//fmt.Println("Sound gestoppt")
