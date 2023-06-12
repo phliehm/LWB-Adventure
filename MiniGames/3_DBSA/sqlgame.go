@@ -18,7 +18,6 @@ var path string = ""
 var path2 string = "./" //MiniGames/2_ALP2/"
 
 var punkte, fehler uint32							// Punkte-/Fehler-Variable
-var musikstopp bool
 
 //----------------String-Slices für Texte-------------------------------
 //----------------------------------------------------------------------
@@ -396,6 +395,7 @@ func SQLgame() (note float32, punkte uint32) {
 	
 
 //-----------------starte Hintergrund-Musik-----------------------------
+	var musikstopp bool
 	go hintergrundMusik(&musikstopp)
 	
 //------------------Grafik-Elemente--------------------------------
