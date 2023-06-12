@@ -60,7 +60,7 @@ func notenberechnung(punkte uint) float32 {
 
 // Darstellung der Aufgabentexte der verschiedenen Level
 func aufgabentexte(n int) {																		//TODO
-	
+		
 	switch n {
 		case 0:
 		gfx.Stiftfarbe(0,0,0)
@@ -440,7 +440,7 @@ func Vaderobi() (float32,uint32) {
 						note = notenberechnung(punkte)
 						notenspeicher[i] = note
 						gesamtpunkte = gesamtpunkte + uint32(punkte)
-						gesamtnote = notenberechnung(uint(gesamtpunkte)/uint(i))
+						gesamtnote = notenberechnung(uint(gesamtpunkte)/uint(len(notenspeicher)-1))
 						fmt.Println(gesamtnote)
 						
 						//Zeichne Level-Abschluss-Meldung
@@ -479,6 +479,7 @@ func Vaderobi() (float32,uint32) {
 				ted = texteditoren.New(700,370,300,305,20,true)
 				
 			}
+			gfx.StoppeAlleSounds()
 		//----------------------------------------------------------------------------
 		}
 			
