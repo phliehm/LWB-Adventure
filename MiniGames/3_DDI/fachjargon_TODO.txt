@@ -1,0 +1,33 @@
+
+Level:
+
+
+- Welche Unterrichtseinheit zu welchem Bereich im RLP?
+
+Nummern mit Kompetenzen / Inhalten
+
+Unterrichtsreihen werden eingeblendet
+	
+- Kompetenzen und Inhalte?
+
+
+
+- Stufen zuordnen (schon fertig)
+
+Stufen haben Nummern
+Beispiele der Folien werden eingeblendet
+
+
+
+- Tools zuordnen (RLP)
+Bsp.: Kara --> Algorithmen
+
+Themen mit Nummern
+
+Tools werden eingeblendet
+
+
+Struktur:
+
+Texboxen mit Nummern --> Strings als Array für jedes Level
+--> V
