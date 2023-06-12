@@ -73,6 +73,10 @@ func ZeichneWeltIntro() {
 		
 		BugAttackTB.Zeichne()
 		
+		gfx.Stiftfarbe(0,255,0)
+		gfx.SetzeFont("Schriftarten/COOPBL.TTF",30)
+		gfx.SchreibeFont(100,600,"Drücke eine Taste, dann verschwinden auch die Bugs, ... vorerst!")
+		
 		gfx.UpdateAn()
 		time.Sleep(1e7)
 	}
