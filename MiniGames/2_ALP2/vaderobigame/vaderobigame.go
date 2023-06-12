@@ -299,10 +299,10 @@ func Vaderobi() (float32,uint32) {
 						korrekteBefehle++
 						}
 					case "LasernUndLaufen()":
+					gfx.SpieleSound("./Sounds/vader_breathing.wav")
+					laseranz++
+					Legen1()
 					switch Laufen1() {
-						gfx.SpieleSound("./Sounds/vader_breathing.wav")
-						laseranz++
-						Legen1()
 						case false:
 						fehler++
 						gfx.SpieleSound("./Sounds/sw_luke_dontdothat.wav")
