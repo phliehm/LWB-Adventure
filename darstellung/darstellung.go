@@ -175,7 +175,7 @@ func InfoDarstellen() {
 
 // Eff: Der Endbildschirm mit Zertifikat und Durchschnitt ist angezeigt. 
 func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
-
+	UpdateAus()
 	// var exit vierecke.Viereck = vierecke.New(1100,565,1190,565,1190,685,1100,685)   	// Position wie in den anderen Räumen
 	// var exit vierecke.Viereck = vierecke.New(1080,30,1080,145,1170,145,1170,30)
 	var noten []float32 = spielstand.GibNoten()	
@@ -218,7 +218,7 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 		}
 	}
 */
-	
+	UpdateAn()
 }
 
 
@@ -583,7 +583,9 @@ func schreibeZertifikatEnde(spielstand spielstaende.Spielstand) {
 	LadeBild(630,530,"./Bilder/FP/fu-logo.bmp")
 	
 	// Alle Dozenten
+
 	alleDozentenUndKonfetti()
+
 	
 }
 
