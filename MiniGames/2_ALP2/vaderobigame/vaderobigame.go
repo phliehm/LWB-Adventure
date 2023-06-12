@@ -146,7 +146,7 @@ func Vaderobi() (float32,uint32) {
 	
 	//Initialisierung der Slices für Level-Welten und Mindestanzahlen (für Befehle, Laser- und Markierungen)
 	var level []string
-	level = [] string {"Start-Welt","Welt_FU","Welt_Steps","Welt_robi","Welt_SCM","Welt_CYR","Welt_ALP"}
+	level = [] string {"Welt_Start","Welt_FU","Welt_Steps","Welt_robi","Welt_SCM","Welt_CYR","Welt_ALP"}
 	var min []uint
 	min = []uint {0,21,28,31,28,24,29}
 	var minlaser []uint
