@@ -22,12 +22,14 @@ Windows: gfx-Paket im Go-Ordner mit dem Paket in Materialordner/gfx_w_neu ersetz
 --> Wenn man ein neues Spiel startet und den gleichen Namen eingibt, 
 wird der Spielstand geladen.
 
-2. Man kommt am Anfang nicht in alle Räume hinein, diese müssen erst frei gespielt werden.
+2. Am Anfang einfach den Namen eintippen, man muss nirgendwo hinklicken.
 
-3. CHEAT: Gibt man "Supermensch" als Spielernamen ein, dann ist alles freigeschaltet, aber die Noten 
+3. Man kommt am Anfang nicht in alle Räume hinein, diese müssen erst frei gespielt werden.
+
+4. CHEAT: Gibt man "Supermensch" als Spielernamen ein, dann ist alles freigeschaltet, aber die Noten 
 sind auf 4 gesetzt.
 
-4. Man kann einen Spielstand nicht im Spiel unter einem anderen Namen Speichern. 
+5. Man kann einen Spielstand nicht im Spiel unter einem anderen Namen Speichern. 
 Man kann aber die Dateien der Spielstände umbennen, der Dateiname ist dann der Spielername.
 
 
@@ -49,5 +51,7 @@ Man kann aber die Dateien der Spielstände umbennen, der Dateiname ist dann der 
 Retro Sounds
 https://opengameart.org/content/512-sound-effects-8-bit-style
 
+Musik:
 https://www.zapsplat.com/sound-effect-category/game-music-and-loops/
 https://gamesounds.xyz/?dir=OpenBundle/Background%20Music%20and%20Loops
+
