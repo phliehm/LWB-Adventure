@@ -28,16 +28,17 @@ func FachJargon() (float32,uint32){
 	
 	
 	fachjargonPackage.IntroBildschirm()		// Zeigt Intro
-	for _,level := range fachjargonPackage.LevelArray {
+	for _,l := range fachjargonPackage.LevelArray {
 		if fachjargonPackage.SpielBeendet == true {break}
-		level()
+		l()
 	}
 	
 	fachjargonPackage.Endbildschirm()
 	audioloops.StoppeAudio()	
 	
 	
-
+	fachjargonPackage.SpielBeendet = false // damit man es nochmal spielen kann
+	c<-true
 	return fachjargonPackage.EndN,fachjargonPackage.EndP
 
 }

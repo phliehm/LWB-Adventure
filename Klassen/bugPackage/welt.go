@@ -199,7 +199,7 @@ func TastaturEingabe(c chan bool) {
 // Wenn man autoAim verwendet gibt diese Funktion den nächsten Bug im Array
 func getNextAliveBug() (uint16, uint16) {
 	// Wenn autoAim noch nicht an ist, mache nichts
-	if !autoAim {return 0,0+y_offset*zH}
+	//if !autoAim {return 0,0+y_offset*zH}
 	bugArraySchloss.Lock()
 	for _,b := range bugArray {
 		if b==nil {continue}

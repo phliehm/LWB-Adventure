@@ -1,5 +1,5 @@
 package fachjargonPackage
-
+import "fmt"
 
 const breite uint16 = 1200
 const höhe uint16 = 700
@@ -60,3 +60,21 @@ var EndP uint32
 
 // Beenden
 var SpielBeendet bool
+
+func printAlleGlobal() {
+	fmt.Println(taste,gedrueckt,tiefe)
+	fmt.Println(Taste, TastenArray)
+	fmt.Println(t_start,level,lvlLäuft,lvlZeit)
+	fmt.Println(EndN,EndP)
+	fmt.Println(punkteArray)
+	fmt.Println(notenArray)
+}
+
+func initialisiereGlobal() {
+	taste,gedrueckt,tiefe = 0,0,0
+	Taste = 0
+	t_start,level = 0,0
+	EndN, EndP = 0,0
+	notenArray[0] = 6.0
+	notenArray[1] = 6.0
+}

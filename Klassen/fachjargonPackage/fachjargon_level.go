@@ -18,6 +18,11 @@ func ZeichneAntworten(text []string) {
 
 // Startbildschirm
 func StartBildschirm() {
+	
+	slicesNullen()
+	initialisiereGlobal()
+	level = 0
+	
 	gfx.Stiftfarbe(255, 255, 255)
 	gfx.Vollrechteck(0, 0, breite, höhe)
 	gfx.LadeBildMitColorKey(100, 190, bilderPfad+"WtheK_smart.bmp", 255, 255, 255)
@@ -317,4 +322,11 @@ func rundeNote(n float32) float32{
 	if n<4.15 {return 4.0}
 	if n<4.5 {return 4.3}
 	return 5.0
+}
+
+// Damit man am Anfang des Spiels einen evtl. gespeicherten Punktestand löschen kann
+func slicesNullen() {
+	for i:=0;i<len(punkteArray);i++ {
+		punkteArray[i] = 0
+	}
 }

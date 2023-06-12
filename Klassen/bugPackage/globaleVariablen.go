@@ -42,7 +42,7 @@ var sr,sg,sb uint8 = 0,0,0
 // Texbox für die Punkte
 var punkteTB textboxen.Textbox 
 
-var autoAim bool =true		// Drücke "x" um automatisch zum nächsten Bug zu springen
+//var autoAim bool =true		// Drücke "x" um automatisch zum nächsten Bug zu springen
 var killNBugsCD uint16		// Cooldown der Fähigkeit Kill-N-Bugs
 var autoAimCD uint16		// Cooldown der Fähigkeit autoAim
 
