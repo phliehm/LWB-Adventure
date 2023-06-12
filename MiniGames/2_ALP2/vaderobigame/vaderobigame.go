@@ -55,7 +55,7 @@ func notenberechnung(punkte uint) float32 {
 		return 3.3
 	} else if punkte >= 50 {
 		return 4.0
-	} else { return 0.0 }
+	} else { return 6.0 }
 }
 
 // Darstellung der Aufgabentexte der verschiedenen Level
@@ -559,7 +559,7 @@ func Vaderobi() (float32,uint32) {
 						gfx.Stiftfarbe(0,0,0)
 						gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",32)
 					
-						if note == 0.0 {												//TODO: Level wiederholen!!!
+						if note == 6.0 {
 							gfx.Stiftfarbe(255,0,0)
 							gfx.Vollrechteck(160,235,355,205)
 							gfx.Stiftfarbe(0,0,0)
@@ -615,7 +615,7 @@ func Vaderobi() (float32,uint32) {
 		gfx.Stiftfarbe(0,0,0)
 		gfx.SetzeFont(path2 + "terminus-font/TerminusTTF-Bold-4.49.2.ttf",24)
 		
-		if gesamtnote == 0.0 {
+		if gesamtnote == 6.0 {
 			gfx.SchreibeFont(295,140,"Du hast die")
 			gfx.SchreibeFont(285,170,"Prüfung leider")
 			gfx.SetzeFont(path + "Schriftarten/Starjedi.ttf",32)
