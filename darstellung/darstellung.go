@@ -1,5 +1,5 @@
 // Autor: A. Cyriacus und M. Seiß
-// Datum: 07.06.2023
+// Datum: 12.06.2023
 // Zweck: Implementierung des ADO darstellung
 
 package darstellung
@@ -27,13 +27,6 @@ import (
 	"fmt"
 )
 
-// Globale Variablen
-// ------------------
-
-// interne Hilfsfunktionen
-// ------------------------
-
-
 // Methoden
 // ---------
 	
@@ -57,11 +50,10 @@ func MainfloorDarstellen() {
 	LadeBildMitColorKey(1083,275,"./Bilder/MainGame/info-1.bmp", 255,255,255)
 	LadeBildMitColorKey(588,370,"./Bilder/MainGame/zeugnis-symbol.bmp",255,255,255)
 	
-	//ende.SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf")
 	ende.SetzeFont("./Schriftarten/Ubuntu-B.ttf")
 	ende.SetzeSchriftgröße(20)
 	ende.SetzeFarbe(255,255,255)
-	ende.SchreibeText("E\n N\n D\n E\n")			//TODO
+	ende.SchreibeText("E\n N\n D\n E\n")
 	ende.Zeichne()
 
 	SetzeFont("./Schriftarten/Starjedi.ttf",20)
@@ -89,6 +81,7 @@ func SemesterraumDarstellen(n int) {
 	}
 	
 }
+
 
 func HeidiDarstellen() (sign, no buttons.Button) {
 	
@@ -133,9 +126,9 @@ func HeidiDarstellen() (sign, no buttons.Button) {
 	return
 }
 
+
 func InfoDarstellen() {
 	
-	// var infotexthead textboxen.Textbox = textboxen.New(570,120,500,350)
 	var infotext textboxen.Textbox = textboxen.New(570,120,400,310)
 	var ok buttons.Button = buttons.New(825,315,50,40,0,255,0,true,"OK")
 	
@@ -200,24 +193,6 @@ func EndbildschirmDarstellen(spielstand spielstaende.Spielstand) {
 	// Inhalt des Zertifikates vorbereiten	
 	schreibeZertifikatEnde(spielstand)
 	
-	
-
-	//exit.SetzeFarbe(0,0,0)
-	//exit.Zeichnen()
-	
-	//exit.AktiviereKlickbar()
-	
-	// Warte auf Mausklick-Entscheidung
-/*	for {
-		taste, status, mausX, mausY := MausLesen1()
-		if taste==1 && status==1 {
-			if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
-				fmt.Println("exit geklickt")
-				break
-			}
-		}
-	}
-*/
 	UpdateAn()
 }
 
@@ -251,8 +226,8 @@ func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) { // bool {
 
 	// exit-Schalter einfügen
 	LadeBild(1100,565,"./Bilder/MainGame/Zurück-Symbol.bmp")
-//	exit.SetzeFarbe(0,0,0)
-//	exit.Zeichnen()
+	//	exit.SetzeFarbe(0,0,0)
+	//	exit.Zeichnen()
 	exit.AktiviereKlickbar()
 	
 	// Spiel-BeendenSchalter einfügen
@@ -263,27 +238,6 @@ func SpielVerlassenDarstellen(spielstand spielstaende.Spielstand) { // bool {
 	Stiftfarbe(0,0,0)
 	SetzeFont("./Schriftarten/terminus-font/TerminusTTF-Bold-4.49.2.ttf",22)
 	SchreibeFont(380,632,"Spiel beenden")
-//	ende.SetzeFarbe(0,0,0)
-//	ende.Zeichnen()
-//	ende.AktiviereKlickbar()
-
-	// Warte auf Mausklick-Entscheidung
-/*	for {
-		taste, status, mausX, mausY := MausLesen1()
-		if taste==1 && status==1 {
-			if exit.Angeklickt(mausX,mausY) { 							// Ende des Spiels
-				fmt.Println("exit geklickt")
-				break
-			}
-			if ende.Angeklickt(mausX,mausY) { 							// Ende des Spiels
-				fmt.Println("ende geklickt")
-				return true
-				break
-			}
-		}
-	}
-*/	
-//	return false
 
 }
 
@@ -388,9 +342,6 @@ func MinigameLaden(raum,n int) (note float32, punkte uint32){
 		case 1:
 		switch n {
 			case 1:
-			// note, punkte = muster.Muster()
-			// noch falsche Rückgabe
-			// note = 6 
 			note, punkte = muster.Muster()
 			case 2:
 			note, punkte = bauelementeSpiel.BauelementeSpiel()
@@ -493,7 +444,7 @@ func ordneNotenGamesZu(spielstand spielstaende.Spielstand) []float32 {
 }
 
 
-func ladeEndeBildschirm() {										//TODO
+func ladeEndeBildschirm() {										
 	Vollrechteck(0,0,1200,700)
 	TastaturLesen1()
 }

@@ -90,7 +90,8 @@ func (f *feld) Edit () string {
   )
 
   r_old,g_old,b_old = (*f).r,(*f).g,(*f).b
-  (*f).r,(*f).g,(*f).b = 0x9F,0x9F,0x9F
+  //(*f).r,(*f).g,(*f).b = 0x9F,0x9F,0x9F
+  (*f).r,(*f).g,(*f).b = 255,255,255
   refresh (f)
   gfx.TastaturpufferAn ()
 

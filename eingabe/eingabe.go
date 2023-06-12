@@ -1,5 +1,5 @@
 // Autor: A. Cyriacus und M. Seiß
-// Datum: 07.06.2023
+// Datum: 12.06.2023
 // Zweck: Implementierung des ADO eingabe
 
 package eingabe
@@ -16,9 +16,7 @@ import (
 // Globale Variablen
 // ------------------
 
-//var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,0)
 var klickbar [][]vierecke.Viereck = make([][]vierecke.Viereck,7)
-//var klickElemente0 []vierecke.Viereck = make([]vierecke.Viereck,0)
 var spielstand spielstaende.Spielstand
 
 
@@ -29,7 +27,6 @@ func klickbarElemente() {
 	var fabweb1, wthek1, darth2, jethi2, herk3, wthek3, darth4, amoebi4, wthek4 vierecke.Viereck
 	var beenden vierecke.Viereck
 	
-	//ende = vierecke.New(1080,495,1075,615,1130,620,1135,500)
 	ende = vierecke.New(1080,450,1080,615,1180,620,1180,450)
 	exit = vierecke.New(1100,565,1190,565,1190,685,1100,685)
 	beenden = vierecke.New(350,620,550,620,550,670,350,670)
@@ -49,15 +46,15 @@ func klickbarElemente() {
 	tuer3 = vierecke.New(425,330,430,470,465,460,460,350)
 	tuer4 = vierecke.New(720,355,710,455,740,460,750,340)
 	tuer5 = vierecke.New(570,350,570,435,625,435,625,350)
-	info = vierecke.New(1043,235,1043,365,1153,365,1153,235)		//  vergrößert 
+	info = vierecke.New(1043,235,1043,365,1153,365,1153,235)			// vergrößert 
 	
 	klickbar[0] = append(klickbar[0],ende,tuer1,tuer2,tuer3,tuer4,tuer5,info)
 	klickbar[1] = append(klickbar[1],exit,fabweb1,wthek1)
 	klickbar[2] = append(klickbar[2],exit,darth2,jethi2)
 	klickbar[3] = append(klickbar[3],exit,herk3,wthek3)
 	klickbar[4] = append(klickbar[4],exit,darth4,amoebi4,wthek4)
-	klickbar[5] = append(klickbar[5],exit)				// Raum 5 - Zertifikat
-	klickbar[6] = append(klickbar[6],exit,beenden)		// Mülleimer - Ende
+	klickbar[5] = append(klickbar[5],exit)								// Raum 5 - Zertifikat
+	klickbar[6] = append(klickbar[6],exit,beenden)						// Mülleimer - Ende
 	
 }
 
@@ -67,17 +64,10 @@ func maussteuerung (raumnr int) {
 	var note float32
 	var punkte uint32
 	var nschluessel uint16 = gibSchluesselzahl(spielstand)
-	var hoSigned bool 				// Hausordnung unterschrieben?
+	var hoSigned bool 													// Hausordnung unterschrieben?
 
 	fmt.Println("Anzahl Schluessel: ",nschluessel)
 	
-	//var taste uint8
-	//var status int8
-	
-	/*for _,el := range klickbar[raumnr] {
-		el.SetzeFarbe(0,0,0)
-		el.Zeichnen()
-	}*/
 	
 A:	for {
 		taste, status, mausX, mausY := gfx.MausLesen1()
@@ -98,61 +88,56 @@ A:	for {
 								darstellung.InfoDarstellen()
 								raumnr = 0
 								darstellung.MainfloorDarstellen()
+								
 							} else if raumnr == 5 {
 								if nschluessel == 5	{
 									fmt.Println("5. Tür angeklickt")
 									darstellung.EndbildschirmDarstellen(spielstand)
-								} else {	// Raum zu, kein Schlüssel da
+								} else {								// Raum zu, kein Schlüssel da
 									raumnr = 0
 									gfx.SpieleSound("Sounds/Beep.wav")
-									// darstellung.MainfloorDarstellen()
 								}
-								//raumnr = 0
-								//darstellung.MainfloorDarstellen()
-							} else if raumnr == 0 { 		// Spiel beenden
+								
+							} else if raumnr == 0 { 					// Spiel beenden
 								fmt.Println("Mülleimer angeklickt")
 								raumnr = 6
-								//if darstellung.SpielVerlassenDarstellen(spielstand) {
-								//	break A				// Hauptspiel verlassen!
-								//}
 								darstellung.SpielVerlassenDarstellen(spielstand)
-								//raumnr = 0
-								//darstellung.MainfloorDarstellen()
+								
 							} else {
 								if nschluessel >= uint16(index)	{
 									
-									if raumnr == 4 && !hoSigned {														//wenn die Semester-Tür 4 angeklickt wurde,
+									if raumnr == 4 && !hoSigned {										//wenn die Semester-Tür 4 angeklickt wurde,
 									
 											fmt.Println("Noch nicht unterschrieben!")
-											sign, no := darstellung.HeidiDarstellen()						//Heidi mit Bubble und Unterschrift-Aufforderung darstellen
+											sign, no := darstellung.HeidiDarstellen()					//Heidi mit Bubble und Unterschrift-Aufforderung darstellen
 
 											//Mauslese-Schleife							
 											for {
 												taste, status, mausX, mausY := gfx.MausLesen1()
 												if taste==1 && status==1 {									
-													if sign.TesteXYPosInButton(mausX,mausY) {					//wenn der sign-Button angeklickt wurde,
+													if sign.TesteXYPosInButton(mausX,mausY) {			//wenn der sign-Button angeklickt wurde,
 														darstellung.SemesterraumDarstellen(index)
 														hoSigned = true
-														break													//Mauslese-Schleife verlassen und weiter in den Semesterraum
-													} else if no.TesteXYPosInButton(mausX,mausY) {				//wenn der no-Button angeklickt wurde,
+														break											//Mauslese-Schleife verlassen und weiter in den Semesterraum
+													} else if no.TesteXYPosInButton(mausX,mausY) {		//wenn der no-Button angeklickt wurde,
 														raumnr = 0
-														darstellung.MainfloorDarstellen()						//aus Mauslese-Schleife und zurück in den mainfloor
+														darstellung.MainfloorDarstellen()				//aus Mauslese-Schleife und zurück in den mainfloor
 														break													
 													}
 												}
 											} 
 									} else  {
 											fmt.Println("Raum darstellen: ",index)
-											darstellung.SemesterraumDarstellen(index)							//also wird der jeweilige Semesterraum dargestellt
+											darstellung.SemesterraumDarstellen(index)					//also wird der jeweilige Semesterraum dargestellt
 									} 
 									
-								} else { 			// Raum zu, kein Schlüssel da
+								} else { 																// Raum zu, kein Schlüssel da
 									raumnr = 0
 									gfx.SpieleSound("Sounds/Beep.wav")
 								}
 							}
 
-							case 6:					// Spiel verlassen?
+							case 6:										// Spiel verlassen?
 							element.DeaktiviereKlickbar()
 							if index == 0 {								//Element mit index 0 wurde geklickt, also "exit", d.h. ...
 								raumnr = index							//... zurück in den mainfloor (raumnr 0)
@@ -169,11 +154,6 @@ A:	for {
 								raumnr = index							//... zurück in den mainfloor (raumnr 0)
 								darstellung.MainfloorDarstellen()		//deshalb mainfloor darstellen
 								
-								/*for _,el := range klickbar[raumnr] {
-									el.SetzeFarbe(0,0,0)
-									el.Zeichnen()
-								}*/
-
 							} else {									//wenn nicht "exit" (index 0) geklickt wurde,
 							
 								start,no := darstellung.BubbleLaden(raumnr,index)
@@ -200,19 +180,10 @@ A:	for {
 				}	
 			}
 		}
-	/*
-	if taste == 3 && status == 1 { 			//RECHTE Maustaste gerade gedrückt
-		//TO DO
-	}
-	*/
 }
 
 
 func Eingabe() {
-
-	// gfx.Fenster(1200,700)
-
-	//darstellung.Startbildschirm()
 
 	gfx.Fenster(1200,700)
 

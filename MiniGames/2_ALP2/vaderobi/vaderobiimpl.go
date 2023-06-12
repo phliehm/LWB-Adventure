@@ -586,7 +586,7 @@ func Melden (text string) {
 	var gedrueckt uint8
 	gfx.Archivieren ()
 	schrifthoehe := w.feldbreite/3
-	ok:= gfx.SetzeFont(fontpath + "LiberationMono-Bold.ttf", int(schrifthoehe-4))
+	ok:= gfx.SetzeFont("./Schriftarten/LiberationMono-Bold.ttf", int(schrifthoehe-4))
 	if ok { // Font gefunden !
 		gfx.Stiftfarbe (255,0,0)
 		gfx.Vollrechteck (0,gfx.Grafikzeilen()-schrifthoehe ,gfx.Grafikspalten(),schrifthoehe)

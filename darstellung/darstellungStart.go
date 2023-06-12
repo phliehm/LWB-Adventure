@@ -52,7 +52,10 @@ func StartFenster() spielstaende.Spielstand {
 
 	// Eingabe des Namens
 	eingabefeld.SetzeZeichensatzgroesse(fontsize)
+	
+	eingabefeld.SetzeHintergrundfarbe(255,255,255)
 	spielername = eingabefeld.Edit ()
+	eingabefeld.SetzeHintergrundfarbe(255,255,255)
 	fmt.Println("spielername: ",spielername)
 	
 	// Spielstand anlegen oder laden
@@ -130,24 +133,18 @@ func zeichneStartHintergrund() {
 	Stiftfarbe(0,0,0)
 	SetzeFont("./Schriftarten/Starjedi.ttf",80)
 	SchreibeFont(105,290,"1")
-	//SchreibeFont(103,442,"1")
 	SetzeFont("./Schriftarten/Starjedi.ttf",50)
 	SchreibeFont(968,314,"2")
-	//SchreibeFont(961,430,"2")
 	SetzeFont("./Schriftarten/Starjedi.ttf",25)
 	SchreibeFont(436,359,"3")
-	//SchreibeFont(438,414,"3")
 	SetzeFont("./Schriftarten/Starjedi.ttf",20)
 	SchreibeFont(725,368,"4")
-	//SchreibeFont(720,415,"4")
-	
-	//LadeBildMitColorKey(740,250, "./Bilder/MainGame/Darth-1.bmp", 255,255,255)
+		
 	LadeBildMitColorKey(140,250, "./Bilder/MainGame/Darth-1.bmp", 255,255,255)
 	LadeBildMitColorKey(1083,275, "./Bilder/MainGame/info-1.bmp", 255,255,255)
 	
 	Stiftfarbe(255,255,255)
 	Transparenz(100)
-	//Vollrechteck(50,100,650,500)
 	Vollrechteck(400,100,650,500)
 	Transparenz(0)
 
