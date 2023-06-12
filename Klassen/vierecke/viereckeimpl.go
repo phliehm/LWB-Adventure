@@ -37,15 +37,16 @@ func New (xA,yA,xB,yB,xC,yC,xD,yD uint16) *data { // *data erfüllt das Interfac
 	return v
 }
 
-
 // Vor.: -
-// Erg.: Alle Koordinaten der vier Ecken des Vierecks sind geliefert.
+// Erg.: Die Koordinaten aller vier Eckpunkte des Vierecks sind
+//       geliefert.
 func (v *data) GetKoordinaten () (xA,yA,xB,yB,xC,yC,xD,yD uint16) {
 	return v.xA,v.yA,v.xB,v.yB,v.xC,v.yC,v.xD,v.yD
 }
 
-// Vor.: -
-// Erg.: Das Viereck hat die eingegebenen Koordinaten.
+// Vor.: Die übergebenen Koordinaten müssen im geöffneten gfx-Fenster liegen.
+// Eff.: Die Koordinaten der vier Eckpunkte des Vierecks sind
+//       entsprechend der übergebenen Werte neu gesetzt.
 func (v *data) SetKoordinaten (xA,yA,xB,yB,xC,yC,xD,yD uint16) {
 	v.xA = xA
 	v.yA = yA
@@ -57,29 +58,47 @@ func (v *data) SetKoordinaten (xA,yA,xB,yB,xC,yC,xD,yD uint16) {
 	v.yD = yD
 }
 
+// Vor.: -
+// Erg.: Die Koordinaten des ersten Eckpunkts des Vierecks sind
+//       geliefert.
 func (v *data) GibKoordA() (uint16,uint16) {
 	return v.xA, v.yA
 }
 
+// Vor.: -
+// Erg.: Die Koordinaten des zweiten Eckpunkts des Vierecks sind
+//       geliefert.
 func (v *data) GibKoordB() (uint16,uint16) {
 	return v.xB, v.yB
 }
 
+// Vor.: -
+// Erg.: Die Koordinaten des dritten Eckpunkts des Vierecks sind
+//       geliefert.
 func (v *data) GibKoordC() (uint16,uint16) {
 	return v.xC, v.yC
 }
 
+// Vor.: -
+// Erg.: Die Koordinaten des vierten Eckpunkts des Vierecks sind
+//       geliefert.
 func (v *data) GibKoordD() (uint16,uint16) {
 	return v.xD, v.yD
 }
 
+// Vor.: Die übergebenen Koordinaten müssen im geöffneten gfx-Fenster liegen.
+// Eff.: Die Koordinaten des ersten Eckpunkts des Vierecks sind
+//       entsprechend der übergebenen Werte neu gesetzt.
 func (v *data) SetzeKoordA(x,y uint16) {
 	if x < 1200 && y < 700 {
 		v.xA = x
 		v.yA = y
 	}
 }
-		
+
+// Vor.: Die übergebenen Koordinaten müssen im geöffneten gfx-Fenster liegen.
+// Eff.: Die Koordinaten des zweiten Eckpunkts des Vierecks sind
+//       entsprechend der übergebenen Werte neu gesetzt.		
 func (v *data) SetzeKoordB(x,y uint16) {
 	if x < 1200 && y < 700 {
 		v.xB = x
@@ -87,6 +106,9 @@ func (v *data) SetzeKoordB(x,y uint16) {
 	}
 }
 
+// Vor.: Die übergebenen Koordinaten müssen im geöffneten gfx-Fenster liegen.
+// Eff.: Die Koordinaten des dritten Eckpunkts des Vierecks sind
+//       entsprechend der übergebenen Werte neu gesetzt.
 func (v *data) SetzeKoordC(x,y uint16) {
 	if x < 1200 && y < 700 {
 		v.xC = x
@@ -94,6 +116,9 @@ func (v *data) SetzeKoordC(x,y uint16) {
 	}
 }
 
+// Vor.: Die übergebenen Koordinaten müssen im geöffneten gfx-Fenster liegen.
+// Eff.: Die Koordinaten des vierten Eckpunkts des Vierecks sind
+//       entsprechend der übergebenen Werte neu gesetzt.
 func (v *data) SetzeKoordD(x,y uint16) {
 	if x < 1200 && y < 700 {
 		v.xD = x
@@ -101,11 +126,14 @@ func (v *data) SetzeKoordD(x,y uint16) {
 	}
 }
 
-		
+// Vor.: -
+// Erg.: Die rgb-Farbwerte des Vierecks sind geliefert.		
 func (v *data) GibFarbe() (uint8,uint8,uint8) {
 	return v.r, v.g, v.b
 }
-
+// Vor.: -
+// Eff.: Die Farbe des Vierecks ist entsprechend der übergebenen
+//       rgb-Werte neu gesetzt.
 func (v *data) SetzeFarbe (r,g,b uint8) {
 	v.r = r
 	v.g = g
@@ -158,14 +186,25 @@ func (v *data) Zeichnen() {
 	gfx.Linie(v.xD, v.yD, v.xA, v.yA)
 }
 
+// Vor.: -
+// Eff.: Das Viereck ist nun anklickbar und die Methode Angeklickt
+//       kann dafür aufgerufen werden und liefert einen bool-Wert.
 func (v *data) AktiviereKlickbar() {
 	v.aktiv = true
 }
 
+// Vor.: -
+// Eff.: Das Viereck ist nun nicht mehr anklickbar und die Methode
+//       Angeklickt kann dafür nicht mehr aufgerufen werden.
 func (v *data) DeaktiviereKlickbar() {
 	v.aktiv = false
 }
 
+// Vor.: Das Viereck muss anklickbar sein (initial ist es das nicht),
+//       die Methode AkitviereAnklickbar muss also mindestens einmal
+//       aufgerufen worden sein.
+// Erg.: True ist geliefert, wenn mit die übergebenen Koordinaten
+//       innerhalb des Vierecks liegen, ansonsten ist false geliefert.
 func (v *data) Angeklickt(x,y uint16) bool {						// Checkt, ob angeklickt
 	
 	if v.aktiv {

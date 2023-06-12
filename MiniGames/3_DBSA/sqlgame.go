@@ -508,7 +508,7 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 					Stiftfarbe(255,255,255)								// schreibe aktuellen Aufgaben-/Leveltext in Sprechblase
 					Vollrechteck(220,115,305,170)
 					bubbletext.SetzeSchriftgröße(16)
-					bubbletext.SchreibeText(texte[aktuellerText])
+					bubbletext.SchreibeText(texte[i])
 					bubbletext.Zeichne()
 					bubblehead.SchreibeText("Level "+fmt.Sprint(i))		// Level-Zahl entspricht dem i aus der Level-Schleife
 					bubblehead.Zeichne()
@@ -536,10 +536,10 @@ A:	for i:=1; i<len(texte); i++ {										// Schleife durch die 10 Level
 		for {
 			
 			if ted.GibString() == "exit" {								// wenn Beenden-Kommando eingetippt wurde,
-				i = 11													// setze i auf 11, um gleich aus Level-Schleife auszusteigen
+				//i = 0													// setze i auf 11, um gleich aus Level-Schleife auszusteigen
 				levelpunkte = 0											// setze aktuelle levelpunkte auf 0, da Level nicht beendet wurde
 				aktuellerText = 0
-				break													// und verlasse Tastaturlese-Schleife
+				break A													// und verlasse Tastaturlese-Schleife
 			}
 			
 			// 4 Eingabe-Versuche pro Level-Schleife (für gestaffelte Hilfen) ------------------------------------------------------
