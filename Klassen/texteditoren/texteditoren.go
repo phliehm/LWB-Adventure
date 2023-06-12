@@ -1,7 +1,7 @@
 //Annalena Cyriacus
 //Juni 2023
 //Klasse Texteditoren
-//basierend auf dem Quelltext von Stefan Schmidt (LWB Informatik, ALP 3)
+//basierend auf dem editor08-Quelltext von Stefan Schmidt (LWB Informatik, ALP 3)
 
 // Der ADT Texteditoren dient der Verwaltung von Vierecken. Jedes Viereck
 // hat vier Koordinaten, nämlich (xA,yA), (xB,yB), (xC,yC) und (xD,yD)
