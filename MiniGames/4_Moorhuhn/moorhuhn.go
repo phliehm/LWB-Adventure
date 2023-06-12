@@ -16,6 +16,7 @@ import ( 	. "gfx"
 	
 func Moorhuhn () (note float32, punktExp uint32) {
 	var mutex sync.Mutex					// erstellt Mutex
+	var wg sync.WaitGroup					// erstellt Waitgroup
 	var punkte int16 = 0					// Spiel-Punktzahl
 	var diff int16 = 0						// Punkte-Veränderung
 	var stop bool = false					// für OK-Objekt
@@ -38,27 +39,31 @@ func Moorhuhn () (note float32, punktExp uint32) {
 	go view_komponente(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &akt, &ende, &punkte, &diff, &mutex)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, &ende, random, &punkte, &punktExp, &note, &mutex)
+	go erstelleObjekte(&obj, maus, &pause, &stop, &hubi, &akt, &ende, random, &punkte, &punktExp, &note, &mutex, &wg)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
-	go maussteuerung(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte, &diff)
+	go maussteuerung(&obj, maus, pauseObjekt, okayObjekt, &pause, &stop, &hubi, &akt, &ende, &punkte, &diff, &wg)
 	
 	go musikhintergrund(&ende)
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
 	// Wir fragen hier nur die Tastatur ab.
 	
+	wg.Add(1)						// Wait-Group erhält Counter 1 zum Warten auf das Ende der nebenläufigen Prozesse
+	
+	
 A:	for {
 		taste,gedrueckt,_:= TastaturLesen1()
 		if gedrueckt == 1 {
 			switch taste {
 				case 'q': 											// mit 'q' wird das Programm beendet!
-				if ende { 
+				if ende {
+					wg.Wait() 
 					break A
-				} else if pause { 
+				} /* else if pause { 
 					ende = true
 					break A
-				}
+				} */
 				case 'p': pause = !pause							// Pause-Modus !!
 				case 'h':											// für Lvl. 5 zum Vertreiben von Hubi
 				if hubi {
@@ -75,10 +80,12 @@ A:	for {
 			}
 		}
 	}
-	// fmt.Println("Vielen Dank für's Spielen!")
+	
+	stop = false
 	time.Sleep( time.Duration(2e8) )
 	
 // -----------------------------------------------------------------	
+	
 	
 	if punkte > 0 {
 		punktExp = uint32(punkte)
@@ -143,8 +150,9 @@ func musikhintergrund(ende *bool) {
 }
 
 func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi,akt,ende *bool, rand *rand.Rand, 
-				punkte *int16, punktExp *uint32, note *float32, mutex *sync.Mutex) {		// füllt Objekte ins Array
+				punkte *int16, punktExp *uint32, note *float32, mutex *sync.Mutex, wg *sync.WaitGroup) {		// füllt Objekte ins Array
 	
+	defer wg.Done()
 	
 	count3 := objekte.New(0,0,0,13)
 	count2 := objekte.New(0,0,0,14)
@@ -154,16 +162,20 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+	if *ende { return }
 	
-	Zwischentext(&texte.MoorEinl, mutex, stop)		// Einleitungs-Text
+	Zwischentext(&texte.MoorEinl, mutex, stop, ende)		// Einleitungs-Text
+	
+	if *ende { return }
 	
 	level1 := objekte.New(0,0,0	,7)
 	Levelanzeige(level1, mutex)						// ----------------- LEVEL 1 -------------------- Große Zielscheiben
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
-	
+
 	
 	for i:=0;i<15;i++ {
+		if *ende { return }
 		time.Sleep( time.Duration(	rand.Uint32()/2 ) )
 		*obj = append(*obj, objekte.New( uint16(rand.Intn(1000))+100, uint16(rand.Intn(500))+100, uint16(rand.Intn(225)+225), 12) )
 		*akt = true
@@ -171,37 +183,50 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	time.Sleep( time.Duration(4e9) )
 	
+	if *ende { return }
+	
 	*obj = make([]objekte.Objekt,0)					// leere den Objekte-Slice (Performance!)
 	
 	// ----------------------------------------------------------------------------------------------
 	
-	Zwischentext(&texte.MoorLvl2, mutex, stop)		// Level 2-Text
+	Zwischentext(&texte.MoorLvl2, mutex, stop, ende)		// Level 2-Text
+	
+	if *ende { return }
 		
 	level2 := objekte.New(0,0,0	,8)
 	Levelanzeige(level2, mutex)						// ----------------- LEVEL 2 -------------------- Kleine Zielscheiben
 	
+	if *ende { return }
+	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
 	
 	for i:=0;i<15;i++ {
+		if *ende { return }
 		time.Sleep( time.Duration( rand.Uint32()/2 ) )
 		*obj = append(*obj, objekte.New( uint16(rand.Intn(1000))+100, uint16(rand.Intn(500))+100, uint16(rand.Intn(150)+50), 12) )
 		*akt = true
 	}
 	time.Sleep( time.Duration(4e9) )
 	
+	if *ende { return }
+	
 	*obj = make([]objekte.Objekt,0)			// leere den Objekte-Slice (Performance!)
 	
 	// ----------------------------------------------------------------------------------------------
 	
-	Zwischentext(&texte.MoorLvl3, mutex, stop)		// Level 3-Text
+	Zwischentext(&texte.MoorLvl3, mutex, stop, ende)		// Level 3-Text
+	
+	if *ende { return }
 	
 	level3 := objekte.New(0,0,0	,9)  	
 	Levelanzeige(level3, mutex)						// ----------------- LEVEL 3 -------------------- Kaffee und Pizza
 	
+	if *ende { return }
+	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
 	
-	
 	for i:=0;i<15;i++ {
+		if *ende { return }
 		*obj = append(*obj, objekte.New( uint16(rand.Intn(800))+75,uint16(rand.Intn(400))+75, uint16(rand.Intn(300)+50), uint8(rand.Intn(2)*2+3)) )
 		*akt = true
 		time.Sleep( time.Duration(	rand.Uint32()/2 ) )
@@ -209,15 +234,21 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	
 	time.Sleep( time.Duration(4e9) )
 	
+	if *ende { return }
+	
 	*obj = make([]objekte.Objekt,0)			// leere den Objekte-Slice (Performance!)
 	
 	// ----------------------------------------------------------------------------------------------
 	
 	
-	Zwischentext(&texte.MoorLvl4, mutex, stop)		// Level 4-Text
+	Zwischentext(&texte.MoorLvl4, mutex, stop, ende)		// Level 4-Text
+	
+	if *ende { return }
 	
 	level4 := objekte.New(0,0,0	,10)
 	Levelanzeige(level4, mutex)						// ----------------- LEVEL 4 --------------------
+	
+	if *ende { return }
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
 		
@@ -239,19 +270,31 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 						objekte.New(990,560,75,uint8(rand.Intn(2)+18)) )
 	
 	*akt = true
-	time.Sleep( time.Duration(1.4e10) )
+	
+	for i:=0;i<14;i++ {
+		time.Sleep( time.Duration(1e9) )
+		if *ende { return }
+	}
 	
 	*obj = make([]objekte.Objekt,0)					// leere den Objekte-Slice (Performance!)
 
 	// ----------------------------------------------------------------------------------------------
 	
 	
-	Zwischentext(&texte.MoorLvl51, mutex, stop)		// Level 5-Text - 1
+	Zwischentext(&texte.MoorLvl51, mutex, stop, ende)		// Level 5-Text - 1
 	maus.SetzeTyp(16)
-	Zwischentext(&texte.MoorLvl52, mutex, stop)		// Level 5-Text - 2
+	
+	if *ende { return }
+	
+	Zwischentext(&texte.MoorLvl52, mutex, stop, ende)		// Level 5-Text - 2
 	maus.SetzeTyp(0)
+	
+	if *ende { return }
+	
 	level5 := objekte.New(0,0,0	,11)
 	Levelanzeige(level5, mutex)						// ----------------- LEVEL 5 -------------------- Kaffee und Pizza
+	
+	if *ende { return }
 	
 	Countdown(count3,count2,count1, mutex, akt)		// lässt den Bildschirm-Countdown ablaufen
 	
@@ -259,7 +302,8 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	zeit := int64(0)
 	
 	for zeit < 4e10 {	
-		
+		if *ende { return }
+	
 		if i:= rand.Intn(20); i < 8 {
 			*obj = append(*obj, objekte.New( uint16(rand.Intn(800))+100,uint16(rand.Intn(400))+100, uint16(rand.Intn(200)+100), uint8(rand.Intn(2)+18)) )
 			*akt = true
@@ -273,6 +317,8 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 		zeit = time.Now().UnixNano() - jetzt
 	}
 	
+	if *ende { return }
+	
 	time.Sleep( time.Duration(2e9) )
 	*obj = make([]objekte.Objekt,0)					// leere den Objekte-Slice (Performance!)
 	
@@ -281,7 +327,9 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	maus.SetzeTyp(16)
 	time.Sleep( time.Duration(2e9) )
 	
-	Zwischentext(&texte.MoorScore, mutex, stop)		// Score-Text	
+	Zwischentext(&texte.MoorScore, mutex, stop, ende)		// Score-Text	
+	
+	if *ende { return }
 	
 	// ----------------------------------------------------------------------------------------------
 	
@@ -294,7 +342,7 @@ func erstelleObjekte(obj *[]objekte.Objekt, maus objekte.Objekt, pause,stop,hubi
 	return
 }
 
-func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
+func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop, ende *bool) {
 	mutex.Lock()
 	LadeBild (0,0, "./Bilder/Moorhuhn/Seminarraum.bmp")
 	Transparenz(120)
@@ -315,7 +363,10 @@ func Zwischentext(textArr *[]string, mutex *sync.Mutex, stop *bool) {
 	mutex.Unlock()
 	
 	*stop = true
-	for *stop { time.Sleep( time.Duration(1e8) ) }
+	for *stop { 
+		if *ende { return }
+		time.Sleep( time.Duration(1e8) ) 
+	}
 }
 
 func Levelanzeige(level objekte.Objekt, mutex *sync.Mutex) {
@@ -424,7 +475,7 @@ func ObjAktualisieren(obj *[]objekte.Objekt) {
 }
 
 // Es folgt die CONTROL-Komponente 1 --- Kein Bestandteil der Welt, also unabhängig -----
-func maussteuerung (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.Objekt, pause,stop,hubi,akt,ende *bool, punkte, diff *int16) {
+func maussteuerung (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.Objekt, pause,stop,hubi,akt,ende *bool, punkte, diff *int16, wg *sync.WaitGroup) {
 	/*var taste uint8
 	var status int8 */
 	for {
@@ -438,6 +489,7 @@ func maussteuerung (obj *[]objekte.Objekt, maus,pauseObjekt,okayObjekt objekte.O
 			if taste==1 && status==1 { 						//LINKE Maustaste gerade gedrückt
 				if ja,_ := pauseObjekt.Getroffen(mausX,mausY,1); ja {
 					*ende = true
+					wg.Wait()
 					return
 				}
 			}
