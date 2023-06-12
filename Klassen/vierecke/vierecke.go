@@ -2,6 +2,7 @@ package vierecke
 
 // Annalena Cyriacus
 // 24.04.2023
+// Klasse Vierecke
 
 // Der ADT Viereck dient der Verwaltung von Vierecken. Jedes Viereck
 // hat vier Koordinaten, nämlich (xA,yA), (xB,yB), (xC,yC) und (xD,yD)
