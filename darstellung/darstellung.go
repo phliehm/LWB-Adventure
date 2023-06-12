@@ -78,7 +78,7 @@ func SemesterraumDarstellen(n int) {
 		LadeBild(0,0,"./Bilder/MainGame/raum1.bmp")
 		case 2:
 		LadeBild(0,0,"./Bilder/MainGame/raum2.bmp")		
-		LadeBildMitColorKey(1125,570,"./Bilder/MainGame/Zurück-Symbol_green.bmp",0,255,0)	
+		LadeBildMitColorKey(1090,570,"./Bilder/MainGame/Zurück-Symbol_green.bmp",0,255,0)	
 		case 3:
 		LadeBild(0,0,"./Bilder/MainGame/raum3.bmp")
 		case 4:

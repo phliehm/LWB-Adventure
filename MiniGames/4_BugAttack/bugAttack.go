@@ -43,5 +43,6 @@ func BugAttack() (float32,uint32){
 	endN,endP := bugPackage.GibErgebnis()		// Hole die Ergebniswerte
 	c<-true						// Beendet Tastatureingabe
 	audioloops.StoppeAudio()		// Stoppe die Musik
+	bugPackage.SpielBeendet = false 	// Damit man das Spiel nochmal spielen kann
 	return endN,endP			// übergebe Ergebnisse an LWB-Adventure
 }
