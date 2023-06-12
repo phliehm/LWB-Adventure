@@ -24,11 +24,11 @@ wird der Spielstand geladen.
 
 2. Man kommt am Anfang nicht in alle Räume hinein, diese müssen erst frei gespielt werden.
 
-3. CHEAT: Gibt "Supermensch" als Spielernamen ein, dann ist alles freigeschaltet aber die Noten 
+3. CHEAT: Gibt man "Supermensch" als Spielernamen ein, dann ist alles freigeschaltet, aber die Noten 
 sind auf 4 gesetzt.
 
 4. Man kann einen Spielstand nicht im Spiel unter einem anderen Namen Speichern. 
-Mann aber die Dateien der Spielstände umbennen, der Dateiname ist dann der Spielername.
+Man kann aber die Dateien der Spielstände umbennen, der Dateiname ist dann der Spielername.
 
 
 ###########
