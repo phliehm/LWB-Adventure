@@ -587,6 +587,13 @@ func Vaderobi() (float32,uint32) {
 				ted = texteditoren.New(700,370,300,305,20,true)
 				
 			}
+			// Falls man im Tutorial exit geschrieben hat, hat man überal 6en
+			if gesamtnote == 0 {
+				gesamtnote = 6.0
+				for i:=0;i<len(notenspeicher);i++ {
+					notenspeicher[i] = 6.0
+				}
+			}
 			gfx.StoppeAlleSounds()
 		//----------------------------------------------------------------------------
 		}
@@ -658,6 +665,7 @@ func Vaderobi() (float32,uint32) {
 	}		
 	
 	//Rückgabe von Note und Gesamtpunktzahl
+	fmt.Println(gesamtnote,gesamtpunkte)
 	return gesamtnote, gesamtpunkte
 
 }
