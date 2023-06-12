@@ -170,7 +170,7 @@ A:	for {
 func musikhintergrund(ende *bool) {
 	for !*ende {
 		SpieleSound("./Sounds/Muster.wav")
-		time.Sleep( time.Duration(38e8) )
+		time.Sleep( time.Duration(44e8) )
 	}
 }
 

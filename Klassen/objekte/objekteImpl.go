@@ -3,9 +3,7 @@ package objekte
 // Datum: 21.03.2023
 // Zweck: Objekte für das SWP
 
-import (. "gfx" ; "sync"; "time"; "math")
-
-var m sync.Mutex
+import (. "gfx" ; "time"; "math")
 	
 type data struct {                                      // Zugriff
 	x,y uint16          	// Koordinaten der linken oberen Ecke
