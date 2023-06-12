@@ -28,7 +28,8 @@ func Muster() (note float32, punktExp uint32) {
 	var stop bool = false					// für OK-Objekt
 	var signal bool = false					// falls Signal
 	var ende bool = false					// falls Ende (Spiel soll beendet werden)
-	var tastatur = false					// falls Tastatur-Eingabe aktiv ist
+	var tastatur bool = false					// falls Tastatur-Eingabe aktiv ist
+	var zweiter bool = false
 	
 	var kanal chan bool = make(chan bool)
 	
@@ -44,10 +45,10 @@ func Muster() (note float32, punktExp uint32) {
 	Fenstertitel(" ### Muster-Spiel ###   . . .  Muster, Muster, nichts als Muster  . . .  und dazwischen Muster  . . . ")								// Gibt Fenster-Titel 
 	
 	// Das Hauptprogramm startet die View-Komponente als nebenläufigen Prozess!
-	go view_komponente(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &mutex, &eingabe, &wg)
+	go view_komponente(&obj, maus, okayObjekt, &stop, &akt, &ende, &punkte, &diff, &mutex, &eingabe, &wg)
 	
 	// Objekte werden nach und nach in der Welt platziert
-	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &ende, &eingabe, &wert, &punkte, &punkteArr, kanal, &wg)
+	go spielablauf(&obj, maus, random, &mutex, &akt, &tastatur, &stop, &signal, &ende, &zweiter, &eingabe, &wert, &punkte, &punkteArr, kanal, &wg)
 	
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
 	go maussteuerung(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &wert, kanal, &wg)
@@ -128,13 +129,17 @@ A:	for {
 	
 	stop = false
 	ende = true 
-	if !signal {
-		signal = true
-	} else {
-		kanal <- false
-	}
+	
+	fmt.Println("Vor dem Channel-Send")
+	
+	if zweiter { kanal <- false }				// wenn im zweiten Spielteil
+	
+	signal = true
+	
+	fmt.Println("Hinter dem Channel-Send")
 	
 	wg.Wait()
+	fmt.Println("Hinter dem Wait")
 	
 	punkte = punkteArr[0] + punkteArr[1] + punkteArr[2] + punkteArr[3]
 	if punkte>0 {
@@ -174,6 +179,7 @@ func musikhintergrund(ende *bool, wg *sync.WaitGroup) {
 		SpieleSound("./Sounds/Muster.wav")
 		time.Sleep( time.Duration(44e8) )
 	}
+	fmt.Println("Musik beendet")
 }
 
 func endbildschirm(EndP uint32, punkteArr [4]int16, note float32) {
@@ -219,11 +225,13 @@ func endbildschirm(EndP uint32, punkteArr [4]int16, note float32) {
 }
 
 	
-func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal, ende *bool, 
+func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, mutex *sync.Mutex, akt, tastatur, stop, signal, ende, zweiter *bool, 
 			eingabe *string, wert *uint8, punkte *int16, punkteArr *[4]int16, kanal chan bool, wg *sync.WaitGroup) {
 	var neuerZustand bool
 	
+	defer fmt.Println("Beende Spielablauf!")
 	defer wg.Done()
+	
 	time.Sleep( time.Duration(1e8) )
 	zwischentext(&texte.MusterEinl, mutex, stop)			// Einleitungs-Text
 	
@@ -236,7 +244,7 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 		fmt.Println("Beende spielablauf")	
 		return 
 	}
-	
+	*zweiter = true
 	punkteArr[0] = *punkte
 	*punkte = 0
 	
@@ -246,8 +254,9 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	zwischentext(&texte.MusterEins, mutex, stop)
 	memorySpiel(obj, akt, 2, random)					// auf Level 1
 	
-	
+	fmt.Println("Vor Kanal-Send im Muster-Memory")
 	neuerZustand = <- kanal
+	fmt.Println("Hinter Kanal-Send im Muster-Memory")
 	punkteArr[1] = *punkte						// speichert Punkte für Lvl.1
 	*punkte = 0	
 	if !neuerZustand { return }
@@ -262,7 +271,7 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	neuerZustand = <- kanal
 	punkteArr[2] = *punkte						// speichert Punkte für Lvl.2
 	*punkte = 0	
-	if !neuerZustand { return }
+	if !neuerZustand || *ende { return }
 	
 	
 	time.Sleep( time.Duration(2e9) )
@@ -277,6 +286,7 @@ func spielablauf(obj *[]objekte.Objekt, maus objekte.Objekt, random *rand.Rand, 
 	if !neuerZustand { return }
 	
 	fmt.Println("Beende Spielablauf")
+	*zweiter = false
 	*signal = false
 }
 
@@ -322,13 +332,11 @@ func musterSpiel(obj *[]objekte.Objekt, maus objekte.Objekt, akt, signal, tastat
 	
 	for i:=1;i<11;i++ {					// Schleife für die Abfrage von 10 Mustern
 		
+		if *ende { return }
 		if *tastatur {
 			passt.SetzeAkt(true)
 			passtNicht.SetzeAkt(true)
 			*tastatur = false
-		} else if *ende {
-			fmt.Println("Beende Muster-Spiel.")
-			return
 		}
 		
 Neu0:			
@@ -349,7 +357,7 @@ Neu0:
 		}
 		musterspeicher = append(musterspeicher, auswahl)		// fügt neue Musterkombination hinzu
 		
-		// -------------------------------------- Zeichnet den Hitnergrund zur Musterabfrage "Passt (nicht)"
+		// -------------------------------------- Zeichnet den Hintergrund zur Musterabfrage "Passt (nicht)"
 		mutex.Lock()
 		musterabfrage(i)
 		
@@ -479,7 +487,8 @@ Neu2:
 	}
 	*tastatur = false
 	*eingabe = ""
-	// kanal <- true
+	
+	*signal = true		// ?
 }
 
 func musterabfrage(i int) {
@@ -581,7 +590,7 @@ func memorySpiel(obj *[]objekte.Objekt, akt *bool, level uint8, rand *rand.Rand)
 }
 
 // Es folgt die VIEW-Komponente
-func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, signal, stop ,akt, ende *bool, 
+func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, stop ,akt, ende *bool, 
 													punkte, diff *int16, mutex *sync.Mutex, eingabe *string, wg *sync.WaitGroup) {   	
 	var t1 int64 = time.Now().UnixNano() 		//Startzeit
 	var anz,anzahl int                  		// zur Bestimmung der Frames pro Sekunde
