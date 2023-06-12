@@ -41,7 +41,7 @@ func Muster() (note float32, punktExp uint32) {
 	maus 		:= objekte.New(0, 0, 0, 25)			// Erstellt das Objekt MAUSZEIGER
 	okayObjekt 	:= objekte.New(0, 0, 0, 20)			// OK-Objekt
 	
-	Fenstertitel("Muster, Muster, nichts als Muster - und dazwischen Muster")								// Gibt Fenster-Titel 
+	Fenstertitel(" ### Muster-Spiel ###   . . .  Muster, Muster, nichts als Muster  . . .  und dazwischen Muster  . . . ")								// Gibt Fenster-Titel 
 	
 	// Das Hauptprogramm startet die View-Komponente als nebenläufigen Prozess!
 	go view_komponente(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &mutex, &eingabe, &wg)
@@ -52,12 +52,12 @@ func Muster() (note float32, punktExp uint32) {
 	// Nebenläufig wird die Kontroll-Komponente für die Maus gestartet.
 	go maussteuerung(&obj, maus, okayObjekt, &signal, &stop, &akt, &ende, &punkte, &diff, &wert, kanal, &wg)
 	
-	go musikhintergrund(&ende)
+	go musikhintergrund(&ende, &wg)
 	
 	// Die Kontroll-Komponente 2 ist die 'Mainloop' im Hauptprogramm	
 	// Wir fragen hier nur die Tastatur ab.
 	
-	wg.Add(3)						// Wait-Group erhält Counter 3 zum Warten auf das Ende der nebenläufigen Prozesse
+	wg.Add(4)						// Wait-Group erhält Counter 4 zum Warten auf das Ende der nebenläufigen Routinen
 	
 	SetzeFont ("./Schriftarten/Ubuntu-B.ttf", 28 )
 	
@@ -167,7 +167,9 @@ A:	for {
 	return
 }
 
-func musikhintergrund(ende *bool) {
+func musikhintergrund(ende *bool, wg *sync.WaitGroup) {
+	defer wg.Done()
+	
 	for !*ende {
 		SpieleSound("./Sounds/Muster.wav")
 		time.Sleep( time.Duration(44e8) )
@@ -591,8 +593,8 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 		mutex.Lock()
 		UpdateAus () 										// Nun wird alles im nicht sichtbaren "hinteren" Fenster gezeichnet!
 		
-		Stiftfarbe(255,255,255)
-		Cls()												// Cleart vollständigen Screen
+		/*Stiftfarbe(255,255,255)
+		Cls()*/												// Cleart vollständigen Screen
 		
 		if *akt { 
 			objAktualisieren(obj)
@@ -614,18 +616,16 @@ func view_komponente (obj *[]objekte.Objekt, maus,okayObjekt objekte.Objekt, sig
 		Stiftfarbe(100,10,155)
 		Schreibe (2,2,"FPS:"+fmt.Sprint (anzahl))							// Schreibe links oben FPS
 		
-		if *signal {  }
-			
 		maus.Zeichnen()														// Zeichnet Maus
 		
-		if time.Now().UnixNano() - t1 < 1000000000 { //noch in der Sekunde ...
+		if time.Now().UnixNano() - t1 < 1000000000 { 		//noch in der Sekunde ...
 			anz++
 		} else {
-			t1 = time.Now().UnixNano() 				// neue Sekunde
+			t1 = time.Now().UnixNano() 						// neue Sekunde
 			anzahl = anz
 			anz=0
 			if anzahl < 100 { verzögerung--}				//Selbstregulierung der 
-			if anzahl > 100 { verzögerung++}				//Frame-Rate :-)
+			if anzahl > 100 { verzögerung++}				//Frame-Rate :-)		-- dieser 8-zeilige Abschnitt wurde  von Herrn Schmidt übernommen
 		}
 		
 		UpdateAn () 										// Nun wird der gezeichnete Frame sichtbar gemacht!
