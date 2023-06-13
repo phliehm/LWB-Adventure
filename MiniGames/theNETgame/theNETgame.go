@@ -22,7 +22,7 @@ package theNETgame
 
 // ------------ exportierte Variablen -------------------- //
 
-// var noten float32
+// var note float32
 // var punkte uint32
 
 

@@ -61,6 +61,7 @@ package getraenkeautomat
 
 import "fmt"
 import "gfx"
+//import "../../Materialordner/gfx"
 import "time"
 import "../../Klassen/textboxen"
 import "../../Klassen/buttons"
