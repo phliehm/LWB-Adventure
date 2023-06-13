@@ -1,7 +1,7 @@
 ﻿#########################################################
-# Readme: LWB-Adventure 				#
+# Readme: LWB-Adventure 								#
 # Autoren: A. Cyriacus, P. Liehm, B. Schneider, M. Seiß #
-# Datum: Juni 2023					#
+# Datum: Juni 2023										#
 #########################################################
 
 ################

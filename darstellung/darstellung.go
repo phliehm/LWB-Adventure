@@ -13,7 +13,6 @@ import (
 	"../MiniGames/1_FP"
 	"../MiniGames/bauelementeSpiel"
 	"../MiniGames/2_ALP2/vaderobigame"
-//	"../MiniGames/2_ALP2/vadeROBIgame"
 	"../MiniGames/3_DDI"
 	"../MiniGames/2_EthI"
 	"../MiniGames/3_DBSA"
