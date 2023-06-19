@@ -65,6 +65,7 @@ func Muster() (note float32, punktExp uint32) {
 	
 A:	for {
 		taste, gedrueckt, tiefe = TastaturLesen1()
+		fmt.Println(taste, gedrueckt, tiefe)
 		
 		if tastatur {
 			if gedrueckt == 1  { 						// Beim Drücken der Taste, nicht beim Loslassen!
@@ -83,34 +84,50 @@ A:	for {
 					if eingabe != "" {
 						eingabe = eingabe [:len(eingabe)-1]
 					}
-					case taste >= 48 && taste < 58 && tiefe == 0:  		// Zahlen
-					eingabe += string(taste)
+					case taste >= 48 && taste < 58:  		// Zahlen
+					if tiefe < 65 {
+						eingabe += string(taste)
+					} else if taste == 48 {  		  			// 0
+						eingabe += "]"
+					} else if taste == 49 {  		  			// 1
+						eingabe += ":"
+					} else if taste == 50 {  		  			// 2
+						eingabe += "\""
+					} else if taste == 51 {  		  			// 3	
+						eingabe += "'"
+					} else if taste == 52 {  		  			// 4	
+						eingabe += "["
+					} else if taste == 53 {  		  			// 5	
+						eingabe += "]"
+					} else if taste == 54 {  		  			// 6	
+						eingabe += ","
+					} else if taste == 55 {  		  			// 7
+						eingabe += "["
+					} else if taste == 56 {  		  			// 8
+						eingabe += "("
+					} else if taste == 57 {  		  			// 9
+						eingabe += ")"
+					}
 					case taste == 44:
-					eingabe += ","
+					if tiefe < 65 {
+						eingabe += ","
+					} else {
+						eingabe += "\""
+					}
+					case taste == 92:
+					eingabe += "'"
 					case taste == 46:
-					eingabe += "."
-					case taste == 55 && tiefe > 0:  					// 7
-					eingabe += "["
-					case taste == 56 && tiefe > 0:  					// 8
-					eingabe += "("
-					case taste == 57 && tiefe > 0:    					// 9		
-					eingabe += ")"
-					case taste == 48 && tiefe > 0:  		  			// 0
-					eingabe += "]"
-					case taste == 46 && tiefe > 0:  		
-					eingabe += ":"
-					case taste == 49 && tiefe > 0:  		
-					eingabe += ":"
-					case taste == 50 && tiefe > 0:  		
-					eingabe += "\""
-					case taste == 51 && tiefe > 0:  		
-					eingabe += "'"
-					case taste == 92 && tiefe > 0:  		
-					eingabe += "'"
-					case taste >= 97 && taste < 123 && tiefe == 0:  	// Kleinbuchstaben
-					eingabe += string(taste)
-					case taste >= 97 && taste < 123 && tiefe > 0:		// Großbuchstaben
-					eingabe += string(taste-32)
+					if tiefe < 65 {
+						eingabe += "."
+					} else {
+						eingabe += ":"
+					}
+					case taste >= 97 && taste < 123:
+					if tiefe < 65 { 				 	// Kleinbuchstaben
+						eingabe += string(taste)
+					} else {
+						eingabe += string(taste-32)
+					}
 					default:
 				}
 			}

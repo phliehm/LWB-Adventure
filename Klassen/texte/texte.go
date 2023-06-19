@@ -102,12 +102,12 @@ var MusterEinl []string = []string{"   H e r z l i c h    W i l l k o m m e n",
 var MusterErk []string = []string{" M U S T E R  -  E R K E N N U N G",
 								"",
 								" Entscheide, ob das Muster passt!",
-								" ",
-								" Wenn JA, gib die Bindungen an,",
-								"       FALLS diese existieren.",
-								" ",
-								" Eingabe von Sonderzeichen:",
-								"                     Shift + 0-9"}
+								"               Gib Bindungen an,",
+								"           FALLS diese existieren!",
+								"",
+								" - Eingabe von Großbuchstaben:",
+								"            Alt + Shift + [Taste]",
+								" - Sonderzeichen: Alt + Shift + [0-9]"}
 								
 var MusterEins []string = []string{"       M U S T E R  -  M E M O R Y ",
 								"",
@@ -164,7 +164,7 @@ var MusterL [6][][2]string = [6][][2]string {{{"1","[]"},{"[1]","[]"},{"\"w\"","
 									{{"'f'",""},{"'v'",""}},												// (f:"w")
 									{{"'w'","'f'"},{"True","False"},{"3","8"}},								// [f,w]
 									{{"'f'","False"},{"1","'w'"},{"\"LWB\"","True"}},						// (f,w)
-									{{"32","[]"},{"L","\"B\""},{"\"so\"","[\"das\"]"},{"1","[3,4,5,6]"}}}	// (f:a:w)
+									{{"32","[]"},{"'L'","\"B\""},{"\"so\"","[\"das\"]"},{"1","[3,4,5,6]"}}}	// (f:a:w)
 	
 var MusterN [6][]string = [6][]string {{"[1,'a']","\"j\":\"a\"","(True,True)","35"},		// (f:w)
 									{"'feuer'","[\"feder\"]"},								// ('f':w)
